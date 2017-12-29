@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Std">
+      <UniqueIdentifier>{4eaa62f8-1dd5-4c3e-8a06-30eed7b5a178}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool_Main">
+      <UniqueIdentifier>{fd74722d-a4ef-4d4c-b748-4dedc27fa5c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool_Header">
+      <UniqueIdentifier>{5c87a17d-d395-4e2b-a905-3643ae045f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{f806327b-e91e-4eb0-b17a-10a8a3041f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditForm">
+      <UniqueIdentifier>{8545e801-a710-4bbb-ac1d-32909ed5023f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tool_Value">
+      <UniqueIdentifier>{cc784257-13a5-4859-a2ae-b03aab5da123}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Std</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Std</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Std</Filter>
+    </ClInclude>
+    <ClInclude Include="WOOJUN_TOOL.h">
+      <Filter>Std</Filter>
+    </ClInclude>
+    <ClInclude Include="WOOJUN_TOOLDoc.h">
+      <Filter>Std</Filter>
+    </ClInclude>
+    <ClInclude Include="WOOJUN_TOOLView.h">
+      <Filter>Std</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Tool_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Header.h">
+      <Filter>Tool_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuDialog.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="EditForm.h">
+      <Filter>EditForm</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectDialog.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="TestDialog.h" />
+    <ClInclude Include="ToolScene.h" />
+    <ClInclude Include="ToolValue.h">
+      <Filter>Tool_Value</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Std</Filter>
+    </ClCompile>
+    <ClCompile Include="WOOJUN_TOOLView.cpp">
+      <Filter>Std</Filter>
+    </ClCompile>
+    <ClCompile Include="WOOJUN_TOOLDoc.cpp">
+      <Filter>Std</Filter>
+    </ClCompile>
+    <ClCompile Include="WOOJUN_TOOL.cpp">
+      <Filter>Std</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Tool_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuDialog.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="EditForm.cpp">
+      <Filter>EditForm</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectDialog.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="TestDialog.cpp" />
+    <ClCompile Include="ToolScene.cpp" />
+    <ClCompile Include="ToolValue.cpp">
+      <Filter>Tool_Value</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WOOJUN_TOOL.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\WOOJUN_TOOL.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\WOOJUN_TOOLDoc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\WOOJUN_TOOL.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

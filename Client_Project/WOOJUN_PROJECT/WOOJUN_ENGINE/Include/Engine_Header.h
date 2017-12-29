@@ -1,0 +1,60 @@
+#pragma once
+
+#include <Windows.h>
+#include <conio.h>
+#include <list>
+#include <vector>
+#include <map>
+#include <unordered_map>
+#include <string>
+#include <algorithm>
+#include <functional>
+#include <process.h>
+
+// DirectX
+#include <d3d11.h>
+#include <d3dcompiler.h>
+
+#include <assert.h>
+#include <crtdbg.h>
+
+using namespace std;
+
+#pragma comment(lib, "d3d11")
+#pragma comment(lib, "d3dcompiler")
+
+#pragma warning( disable : 4251 )
+#pragma warning( disable : 4275 )
+
+// 사용자 정의 헤더파일
+#include "Engine_Macro.h"
+
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Matrix.h"
+
+#include "Engine_Struct.h"
+#include "Engine_TemplateFunc.h"
+#include "Engine_Enum.h"
+#include "FBX_Struct.h"
+
+#ifdef _DEBUG
+#pragma comment(lib, "DirectXTex_Debug")
+#else
+#pragma comment(lib, "DirectXTex")
+#endif // _DEBUG
+
+WOOJUN_BEGIN
+
+static Vector3 WORLDAXIS[AXIS_MAX] =
+{
+	// Right
+	Vector3(1.f, 0.f, 0.f),
+	// Up
+	Vector3(0.f, 1.f, 0.f),
+	// Forward
+	Vector3(0.f, 0.f, 1.f)
+};
+
+WOOJUN_END

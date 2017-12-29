@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="00. Header">
+      <UniqueIdentifier>{cdd372f2-9326-4f04-9ce0-7b10a515a2ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. SceneScript">
+      <UniqueIdentifier>{37f0ae2c-5e1c-418b-9ec5-f8c5d615ccd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript">
+      <UniqueIdentifier>{ff9dd8b6-3e5f-4135-8cb6-40a41ad998e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\01. Player">
+      <UniqueIdentifier>{f81ecb9f-4ccd-4678-8a1c-b23a7c5a17d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Main">
+      <UniqueIdentifier>{f14c219e-edc3-430c-ba61-2992c834cea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\02. Bullet">
+      <UniqueIdentifier>{8580f1de-c1a9-4b21-ad23-a19231f91b61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\03. Monster">
+      <UniqueIdentifier>{9107dc9b-2de3-44bf-bced-49b196a44510}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\02. Bullet\01. PlayerBullet">
+      <UniqueIdentifier>{3092fb96-36b0-44f3-813a-fcb2e38409df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\02. Bullet\02. MonsterBullet">
+      <UniqueIdentifier>{e9d7877b-163d-47d7-8cce-f789efe596c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\04. RotBullet">
+      <UniqueIdentifier>{edbed232-a907-42d2-a310-927215b34979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\00. Mouse">
+      <UniqueIdentifier>{e7b2053c-d4bb-4947-907b-35a602bfe84e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Thread">
+      <UniqueIdentifier>{86d9d7d9-7281-4f11-a618-c896617b5c15}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SceneScript\MainScene.h">
+      <Filter>02. SceneScript</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\Player.h">
+      <Filter>03. ObjectScript\01. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Client_Header.h">
+      <Filter>00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\Minion.h">
+      <Filter>03. ObjectScript\03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\RotBullet.h">
+      <Filter>03. ObjectScript\04. RotBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\MonsterBullet.h">
+      <Filter>03. ObjectScript\02. Bullet\02. MonsterBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\PlayerBullet.h">
+      <Filter>03. ObjectScript\02. Bullet\01. PlayerBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneScript\StartScene.h">
+      <Filter>02. SceneScript</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\Mouse.h">
+      <Filter>03. ObjectScript\00. Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneScript\LoadingScene.h">
+      <Filter>02. SceneScript</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread\LoadingThread.h">
+      <Filter>04. Thread</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SceneScript\MainScene.cpp">
+      <Filter>02. SceneScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Player.cpp">
+      <Filter>03. ObjectScript\01. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>01. Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Minion.cpp">
+      <Filter>03. ObjectScript\03. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\RotBullet.cpp">
+      <Filter>03. ObjectScript\04. RotBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\MonsterBullet.cpp">
+      <Filter>03. ObjectScript\02. Bullet\02. MonsterBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\PlayerBullet.cpp">
+      <Filter>03. ObjectScript\02. Bullet\01. PlayerBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneScript\StartScene.cpp">
+      <Filter>02. SceneScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Mouse.cpp">
+      <Filter>03. ObjectScript\00. Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneScript\LoadingScene.cpp">
+      <Filter>02. SceneScript</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread\LoadingThread.cpp">
+      <Filter>04. Thread</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WOOJUN_CLIENT.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
