@@ -17,6 +17,8 @@ private:
 	void CreateCheckBox();
 	void CreateRadioButton();
 	void CreateMouse();
+
+	void CreateInventory();
 public:
 	virtual bool Init();
 	virtual void Update(float _fTime);

@@ -13,7 +13,17 @@ private:
 private:
 	vector<pMESHCONTAINER>	m_vecMeshContainer;
 	string			m_strKey;
+	DxVector3		m_vMin;
+	DxVector3		m_vMax;
+	DxVector3		m_vSize;
+	SPHEREINFO		m_tSphere;
 public:
+	DxVector3 GetMeshMin() const;
+	DxVector3 GetMeshMax() const;
+	DxVector3 GetMeshSize() const;
+	SPHEREINFO GetSphereInfo() const;
+	DxVector3 GetCenter() const;
+	float GetRadius() const;
 	UINT GetContainerCount() const;
 	UINT GetSubsetCount(int _iContainer = 0) const;
 public:
@@ -31,8 +41,8 @@ public:
 private:
 	bool CreateVertexBuffer(void* _pVertices, unsigned int _iVtxCount, unsigned int _iVtxSize, D3D11_USAGE _eVtxUsage, D3D11_PRIMITIVE_TOPOLOGY _ePrimitive, pMESHCONTAINER _pContainer);
 	bool CreateIndexBuffer(void* _pIndices, unsigned int _iIdxCount, unsigned int _iIdxSize, D3D11_USAGE _eIdxUsage, DXGI_FORMAT _eFormat, pMESHCONTAINER _pContainer);
-	void SubDivide(vector<VERTEXCOLOR>* _pVertex, vector<unsigned int>* _pIndex);
-	void SubDividePos(vector<VERTEXPOS>* _pVertex, vector<unsigned int>* _pIndex);
+	void SubDivide(vector<VERTEXCOLOR>* _pVertex, vector<UINT>* _pIndex);
+	void SubDividePos(vector<VERTEXPOS>* _pVertex, vector<UINT>* _pIndex);
 	bool ConvertFbxData(CFbxLoader* _pLoader);
 public:
 	CMesh();

@@ -1,8 +1,12 @@
 #include "Layer.h"
-#include "../06.GameObject/GameObject.h"
 #include "Scene.h"
-#include "../07.Component/Transform.h"
 #include "SceneMgr.h"
+#include "../03.Resource/Mesh.h"
+#include "../06.GameObject/GameObject.h"
+#include "../07.Component/Transform.h"
+#include "../07.Component/Frustum.h"
+#include "../07.Component/Renderer.h"
+#include "../07.Component/Renderer2D.h"
 
 WOOJUN_USING
 
@@ -225,7 +229,65 @@ void CLayer::Render(float _fTime)
 			continue;
 		}
 
-		(*m_iter)->Render(_fTime);
+		CRenderer*		pRenderer = (*m_iter)->FindComponentFromTypeID<CRenderer>();
+		CRenderer2D*	pRenderer2D = (*m_iter)->FindComponentFromTypeID<CRenderer2D>();
+		CTransform*		pTransform = (*m_iter)->GetTransform();
+
+		bool bFrustum = false;
+		CFrustum*		pFrustum = m_pScene->GetMainCameraFrustum();
+
+		if (NULL != pRenderer)
+		{
+			CMesh*	pMesh = pRenderer->GetMesh();
+
+			SPHEREINFO	tSphereInfo = pMesh->GetSphereInfo();
+
+			DxVector3	vScale = pTransform->GetWorldScale();
+
+			float fMax = vScale.x > vScale.y ? vScale.x : vScale.y;
+			fMax = fMax > vScale.z ? fMax : vScale.z;
+
+			tSphereInfo.vCenter *= vScale;
+			tSphereInfo.vCenter += pTransform->GetWorldPos();
+			tSphereInfo.fRadius *= fMax;
+
+			bFrustum = pFrustum->FrustumInSphere(tSphereInfo);
+
+			SAFE_RELEASE(pMesh);
+		}
+		else if (pRenderer2D && !(*m_iter)->CheckComponentFromType(CT_UI))
+		{
+			CMesh*	pMesh = pRenderer2D->GetMesh();
+
+			SPHEREINFO	tSphereInfo = pMesh->GetSphereInfo();
+
+			DxVector3	vScale = pTransform->GetWorldScale();
+
+			float fMax = vScale.x > vScale.y ? vScale.x : vScale.y;
+			fMax = fMax > vScale.z ? fMax : vScale.z;
+
+			tSphereInfo.vCenter *= vScale;
+			tSphereInfo.vCenter += pTransform->GetWorldPos();
+			tSphereInfo.fRadius *= fMax;
+
+			bFrustum = pFrustum->FrustumInSphere(tSphereInfo);
+
+			SAFE_RELEASE(pMesh);
+		}
+
+		SAFE_RELEASE(pRenderer);
+		SAFE_RELEASE(pRenderer2D);
+		SAFE_RELEASE(pFrustum);
+		SAFE_RELEASE(pTransform);
+
+		if (false == bFrustum)
+		{
+			(*m_iter)->Render(_fTime);
+		}
+		else
+		{
+			int a = 0;
+		}
 
 		if (false == (*m_iter)->GetIsAlive())
 		{

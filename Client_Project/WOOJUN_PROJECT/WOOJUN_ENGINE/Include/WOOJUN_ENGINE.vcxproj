@@ -176,6 +176,7 @@
     <ClInclude Include="07.Component\Component.h" />
     <ClInclude Include="07.Component\DirLight.h" />
     <ClInclude Include="07.Component\Effect.h" />
+    <ClInclude Include="07.Component\Frustum.h" />
     <ClInclude Include="07.Component\Light.h" />
     <ClInclude Include="07.Component\Material.h" />
     <ClInclude Include="07.Component\PointLight.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="07.Component\SpotLight.h" />
     <ClInclude Include="07.Component\Transform.h" />
     <ClInclude Include="07.Component\UI.h" />
+    <ClInclude Include="07.Component\UIBack.h" />
     <ClInclude Include="07.Component\UIButton.h" />
     <ClInclude Include="BaseObj.h" />
     <ClInclude Include="Device.h" />
@@ -241,6 +243,7 @@
     <ClCompile Include="07.Component\Component.cpp" />
     <ClCompile Include="07.Component\DirLight.cpp" />
     <ClCompile Include="07.Component\Effect.cpp" />
+    <ClCompile Include="07.Component\Frustum.cpp" />
     <ClCompile Include="07.Component\Light.cpp" />
     <ClCompile Include="07.Component\Material.cpp" />
     <ClCompile Include="07.Component\PointLight.cpp" />
@@ -252,6 +255,7 @@
     <ClCompile Include="07.Component\SpotLight.cpp" />
     <ClCompile Include="07.Component\Transform.cpp" />
     <ClCompile Include="07.Component\UI.cpp" />
+    <ClCompile Include="07.Component\UIBack.cpp" />
     <ClCompile Include="07.Component\UIButton.cpp" />
     <ClCompile Include="BaseObj.cpp" />
     <ClCompile Include="Device.cpp" />

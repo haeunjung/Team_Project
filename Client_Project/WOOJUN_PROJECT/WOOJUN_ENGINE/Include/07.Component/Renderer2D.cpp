@@ -47,6 +47,12 @@ void CRenderer2D::UpdateTransform()
 	GET_SINGLE(CShaderMgr)->UpdateConstBuffer("Transform", &tTransform, CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);
 }
 
+CMesh * CRenderer2D::GetMesh() const
+{
+	m_pMesh->AddRef();
+	return m_pMesh;
+}
+
 void CRenderer2D::SetMesh(const string & _strKey)
 {
 	SAFE_RELEASE(m_pMesh);

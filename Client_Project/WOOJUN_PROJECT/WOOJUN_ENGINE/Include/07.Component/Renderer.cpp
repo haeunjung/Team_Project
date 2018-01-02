@@ -46,6 +46,12 @@ void CRenderer::UpdateTransform()
 	GET_SINGLE(CShaderMgr)->UpdateConstBuffer("Transform", &tTransform, CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);	
 }
 
+CMesh * CRenderer::GetMesh() const
+{
+	m_pMesh->AddRef();
+	return m_pMesh;
+}
+
 void CRenderer::SetMesh(const string & _strKey)
 {
 	SAFE_RELEASE(m_pMesh);

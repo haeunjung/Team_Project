@@ -20,6 +20,7 @@
 #include "07.Component/CheckBox.h"
 #include "07.Component/RadioButton.h"
 #include "07.Component/RadioButtonMgr.h"
+#include "07.Component/UIBack.h"
 #include "../ObjectScript/Mouse.h"
 
 void CMainScene::CreateProtoType()
@@ -139,11 +140,50 @@ void CMainScene::CreateMouse()
 	SAFE_RELEASE(pUILayer);
 }
 
+void CMainScene::CreateInventory()
+{
+	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
+
+	CGameObject*	pCheckButtonObject = CGameObject::Create("CheckButtonObject");
+
+	CTransform*	pTransform = pCheckButtonObject->GetTransform();
+	DxVector3	vScale = { 400.0f, 250.0f, 1.0f };
+	pTransform->SetWorldScale(vScale);
+	pTransform->SetWorldPos(400.0f, 100.0f, 0.0f);
+
+	CColliderRect*	pColRect = pCheckButtonObject->AddComponent<CColliderRect>("ButtonCol");
+	DxVector3	vPos = pTransform->GetWorldPos();
+	pColRect->SetRectInfo(0.0f, vScale.y, 0.0f, vScale.x, false);
+
+	SAFE_RELEASE(pColRect);
+	SAFE_RELEASE(pTransform);
+
+	CRenderer2D*	pRenderer = pCheckButtonObject->AddComponent<CRenderer2D>("CheckButtonRenderer2D");
+	pRenderer->SetMesh("UIMesh");
+	pRenderer->SetShader(UI_SHADER);
+	pRenderer->SetInputLayout("TexInputLayout");
+	pRenderer->SetRenderState(ALPHABLEND);
+
+	CMaterial*	pMaterial = pRenderer->GetMaterial();
+	pMaterial->SetDiffuseTexture("Linear", "InvenBox", L"mjh.jpg");
+	SAFE_RELEASE(pMaterial);
+	SAFE_RELEASE(pRenderer);
+
+	CUIBack*	pUIBack = pCheckButtonObject->AddComponent<CUIBack>("InvenBox");
+	SAFE_RELEASE(pUIBack);
+
+	pUILayer->AddObject(pCheckButtonObject);
+	SAFE_RELEASE(pCheckButtonObject);
+
+	SAFE_RELEASE(pUILayer);
+}
+
 bool CMainScene::Init()
 {
 	CreateProtoType();
 	CreateCheckBox();
 	CreateRadioButton();
+	CreateInventory();
 	//CreateMouse();
 
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);

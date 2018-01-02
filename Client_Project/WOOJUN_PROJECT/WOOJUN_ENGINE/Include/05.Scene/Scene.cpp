@@ -10,6 +10,7 @@
 #include "07.Component/SpotLight.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/Material.h"
+#include "07.Component/Frustum.h"
 
 WOOJUN_USING
 
@@ -33,6 +34,12 @@ CCamera * CScene::GetMainCamera() const
 CTransform * CScene::GetMainCameraTransform() const
 {
 	return m_pCameraObject->GetTransform();;
+}
+
+CFrustum * CScene::GetMainCameraFrustum() const
+{
+	m_pFrustum->AddRef();
+	return m_pFrustum;
 }
 
 CGameObject * CScene::FindCameraObject(const string & _strKey) const
@@ -73,6 +80,20 @@ CTransform * CScene::FindCameraTransform(const string & _strKey) const
 	}
 	
 	return iter->second->GetTransform();;
+}
+
+CFrustum * CScene::FindFrustum(const string & _strKey) const
+{
+	unordered_map<string, CGameObject*>::const_iterator	iter = m_mapCamera.find(_strKey);
+
+	if (m_mapCamera.end() == iter)
+	{
+		return NULL;
+	}
+
+	CFrustum*	pFrustum = iter->second->FindComponentFromTypeID<CFrustum>();
+
+	return pFrustum;
 }
 
 const list<CGameObject*>* CScene::GetLightList() const
@@ -139,6 +160,9 @@ CGameObject * CScene::CreateCamera(const string & _strKey, const DxVector3 & _vP
 
 	CCamera* pCamera = pCameraObject->AddComponent<CCamera>("Camera");	
 	SAFE_RELEASE(pCamera);
+
+	CFrustum* pFrustum = pCameraObject->AddComponent<CFrustum>("Frustum");
+	SAFE_RELEASE(pFrustum);
 
 	pCameraObject->AddRef();
 	pCameraObject->SetScene(this);
@@ -291,6 +315,7 @@ bool CScene::Init()
 	// Scene 持失獣 Main Camera 持失
 	m_pCameraObject = CreateCamera(MAINCAMERA, DxVector3(0.0f, 0.0f, -5.0f));
 	m_pCamera = (CCamera*)m_pCameraObject->FindComponentFromTypeID<CCamera>();
+	m_pFrustum = (CFrustum*)m_pCameraObject->FindComponentFromTypeID<CFrustum>();
 
 	// UI Camera
 	CGameObject*	pUICameraObject = CreateCamera("UICamera", DxVector3(0.0f, 0.0f, -5.0f));
@@ -597,7 +622,8 @@ void CScene::Render(float _fTime)
 
 CScene::CScene() :
 	m_pCameraObject(NULL),
-	m_pCamera(NULL)
+	m_pCamera(NULL),
+	m_pFrustum(NULL)
 {
 }
 
@@ -611,6 +637,7 @@ CScene::~CScene()
 	Safe_Release_VecList(m_vecLayer);	
 
 	Safe_Release_Map(m_mapCamera);
+	SAFE_RELEASE(m_pFrustum);
 	SAFE_RELEASE(m_pCamera);
 	SAFE_RELEASE(m_pCameraObject);
 	Safe_Release_VecList(m_LightList);

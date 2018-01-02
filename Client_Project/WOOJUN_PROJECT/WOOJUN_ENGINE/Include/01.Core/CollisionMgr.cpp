@@ -1,10 +1,11 @@
 #include "CollisionMgr.h"
+#include "../01.Core/KeyMgr.h"
 #include "../06.GameObject/GameObject.h"
 #include "../07.Component/Collider.h"
-#include "../07.Component/Camera.h"
+#include "../07.Component/ColliderRay.h"
+#include "../07.Component/ColliderPoint.h"
 #include "../07.Component/Transform.h"
-#include "../05.Scene/SceneMgr.h"
-#include "../05.Scene/Scene.h"
+
 
 WOOJUN_USING
 
@@ -26,39 +27,205 @@ void CCollisionMgr::AddObject(CGameObject * _pGameObject)
 		return;
 	}
 
-	m_vecCollision.push_back(_pGameObject);
+	if (false == _pGameObject->CheckComponentFromType(CT_UI))
+	{
+		m_vecCollision.push_back(_pGameObject);
+	}
+	else
+	{
+		m_vecUICollision.push_back(_pGameObject);
+	}
+	
 }
 
 bool CCollisionMgr::Init()
 {
 	m_vecCollision.reserve(1000);
+	m_vecUICollision.reserve(1000);
 
 	return true;
 }
 
 void CCollisionMgr::Collision(float _fTime)
 {
-	// 사이즈가 2개 미만이면 서로 충돌할 오브젝트가 없다
-	if (1 >= m_vecCollision.size())
+	// 마우스를 이용한 충돌 먼저
+	bool	bMouseCollision = false;
+
+	// Mouse Point와 UI Object 충돌체 사이의 충돌처리
+	// 충돌했을경우 True를 반환
+	bMouseCollision = CollisionMouseUI(_fTime);
+
+	// 충돌하지 않았을 경우
+	// Mouse Ray와 Object 충돌체 사이의 충돌처리
+	if (true == bMouseCollision)
 	{
-		m_vecCollision.clear();
-		return;
+		int a = 0;
 	}
+	else
+	{
+		// 충돌 목록 정렬
+		sort(m_vecCollision.begin(), m_vecCollision.end(), CCollisionMgr::ZSort);
 
-	sort(m_vecCollision.begin(), m_vecCollision.end(), CCollisionMgr::ZSort);
-
+		CollisionMouseObject(_fTime);
+	}
+	
 	vector<CGameObject*>::iterator	iter;
-	vector<CGameObject*>::iterator	iterEnd = m_vecCollision.end();
+	vector<CGameObject*>::iterator	iterEnd;
 
-	for (iter = m_vecCollision.begin(); iter != iterEnd - 1; ++iter)
-	{		
-		for (vector<CGameObject*>::iterator iter1 = iter + 1; iter1 != iterEnd; ++iter1)
+	if (1 < m_vecUICollision.size())
+	{
+		iterEnd = m_vecUICollision.end();
+		for (iter = m_vecUICollision.begin(); iter != iterEnd - 1; ++iter)
 		{
-			CollisionObject(*iter, *iter1, _fTime);
+			for (vector<CGameObject*>::iterator iter1 = iter + 1; iter1 != iterEnd; ++iter1)
+			{
+				CollisionObject(*iter, *iter1, _fTime);
+			}
 		}
 	}
 
+	if (1 < m_vecCollision.size())
+	{
+		iterEnd = m_vecCollision.end();
+		for (iter = m_vecCollision.begin(); iter != iterEnd - 1; ++iter)
+		{
+			for (vector<CGameObject*>::iterator iter1 = iter + 1; iter1 != iterEnd; ++iter1)
+			{
+				CollisionObject(*iter, *iter1, _fTime);
+			}
+		}
+	}
+
+	m_vecUICollision.clear();
 	m_vecCollision.clear();
+}
+
+bool CCollisionMgr::CollisionMouseUI(float _fTime)
+{
+	vector<CGameObject*>::iterator	iter;
+	vector<CGameObject*>::iterator	iterEnd = m_vecUICollision.end();
+
+	CGameObject*	pMouseObject = GET_SINGLE(CKeyMgr)->GetMouseObject();
+	CColliderPoint*	pMouseColPoint = GET_SINGLE(CKeyMgr)->GetMouseColPoint();
+
+	for (iter = m_vecUICollision.begin(); iter != iterEnd; ++iter)
+	{
+		list<CComponent*>* pList = (*iter)->FindComponentsFromType(CT_COLLIDER);
+
+		list<CComponent*>::iterator iter1;
+		list<CComponent*>::iterator iter1End = pList->end();
+
+		for (iter1 = pList->begin(); iter1 != iter1End; ++iter1)
+		{
+			CCollider*	pCol = (CCollider*)*iter1;
+
+			if (true == pMouseColPoint->Collision(pCol))
+			{
+				pMouseColPoint->CollisionEnable();
+				pCol->CollisionEnable();
+
+				// 처음 충돌
+				if (false == pMouseColPoint->CheckColList(pCol))
+				{
+					pMouseColPoint->AddColList(pCol);
+					pCol->AddColList(pMouseColPoint);
+					
+					pMouseObject->OnCollisionEnter(pMouseColPoint, pCol, _fTime);
+					(*iter)->OnCollisionEnter(pCol, pMouseColPoint, _fTime);
+				}
+
+				// 충돌 중
+				else
+				{
+					pMouseObject->OnCollisionStay(pMouseColPoint, pCol, _fTime);
+					(*iter)->OnCollisionStay(pCol, pMouseColPoint, _fTime);
+				}
+
+				SAFE_RELEASE(pMouseObject);
+				SAFE_RELEASE(pMouseColPoint);
+
+				return true;
+			}
+
+			// 충돌 빠져나감
+			else if (true == pMouseColPoint->CheckColList(pCol))
+			{
+				pMouseColPoint->EraseColList(pCol);
+				pCol->EraseColList(pMouseColPoint);
+
+				pMouseObject->OnCollisionLeave(pMouseColPoint, pCol, _fTime);
+				(*iter)->OnCollisionLeave(pCol, pMouseColPoint, _fTime);
+			}
+		}
+	}
+
+	SAFE_RELEASE(pMouseObject);
+	SAFE_RELEASE(pMouseColPoint);
+
+	return false;
+}
+
+void CCollisionMgr::CollisionMouseObject(float _fTime)
+{
+	CGameObject*	pMouseObject = GET_SINGLE(CKeyMgr)->GetMouseObject();
+	CColliderRay*	pMouseColRay = GET_SINGLE(CKeyMgr)->GetMouseColRay();
+
+	vector<CGameObject*>::iterator	iter;
+	vector<CGameObject*>::iterator	iterEnd = m_vecCollision.end();	
+
+	for (iter = m_vecCollision.begin(); iter != iterEnd; ++iter)
+	{
+		list<CComponent*>* pList = (*iter)->FindComponentsFromType(CT_COLLIDER);
+
+		list<CComponent*>::iterator iter1;
+		list<CComponent*>::iterator iter1End = pList->end();
+
+		for (iter1 = pList->begin(); iter1 != iter1End; ++iter1)
+		{
+			CCollider*	pCol = (CCollider*)*iter1;
+
+			if (true == pMouseColRay->Collision(pCol))
+			{
+				pMouseColRay->CollisionEnable();
+				pCol->CollisionEnable();
+
+				// 처음 충돌
+				if (false == pMouseColRay->CheckColList(pCol))
+				{
+					pMouseColRay->AddColList(pCol);
+					pCol->AddColList(pMouseColRay);
+
+					pMouseObject->OnCollisionEnter(pMouseColRay, pCol, _fTime);
+					(*iter)->OnCollisionEnter(pCol, pMouseColRay, _fTime);
+				}
+
+				// 충돌 중
+				else
+				{
+					pMouseObject->OnCollisionStay(pMouseColRay, pCol, _fTime);
+					(*iter)->OnCollisionStay(pCol, pMouseColRay, _fTime);
+				}
+
+				SAFE_RELEASE(pMouseObject);
+				SAFE_RELEASE(pMouseColRay);
+
+				return;
+			}
+
+			// 충돌 빠져나감
+			else if (true == pMouseColRay->CheckColList(pCol))
+			{
+				pMouseColRay->EraseColList(pCol);
+				pCol->EraseColList(pMouseColRay);
+
+				pMouseObject->OnCollisionLeave(pMouseColRay, pCol, _fTime);
+				(*iter)->OnCollisionLeave(pCol, pMouseColRay, _fTime);
+			}
+		}
+	}
+
+	SAFE_RELEASE(pMouseObject);
+	SAFE_RELEASE(pMouseColRay);
 }
 
 void CCollisionMgr::CollisionObject(CGameObject * _pSrc, CGameObject * _pDest, float _fTime)
@@ -119,21 +286,20 @@ void CCollisionMgr::CollisionObject(CGameObject * _pSrc, CGameObject * _pDest, f
 
 bool CCollisionMgr::ZSort(CGameObject * _pSrc, CGameObject * _pDest)
 {
+	CColliderRay*	pRay = GET_SINGLE(CKeyMgr)->GetMouseColRay();
+
 	// 두개의 비교대상
 	CTransform*	pSrcTransform = _pSrc->GetTransform();
 	CTransform*	pDestTransform = _pDest->GetTransform();
-
-	// Camera Transform	
-	CTransform*		pCameraTransform = GET_SINGLE(CSceneMgr)->GetCurScene()->GetMainCameraTransform();
-
+	
 	// 카메라로부터 거리
 	float	fDist1, fDist2 = 0.0f;
-	fDist1 = pSrcTransform->GetWorldPos().Distance(pCameraTransform->GetWorldPos());
-	fDist2 = pDestTransform->GetWorldPos().Distance(pCameraTransform->GetWorldPos());
+	fDist1 = pSrcTransform->GetWorldPos().Distance(pRay->GetRay().vPos);
+	fDist2 = pDestTransform->GetWorldPos().Distance(pRay->GetRay().vPos);
 
-	SAFE_RELEASE(pCameraTransform);
 	SAFE_RELEASE(pSrcTransform);
 	SAFE_RELEASE(pDestTransform);
+	SAFE_RELEASE(pRay);
 
 	return fDist1 < fDist2;
 }

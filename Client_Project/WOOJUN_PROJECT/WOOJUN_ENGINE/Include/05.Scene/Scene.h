@@ -8,17 +8,19 @@ class CSceneScript;
 class CGameObject;
 class CCamera;
 class CTransform;
+class CFrustum;
 class DLL CScene 
 {
 private:
 	friend class CSceneMgr;
 private:
-	string m_strTag;
-	vector<CLayer*> m_vecLayer;	
-	vector<CSceneScript*> m_vecSceneScript;	
-	unordered_map<string, CGameObject*> m_mapCamera;
-	CGameObject* m_pCameraObject;
-	CCamera* m_pCamera;
+	string	m_strTag;
+	vector<CLayer*>			m_vecLayer;	
+	vector<CSceneScript*>	m_vecSceneScript;	
+	unordered_map<string, CGameObject*>	m_mapCamera;
+	CGameObject*	m_pCameraObject;
+	CCamera*		m_pCamera;
+	CFrustum*		m_pFrustum;
 	list<CGameObject*>	m_LightList;	
 public:
 	static bool LayerZSort(CLayer* _p1, CLayer* _p2);
@@ -26,10 +28,12 @@ public:
 	CGameObject* GetMainCameraObject() const;
 	CCamera* GetMainCamera() const;
 	CTransform* GetMainCameraTransform() const;
+	CFrustum* GetMainCameraFrustum() const;
 
 	CGameObject* FindCameraObject(const string& _strKey) const;
 	CCamera* FindCamera(const string& _strKey) const;
 	CTransform* FindCameraTransform(const string& _strKey) const;
+	CFrustum* FindFrustum(const string& _strKey) const;
 
 	const list<CGameObject*>* GetLightList() const;
 public:

@@ -5,6 +5,36 @@
 
 WOOJUN_USING
 
+DxVector3 CMesh::GetMeshMin() const
+{
+	return m_vMin;
+}
+
+DxVector3 CMesh::GetMeshMax() const
+{
+	return m_vMax;
+}
+
+DxVector3 CMesh::GetMeshSize() const
+{
+	return m_vSize;
+}
+
+SPHEREINFO CMesh::GetSphereInfo() const
+{
+	return m_tSphere;
+}
+
+DxVector3 CMesh::GetCenter() const
+{
+	return m_tSphere.vCenter;
+}
+
+float CMesh::GetRadius() const
+{
+	return m_tSphere.fRadius;
+}
+
 UINT CMesh::GetContainerCount() const
 {
 	return m_vecMeshContainer.size();
@@ -40,6 +70,10 @@ bool CMesh::CreateMesh(const string & _strKey, void * _pVertices, unsigned int _
 			return false;
 		}
 	}	
+
+	m_vSize = m_vMax - m_vMin;
+	m_tSphere.vCenter = (m_vMin + m_vMax) / 2.0f;
+	m_tSphere.fRadius = m_vSize.Length() / 2.0f;
 
 	return true;
 }
@@ -114,6 +148,10 @@ bool CMesh::CreateSphere(const string & _strKey, float _fRadius, unsigned int _i
 		return false;
 	}
 
+	m_vSize = m_vMax - m_vMin;
+	m_tSphere.vCenter = (m_vMin + m_vMax) / 2.0f;
+	m_tSphere.fRadius = m_vSize.Length() / 2.0f;
+
 	return true;
 }
 
@@ -185,6 +223,10 @@ bool CMesh::CreateSphere(const string & _strKey, float _fRadius, unsigned int _i
 	{
 		return false;
 	}
+
+	m_vSize = m_vMax - m_vMin;
+	m_tSphere.vCenter = (m_vMin + m_vMax) / 2.0f;
+	m_tSphere.fRadius = m_vSize.Length() / 2.0f;
 
 	return true;
 }
@@ -306,6 +348,31 @@ bool CMesh::CreateVertexBuffer(void * _pVertices, unsigned int _iVtxCount, unsig
 {	
 	pVERTEXBUFFER	pVtxBuf = new VERTEXBUFFER();
 
+	// 정점 수만큼 반복하며 Min과 Max값을 구한다.
+	for (int i = 0; i < _iVtxCount; ++i)
+	{
+		DxVector3	vPos;
+		memcpy(&vPos, ((char*)_pVertices) + i * _iVtxSize,
+			sizeof(DxVector3));
+		if (m_vMin.x > vPos.x)
+			m_vMin.x = vPos.x;
+
+		if (m_vMax.x < vPos.x)
+			m_vMax.x = vPos.x;
+
+		if (m_vMin.y > vPos.y)
+			m_vMin.y = vPos.y;
+
+		if (m_vMax.y < vPos.y)
+			m_vMax.y = vPos.y;
+
+		if (m_vMin.z > vPos.z)
+			m_vMin.z = vPos.z;
+
+		if (m_vMax.z < vPos.z)
+			m_vMax.z = vPos.z;
+	}
+
 	_pContainer->pVtxBuffer = pVtxBuf;
 
 	pVtxBuf->iCount = _iVtxCount;
@@ -368,16 +435,16 @@ bool CMesh::CreateIndexBuffer(void * pIndices, unsigned int _iIdxCount, unsigned
 	return true;
 }
 
-void CMesh::SubDivide(vector<VERTEXCOLOR>* _pVertex, vector<unsigned int>* _pIndex)
+void CMesh::SubDivide(vector<VERTEXCOLOR>* _pVertex, vector<UINT>* _pIndex)
 {
 	vector<VERTEXCOLOR>	vecCopyVertex = *_pVertex;
-	vector<unsigned int> vecCopyIndex = *_pIndex;
+	vector<UINT> vecCopyIndex = *_pIndex;
 
 	_pVertex->resize(0);
 	_pIndex->resize(0);
 
 	unsigned int numTris = vecCopyIndex.size() / 3;
-	for (unsigned int i = 0; i < numTris; ++i)
+	for (UINT i = 0; i < numTris; ++i)
 	{
 		VERTEXCOLOR v0 = vecCopyVertex[vecCopyIndex[i * 3 + 0]];
 		VERTEXCOLOR v1 = vecCopyVertex[vecCopyIndex[i * 3 + 1]];
@@ -436,7 +503,7 @@ void CMesh::SubDivide(vector<VERTEXCOLOR>* _pVertex, vector<unsigned int>* _pInd
 	}
 }
 
-void CMesh::SubDividePos(vector<VERTEXPOS>* _pVertex, vector<unsigned int>* _pIndex)
+void CMesh::SubDividePos(vector<VERTEXPOS>* _pVertex, vector<UINT>* _pIndex)
 {
 	vector<VERTEXPOS>	vecCopyVertex = *_pVertex;
 	vector<UINT> vecCopyIndex = *_pIndex;
@@ -445,7 +512,7 @@ void CMesh::SubDividePos(vector<VERTEXPOS>* _pVertex, vector<unsigned int>* _pIn
 	_pIndex->resize(0);
 
 	unsigned int numTris = vecCopyIndex.size() / 3;
-	for (unsigned int i = 0; i < numTris; ++i)
+	for (UINT i = 0; i < numTris; ++i)
 	{
 		VERTEXPOS v0 = vecCopyVertex[vecCopyIndex[i * 3 + 0]];
 		VERTEXPOS v1 = vecCopyVertex[vecCopyIndex[i * 3 + 1]];
@@ -633,6 +700,10 @@ bool CMesh::ConvertFbxData(CFbxLoader * _pLoader)
 			pContainer->vecMaterial.push_back(pMaterial);
 		}
 	}
+
+	m_vSize = m_vMax - m_vMin;
+	m_tSphere.vCenter = (m_vMin + m_vMax) / 2.0f;
+	m_tSphere.fRadius = m_vSize.Length() / 2.0f;
 
 	return true;
 }

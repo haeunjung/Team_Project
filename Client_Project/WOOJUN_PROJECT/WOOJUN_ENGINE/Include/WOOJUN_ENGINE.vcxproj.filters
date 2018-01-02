@@ -320,7 +320,11 @@
       <Filter>07. Component\10. UI\RadioButton</Filter>
     </ClInclude>
     <ClInclude Include="07.Component\RadioButtonMgr.h" />
-    <ClInclude Include="07.Component\ColliderRay.h" />
+    <ClInclude Include="07.Component\ColliderRay.h">
+      <Filter>07. Component\05. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="07.Component\Frustum.h" />
+    <ClInclude Include="07.Component\UIBack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -484,7 +488,11 @@
       <Filter>07. Component\10. UI\RadioButton</Filter>
     </ClCompile>
     <ClCompile Include="07.Component\RadioButtonMgr.cpp" />
-    <ClCompile Include="07.Component\ColliderRay.cpp" />
+    <ClCompile Include="07.Component\ColliderRay.cpp">
+      <Filter>07. Component\05. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\Frustum.cpp" />
+    <ClCompile Include="07.Component\UIBack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\Standard.fx">

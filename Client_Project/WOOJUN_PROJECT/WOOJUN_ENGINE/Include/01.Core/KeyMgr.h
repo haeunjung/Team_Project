@@ -7,6 +7,7 @@ WOOJUN_BEGIN
 class CGameObject;
 class CTransform;
 class CColliderRay;
+class CColliderPoint;
 class DLL CKeyMgr
 {
 private:
@@ -46,11 +47,16 @@ private:
 
 	CGameObject*	m_pMouseObject;
 	CTransform*		m_pMouseTransform;
-	CColliderRay*	m_pRay;
+	CColliderPoint*	m_pColPoint;
+	CColliderRay*	m_pColRay;
 public:
 	void SetWheel(short sWheel);
 	short GetWheelDir() const;
 	void ClearWheel();
+public:
+	CGameObject* GetMouseObject();
+	CColliderPoint* GetMouseColPoint();
+	CColliderRay* GetMouseColRay();
 public:
 	template<typename... Rest>
 	void CreateKey(const string& _strKey, Rest ... _KeyList)

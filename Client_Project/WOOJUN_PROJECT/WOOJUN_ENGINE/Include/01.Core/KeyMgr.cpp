@@ -100,10 +100,8 @@ bool CKeyMgr::Init()
 
 	m_pMouseTransform = m_pMouseObject->GetTransform();
 
-	m_pRay = m_pMouseObject->AddComponent<CColliderRay>("MouseRay");
-
-	CColliderPoint* pPoint = m_pMouseObject->AddComponent<CColliderPoint>("MousePoint");
-	SAFE_RELEASE(pPoint);
+	m_pColPoint = m_pMouseObject->AddComponent<CColliderPoint>("MousePoint");	
+	m_pColRay = m_pMouseObject->AddComponent<CColliderRay>("MouseRay");
 
 	// 마우스 위치를 얻어온다.
 	memset(&m_tMousePos, 0, sizeof(POINT));
@@ -128,7 +126,7 @@ void CKeyMgr::Update(float _fTime)
 
 	m_pMouseObject->Update(_fTime);
 	m_pMouseObject->LateUpdate(_fTime);
-	GET_SINGLE(CCollisionMgr)->AddObject(m_pMouseObject);
+	//GET_SINGLE(CCollisionMgr)->AddObject(m_pMouseObject);
 }
 
 void CKeyMgr::SetWheel(short _sWheel)
@@ -144,6 +142,24 @@ short CKeyMgr::GetWheelDir() const
 void CKeyMgr::ClearWheel()
 {
 	m_sWheel = 0;
+}
+
+CGameObject * CKeyMgr::GetMouseObject()
+{
+	m_pMouseObject->AddRef();
+	return m_pMouseObject;
+}
+
+CColliderPoint * CKeyMgr::GetMouseColPoint()
+{
+	m_pColPoint->AddRef();
+	return m_pColPoint;
+}
+
+CColliderRay * CKeyMgr::GetMouseColRay()
+{
+	m_pColRay->AddRef();
+	return m_pColRay;
 }
 
 CKeyMgr::CKey* CKeyMgr::FindKey(const string& _strKey) const
@@ -224,7 +240,7 @@ void CKeyMgr::ComputeRay()
 	vDir = vDir.Normalize();
 	vPos = vPos.TransformCoord(tView);
 
-	m_pRay->SetRay(vPos, vDir);
+	m_pColRay->SetRay(vPos, vDir);
 
 	SAFE_RELEASE(pCamera);
 }
@@ -272,14 +288,18 @@ POINT CKeyMgr::GetMouseMove() const
 	return m_tMouseMove;
 }
 
-CKeyMgr::CKeyMgr() 
-	: m_pCurKey(NULL)
+CKeyMgr::CKeyMgr() :
+	m_pCurKey(NULL),
+	m_pMouseObject(NULL),
+	m_pColPoint(NULL),
+	m_pColRay(NULL)
 {
 }
 
 CKeyMgr::~CKeyMgr()
 {
-	SAFE_RELEASE(m_pRay);
+	SAFE_RELEASE(m_pColRay);
+	SAFE_RELEASE(m_pColPoint);
 	SAFE_RELEASE(m_pMouseObject);
 	SAFE_RELEASE(m_pMouseTransform);
 
