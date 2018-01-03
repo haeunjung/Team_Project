@@ -53,6 +53,7 @@
 #define MAINTIMER		"MainThread"
 #define DEFAULTSCENE	"DefaultScene"
 #define DEFAULTLAYER	"DefaultLayer"
+#define MAPLAYER		"MapLayer"
 #define MAINCAMERA		"MainCamera"
 
 #define WINDOWHANDLE	CEngine_Core::GetInst()->GetWindowHandle()

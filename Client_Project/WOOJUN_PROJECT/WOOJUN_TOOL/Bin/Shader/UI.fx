@@ -18,7 +18,12 @@ VS_TEX_OUTPUT UIVS(VS_TEX_INPUT input)
 {
     VS_TEX_OUTPUT output = (VS_TEX_OUTPUT) 0;
 
-    output.vPos = mul(float4(input.vPos, 1.f), g_matWVP);
+    float3 vPos = input.vPos;
+    float3 vPivot = g_vMeshMin + (g_vMeshSize * g_vPivot);
+
+    vPos -= vPivot;
+
+    output.vPos = mul(float4(vPos, 1.0f), g_matWVP);
     output.vUV = input.vUV;
 
     return output;

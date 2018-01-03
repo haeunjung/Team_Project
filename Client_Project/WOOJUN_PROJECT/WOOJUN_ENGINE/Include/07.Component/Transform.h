@@ -15,6 +15,8 @@ private:
 	DxVector3		m_vLocalPos;
 	DxVector3		m_vLocalAxis[AXIS_MAX];
 
+	DxVector3		m_vPivot;
+
 	DxVector3		m_vWorldScale;
 	DxVector3		m_vWorldRot;
 	DxVector3		m_vWorldPos;
@@ -26,6 +28,8 @@ public:
 	DxVector3 GetLocalScale() const;
 	DxVector3 GetLocalRot() const;
 	DxVector3 GetLocalPos() const;
+
+	DxVector3 GetPivot() const;
 
 	DxVector3 GetWorldScale() const;
 	DxVector3 GetWorldRot() const;
@@ -68,6 +72,10 @@ public:
 	void SetLocalPosX(float x);
 	void SetLocalPosY(float y);
 	void SetLocalPosZ(float z);
+
+	// ============= Pivot ==============
+	void SetPivot(const DxVector3& v);
+	void SetPivot(float x, float y, float z);
 
 	// ============= World Scale ==============
 	void SetWorldScale(const Vector3& v);
@@ -154,13 +162,13 @@ public:
 	void CopyTransform(CTransform* _pTransform);
 	void ComputeWorldMatrix();
 public:
-	virtual bool Init() override;
-	virtual void Input(float _fTime) override;
-	virtual void Update(float _fTime) override;
-	virtual void LateUpdate(float _fTime) override;
-	virtual void Collision(float _fTime) override;
-	virtual void Render(float _fTime) override;
-	virtual CTransform* Clone() override;
+	bool Init() override;
+	void Input(float _fTime) override;
+	void Update(float _fTime) override;
+	void LateUpdate(float _fTime) override;
+	void Collision(float _fTime) override;
+	void Render(float _fTime) override;
+	CTransform* Clone() override;
 private:
 	CTransform();
 	CTransform(const CTransform& _Transform);

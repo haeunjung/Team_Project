@@ -51,7 +51,7 @@ bool CMouse::Init()
 
 	CColliderRect*	pColRect = m_pGameObject->AddComponent<CColliderRect>("MouseCol");
 	DxVector3	vPos = pTransform->GetWorldPos();
-	pColRect->SetRectInfo(0.0f, vScale.y, 0.0f, vScale.x, false);
+	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
 	SAFE_RELEASE(pColRect);
 
 	//CColliderPoint*		pColPoint = m_pGameObject->AddComponent<CColliderPoint>("MouseCol");

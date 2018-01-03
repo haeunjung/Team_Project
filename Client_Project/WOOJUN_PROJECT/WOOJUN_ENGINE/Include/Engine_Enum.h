@@ -107,6 +107,7 @@ enum DLL UI_TYPE
 	UT_BUTTON,
 	UT_CHECKBOX,
 	UT_RADIOBUTTON,
+	UT_BAR,
 	UT_BACK,
 	UT_END
 };
@@ -123,6 +124,15 @@ enum DLL SCENE_CHANGE
 	SC_PREV = -1,
 	SC_NONE = 0,
 	SC_NEXT = 1
+};
+
+// Bar Dir
+enum DLL BAR_DIR
+{
+	BD_LEFT,
+	BD_RIGHT,
+	BD_DOWN,
+	BD_UP
 };
 
 // Frustum Plane

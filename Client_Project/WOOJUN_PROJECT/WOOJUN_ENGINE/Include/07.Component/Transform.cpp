@@ -18,6 +18,11 @@ DxVector3 CTransform::GetLocalPos() const
 	return m_vLocalPos;
 }
 
+DxVector3 CTransform::GetPivot() const
+{
+	return m_vPivot;
+}
+
 DxVector3 CTransform::GetWorldScale() const
 {
 	return m_vWorldScale;
@@ -353,6 +358,16 @@ void CTransform::SetLocalPosZ(float z)
 	*m_matLocalPos = XMMatrixTranslation(m_vLocalPos.x, m_vLocalPos.y, m_vLocalPos.z);
 
 	ActiveUpdate();
+}
+
+void CTransform::SetPivot(const DxVector3 & v)
+{
+	m_vPivot = v;
+}
+
+void CTransform::SetPivot(float x, float y, float z)
+{
+	m_vPivot = DxVector3(x, y, z);
 }
 
 void CTransform::SetWorldScale(const Vector3 & v)
@@ -972,6 +987,7 @@ bool CTransform::Init()
 
 	m_vLocalScale = DxVector3(1.0f, 1.0f, 1.0f);
 	m_vWorldScale = DxVector3(1.0f, 1.0f, 1.0f);
+	m_vPivot = DxVector3(0.5f, 0.5f, 0.5f);
 
 	return true;
 }

@@ -71,7 +71,7 @@ void CStartScene::CreateStartButton()
 
 	CColliderRect*	pColRect = pStartButtonObject->AddComponent<CColliderRect>("ButtonCol");
 	DxVector3	vPos = pTransform->GetWorldPos();
-	pColRect->SetRectInfo(0.0f, vScale.y, 0.0f, vScale.x, false);
+	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
 
 	SAFE_RELEASE(pColRect);
 	SAFE_RELEASE(pTransform);
@@ -121,7 +121,7 @@ void CStartScene::CreateEndButton()
 
 	CColliderRect*	pColRect = pStartButtonObject->AddComponent<CColliderRect>("ButtonCol");
 	DxVector3	vPos = pTransform->GetWorldPos();
-	pColRect->SetRectInfo(0.0f, vScale.y, 0.0f, vScale.x, false);	
+	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
 
 	SAFE_RELEASE(pColRect);
 	SAFE_RELEASE(pTransform);

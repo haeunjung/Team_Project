@@ -32,6 +32,11 @@ void CRenderer2D::UpdateTransform()
 	tTransform.matWVP = tTransform.matWV * tTransform.matProj;
 	tTransform.matVP = tTransform.matView * tTransform.matProj;
 
+	tTransform.vPivot = m_pTransform->GetPivot();
+	tTransform.vMeshSize = m_pMesh->GetMeshSize();
+	tTransform.vMeshMin = m_pMesh->GetMeshMin();
+	tTransform.vMeshMax = m_pMesh->GetMeshMax();
+
 	SAFE_RELEASE(pCamera);
 
 	// 셰이더는 세로로 읽기 때문에

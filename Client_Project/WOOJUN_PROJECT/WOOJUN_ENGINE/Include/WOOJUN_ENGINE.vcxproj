@@ -186,9 +186,11 @@
     <ClInclude Include="07.Component\Renderer2D.h" />
     <ClInclude Include="07.Component\Script.h" />
     <ClInclude Include="07.Component\SpotLight.h" />
+    <ClInclude Include="07.Component\Terrain.h" />
     <ClInclude Include="07.Component\Transform.h" />
     <ClInclude Include="07.Component\UI.h" />
     <ClInclude Include="07.Component\UIBack.h" />
+    <ClInclude Include="07.Component\UIBar.h" />
     <ClInclude Include="07.Component\UIButton.h" />
     <ClInclude Include="BaseObj.h" />
     <ClInclude Include="Device.h" />
@@ -253,9 +255,11 @@
     <ClCompile Include="07.Component\Renderer2D.cpp" />
     <ClCompile Include="07.Component\Script.cpp" />
     <ClCompile Include="07.Component\SpotLight.cpp" />
+    <ClCompile Include="07.Component\Terrain.cpp" />
     <ClCompile Include="07.Component\Transform.cpp" />
     <ClCompile Include="07.Component\UI.cpp" />
     <ClCompile Include="07.Component\UIBack.cpp" />
+    <ClCompile Include="07.Component\UIBar.cpp" />
     <ClCompile Include="07.Component\UIButton.cpp" />
     <ClCompile Include="BaseObj.cpp" />
     <ClCompile Include="Device.cpp" />

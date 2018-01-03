@@ -82,6 +82,14 @@ typedef struct DLL _tagTransformCBuffer
 	XMMATRIX	matWV;
 	XMMATRIX	matWVP;
 	XMMATRIX	matVP;
+	DxVector3	vPivot;
+	float		fEmpty1;
+	DxVector3	vMeshSize;
+	float		fEmpty2;
+	DxVector3	vMeshMin;
+	float		fEmpty3;
+	DxVector3	vMeshMax;
+	float		fEmpty4;
 }TRANSFORMCBUFFER, *pTRANSFORMCBUFFER;
 
 // Color Vertex
@@ -308,52 +316,36 @@ typedef struct _tagRectInfo
 	float	fLeft;
 	float	fRight;
 
-	float	fSizeX;
-	float	fSizeY;	
-	float	fSizeHX;
-	float	fSizeHY;
-	
 	_tagRectInfo() :
-		fTop(0.0f),
-		fBottom(0.0f),
 		fLeft(0.0f),
+		fTop(0.0f),
 		fRight(0.0f),
-		fSizeX(0.0f),
-		fSizeY(0.0f)
+		fBottom(0.0f)
 	{
 	}
 
-	_tagRectInfo(float _fTop, float _fBottom, float _fLeft, float _fRight) :
-		fTop(_fTop),
-		fBottom(_fBottom),
+	_tagRectInfo(float _fLeft, float _fTop, float _fRight, float _fBottom) :
 		fLeft(_fLeft),
+		fTop(_fTop),
 		fRight(_fRight),
-		fSizeX(0.0f),
-		fSizeY(0.0f)
+		fBottom(_fBottom)
 	{
 	}
 
 	_tagRectInfo(const _tagRectInfo& _rc)
 	{
-		fTop = _rc.fTop;
-		fBottom = _rc.fBottom;
 		fLeft = _rc.fLeft;
+		fTop = _rc.fTop;
 		fRight = _rc.fRight;
-
-		fSizeX = _rc.fSizeX;
-		fSizeY = _rc.fSizeY;
+		fBottom = _rc.fBottom;
 	}
 
 	void MoveRect(float _fX, float _fY)
 	{
-		fTop += _fY;
-		fBottom += _fY;
 		fLeft += _fX;
+		fTop += _fY;
 		fRight += _fX;
-		/*fTop += _fY + fSizeHY;
-		fBottom += _fY - fSizeHY;
-		fLeft += _fX - fSizeHX;
-		fRight += _fX + fSizeHX;*/
+		fBottom += _fY;
 	}
 }RECTINFO, *PRECTINFO;
 

@@ -276,11 +276,6 @@ bool CMaterial::Init()
 
 void CMaterial::SetMaterial()
 {
-	if (1 == m_tInfo.vAmbient.w)
-	{
-		int a = 0;
-	}
-
 	GET_SINGLE(CShaderMgr)->UpdateConstBuffer("Material", &m_tInfo, CUT_VERTEX | CUT_GEOMETRY | CUT_PIXEL);
 
 	if (m_pDiffuse)

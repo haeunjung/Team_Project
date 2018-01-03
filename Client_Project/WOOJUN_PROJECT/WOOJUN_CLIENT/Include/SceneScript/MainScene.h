@@ -1,6 +1,7 @@
 #pragma once
 #include "05.Scene/SceneScript.h"
 #include "06.GameObject/GameObject.h"
+#include "07.Component/UIBar.h"
 
 WOOJUN_USING
 
@@ -12,6 +13,7 @@ private:
 	float m_fRespawnLimitTime;
 
 	bool	m_bCheck;
+	CUIBar*	m_pHpBar;
 private:
 	void CreateProtoType();
 	void CreateCheckBox();
@@ -19,6 +21,7 @@ private:
 	void CreateMouse();
 
 	void CreateInventory();
+	void CreateHpBar();
 public:
 	virtual bool Init();
 	virtual void Update(float _fTime);

@@ -1,7 +1,7 @@
 #include "ColliderRect.h"
-#include "../05.Scene/Scene.h"
-#include "07.Component/Camera.h"
+#include "Camera.h"
 #include "ColliderPoint.h"
+#include "../05.Scene/Scene.h"
 
 WOOJUN_USING
 
@@ -30,29 +30,9 @@ RECTINFO CColliderRect::GetRectInfo() const
 	return m_tRectInfo;
 }
 
-void CColliderRect::SetRectInfo(float _fTop, float _fBottom, float _fLeft, float _fRight, bool _bCenter)
+void CColliderRect::SetRectInfo(float _fLeft, float _fTop, float _fRight, float _fBottom)
 {
-	SetRectSize(_fRight - _fLeft, _fBottom - _fTop);
-
-	if (true == _bCenter)
-	{
-		m_tRectInfo = RECTINFO(_fTop - m_tRectInfo.fSizeHY, _fBottom - m_tRectInfo.fSizeHY, _fLeft - m_tRectInfo.fSizeHX, _fRight - m_tRectInfo.fSizeHX);
-	}
-	else
-	{
-		m_tRectInfo = RECTINFO(_fTop, _fBottom, _fLeft, _fRight);
-	}
-	
-	
-}
-
-void CColliderRect::SetRectSize(float _fSizeX, float _fSizeY)
-{
-	m_tRectInfo.fSizeX = _fSizeX;
-	m_tRectInfo.fSizeY = _fSizeY;
-
-	m_tRectInfo.fSizeHX = _fSizeX * 0.5f;
-	m_tRectInfo.fSizeHY = _fSizeY * 0.5f;
+	m_tRectInfo = RECTINFO(_fLeft, _fTop, _fRight, _fBottom);
 }
 
 bool CColliderRect::Init()
@@ -72,18 +52,7 @@ void CColliderRect::Update(float _fTime)
 {
 	CCollider::Update(_fTime);
 
-	//if (true == m_bFirst)
-	//{
-	//	m_bFirst = false;
-	//	return;
-	//}
-
 	m_tRectInfo.MoveRect(m_vMove.x, m_vMove.y);
-	//// MoveRect ¼öÁ¤??
-	//if (Vec3Zero != m_vMove)
-	//{
-	//	m_tRectInfo.MoveRect(m_vMove.x, m_vMove.y);
-	//}	
 }
 
 void CColliderRect::LateUpdate(float _fTime)

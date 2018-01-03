@@ -30,6 +30,11 @@ void CRenderer::UpdateTransform()
 	tTransform.matWV = tTransform.matWorld * tTransform.matView;
 	tTransform.matWVP = tTransform.matWV * tTransform.matProj;
 	tTransform.matVP = tTransform.matView * tTransform.matProj;
+	
+	tTransform.vPivot = m_pTransform->GetPivot();
+	tTransform.vMeshSize = m_pMesh->GetMeshSize();
+	tTransform.vMeshMin = m_pMesh->GetMeshMin();
+	tTransform.vMeshMax = m_pMesh->GetMeshMax();
 
 	SAFE_RELEASE(pCamera);
 
@@ -92,6 +97,13 @@ void CRenderer::SetMesh(const string & _strKey, const TCHAR * _pFileName, const 
 			m_vecMaterial[i].push_back(pMaterial);
 		}		
 	}
+}
+
+void CRenderer::SetMesh(CMesh * _pMesh)
+{
+	SAFE_RELEASE(m_pMesh);
+	m_pMesh = _pMesh;
+	m_pMesh->AddRef();
 }
 
 void CRenderer::SetShader(const string & _strKey)
@@ -226,6 +238,12 @@ void CRenderer::Collision(float _fTime)
 
 void CRenderer::Render(float _fTime)
 {
+	string str = "TerrainObject";
+	if (str == m_pGameObject->GetTag())
+	{
+		int a = 0;
+	}
+
 	UpdateTransform();
 
 	for (int i = 0; i < RST_END; ++i)

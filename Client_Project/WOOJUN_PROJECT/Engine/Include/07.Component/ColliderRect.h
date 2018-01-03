@@ -14,8 +14,7 @@ private:
 public:
 	RECTINFO GetRectInfo() const;
 public:
-	void SetRectInfo(float _fLeft, float _fTop, float _fRight, float _fBottom, bool _bCenter);
-	void SetRectSize(float _fSizeX, float _fSizeY);
+	void SetRectInfo(float _fLeft, float _fTop, float _fRight, float _fBottom);	
 public:
 	virtual bool Init();
 	virtual void Input(float _fTime);

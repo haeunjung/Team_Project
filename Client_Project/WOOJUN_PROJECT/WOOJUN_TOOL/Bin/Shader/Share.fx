@@ -60,12 +60,21 @@ struct PS_SINGLE_OUTPUT
 // 쉐이더 외부에서 값을 넘겨줄때 사용
 cbuffer Transform : register(b0)
 {
-    matrix g_matWorld;
-    matrix g_matView;
-    matrix g_matProj;
-    matrix g_matWV;
-    matrix g_matWVP;
-    matrix g_matVP;
+    matrix  g_matWorld;
+    matrix  g_matView;
+    matrix  g_matProj;
+    matrix  g_matWV;
+    matrix  g_matWVP;
+    matrix  g_matVP;
+
+    float3  g_vPivot;
+    float   g_Empty1;
+    float3  g_vMeshSize;
+    float   g_Empty2;
+    float3  g_vMeshMin;
+    float   g_Empty3;
+    float3  g_vMeshMax;
+    float   g_Empty4;
 }
 
 cbuffer Material : register(b1)
@@ -74,6 +83,7 @@ cbuffer Material : register(b1)
     float4 g_vMaterialAmbient;
     float4 g_vMaterialSpecular;
     float4 g_vMaterialEmissive; 
+
     int    g_iBump;
     int    g_iSpecular;
     float  g_fSpecularPower;

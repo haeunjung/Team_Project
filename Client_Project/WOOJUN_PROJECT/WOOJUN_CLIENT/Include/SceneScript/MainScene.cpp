@@ -5,6 +5,7 @@
 #include "../ObjectScript/RotBullet.h"
 #include "../ObjectScript/PlayerBullet.h"
 #include "01.Core/Debug.h"
+#include "01.Core/KeyMgr.h"
 #include "05.Scene/Scene.h"
 #include "05.Scene/Layer.h"
 #include "07.Component/Renderer.h"
@@ -21,6 +22,7 @@
 #include "07.Component/RadioButton.h"
 #include "07.Component/RadioButtonMgr.h"
 #include "07.Component/UIBack.h"
+#include "07.Component/Terrain.h"
 #include "../ObjectScript/Mouse.h"
 
 void CMainScene::CreateProtoType()
@@ -52,10 +54,11 @@ void CMainScene::CreateCheckBox()
 	DxVector3	vScale = { 128.0f, 128.0f, 1.0f };
 	pTransform->SetWorldScale(vScale);
 	pTransform->SetWorldPos(1100.0f, 500.0f, 0.0f);
+	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
 
 	CColliderRect*	pColRect = pCheckButtonObject->AddComponent<CColliderRect>("ButtonCol");
 	DxVector3	vPos = pTransform->GetWorldPos();
-	pColRect->SetRectInfo(0.0f, vScale.y, 0.0f, vScale.x, false);
+	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
 
 	SAFE_RELEASE(pColRect);
 	SAFE_RELEASE(pTransform);
@@ -94,10 +97,11 @@ void CMainScene::CreateRadioButton()
 		DxVector3	vScale = { 128.0f, 128.0f, 1.0f };
 		pTransform->SetWorldScale(vScale);
 		pTransform->SetWorldPos((150.0f * i) + 100.0f , 500.0f, 0.0f);
+		pTransform->SetPivot(0.0f, 0.0f, 0.0f);
 
 		CColliderRect*	pColRect = pRadioButtonObject->AddComponent<CColliderRect>("ButtonCol");
 		DxVector3	vPos = pTransform->GetWorldPos();
-		pColRect->SetRectInfo(0.0f, vScale.y, 0.0f, vScale.x, false);
+		pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
 
 		SAFE_RELEASE(pColRect);
 		SAFE_RELEASE(pTransform);
@@ -150,10 +154,11 @@ void CMainScene::CreateInventory()
 	DxVector3	vScale = { 400.0f, 250.0f, 1.0f };
 	pTransform->SetWorldScale(vScale);
 	pTransform->SetWorldPos(400.0f, 100.0f, 0.0f);
+	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
 
 	CColliderRect*	pColRect = pCheckButtonObject->AddComponent<CColliderRect>("ButtonCol");
 	DxVector3	vPos = pTransform->GetWorldPos();
-	pColRect->SetRectInfo(0.0f, vScale.y, 0.0f, vScale.x, false);
+	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
 
 	SAFE_RELEASE(pColRect);
 	SAFE_RELEASE(pTransform);
@@ -178,12 +183,48 @@ void CMainScene::CreateInventory()
 	SAFE_RELEASE(pUILayer);
 }
 
+void CMainScene::CreateHpBar()
+{
+	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
+
+	CGameObject*	pHpBarObejct = CGameObject::Create("HpBarObejct");
+
+	CTransform*	pTransform = pHpBarObejct->GetTransform();
+	DxVector3	vScale = { 400.0f, 50.0f, 1.0f };
+	pTransform->SetWorldScale(vScale);
+	pTransform->SetWorldPos(10.0f, 10.0f, 0.0f);	
+	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
+	SAFE_RELEASE(pTransform);
+
+	CRenderer2D*	pRenderer = pHpBarObejct->AddComponent<CRenderer2D>("HpBarRenderer2D");
+	pRenderer->SetMesh("UIMesh");
+	pRenderer->SetShader(UI_SHADER);
+	pRenderer->SetInputLayout("TexInputLayout");
+	pRenderer->SetRenderState(ALPHABLEND);
+
+	CMaterial*	pMaterial = pRenderer->GetMaterial();
+	pMaterial->SetDiffuseTexture("Linear", "HpBar", L"SmallHpBar.png");
+	SAFE_RELEASE(pMaterial);
+	SAFE_RELEASE(pRenderer);
+	
+	m_pHpBar = pHpBarObejct->AddComponent<CUIBar>("HpBar");
+	m_pHpBar->SetMinMax(0.0f, 1000.0f);
+	m_pHpBar->SetBarDir(BD_LEFT);	
+
+	pUILayer->AddObject(pHpBarObejct);
+	SAFE_RELEASE(pHpBarObejct);
+
+	SAFE_RELEASE(pUILayer);
+}
+
 bool CMainScene::Init()
 {
 	CreateProtoType();
 	CreateCheckBox();
 	CreateRadioButton();
-	CreateInventory();
+
+	//CreateInventory();
+	CreateHpBar();
 	//CreateMouse();
 
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
@@ -245,6 +286,25 @@ bool CMainScene::Init()
 	
 	SAFE_RELEASE(pLayer);
 
+	CLayer*	pMapLayer = m_pScene->FindLayer(MAPLAYER);
+
+	CGameObject*	pTerrainObject = CGameObject::Create("TerrainObject");
+
+	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
+	pTerrain->CreateTerrain("Terrain", 65, 65, 1, 1);
+	/*pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cliff05.dds");
+	pTerrain->SetNormalTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cliff05_NRM.bmp");
+	pTerrain->SetSpecularTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cliff05_SPEC.bmp");*/
+	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cave_01.dds");
+	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/BD_Terrain_Cave_01_NRM.bmp");
+	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/BD_Terrain_Cave_01_SPC.bmp");
+
+	SAFE_RELEASE(pTerrain);
+
+	pMapLayer->AddObject(pTerrainObject);
+	SAFE_RELEASE(pTerrainObject);
+	SAFE_RELEASE(pMapLayer);
+
 	pCameraObject = m_pScene->CreateCamera("BulletCamera", DxVector3(0.0f, 0.0f, -5.0f));
 	SAFE_RELEASE(pCameraObject);
 
@@ -296,6 +356,16 @@ void CMainScene::Update(float _fTime)
 	//	SAFE_RELEASE(pLayer);	
 	//}
 
+	if (true == KEYPRESS("F1"))
+	{
+		m_pHpBar->AddValue(-100.0f * _fTime);
+	}
+
+	if (true == KEYPRESS("F2"))
+	{
+		m_pHpBar->AddValue(100.0f * _fTime);
+	}
+
 	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 	pLayer->SetIsEnable(m_bCheck);
 	SAFE_RELEASE(pLayer);
@@ -326,7 +396,8 @@ void CMainScene::RadioButton(CGameObject * _pObj, float _fTime)
 CMainScene::CMainScene() :
 	m_pPlayerObject(NULL),
 	m_fRespawnTime(0.0f),
-	m_fRespawnLimitTime(5.0f)
+	m_fRespawnLimitTime(5.0f),
+	m_pHpBar(NULL)
 {
 	m_bCheck = true;
 }
@@ -334,4 +405,6 @@ CMainScene::CMainScene() :
 CMainScene::~CMainScene()
 {
 	SAFE_RELEASE(m_pPlayerObject);
+
+	SAFE_RELEASE(m_pHpBar);
 }

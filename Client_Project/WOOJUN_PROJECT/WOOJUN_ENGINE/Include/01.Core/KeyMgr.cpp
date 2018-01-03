@@ -94,6 +94,9 @@ bool CKeyMgr::Init()
 	CreateKey("LButton", VK_LBUTTON);
 	CreateKey("RButton", VK_RBUTTON);
 
+	CreateKey("F1", VK_F1);
+	CreateKey("F2", VK_F2);
+
 	m_sWheel = 0;
 
 	m_pMouseObject = CGameObject::Create("MouseObject");

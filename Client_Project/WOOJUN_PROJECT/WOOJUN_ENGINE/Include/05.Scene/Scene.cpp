@@ -279,9 +279,12 @@ CGameObject * CScene::FindLight(const string & _strKey)
 
 bool CScene::Init()
 {
-	CLayer* pLayer = CreateLayer(DEFAULTLAYER);	
+	CLayer* pLayer = CreateLayer(DEFAULTLAYER, 1);	
 	pLayer->SetSortFlag(SF_DESCENDING);
 	SAFE_RELEASE(pLayer);
+
+	CLayer* pMapLayer = CreateLayer(MAPLAYER);
+	SAFE_RELEASE(pMapLayer);
 
 	CLayer* pUILayer = CreateLayer("UILayer", INT_MAX);
 	SAFE_RELEASE(pUILayer);
