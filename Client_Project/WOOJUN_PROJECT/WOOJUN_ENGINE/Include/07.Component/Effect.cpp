@@ -1,9 +1,11 @@
 #include "Effect.h"
 #include "Transform.h"
 #include "Camera.h"
-#include "../05.Scene/Scene.h"
+#include "Renderer.h"
+#include "Renderer2D.h"
 #include "../04.Rendering/ShaderMgr.h"
-#include "Transform.h"
+#include "../05.Scene/Scene.h"
+#include "../06.GameObject/GameObject.h"
 
 WOOJUN_USING
 
@@ -15,6 +17,24 @@ void CEffect::SetEffectCBuffer()
 
 bool CEffect::Init()
 {
+	// Renderer Component가 있다면
+	if (true == m_pGameObject->CheckComponentFromTypeID<CRenderer>())
+	{
+		// Renderer에 Effect를 위한 상수버퍼 추가
+		CRenderer*	pRenderer = m_pGameObject->FindComponentFromTypeID<CRenderer>();
+		pRenderer->AddConstBuffer("BillBoard", 11, sizeof(EFFECTCBUFFER), CUT_VERTEX | CUT_GEOMETRY);
+
+		SAFE_RELEASE(pRenderer);
+	}
+	else if (true == m_pGameObject->CheckComponentFromTypeID<CRenderer2D>())
+	{
+		// Renderer2D에 Effect를 위한 상수버퍼 추가
+		CRenderer2D*	pRenderer2D = m_pGameObject->FindComponentFromTypeID<CRenderer2D>();
+		pRenderer2D->AddConstBuffer("BillBoard", 11, sizeof(EFFECTCBUFFER), CUT_VERTEX | CUT_GEOMETRY);
+
+		SAFE_RELEASE(pRenderer2D);
+	}
+
 	return true;
 }
 
@@ -57,6 +77,24 @@ void CEffect::LateUpdate(float _fTime)
 
 	SAFE_RELEASE(pCameraTransform);
 	SAFE_RELEASE(pCamera);
+
+	// Renderer Component가 있다면
+	if (true == m_pGameObject->CheckComponentFromTypeID<CRenderer>())
+	{
+		// Renderer에 Effect 상수버퍼 업데이트
+		CRenderer*	pRenderer = m_pGameObject->FindComponentFromTypeID<CRenderer>();
+		pRenderer->UpdateCBuffer("BillBoard", &m_tEffectCBuffer);
+
+		SAFE_RELEASE(pRenderer);
+	}
+	else if (true == m_pGameObject->CheckComponentFromTypeID<CRenderer2D>())
+	{
+		// Renderer2D에 Effect 상수버퍼 업데이트
+		CRenderer2D*	pRenderer2D = m_pGameObject->FindComponentFromTypeID<CRenderer2D>();
+		pRenderer2D->UpdateCBuffer("BillBoard", &m_tEffectCBuffer);
+
+		SAFE_RELEASE(pRenderer2D);
+	}
 }
 
 void CEffect::Collision(float _fTime)

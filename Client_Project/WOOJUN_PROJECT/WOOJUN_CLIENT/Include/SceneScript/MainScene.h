@@ -17,9 +17,8 @@ private:
 private:
 	void CreateProtoType();
 	void CreateCheckBox();
-	void CreateRadioButton();
-	void CreateMouse();
-
+	void CreateRadioButton();	
+	void CreateTerrain();
 	void CreateInventory();
 	void CreateHpBar();
 public:

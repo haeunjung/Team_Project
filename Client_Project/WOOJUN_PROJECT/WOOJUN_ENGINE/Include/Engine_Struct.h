@@ -357,6 +357,13 @@ typedef struct DLL _tagRay
 	bool		bIntersect;
 }RAY, *pRAY;
 
+typedef struct DLL _tagTerrainInfo
+{
+	vector<DxVector3>	vecPos;
+	UINT				iNumW;
+	UINT				iNumH;
+}TERRAININFO, *pTERRAININFO;
+
 typedef struct DLL _tagLightInfo
 {
 	DxVector4	vDiffuse;
@@ -435,5 +442,20 @@ typedef struct DLL _tagAnimation2DCBuffer
 	int					iFrameMaxY;
 	DxVector3			vEmpty;
 }ANIMATION2DCBUFFER, *pANIMATION2DCBUFFER;
+
+typedef struct DLL _tagTerrainCBuffer
+{
+	float		fDetailLevel;
+	int			iSplatCount;
+	DxVector2	vEmpty;
+}TERRAINCBUFFER, *pTERRAINCBUFFER;
+
+typedef struct DLL _tagRendererCBuffer
+{
+	int		iRegister;
+	int		iSize;
+	void*	pData;
+	int		iShaderType;
+}RENDERERCBUFFER, *pRENDERERCBUFFER;
 
 WOOJUN_END

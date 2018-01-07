@@ -15,11 +15,25 @@ private:
 	UINT	m_iVtxSizeZ;
 
 	vector<DxVector3>	m_vecPos;
+	float			m_fDetailLevel;
+	TERRAINCBUFFER	m_tTerrainCBuffer;
+private:
+	const DxVector3& CreateNormal(const DxVector3& _StartPos, const DxVector3& _XPos, const DxVector3& _ZPos);
 public:
-	bool CreateTerrain(const string& _strKey, UINT _iVtxNumX, UINT _iVtxNumZ, UINT _iVtxSizeX, UINT _iVtxSizeZ);
+	bool CreateTerrain(const string& _strKey, UINT _iVtxNumX, UINT _iVtxNumZ, UINT _iVtxSizeX, UINT _iVtxSizeZ,
+		char* pHeightMap = NULL, const string& _strPathKey = TEXTUREPATH);
+
 	void SetBaseTexture(const string& _strKey, TCHAR* _pFileName, const string& _strPathKey = TEXTUREPATH);
 	void SetNormalTexture(const string& _strKey, TCHAR* _pFileName, const string& _strPathKey = TEXTUREPATH);
 	void SetSpecularTexture(const string& _strKey, TCHAR* _pFileName, const string& _strPathKey = TEXTUREPATH);
+	
+	void SetSplatTexture(const string& _strKey, vector<wstring> _vecFileName, const string& _strPathKey = TEXTUREPATH);
+	void SetSplatNormalTexture(const string& _strKey, vector<wstring> _vecFileName, const string& _strPathKey = TEXTUREPATH);
+	void SetSplatSpecularTexture(const string& _strKey, vector<wstring> _vecFileName, const string& _strPathKey = TEXTUREPATH);
+	void SetSplatAlphaTexture(const string& _strKey, vector<wstring> _vecFileName, const string& _strPathKey = TEXTUREPATH);
+
+	void SetSplatCount(int _iCount);
+	void SetDetailLevel(float _fLevel);
 public:
 	bool Init() override;
 	void Input(float _fTime) override;

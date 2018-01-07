@@ -1,9 +1,9 @@
 #include "Animation2D.h"
-#include "../03.Resource/Texture.h"
-#include "../03.Resource/ResMgr.h"
 #include "Renderer.h"
 #include "Renderer2D.h"
 #include "Material.h"
+#include "../03.Resource/Texture.h"
+#include "../03.Resource/ResMgr.h"
 #include "../06.GameObject/GameObject.h"
 #include "../04.Rendering/ShaderMgr.h"
 
@@ -112,32 +112,6 @@ void CAnimation2D::SetShader()
 
 void CAnimation2D::Start(bool _b2D)
 {
-/*	if (true == _b2D)
-	{
-		CRenderer2D*	pRenderer = m_pGameObject->FindComponentFromTypeID<CRenderer2D>();
-
-		CMaterial*	pMaterial = pRenderer->GetMaterial(0, 0);
-
-		pMaterial->SetDiffuseTexture(m_vecAnimationClip[m_iCurrentAnimation]->pTexture,
-			m_vecAnimationClip[m_iCurrentAnimation]->iTexRegister);
-
-		SAFE_RELEASE(pMaterial);
-
-		SAFE_RELEASE(pRenderer);
-	}
-	else
-	{
-		CRenderer*	pRenderer = m_pGameObject->FindComponentFromTypeID<CRenderer>();
-
-		CMaterial*	pMaterial = pRenderer->GetMaterial(0, 0);
-
-		pMaterial->SetDiffuseTexture(m_vecAnimationClip[m_iCurrentAnimation]->pTexture,
-			m_vecAnimationClip[m_iCurrentAnimation]->iTexRegister);
-
-		SAFE_RELEASE(pMaterial);
-
-		SAFE_RELEASE(pRenderer);
-	}	*/	
 	CRenderer*	pRenderer = m_pGameObject->FindComponentFromTypeID<CRenderer>();
 
 	CMaterial*	pMaterial = pRenderer->GetMaterial(0, 0);
@@ -152,6 +126,24 @@ void CAnimation2D::Start(bool _b2D)
 
 bool CAnimation2D::Init()
 {
+	// Renderer Component가 있다면
+	if (true == m_pGameObject->CheckComponentFromTypeID<CRenderer>())
+	{
+		// Renderer에 Animation2D를 위한 상수버퍼 추가
+		CRenderer*	pRenderer = m_pGameObject->FindComponentFromTypeID<CRenderer>();
+		pRenderer->AddConstBuffer("Animation2D", 12, sizeof(ANIMATION2DCBUFFER), CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);
+
+		SAFE_RELEASE(pRenderer);
+	}
+	else if (true == m_pGameObject->CheckComponentFromTypeID<CRenderer2D>())
+	{
+		// Renderer2D에 Animation2D를 위한 상수버퍼 추가
+		CRenderer2D*	pRenderer2D = m_pGameObject->FindComponentFromTypeID<CRenderer2D>();
+		pRenderer2D->AddConstBuffer("Animation2D", 12, sizeof(ANIMATION2DCBUFFER), CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);
+
+		SAFE_RELEASE(pRenderer2D);
+	}
+
 	return true;
 }
 
@@ -213,6 +205,24 @@ void CAnimation2D::LateUpdate(float _fTime)
 	m_tCBuffer.iFrameY = pClip->iFrameY;
 	m_tCBuffer.iFrameMaxX = pClip->iFrameMaxX;
 	m_tCBuffer.iFrameMaxY = pClip->iFrameMaxY;
+
+	// Renderer Component가 있다면
+	if (true == m_pGameObject->CheckComponentFromTypeID<CRenderer>())
+	{
+		// Renderer에 Effect 상수버퍼 업데이트
+		CRenderer*	pRenderer = m_pGameObject->FindComponentFromTypeID<CRenderer>();
+		pRenderer->UpdateCBuffer("Animation2D", &m_tCBuffer);
+
+		SAFE_RELEASE(pRenderer);
+	}
+	else if (true == m_pGameObject->CheckComponentFromTypeID<CRenderer2D>())
+	{
+		// Renderer2D에 Effect 상수버퍼 업데이트
+		CRenderer2D*	pRenderer2D = m_pGameObject->FindComponentFromTypeID<CRenderer2D>();
+		pRenderer2D->UpdateCBuffer("Animation2D", &m_tCBuffer);
+
+		SAFE_RELEASE(pRenderer2D);
+	}
 }
 
 void CAnimation2D::Collision(float _fTime)

@@ -26,28 +26,39 @@ bool CShaderMgr::Init()
 	pShader = LoadShader(STANDARD_TEXNORMAL_SHADER, L"Standard.fx", pEntryPoint);
 	SAFE_RELEASE(pShader);
 
+	// Bump Shader
 	pEntryPoint[ST_VERTEX] = "StandardBumpVS";
 	pEntryPoint[ST_GEOMETRY] = NULL;
 	pEntryPoint[ST_PIXEL] = "StandardBumpPS";
 	pShader = LoadShader(STANDARD_BUMP_SHADER, L"Standard.fx", pEntryPoint);
 	SAFE_RELEASE(pShader);
 
+	// SkyBox Shader
 	pEntryPoint[ST_VERTEX] = "SkyVS";
 	pEntryPoint[ST_GEOMETRY] = NULL;
 	pEntryPoint[ST_PIXEL] = "SkyPS";
 	pShader = LoadShader("SkyShader", L"Sky.fx", pEntryPoint);
 	SAFE_RELEASE(pShader);
 
+	// Effect Shader
 	pEntryPoint[ST_VERTEX] = "EffectVS";
 	pEntryPoint[ST_GEOMETRY] = "EffectGS";
 	pEntryPoint[ST_PIXEL] = "EffectPS";
 	pShader = LoadShader(EFFECT_SHADER, L"Effect.fx", pEntryPoint);
 	SAFE_RELEASE(pShader);
 
+	// UI Shader
 	pEntryPoint[ST_VERTEX] = "UIVS";
 	pEntryPoint[ST_GEOMETRY] = NULL;
 	pEntryPoint[ST_PIXEL] = "UIPS";
 	pShader = LoadShader(UI_SHADER, L"UI.fx", pEntryPoint);
+	SAFE_RELEASE(pShader);
+
+	// Terrain Shader
+	pEntryPoint[ST_VERTEX] = "TerrainVS";
+	pEntryPoint[ST_GEOMETRY] = NULL;
+	pEntryPoint[ST_PIXEL] = "TerrainPS";
+	pShader = LoadShader(TERRAIN_SHADER, L"Terrain.fx", pEntryPoint);
 	SAFE_RELEASE(pShader);
 
 	AddElement("POSITION", 0, 12, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
@@ -90,6 +101,9 @@ bool CShaderMgr::Init()
 
 	// Animation2D Const Buffer
 	CreateConstBuffer("Animation2D", sizeof(ANIMATION2DCBUFFER), 12);
+
+	// Terrain Const Buffer
+	CreateConstBuffer("Terrain", sizeof(TERRAINCBUFFER), 10);
 
 	return true;
 }

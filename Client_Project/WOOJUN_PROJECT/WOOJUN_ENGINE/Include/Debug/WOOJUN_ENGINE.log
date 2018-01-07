@@ -1,0 +1,20 @@
+﻿  Terrain.cpp
+c:\users\wooju\desktop\team_project\client_project\woojun_project\woojun_engine\include\07.component\terrain.cpp(101): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\wooju\desktop\team_project\client_project\woojun_project\woojun_engine\include\07.component\terrain.cpp(103): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\wooju\desktop\team_project\client_project\woojun_project\woojun_engine\include\07.component\terrain.cpp(124): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\wooju\desktop\team_project\client_project\woojun_project\woojun_engine\include\07.component\terrain.cpp(126): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\wooju\desktop\team_project\client_project\woojun_project\woojun_engine\include\07.component\terrain.cpp(131): warning C4244: '인수': 'UINT'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\wooju\desktop\team_project\client_project\woojun_project\woojun_engine\include\07.component\terrain.cpp(162): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\wooju\desktop\team_project\client_project\woojun_project\woojun_engine\include\07.component\terrain.cpp(164): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\wooju\desktop\team_project\client_project\woojun_project\woojun_engine\include\07.component\terrain.cpp(47): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+  WOOJUN_ENGINE.vcxproj -> C:\Users\wooju\Desktop\Team_Project\Client_Project\WOOJUN_PROJECT\WOOJUN_ENGINE\Include\../Bin/WOOJUN_ENGINE_Debug.dll
+  WOOJUN_ENGINE.vcxproj -> ../Bin/WOOJUN_ENGINE_Debug.pdb (Partial PDB)
+  0개 파일이 복사되었습니다.
+  파일을 찾을 수 없습니다-*.inl
+  0개 파일이 복사되었습니다.
+  .\WOOJUN_ENGINE\Bin\WOOJUN_ENGINE_Debug.dll
+  1개 파일이 복사되었습니다.
+  .\Engine\Bin\WOOJUN_ENGINE_Debug.dll
+  1개 파일이 복사되었습니다.
+  .\Engine\Bin\WOOJUN_ENGINE_Debug.dll
+  1개 파일이 복사되었습니다.

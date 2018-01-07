@@ -205,6 +205,49 @@ void CRenderer2D::AddContainerMaterial()
 	m_vecMaterial.push_back(vecMaterial);
 }
 
+void CRenderer2D::AddConstBuffer(const string & _strKey, int _iRegister, int _iSize, int _iShaderType)
+{
+	if (NULL != FindConstBuffer(_strKey))
+	{
+		return;
+	}
+
+	pRENDERERCBUFFER	pBuffer = new RENDERERCBUFFER();
+
+	pBuffer->iRegister = _iRegister;
+	pBuffer->iSize = _iSize;
+	pBuffer->iShaderType = _iShaderType;
+	pBuffer->pData = new char[_iSize];
+
+	m_mapCBuffer.insert(make_pair(_strKey, pBuffer));
+}
+
+bool CRenderer2D::UpdateCBuffer(const string & _strKey, void * _pData)
+{
+	pRENDERERCBUFFER	pBuffer = FindConstBuffer(_strKey);
+
+	if (NULL == pBuffer)
+	{
+		return false;
+	}
+
+	memcpy(pBuffer->pData, _pData, pBuffer->iSize);
+
+	return true;
+}
+
+pRENDERERCBUFFER CRenderer2D::FindConstBuffer(const string & _strKey)
+{
+	unordered_map<string, pRENDERERCBUFFER>::iterator	iter = m_mapCBuffer.find(_strKey);
+
+	if (iter == m_mapCBuffer.end())
+	{
+		return NULL;
+	}
+
+	return iter->second;
+}
+
 bool CRenderer2D::Init()
 {
 	CMaterial*	pMaterial = CreateMaterial("Linear", "");
@@ -261,20 +304,13 @@ void CRenderer2D::Render(float _fTime)
 		SAFE_RELEASE(pLight);
 	}
 
-	// 이펙트가 있다면 이펙트 상수버퍼 넘긴다
-	CEffect*	pEffect = m_pGameObject->FindComponentFromTypeID<CEffect>();
-	if (NULL != pEffect)
-	{
-		pEffect->SetEffectCBuffer();
-		SAFE_RELEASE(pEffect);
-	}
+	// 상수버퍼들을 셰이더에 업데이트
+	unordered_map<string, pRENDERERCBUFFER>::iterator	iter;
+	unordered_map<string, pRENDERERCBUFFER>::iterator	iterEnd = m_mapCBuffer.end();
 
-	// 애니메이션
-	CAnimation2D*	pAnimation2D = m_pGameObject->FindComponentFromTypeID<CAnimation2D>();
-	if (NULL != pAnimation2D)
+	for (iter = m_mapCBuffer.begin(); iter != iterEnd; ++iter)
 	{
-		pAnimation2D->SetShader();
-		SAFE_RELEASE(pAnimation2D);
+		GET_SINGLE(CShaderMgr)->UpdateConstBuffer(iter->first, iter->second->pData, iter->second->iShaderType);
 	}
 
 	// 재질 설정
@@ -353,6 +389,22 @@ CRenderer2D::CRenderer2D(const CRenderer2D & _Renderer2D)
 			m_vecMaterial[i].push_back(pMaterial);
 		}
 	}
+
+	unordered_map<string, pRENDERERCBUFFER>::const_iterator	iter;
+	unordered_map<string, pRENDERERCBUFFER>::const_iterator	iterEnd = _Renderer2D.m_mapCBuffer.end();
+
+	m_mapCBuffer.clear();
+	for (iter = _Renderer2D.m_mapCBuffer.begin(); iter != iterEnd; ++iter)
+	{
+		pRENDERERCBUFFER	pBuffer = new RENDERERCBUFFER();
+
+		pBuffer->iRegister = iter->second->iRegister;
+		pBuffer->iSize = iter->second->iSize;
+		pBuffer->iShaderType = iter->second->iShaderType;
+		pBuffer->pData = new char[pBuffer->iSize];
+
+		m_mapCBuffer.insert(make_pair(iter->first, pBuffer));
+	}
 }
 
 CRenderer2D::~CRenderer2D()
@@ -370,4 +422,13 @@ CRenderer2D::~CRenderer2D()
 	{
 		Safe_Release_VecList(m_vecMaterial[i]);
 	}
+
+	unordered_map<string, pRENDERERCBUFFER>::iterator	iter;
+	unordered_map<string, pRENDERERCBUFFER>::iterator	iterEnd = m_mapCBuffer.end();
+
+	for (iter = m_mapCBuffer.begin(); iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE_ARR(iter->second->pData);
+	}
+	Safe_Delete_Map(m_mapCBuffer);
 }

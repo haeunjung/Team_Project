@@ -4,6 +4,7 @@
 #include "../05.Scene/Scene.h"
 #include "../Device.h"
 #include "ColliderRay.h"
+#include "ColliderTerrain.h"
 
 WOOJUN_USING
 
@@ -112,8 +113,12 @@ bool CColliderSphere::Collision(CCollider * _pCollider)
 		return ColSphereToSphere(m_tSphereInfo, ((CColliderSphere*)_pCollider)->m_tSphereInfo);
 	case COL_RAY:
 		return ColRayToSphere(((CColliderRay*)_pCollider)->GetRay(), m_tSphereInfo);
+	case COL_TERRAIN:
+		CTransform*	pTransform = _pCollider->GetTransform();
+		bool bReturn = ColTerrainToPosition(((CColliderTerrain*)_pCollider)->GetTerrainInfo(), m_pTransform, pTransform->GetWorldScale());
+		SAFE_RELEASE(pTransform);
+		return bReturn;
 	}
-
 	return false;
 }
 

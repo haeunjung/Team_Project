@@ -346,7 +346,12 @@
     <ClInclude Include="07.Component\UIBack.h">
       <Filter>07. Component\10. UI\03. Back</Filter>
     </ClInclude>
-    <ClInclude Include="07.Component\Terrain.h" />
+    <ClInclude Include="07.Component\Terrain.h">
+      <Filter>07. Component\11. Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="07.Component\ColliderTerrain.h">
+      <Filter>07. Component\05. Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -524,7 +529,12 @@
     <ClCompile Include="07.Component\UIBack.cpp">
       <Filter>07. Component\10. UI\03. Back</Filter>
     </ClCompile>
-    <ClCompile Include="07.Component\Terrain.cpp" />
+    <ClCompile Include="07.Component\Terrain.cpp">
+      <Filter>07. Component\11. Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\ColliderTerrain.cpp">
+      <Filter>07. Component\05. Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\Standard.fx">
@@ -543,6 +553,9 @@
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\Shader\UI.fx">
+      <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Terrain.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

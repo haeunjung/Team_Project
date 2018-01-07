@@ -41,6 +41,7 @@ bool CPlayer::Init()
 	CGameObject*	pChild = CGameObject::Create("BoostObject");
 
 	pTransform = pChild->GetTransform();
+	pTransform->SetLocalRotY(PI * 0.5f);
 	pTransform->SetWorldPos(0.0f, -1.0f, 0.0f);
 	SAFE_RELEASE(pTransform);
 
@@ -91,6 +92,11 @@ bool CPlayer::Init()
 	GET_SINGLE(CKeyMgr)->CreateKey("Init", VK_CONTROL, VK_MENU);	
 	GET_SINGLE(CKeyMgr)->CreateKey("RotFire", 'R');
 
+	GET_SINGLE(CKeyMgr)->CreateKey("MoveForward", VK_UP);
+	GET_SINGLE(CKeyMgr)->CreateKey("MoveBack", VK_DOWN);
+	GET_SINGLE(CKeyMgr)->CreateKey("MoveLeft", VK_LEFT);
+	GET_SINGLE(CKeyMgr)->CreateKey("MoveRight", VK_RIGHT);
+
 	return true;
 }
 
@@ -136,6 +142,23 @@ void CPlayer::Input(float _fTime)
 	if (true == KEYPRESS("RotZDown"))
 	{
 		m_pTransform->RotateZ(-PI, _fTime);
+	}
+
+	if (true == KEYPRESS("MoveForward"))
+	{
+		m_pTransform->Forward(m_fSpeed, _fTime);
+	}
+	if (true == KEYPRESS("MoveBack"))
+	{
+		m_pTransform->Forward(-m_fSpeed, _fTime);
+	}
+	if (true == KEYPRESS("MoveLeft"))
+	{
+		m_pTransform->Right(-m_fSpeed, _fTime);
+	}
+	if (true == KEYPRESS("MoveRight"))
+	{
+		m_pTransform->Right(m_fSpeed, _fTime);
 	}
 
 	if (true == KEYPUSH("Fire"))

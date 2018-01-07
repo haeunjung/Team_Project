@@ -79,29 +79,7 @@ PS_SINGLE_OUTPUT StandardBumpPS(VS_BUMP_OUTPUT input)
 
     if (1 == g_iBump)
     {
-        float4 vNormalMap = g_NormalTexture.Sample(g_NormalSampler, input.vUV);
-        vNormal = vNormalMap.xyz * 2.0f - 1.0f;
-
-        // 기저벡터를 이용하여 탄젠트공간의 법선을 뷰공간으로 만들어준다.
-        float3x3 mat = float3x3(input.vTangent, input.vBinormal, input.vNormal);
-
-        // Tangent, Binormal, Normal은 버텍스 셰이더에서 View 공간으로 변환된 축정도블이다.
-        // 이 축정보를 이용해서 행렬을 아래처럼 구성한다.
-        // Tx     Bx     Nx
-        // Ty     By     Ny
-        // Tz     Bz     Nz
-        // 이렇게 구성하면 뷰공간에 있는 어느 벡터를 탄젠트 공간으로 변환하는 행렬이 만들어진다.
-        // NormalMap에 저장된 법선 정보는 탄젠트공간에 존재하는 법선들이다.
-        // 이 법선정보를 뷰공간으로 바꾸려면 위 행렬의 역행렬이 필요하다.
-        // 직교행렬의 역행렬은 전치행렬과 같기때문에
-        // Tx     Ty     Tz
-        // Bx     By     Bz
-        // Nx     Ny     Nz
-        // 위와 같은 행렬이라고 볼 수 있다.
-        // NormalMap에서 뽑아온 벡터를 위 행렬에 곱하게 되면 탄젠트공간에 있던 법선 정보가 뷰공간으로 변환된다.
-
-        vNormal = mul(vNormal, mat);
-        vNormal = normalize(vNormal);
+        vNormal = ComputeNormal(input.vTangent, input.vBinormal, input.vNormal, input.vUV);
     }
 
     _tagMaterial tMaterial = ComputeLight(vNormal, input.vViewPos, input.vUV);

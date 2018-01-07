@@ -81,4 +81,5 @@
 #define COLLIDER_COLOR_SHADER		"ColliderColorShader"
 #define STANDARD_BUMP_SHADER		"StandardBumpShader"
 #define UI_SHADER					"UIShader"
+#define TERRAIN_SHADER				"TerrainShader"
  

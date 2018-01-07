@@ -21,6 +21,22 @@ typedef struct DLL _tagTexture
 	}
 }TEXTURE, *pTEXTURE;
 
+typedef struct DLL _tagSkinInfo
+{
+	pTEXTURE	pDiffuse;
+	pTEXTURE	pNormal;
+	pTEXTURE	pSpecular;
+	pTEXTURE	pAlpha;
+
+	_tagSkinInfo() :
+		pDiffuse(NULL),
+		pNormal(NULL),
+		pSpecular(NULL),
+		pAlpha(NULL)
+	{
+	}
+}SKININFO, *pSKININFO;
+
 class DLL CMaterial :
 	public CBaseObj
 {
@@ -30,9 +46,8 @@ private:
 	friend class CMesh;
 private:
 	MATERIALINFO	m_tInfo;
-	pTEXTURE		m_pDiffuse;
-	pTEXTURE		m_pNormal;
-	pTEXTURE		m_pSpecular;
+	SKININFO		m_tBase;
+	SKININFO		m_tMultiTexture;
 public:
 	void SetMaterialInfo(const MATERIALINFO& _tInfo);
 	void SetMaterialInfo(const DxVector4& _vDiffuse, const DxVector4& _vAmbient, const DxVector4& _vSpecular, const DxVector4& _vEmissive,
@@ -59,6 +74,15 @@ public:
 	bool SetSpecularTextureFromFullPath(const string& _strSamplerKey, const string& _strKey, const char* _pFullPath);
 	void SetSpecularRegister(int _iSamplerRegister = 0, int _iTextureRegister = 0);
 	void SetSpecularShaderConstantType(int _iShaderConstantType);
+public:	
+	void AddDiffuseMultiTexture(const string& _strDifSmpKey, const string& _strDifTexKey,
+		int _iDifTexRegister, int _iDifSmpRegister,	int _iShaderType, vector<wstring> _vecFileName, const string& _strPathKey = TEXTUREPATH);
+	void AddNormalMultiTexture(const string& _strNrmSmpKey, const string& _strNrmTexKey,
+		int _iNrmTexRegister, int _iNrmSmpRegister, int _iShaderType, vector<wstring> _vecFileName, const string& _strPathKey = TEXTUREPATH);
+	void AddSpecularMultiTexture(const string& _strSpcSmpKey, const string& _strSpcTexKey,
+		int _iSpcTexRegister, int _iSpcSmpRegister, int _iShaderType, vector<wstring> _vecFileName, const string& _strPathKey = TEXTUREPATH);
+	void AddAlphaMultiTexture(const string& _strAlphaSmpKey, const string& _strAlphaTexKey,
+		int _iAlphaTexRegister, int _iAlphaSmpRegister, int _iShaderType, vector<wstring> _vecFileName, const string& _strPathKey = TEXTUREPATH);
 public:
 	bool Init();
 	void SetMaterial();

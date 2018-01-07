@@ -17,6 +17,8 @@ private:
 	ID3D11InputLayout*	m_pInputLayout;
 	CRenderState*		m_pRenderState[RST_END];
 	vector<vector<CMaterial*>>	m_vecMaterial;
+	unordered_map<string, pRENDERERCBUFFER>	m_mapCBuffer;
+
 private:
 	void UpdateTransform();
 
@@ -41,6 +43,12 @@ public:
 		int _iContainer = 0);
 	void AddMaterial(CMaterial* _pMaterial, int _iContainer = 0);
 	void AddContainerMaterial();
+
+// Renderer CBuffer
+public:
+	void AddConstBuffer(const string& _strKey, int _iRegister, int _iSize, int _iShaderType);
+	bool UpdateCBuffer(const string& _strKey, void* _pData);
+	pRENDERERCBUFFER FindConstBuffer(const string& _strKey);
 public:
 	virtual bool Init() override;
 	virtual void Input(float _fTime) override;
