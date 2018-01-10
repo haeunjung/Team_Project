@@ -61,7 +61,6 @@ void CKeyMgr::CKey::KeyCheck() {
 			m_bStayUp = true;
 		}
 	}
-
 }
 
 bool CKeyMgr::CKey::GetAsyncCheck() const {
@@ -96,6 +95,11 @@ bool CKeyMgr::Init()
 
 	CreateKey("F1", VK_F1);
 	CreateKey("F2", VK_F2);
+
+	CreateKey("CameraForward", VK_UP);
+	CreateKey("CameraBack", VK_DOWN);
+	CreateKey("CameraLeft", VK_LEFT);
+	CreateKey("CameraRight", VK_RIGHT);
 
 	m_sWheel = 0;
 

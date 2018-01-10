@@ -9,7 +9,6 @@ private:
 	friend class CGameObject;
 private:
 	// 얘 벡터값 초기화 어디서하냐 대체??
-
 	DxVector3		m_vLocalScale;
 	DxVector3		m_vLocalRot;
 	DxVector3		m_vLocalPos;
@@ -39,6 +38,7 @@ public:
 
 	CTransform* GetParentTransform() const;
 public:
+	void SetWorldAxis(AXIS _eAxis, const DxVector3& _vAxis);
 	void SetParentTransform(CTransform* _pParentTransform);
 	void ActiveUpdate();
 	void ComputeWorldAxis();
@@ -130,6 +130,8 @@ public:
 	MATRIX GetWorldMatrix()	const;
 	MATRIX GetParentMatrix() const;
 	MATRIX GetParentRotMatrix() const;
+
+	void SetWorldRotMatrix(MATRIX& _Mat);
 public:
 	// Move
 	void Forward(float _fSpeed, float _fTime);

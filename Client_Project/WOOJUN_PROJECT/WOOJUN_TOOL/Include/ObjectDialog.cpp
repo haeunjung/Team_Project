@@ -7,8 +7,16 @@
 #include "afxdialogex.h"
 #include "ToolValue.h"
 
+#include "01.Core/PathMgr.h"
+#include "03.Resource/ResMgr.h"
+#include "03.Resource/Mesh.h"
+#include "05.Scene/Scene.h"
+#include "05.Scene/SceneMgr.h"
+#include "05.Scene/Layer.h"
 #include "07.Component/Transform.h"
-
+#include "07.Component/Renderer.h"
+#include "07.Component/ColliderSphere.h"
+#include "ToolObject.h"
 
 // CObjectDialog 대화 상자입니다.
 
@@ -24,7 +32,9 @@ CObjectDialog::CObjectDialog(CWnd* pParent /*=NULL*/) :
 	m_fRotationZ(0),
 	m_fPosX(0),
 	m_fPosY(0),
-	m_fPosZ(0)
+	m_fPosZ(0),
+	m_bLoad(false),
+	m_iCurIndex(0)	
 {
 }
 
@@ -47,11 +57,16 @@ void CObjectDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT1_POSX, m_fPosX);
 	DDX_Text(pDX, IDC_EDIT1_POSY, m_fPosY);
 	DDX_Text(pDX, IDC_EDIT1_POSZ, m_fPosZ);
+	DDX_Control(pDX, IDC_LIST1, m_ObjectListBox);
 }
 
 
 BEGIN_MESSAGE_MAP(CObjectDialog, CDialogEx)
 	ON_WM_PAINT()
+	ON_LBN_SELCHANGE(IDC_LIST1, &CObjectDialog::OnLbnSelchangeList1)
+	ON_WM_CREATE()
+	ON_BN_CLICKED(IDC_LOAD_BUTTON, &CObjectDialog::OnBnClickedLoadButton)
+	ON_BN_CLICKED(IDC_CREATE_BUTTON, &CObjectDialog::OnBnClickedCreateButton)
 END_MESSAGE_MAP()
 
 
@@ -132,6 +147,68 @@ void CObjectDialog::SetObjectValue()
 	UpdateData(FALSE);
 }
 
+bool CObjectDialog::LoadFBX()
+{
+	CFileFind FileFind;
+
+	wstring TempPath = GET_SINGLE(CPathMgr)->FindPath(MESHPATH);
+	TempPath += L"*.FBX";
+	
+	string strKey;
+
+	// 디렉터리가 존재하면 TRUE를 반환한다.
+	bool IsFile = FileFind.FindFile(TempPath.c_str());
+	while (IsFile)
+	{
+		// 다음 파일 혹은 폴더가 존재한다면 TRUE를 반환한다.
+		IsFile = FileFind.FindNextFileW();
+
+		if (false == FileFind.IsDots())
+		{
+			CString FileName = FileFind.GetFileName();
+			m_ObjectListBox.AddString(FileName);
+			
+			CString FilePath = FileFind.GetFilePath();
+			strKey = GET_SINGLE(CToolValue)->CStringToString(FileName);
+
+			/*CMesh* pMesh = GET_SINGLE(CResMgr)->LoadMeshFromFullPath(strKey, FilePath);
+			SAFE_RELEASE(pMesh);*/
+		}
+	}
+
+	return true;
+}
+
+void CObjectDialog::CreateObject(const string & _strKey, const wstring & _FileName)
+{
+	CLayer*	pLayer = GET_SINGLE(CSceneMgr)->GetCurScene()->FindLayer(DEFAULTLAYER);
+
+	CGameObject* pGameObject = CGameObject::Create(_strKey);
+
+	CTransform* pTransform = pGameObject->GetTransform();
+	pTransform->SetWorldPos(0.0f, 0.0f, 0.0f);
+	pTransform->SetWorldScale(0.1f, 0.1f, 0.1f);
+	SAFE_RELEASE(pTransform);
+
+	CToolObject* pToolObject = pGameObject->AddComponent<CToolObject>(_strKey + "Object");
+	SAFE_RELEASE(pToolObject);
+	
+	CRenderer* pRenderer = pGameObject->AddComponent<CRenderer>(_strKey + "Renderer");
+	pRenderer->SetMesh(_strKey, _FileName.c_str());
+	pRenderer->SetShader(STANDARD_BUMP_SHADER);
+	pRenderer->SetInputLayout("BumpInputLayout");
+	pRenderer->SetRenderState(ALPHABLEND);
+	SAFE_RELEASE(pRenderer);
+
+	CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
+	pColSphere->SetSphereInfo(Vec3Zero, 1.0f);
+	SAFE_RELEASE(pColSphere);
+
+	pLayer->AddObject(pGameObject);
+	SAFE_RELEASE(pGameObject);
+	SAFE_RELEASE(pLayer);
+}
+
 
 void CObjectDialog::OnPaint()
 {
@@ -140,4 +217,67 @@ void CObjectDialog::OnPaint()
 					   // 그리기 메시지에 대해서는 CDialogEx::OnPaint()을(를) 호출하지 마십시오.
 
 	SetObjectValue();
+}
+
+
+void CObjectDialog::OnLbnSelchangeList1()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_iCurIndex = m_ObjectListBox.GetCurSel();
+}
+
+
+int CObjectDialog::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CDialogEx::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
+	return 0;
+}
+
+
+BOOL CObjectDialog::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	// TODO:  여기에 추가 초기화 작업을 추가합니다.
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
+}
+
+
+void CObjectDialog::OnBnClickedLoadButton()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	if (true == m_bLoad)
+	{
+		return;
+	}
+
+	m_bLoad = LoadFBX();
+}
+
+
+void CObjectDialog::OnBnClickedCreateButton()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.	
+	CString GetText;
+	m_ObjectListBox.GetText(m_iCurIndex, GetText);
+
+	string strKey = GET_SINGLE(CToolValue)->CStringToString(GetText);
+	
+	int Num = 0;
+	for (int i = strlen(strKey.c_str()) - 1; i >= 0; --i)
+	{
+		++Num;
+		if ('.' == strKey[i])
+		{
+			strKey.erase(i, Num);
+			break;
+		}
+	}
+
+	CreateObject(strKey, GetText.GetString());
 }

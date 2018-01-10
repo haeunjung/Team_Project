@@ -38,15 +38,6 @@ CTerrain::~CTerrain()
 {
 }
 
-const DxVector3 & CTerrain::CreateNormal(const DxVector3 & _StartPos, const DxVector3 & _XPos, const DxVector3 & _ZPos)
-{
-	// TODO: 여기에 반환 구문을 삽입합니다.
-	DxVector3 vec1 = _XPos - _StartPos;
-	DxVector3 vec2 = _ZPos - _StartPos;
-
-	return vec1.Cross(vec2);
-}
-
 bool CTerrain::CreateTerrain(const string & _strKey, UINT _iVtxNumX, UINT _iVtxNumZ, UINT _iVtxSizeX, UINT _iVtxSizeZ,
 	char* pHeightMap /*= NULL*/, const string& _strPathKey /*= TEXTUREPATH*/)
 {
@@ -118,14 +109,12 @@ bool CTerrain::CreateTerrain(const string & _strKey, UINT _iVtxNumX, UINT _iVtxN
 
 	vector<VERTEXBUMP> vecVtxBump;
 	vecVtxBump.reserve(m_iVtxNumX * m_iVtxNumZ);
-
-	int Index = 0;
+		
 	// 버텍스 버퍼 생성
 	for (int i = 0; i < m_iVtxNumZ; ++i)
 	{
 		for (int j = 0; j < m_iVtxNumX; ++j)
-		{
-			
+		{			
 			VERTEXBUMP	tVtxBump = {};
 
 			tVtxBump.vPos = DxVector3(j * m_iVtxSizeX, 0.0f, ((m_iVtxNumZ - 1) - i) * m_iVtxSizeZ);
@@ -136,18 +125,8 @@ bool CTerrain::CreateTerrain(const string & _strKey, UINT _iVtxNumX, UINT _iVtxN
 			}
 
 			m_vecPos.push_back(tVtxBump.vPos);
-			++Index;
-
-			if (0 == j || 0 == i)
-			{
-				tVtxBump.vNormal = DxVector3(0.0f, 1.0f, 0.0f);
-			}
-			else
-			{
-				tVtxBump.vNormal = CreateNormal(tVtxBump.vPos, m_vecPos[Index - 2], m_vecPos[Index - m_iVtxNumX - 1]);
-				//tVtxBump.vNormal = DxVector3(0.0f, 1.0f, 0.0f);
-			}
 			
+			tVtxBump.vNormal = DxVector3(0.0f, 0.0f, 0.0f);
 			tVtxBump.vUV = DxVector2(j / (float)(m_iVtxNumX - 1), i / (float)(m_iVtxNumZ - 1));
 			tVtxBump.vTangent = DxVector3(1.0f, 0.0f, 0.0f);
 			tVtxBump.vBinormal = DxVector3(0.0f, 0.0f, -1.0f);
@@ -158,6 +137,8 @@ bool CTerrain::CreateTerrain(const string & _strKey, UINT _iVtxNumX, UINT _iVtxN
 	
 	// 인덱스 버퍼 생성
 	vector<UINT>	vecIndex;
+
+	m_vecFaceNormal.reserve((m_iVtxNumX - 1) * (m_iVtxNumZ - 1) * 2);
 
 	for (int i = 0; i < m_iVtxNumZ - 1; ++i)
 	{
@@ -170,12 +151,38 @@ bool CTerrain::CreateTerrain(const string & _strKey, UINT _iVtxNumX, UINT _iVtxN
 			vecIndex.push_back(iAddr + 1);
 			vecIndex.push_back(iAddr + m_iVtxNumX + 1);
 
+			// 면법선 구하기
+			DxVector3	vEdge1 = m_vecPos[iAddr + 1] - m_vecPos[iAddr];
+			DxVector3	vEdge2 = m_vecPos[iAddr + m_iVtxNumX + 1] - m_vecPos[iAddr];
+
+			vEdge1 = vEdge1.Normalize();
+			vEdge2 = vEdge2.Normalize();
+
+			DxVector3	vFaceNormal = vEdge1.Cross(vEdge2);
+			vFaceNormal = vFaceNormal.Normalize();
+
+			m_vecFaceNormal.push_back(vFaceNormal);
+			
 			// 좌하단 삼각형
 			vecIndex.push_back(iAddr);
 			vecIndex.push_back(iAddr + m_iVtxNumX + 1);
 			vecIndex.push_back(iAddr + m_iVtxNumX);
+
+			vEdge1 = m_vecPos[iAddr + m_iVtxNumX + 1] - m_vecPos[iAddr];
+			vEdge2 = m_vecPos[iAddr + m_iVtxNumX] - m_vecPos[iAddr];
+
+			vEdge1 = vEdge1.Normalize();
+			vEdge2 = vEdge2.Normalize();
+
+			vFaceNormal = vEdge1.Cross(vEdge2);
+			vFaceNormal = vFaceNormal.Normalize();
+
+			m_vecFaceNormal.push_back(vFaceNormal);
 		}
 	}
+
+	ComputeNormal(vecVtxBump, vecIndex);
+	ComputeTangent(vecVtxBump, vecIndex);
 
 	CMesh*	pMesh = GET_SINGLE(CResMgr)->CreateMesh(_strKey, &vecVtxBump[0], vecVtxBump.size(), sizeof(VERTEXBUMP),
 		D3D11_USAGE_DEFAULT, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,	&vecIndex[0], vecIndex.size(), sizeof(UINT));
@@ -283,6 +290,68 @@ void CTerrain::SetDetailLevel(float _fLevel)
 	m_fDetailLevel = _fLevel;
 }
 
+void CTerrain::ComputeNormal(vector<VERTEXBUMP>& _vecVertex, const vector<UINT>& _vecIndex)
+{
+	for (size_t i = 0; i < m_vecFaceNormal.size(); ++i)
+	{
+		int	idx0 = _vecIndex[i * 3];
+		int	idx1 = _vecIndex[i * 3 + 1];
+		int	idx2 = _vecIndex[i * 3 + 2];
+
+		_vecVertex[idx0].vNormal += m_vecFaceNormal[i];
+		_vecVertex[idx1].vNormal += m_vecFaceNormal[i];
+		_vecVertex[idx2].vNormal += m_vecFaceNormal[i];
+	}
+
+	for (size_t i = 0; i < _vecVertex.size(); ++i)
+	{
+		_vecVertex[i].vNormal = _vecVertex[i].vNormal.Normalize();
+	}
+}
+
+void CTerrain::ComputeTangent(vector<VERTEXBUMP>& _vecVertex, const vector<UINT>& _vecIndex)
+{
+	for (size_t i = 0; i < m_vecFaceNormal.size(); ++i)
+	{
+		int idx0 = _vecIndex[i * 3];
+		int idx1 = _vecIndex[i * 3 + 1];
+		int idx2 = _vecIndex[i * 3 + 2];
+
+		float	fVertex1[3], fVertex2[3];
+		fVertex1[0] = _vecVertex[idx1].vPos.x - _vecVertex[idx0].vPos.x;
+		fVertex1[1] = _vecVertex[idx1].vPos.y - _vecVertex[idx0].vPos.y;
+		fVertex1[2] = _vecVertex[idx1].vPos.z - _vecVertex[idx0].vPos.z;
+
+		fVertex2[0] = _vecVertex[idx2].vPos.x - _vecVertex[idx0].vPos.x;
+		fVertex2[1] = _vecVertex[idx2].vPos.y - _vecVertex[idx0].vPos.y;
+		fVertex2[2] = _vecVertex[idx2].vPos.z - _vecVertex[idx0].vPos.z;
+
+		float ftu[2], ftv[2];
+		ftu[0] = _vecVertex[idx1].vUV.x - _vecVertex[idx0].vUV.x;
+		ftv[0] = _vecVertex[idx1].vUV.y - _vecVertex[idx0].vUV.y;
+
+		ftu[1] = _vecVertex[idx2].vUV.x - _vecVertex[idx0].vUV.x;
+		ftv[1] = _vecVertex[idx2].vUV.y - _vecVertex[idx0].vUV.y;
+
+		float	fDen = 1.0f / (ftu[0] * ftv[1] - ftu[1] * ftv[0]);
+
+		DxVector3	vTangent;
+		vTangent.x = (ftv[1] * fVertex1[0] - ftv[0] * fVertex2[0]) * fDen;
+		vTangent.y = (ftv[1] * fVertex1[1] - ftv[0] * fVertex2[1]) * fDen;
+		vTangent.z = (ftv[1] * fVertex1[2] - ftv[0] * fVertex2[2]) * fDen;
+
+		vTangent = vTangent.Normalize();
+
+		_vecVertex[idx0].vTangent = vTangent;
+		_vecVertex[idx1].vTangent = vTangent;
+		_vecVertex[idx2].vTangent = vTangent;
+
+		_vecVertex[idx0].vBinormal = _vecVertex[idx0].vNormal.Cross(vTangent).Normalize();
+		_vecVertex[idx1].vBinormal = _vecVertex[idx1].vNormal.Cross(vTangent).Normalize();
+		_vecVertex[idx2].vBinormal = _vecVertex[idx2].vNormal.Cross(vTangent).Normalize();
+	}
+}
+
 bool CTerrain::Init()
 {
 	CRenderer*	pRenderer = m_pGameObject->AddComponent<CRenderer>("Terrain Renderer");
@@ -295,7 +364,7 @@ bool CTerrain::Init()
 
 	SAFE_RELEASE(pRenderer);
 
-	m_fDetailLevel = 16.0f;
+	m_fDetailLevel = 32.0f;
 
 	return true;
 }

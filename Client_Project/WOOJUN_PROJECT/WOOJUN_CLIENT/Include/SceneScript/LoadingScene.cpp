@@ -18,7 +18,7 @@ bool CLoadingScene::Init()
 	SAFE_RELEASE(pTransform);
 
 	CRenderer2D*	pRenderer = pBGObject->AddComponent<CRenderer2D>("BGRenderer2D");
-	pRenderer->SetMesh("LTOrthoRect");
+	pRenderer->SetMesh("UIMesh");
 	pRenderer->SetShader(UI_SHADER);
 	pRenderer->SetInputLayout("TexInputLayout");
 	pRenderer->SetRenderState(ALPHABLEND);

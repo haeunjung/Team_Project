@@ -7,17 +7,25 @@ DEFINITION_SINGLE(CPathMgr)
 bool CPathMgr::Init()
 {
 	WCHAR strPath[MAX_PATH] = {};	
-	GetModuleFileName(NULL, strPath, MAX_PATH);
+	GetModuleFileName(NULL, strPath, MAX_PATH);	
+
+	int Num = 0;
 
 	for (int i = lstrlen(strPath) - 1; i >= 0; --i)
 	{
 		if ('\\' == strPath[i] || '/' == strPath[i])
-		{			
-			memset(&strPath[i + 1], 0, sizeof(WCHAR) * (MAX_PATH - (i + 1)));
-			break;
+		{		
+			++Num;
+
+			if (3 == Num)
+			{
+				memset(&strPath[i + 1], 0, sizeof(WCHAR) * (MAX_PATH - (i + 1)));
+				break;
+			}			
 		}
 	}
 
+	lstrcat(strPath, L"WOOJUN_CLIENT\\Bin\\");	
 	m_mapPath.insert(make_pair(BASEPATH, strPath));
 
 	AddPath(SHADERPATH, L"Shader\\");	

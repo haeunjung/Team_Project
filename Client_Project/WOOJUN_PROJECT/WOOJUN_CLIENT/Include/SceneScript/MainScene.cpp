@@ -5,7 +5,7 @@
 #include "../ObjectScript/RotBullet.h"
 #include "../ObjectScript/PlayerBullet.h"
 #include "01.Core/Debug.h"
-#include "01.Core/KeyMgr.h"
+#include "01.Core/Input.h"
 #include "05.Scene/Scene.h"
 #include "05.Scene/Layer.h"
 #include "07.Component/Renderer.h"
@@ -422,7 +422,7 @@ bool CMainScene::Init()
 
 	//	--num;
 	//}
-	CGameObject*	pObejct = CGameObject::CreateClone("WareHouseObject");
+	/*CGameObject*	pObejct = CGameObject::CreateClone("WareHouseObject");
 	pLayer->AddObject(pObejct);
 	CTransform*		pTransform = pObejct->GetTransform();
 	pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
@@ -492,7 +492,7 @@ bool CMainScene::Init()
 	pTransform->SetWorldScale(0.1f, 0.1f, 0.1f);
 	pTransform->SetWorldPos(-30.0f, 0.0f, 30.0f);
 	SAFE_RELEASE(pTransform);
-	SAFE_RELEASE(pObejct);
+	SAFE_RELEASE(pObejct);*/
 
 	SAFE_RELEASE(pLayer);
 

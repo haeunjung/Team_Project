@@ -63,6 +63,11 @@ CTransform * CTransform::GetParentTransform() const
 	return m_pParentTransform;
 }
 
+void CTransform::SetWorldAxis(AXIS _eAxis, const DxVector3 & _vAxis)
+{
+	m_vWorldAxis[_eAxis] = _vAxis;
+}
+
 void CTransform::SetParentTransform(CTransform * _pParentTransform)
 {
 	m_pParentTransform = _pParentTransform;
@@ -649,6 +654,15 @@ MATRIX CTransform::GetParentRotMatrix() const
 	}
 
 	return *m_matWorldRot * matParent;
+}
+
+void CTransform::SetWorldRotMatrix(MATRIX & _Mat)
+{
+	*m_matWorldRot = _Mat;
+
+	ComputeWorldAxis();
+
+	ActiveUpdate();
 }
 
 void CTransform::Forward(float _fSpeed, float _fTime)

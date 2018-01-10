@@ -1,5 +1,5 @@
 #include "CollisionMgr.h"
-#include "../01.Core/KeyMgr.h"
+#include "../01.Core/Input.h"
 #include "../06.GameObject/GameObject.h"
 #include "../07.Component/Collider.h"
 #include "../07.Component/ColliderRay.h"
@@ -105,8 +105,8 @@ bool CCollisionMgr::CollisionMouseUI(float _fTime)
 	vector<CGameObject*>::iterator	iter;
 	vector<CGameObject*>::iterator	iterEnd = m_vecUICollision.end();
 
-	CGameObject*	pMouseObject = GET_SINGLE(CKeyMgr)->GetMouseObject();
-	CColliderPoint*	pMouseColPoint = GET_SINGLE(CKeyMgr)->GetMouseColPoint();
+	CGameObject*	pMouseObject = GET_SINGLE(CInput)->GetMouseObj();
+	CColliderPoint*	pMouseColPoint = GET_SINGLE(CInput)->GetMousePoint();
 
 	for (iter = m_vecUICollision.begin(); iter != iterEnd; ++iter)
 	{
@@ -167,8 +167,8 @@ bool CCollisionMgr::CollisionMouseUI(float _fTime)
 
 void CCollisionMgr::CollisionMouseObject(float _fTime)
 {
-	CGameObject*	pMouseObject = GET_SINGLE(CKeyMgr)->GetMouseObject();
-	CColliderRay*	pMouseColRay = GET_SINGLE(CKeyMgr)->GetMouseColRay();
+	CGameObject*	pMouseObject = GET_SINGLE(CInput)->GetMouseObj();
+	CColliderRay*	pMouseColRay = GET_SINGLE(CInput)->GetMouseRay();
 
 	vector<CGameObject*>::iterator	iter;
 	vector<CGameObject*>::iterator	iterEnd = m_vecCollision.end();	
@@ -286,7 +286,7 @@ void CCollisionMgr::CollisionObject(CGameObject * _pSrc, CGameObject * _pDest, f
 
 bool CCollisionMgr::ZSort(CGameObject * _pSrc, CGameObject * _pDest)
 {
-	CColliderRay*	pRay = GET_SINGLE(CKeyMgr)->GetMouseColRay();
+	CColliderRay*	pRay = GET_SINGLE(CInput)->GetMouseRay();
 
 	// 두개의 비교대상
 	CTransform*	pSrcTransform = _pSrc->GetTransform();

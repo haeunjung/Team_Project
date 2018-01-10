@@ -15,10 +15,9 @@ private:
 	UINT	m_iVtxSizeZ;
 
 	vector<DxVector3>	m_vecPos;
+	vector<DxVector3>	m_vecFaceNormal;
 	float			m_fDetailLevel;
 	TERRAINCBUFFER	m_tTerrainCBuffer;
-private:
-	const DxVector3& CreateNormal(const DxVector3& _StartPos, const DxVector3& _XPos, const DxVector3& _ZPos);
 public:
 	bool CreateTerrain(const string& _strKey, UINT _iVtxNumX, UINT _iVtxNumZ, UINT _iVtxSizeX, UINT _iVtxSizeZ,
 		char* pHeightMap = NULL, const string& _strPathKey = TEXTUREPATH);
@@ -34,6 +33,9 @@ public:
 
 	void SetSplatCount(int _iCount);
 	void SetDetailLevel(float _fLevel);
+private:
+	void ComputeNormal(vector<VERTEXBUMP>& _vecVertex, const vector<UINT>& _vecIndex);
+	void ComputeTangent(vector<VERTEXBUMP>& _vecVertex, const vector<UINT>& _vecIndex);
 public:
 	bool Init() override;
 	void Input(float _fTime) override;

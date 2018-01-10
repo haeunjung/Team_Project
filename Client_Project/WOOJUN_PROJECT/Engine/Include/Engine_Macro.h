@@ -60,14 +60,13 @@
 
 #define PI				3.141592f
 
-#define KEYPUSH(Key)	CKeyMgr::GetInst()->GetPush(Key)
-#define KEYPRESS(Key)	CKeyMgr::GetInst()->GetPress(Key)
-#define KEYUP(Key)		CKeyMgr::GetInst()->GetUp(Key)
-#define KEYSTAYUP(Key)	CKeyMgr::GetInst()->GetStayUp(Key)
+#define	KEYPRESS(key)	CInput::GetInst()->KeyPress(key)
+#define	KEYPUSH(key)	CInput::GetInst()->KeyPush(key)
+#define	KEYUP(key)		CInput::GetInst()->KeyUp(key)
 
-#define WHEELDIR		CKeyMgr::GetInst()->GetWheelDir()
-#define MOUSEPOS		CKeyMgr::GetInst()->GetMousePos()
-#define MOUSEMOVE		CKeyMgr::GetInst()->GetMouseMove()
+#define	WHEELDIR		CInput::GetInst()->GetWheelDir()
+#define	MOUSEPOS		CInput::GetInst()->GetMousePos()
+#define	MOUSEMOVE		CInput::GetInst()->GetMouseMove()
 
 #define WIRE_FRAME			"WireFrame"
 #define CULLING_CW			"CWCulling"

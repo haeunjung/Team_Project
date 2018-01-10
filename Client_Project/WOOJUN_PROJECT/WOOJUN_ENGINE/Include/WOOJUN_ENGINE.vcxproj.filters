@@ -234,9 +234,6 @@
     <ClInclude Include="07.Component\Script.h">
       <Filter>07. Component\03. Script</Filter>
     </ClInclude>
-    <ClInclude Include="01.Core\KeyMgr.h">
-      <Filter>01. Core\05. Key</Filter>
-    </ClInclude>
     <ClInclude Include="BaseObj.h">
       <Filter>01. Core\BaseObj</Filter>
     </ClInclude>
@@ -352,6 +349,10 @@
     <ClInclude Include="07.Component\ColliderTerrain.h">
       <Filter>07. Component\05. Collider</Filter>
     </ClInclude>
+    <ClInclude Include="07.Component\CameraFree.h" />
+    <ClInclude Include="01.Core\Input.h">
+      <Filter>01. Core\05. Key</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -428,9 +429,6 @@
     </ClCompile>
     <ClCompile Include="07.Component\Script.cpp">
       <Filter>07. Component\03. Script</Filter>
-    </ClCompile>
-    <ClCompile Include="01.Core\KeyMgr.cpp">
-      <Filter>01. Core\05. Key</Filter>
     </ClCompile>
     <ClCompile Include="07.Component\Camera.cpp">
       <Filter>07. Component\04. Camera</Filter>
@@ -534,6 +532,10 @@
     </ClCompile>
     <ClCompile Include="07.Component\ColliderTerrain.cpp">
       <Filter>07. Component\05. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\CameraFree.cpp" />
+    <ClCompile Include="01.Core\Input.cpp">
+      <Filter>01. Core\05. Key</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

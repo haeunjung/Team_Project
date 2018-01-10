@@ -1,5 +1,5 @@
 #include "RadioButton.h"
-#include "../01.Core/KeyMgr.h"
+#include "../01.Core/Input.h"
 #include "../06.GameObject/GameObject.h"
 #include "Renderer2D.h"
 #include "Material.h"

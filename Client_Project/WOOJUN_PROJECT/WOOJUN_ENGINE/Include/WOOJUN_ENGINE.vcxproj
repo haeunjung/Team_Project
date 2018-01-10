@@ -139,7 +139,7 @@
   <ItemGroup>
     <ClInclude Include="01.Core\CollisionMgr.h" />
     <ClInclude Include="01.Core\Debug.h" />
-    <ClInclude Include="01.Core\KeyMgr.h" />
+    <ClInclude Include="01.Core\Input.h" />
     <ClInclude Include="01.Core\PathMgr.h" />
     <ClInclude Include="01.Core\Thread.h" />
     <ClInclude Include="01.Core\ThreadMgr.h" />
@@ -167,6 +167,7 @@
     <ClInclude Include="07.Component\Animation2D.h" />
     <ClInclude Include="07.Component\Camera.h" />
     <ClInclude Include="07.Component\CameraArm.h" />
+    <ClInclude Include="07.Component\CameraFree.h" />
     <ClInclude Include="07.Component\CheckBox.h" />
     <ClInclude Include="07.Component\Collider.h" />
     <ClInclude Include="07.Component\ColliderPoint.h" />
@@ -211,7 +212,7 @@
   <ItemGroup>
     <ClCompile Include="01.Core\CollisionMgr.cpp" />
     <ClCompile Include="01.Core\Debug.cpp" />
-    <ClCompile Include="01.Core\KeyMgr.cpp" />
+    <ClCompile Include="01.Core\Input.cpp" />
     <ClCompile Include="01.Core\PathMgr.cpp" />
     <ClCompile Include="01.Core\Thread.cpp" />
     <ClCompile Include="01.Core\ThreadMgr.cpp" />
@@ -237,6 +238,7 @@
     <ClCompile Include="07.Component\Animation2D.cpp" />
     <ClCompile Include="07.Component\Camera.cpp" />
     <ClCompile Include="07.Component\CameraArm.cpp" />
+    <ClCompile Include="07.Component\CameraFree.cpp" />
     <ClCompile Include="07.Component\CheckBox.cpp" />
     <ClCompile Include="07.Component\Collider.cpp" />
     <ClCompile Include="07.Component\ColliderPoint.cpp" />

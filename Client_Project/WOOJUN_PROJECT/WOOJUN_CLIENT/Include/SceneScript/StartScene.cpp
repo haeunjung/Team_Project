@@ -1,6 +1,6 @@
 #include "StartScene.h"
 #include "Engine_Core.h"
-#include "01.Core/KeyMgr.h"
+#include "01.Core/Input.h"
 #include "05.Scene/SceneMgr.h"
 #include "05.Scene/Scene.h"
 #include "05.Scene/Layer.h"
@@ -143,9 +143,10 @@ void CStartScene::ExitButton(CGameObject* _pObj, float _fTime)
 
 void CStartScene::StartButton(CGameObject * _pObj, float _fTime)
 {
-	CScene* pScene = GET_SINGLE(CSceneMgr)->CreateScene("LoadingScene");
+	CScene* pScene = GET_SINGLE(CSceneMgr)->CreateScene("MainScene");
 
-	CLoadingScene* pLoad = pScene->CreateScript<CLoadingScene>();
+	//CLoadingScene* pLoad = pScene->CreateScript<CLoadingScene>();
+	CMainScene* pMain = pScene->CreateScript<CMainScene>();
 
 	GET_SINGLE(CSceneMgr)->ReplaceScene(pScene);
 }

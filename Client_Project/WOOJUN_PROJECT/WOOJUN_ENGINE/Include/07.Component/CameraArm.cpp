@@ -1,5 +1,5 @@
 #include "CameraArm.h"
-#include "01.Core/KeyMgr.h"
+#include "01.Core/Input.h"
 #include "07.Component/Transform.h"
 #include "Camera.h"
 #include "06.GameObject/GameObject.h"

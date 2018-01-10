@@ -66,6 +66,8 @@ void CRenderer::SetMesh(const string & _strKey)
 	{
 		assert(m_pMesh);		
 	}
+
+
 }
 
 void CRenderer::SetMesh(const string & _strKey, const TCHAR * _pFileName, const string & _strPathKey)

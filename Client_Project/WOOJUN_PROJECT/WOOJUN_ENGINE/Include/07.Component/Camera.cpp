@@ -3,6 +3,7 @@
 #include "../Engine_Core.h"
 #include "../06.GameObject/GameObject.h"
 #include "CameraArm.h"
+#include "CameraFree.h"
 
 WOOJUN_USING
 
@@ -105,16 +106,22 @@ void CCamera::ComputeViewMatrix()
 
 	// CameraArm 컴포넌트 확인
 	bool	bCheckArm = m_pGameObject->CheckComponentFromTypeID<CCameraArm>();
+	bool	bCheckFree = m_pGameObject->CheckComponentFromTypeID<CCameraFree>();
 
 	for (int i = 0; i < AXIS_MAX; ++i)
 	{
-		if (false == bCheckArm)
+		if (true == bCheckArm)
 		{
-			vAxis[i] = m_pTransform->GetWorldAxis((AXIS)i);
+			vAxis[i] = m_vAxis[i];
+		}
+		else if (true == bCheckFree)
+		{
+			vAxis[i] = m_vAxis[i];
+			m_pTransform->SetWorldAxis((AXIS)i, m_vAxis[i]);
 		}
 		else
 		{
-			vAxis[i] = m_vAxis[i];
+			vAxis[i] = m_pTransform->GetWorldAxis((AXIS)i);
 		}
 		memcpy(&m_matView->m[i][0], &vAxis[i], sizeof(DxVector3));
 	}

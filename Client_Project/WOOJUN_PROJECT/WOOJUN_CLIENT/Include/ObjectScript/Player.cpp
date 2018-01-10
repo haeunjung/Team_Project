@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "01.Core/KeyMgr.h"
+#include "01.Core/Input.h"
 #include "01.Core/Debug.h"
 #include "05.Scene/Layer.h"
 #include "05.Scene/Scene.h"
@@ -78,24 +78,17 @@ bool CPlayer::Init()
 	pSphere->SetSphereInfo(Vec3Zero, 0.5f);
 	SAFE_RELEASE(pSphere);
 
-	GET_SINGLE(CKeyMgr)->CreateKey("MoveUp", 'W');
-	GET_SINGLE(CKeyMgr)->CreateKey("MoveDown", 'S');
-
-	GET_SINGLE(CKeyMgr)->CreateKey("RotXUp", 'Q');
-	GET_SINGLE(CKeyMgr)->CreateKey("RotXDown", 'E');
-	GET_SINGLE(CKeyMgr)->CreateKey("RotYUp", 'A');
-	GET_SINGLE(CKeyMgr)->CreateKey("RotYDown", 'D');
-	GET_SINGLE(CKeyMgr)->CreateKey("RotZUp", 'Z');
-	GET_SINGLE(CKeyMgr)->CreateKey("RotZDown", 'C');
-
-	GET_SINGLE(CKeyMgr)->CreateKey("Fire", VK_SPACE);
-	GET_SINGLE(CKeyMgr)->CreateKey("Init", VK_CONTROL, VK_MENU);	
-	GET_SINGLE(CKeyMgr)->CreateKey("RotFire", 'R');
-
-	GET_SINGLE(CKeyMgr)->CreateKey("MoveForward", VK_UP);
-	GET_SINGLE(CKeyMgr)->CreateKey("MoveBack", VK_DOWN);
-	GET_SINGLE(CKeyMgr)->CreateKey("MoveLeft", VK_LEFT);
-	GET_SINGLE(CKeyMgr)->CreateKey("MoveRight", VK_RIGHT);
+	GET_SINGLE(CInput)->CreateKey("MoveUp", 'W');
+	GET_SINGLE(CInput)->CreateKey("MoveDown", 'S');
+	GET_SINGLE(CInput)->CreateKey("RotXUp", 'Q');
+	GET_SINGLE(CInput)->CreateKey("RotXDown", 'E');
+	GET_SINGLE(CInput)->CreateKey("RotYUp", 'A');
+	GET_SINGLE(CInput)->CreateKey("RotYDown", 'D');
+	GET_SINGLE(CInput)->CreateKey("RotZUp", 'Z');
+	GET_SINGLE(CInput)->CreateKey("RotZDown", 'C');
+	GET_SINGLE(CInput)->CreateKey("Fire", VK_SPACE);
+	GET_SINGLE(CInput)->CreateKey("Init", VK_CONTROL, VK_MENU);	
+	GET_SINGLE(CInput)->CreateKey("RotFire", 'R');
 
 	return true;
 }
@@ -142,23 +135,6 @@ void CPlayer::Input(float _fTime)
 	if (true == KEYPRESS("RotZDown"))
 	{
 		m_pTransform->RotateZ(-PI, _fTime);
-	}
-
-	if (true == KEYPRESS("MoveForward"))
-	{
-		m_pTransform->Forward(m_fSpeed, _fTime);
-	}
-	if (true == KEYPRESS("MoveBack"))
-	{
-		m_pTransform->Forward(-m_fSpeed, _fTime);
-	}
-	if (true == KEYPRESS("MoveLeft"))
-	{
-		m_pTransform->Right(-m_fSpeed, _fTime);
-	}
-	if (true == KEYPRESS("MoveRight"))
-	{
-		m_pTransform->Right(m_fSpeed, _fTime);
 	}
 
 	if (true == KEYPUSH("Fire"))

@@ -1,18 +1,18 @@
 #include "Engine_Core.h"
 #include "Device.h"
-#include "04.Rendering\RenderMgr.h"
-#include "03.Resource\ResMgr.h"
-#include "01.Core\PathMgr.h"
-#include "03.Resource\Mesh.h"
-#include "04.Rendering\Shader.h"
-#include "04.Rendering\ShaderMgr.h"
-#include "01.Core\TimerMgr.h"
-#include "01.Core\Timer.h"
-#include "05.Scene\SceneMgr.h"
-#include "01.Core\KeyMgr.h"
-#include "06.GameObject\GameObject.h"
-#include "01.Core\CollisionMgr.h"
-#include "07.Component\RadioButtonMgr.h"
+#include "01.Core/PathMgr.h"
+#include "01.Core/TimerMgr.h"
+#include "01.Core/Timer.h"
+#include "01.Core/Input.h"
+#include "01.Core/CollisionMgr.h"
+#include "03.Resource/ResMgr.h"
+#include "03.Resource/Mesh.h"
+#include "04.Rendering/Shader.h"
+#include "04.Rendering/RenderMgr.h"
+#include "04.Rendering/ShaderMgr.h"
+#include "05.Scene/SceneMgr.h"
+#include "06.GameObject/GameObject.h"
+#include "07.Component/RadioButtonMgr.h"
 
 WOOJUN_BEGIN
 
@@ -53,7 +53,7 @@ bool CEngine_Core::Init(HWND _hWnd, unsigned int _iWidth, unsigned int _iHeight,
 	m_pMainTimer = GET_SINGLE(CTimerMgr)->FindTimer(MAINTIMER);
 
 	// Init KeyMGr
-	if (false == GET_SINGLE(CKeyMgr)->Init())
+	if (false == GET_SINGLE(CInput)->Init())
 	{		
 		return false;
 	}
@@ -133,7 +133,7 @@ void CEngine_Core::Logic()
 	m_pMainTimer->Update();
 	m_fMainDeltaTime = m_pMainTimer->GetDeltaTime();
 
-	GET_SINGLE(CKeyMgr)->Update(m_fMainDeltaTime);
+	GET_SINGLE(CInput)->Update(m_fMainDeltaTime);
 
 	Input(m_fMainDeltaTime);
 	Update(m_fMainDeltaTime);
@@ -141,7 +141,7 @@ void CEngine_Core::Logic()
 	Collision(m_fMainDeltaTime);
 	Render(m_fMainDeltaTime);	
 
-	GET_SINGLE(CKeyMgr)->ClearWheel();	
+	GET_SINGLE(CInput)->ClearWheel();
 }
 
 int CEngine_Core::Input(float _fTime)
@@ -161,7 +161,7 @@ int CEngine_Core::LateUpdate(float _fTime)
 
 void CEngine_Core::Collision(float _fTime)
 {
-	GET_SINGLE(CKeyMgr)->ComputeRay();
+	GET_SINGLE(CInput)->ComputeRay();
 	GET_SINGLE(CSceneMgr)->Collision(_fTime);
 	GET_SINGLE(CCollisionMgr)->Collision(_fTime);
 }
@@ -227,7 +227,7 @@ LRESULT CEngine_Core::WndProc(HWND _hWnd, unsigned int _message, WPARAM _wParam,
 		// wParam에 들어오는 값을 직접 가져와야한다
 		// WHEEL UP = 120
 		// WHEEL DOWN = -120
-		GET_SINGLE(CKeyMgr)->SetWheel(HIWORD(_wParam));
+		GET_SINGLE(CInput)->SetWheel(HIWORD(_wParam));
 		break;
 	}
 	case WM_PAINT:
@@ -251,7 +251,7 @@ CEngine_Core::CEngine_Core() : m_hInst(NULL), m_fMainDeltaTime(0.0f)
 {
 	srand(GetCurrentTime());
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(348);
+	//_CrtSetBreakAlloc(42421);
 
 	new int();
 
@@ -268,7 +268,7 @@ CEngine_Core::~CEngine_Core()
 	DESTROY_SINGLE(CRenderMgr);
 	DESTROY_SINGLE(CPathMgr);
 	DESTROY_SINGLE(CDevice);
-	DESTROY_SINGLE(CKeyMgr);
+	DESTROY_SINGLE(CInput);
 	DESTROY_SINGLE(CTimerMgr);
 	DESTROY_SINGLE(CRadioButtonMgr);
 	CGameObject::DestroyPrototype();

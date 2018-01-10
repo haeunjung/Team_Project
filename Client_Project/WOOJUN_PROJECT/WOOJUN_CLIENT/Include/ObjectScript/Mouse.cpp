@@ -1,5 +1,5 @@
 #include "Mouse.h"
-#include "01.Core/KeyMgr.h"
+#include "01.Core/Input.h"
 #include "01.Core/Debug.h"
 #include "05.Scene/Layer.h"
 #include "05.Scene/Scene.h"

@@ -1,9 +1,0 @@
-﻿  MainScene.cpp
-c:\users\wooju\desktop\team_project\client_project\woojun_project\engine\include\06.gameobject\gameobject.h(54): warning C4316: 'WOOJUN::CColliderRect': 힙에 할당된 개체가 16에 맞추어져 있지 않을 수도 있습니다
-  c:\users\wooju\desktop\team_project\client_project\woojun_project\woojun_client\include\scenescript\mainscene.cpp(155): note: 컴파일 중인 함수 템플릿 인스턴스화 'T *WOOJUN::CGameObject::AddComponent<WOOJUN::CColliderRect>(const std::string &)'에 대한 참조를 확인하십시오.
-          with
-          [
-              T=WOOJUN::CColliderRect
-          ]
-  WOOJUN_CLIENT.vcxproj -> C:\Users\wooju\Desktop\Team_Project\Client_Project\WOOJUN_PROJECT\WOOJUN_CLIENT\Include\../Bin/WOOJUN_CLIENT_Debug.exe
-  WOOJUN_CLIENT.vcxproj -> ../Bin/WOOJUN_CLIENT_Debug.pdb (Partial PDB)
