@@ -22,9 +22,6 @@
     <Filter Include="04. Rendering">
       <UniqueIdentifier>{a995e219-a20d-4b9f-9d4a-b6b5f965fc96}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Core\02. File">
-      <UniqueIdentifier>{ec45712b-8571-4228-886a-9ee335987512}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04. Rendering\01. Shader">
       <UniqueIdentifier>{cbebcc2a-3295-440e-8e9f-be27c9517bdd}</UniqueIdentifier>
     </Filter>
@@ -142,6 +139,12 @@
     <Filter Include="07. Component\11. Terrain">
       <UniqueIdentifier>{14abb77a-5529-4370-a44d-e0aa197f6d27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Core\02. Path">
+      <UniqueIdentifier>{ec45712b-8571-4228-886a-9ee335987512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07. Component\12. Animation3D">
+      <UniqueIdentifier>{658e291a-3852-4be8-ab38-74bd46e27eb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine_Core.h">
@@ -166,7 +169,7 @@
       <Filter>01. Core\01. Math</Filter>
     </ClInclude>
     <ClInclude Include="01.Core\PathMgr.h">
-      <Filter>01. Core\02. File</Filter>
+      <Filter>01. Core\02. Path</Filter>
     </ClInclude>
     <ClInclude Include="04.Rendering\RenderMgr.h">
       <Filter>04. Rendering</Filter>
@@ -349,9 +352,14 @@
     <ClInclude Include="07.Component\ColliderTerrain.h">
       <Filter>07. Component\05. Collider</Filter>
     </ClInclude>
-    <ClInclude Include="07.Component\CameraFree.h" />
     <ClInclude Include="01.Core\Input.h">
       <Filter>01. Core\05. Key</Filter>
+    </ClInclude>
+    <ClInclude Include="07.Component\CameraFree.h">
+      <Filter>07. Component\04. Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="07.Component\Animation3D.h">
+      <Filter>07. Component\12. Animation3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -362,7 +370,7 @@
       <Filter>02. Device</Filter>
     </ClCompile>
     <ClCompile Include="01.Core\PathMgr.cpp">
-      <Filter>01. Core\02. File</Filter>
+      <Filter>01. Core\02. Path</Filter>
     </ClCompile>
     <ClCompile Include="04.Rendering\RenderMgr.cpp">
       <Filter>04. Rendering</Filter>
@@ -533,9 +541,14 @@
     <ClCompile Include="07.Component\ColliderTerrain.cpp">
       <Filter>07. Component\05. Collider</Filter>
     </ClCompile>
-    <ClCompile Include="07.Component\CameraFree.cpp" />
     <ClCompile Include="01.Core\Input.cpp">
       <Filter>01. Core\05. Key</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\CameraFree.cpp">
+      <Filter>07. Component\04. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\Animation3D.cpp">
+      <Filter>07. Component\12. Animation3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

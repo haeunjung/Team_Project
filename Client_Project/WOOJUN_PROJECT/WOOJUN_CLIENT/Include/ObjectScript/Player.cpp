@@ -95,7 +95,7 @@ bool CPlayer::Init()
 
 void CPlayer::Input(float _fTime)
 {
-	if (true == KEYPRESS("MoveUp"))
+	if (true == KEYPUSH("MoveUp"))
 	{
 		m_pTransform->Up(m_fSpeed, _fTime);
 		m_bUp = true;
@@ -105,39 +105,39 @@ void CPlayer::Input(float _fTime)
 		m_bUp = false;
 	}
 
-	if (true == KEYPRESS("MoveDown"))
+	if (true == KEYPUSH("MoveDown"))
 	{
 		m_pTransform->Up(-m_fSpeed, _fTime);
 	}
 
-	if (true == KEYPRESS("RotXUp"))
+	if (true == KEYPUSH("RotXUp"))
 	{
 		m_pTransform->RotateX(PI, _fTime);
 	}
-	if (true == KEYPRESS("RotXDown"))
+	if (true == KEYPUSH("RotXDown"))
 	{
 		m_pTransform->RotateX(-PI, _fTime);
 	}
 
-	if (true == KEYPRESS("RotYUp"))
+	if (true == KEYPUSH("RotYUp"))
 	{
 		m_pTransform->RotateY(-PI, _fTime);
 	}
-	if (true == KEYPRESS("RotYDown"))
+	if (true == KEYPUSH("RotYDown"))
 	{
 		m_pTransform->RotateY(PI, _fTime);
 	}
 
-	if (true == KEYPRESS("RotZUp"))
+	if (true == KEYPUSH("RotZUp"))
 	{
 		m_pTransform->RotateZ(PI, _fTime);
 	}
-	if (true == KEYPRESS("RotZDown"))
+	if (true == KEYPUSH("RotZDown"))
 	{
 		m_pTransform->RotateZ(-PI, _fTime);
 	}
 
-	if (true == KEYPUSH("Fire"))
+	if (true == KEYPRESS("Fire"))
 	{	
 		// Bullet Object CreateClone
 		CGameObject*	pBulletObject = CGameObject::CreateClone("PlayerBulletObject");		
@@ -155,7 +155,7 @@ void CPlayer::Input(float _fTime)
 		SAFE_RELEASE(pBulletObject);
 	}
 
-	if (true == KEYPUSH("RotFire"))
+	if (true == KEYPRESS("RotFire"))
 	{
 		if (true == CRotBullet::m_IsFire)
 		{
@@ -186,7 +186,7 @@ void CPlayer::Input(float _fTime)
 		SAFE_RELEASE(pRotBullet);		
 	}
 
-	if (true == KEYPUSH("Init"))
+	if (true == KEYPRESS("Init"))
 	{
 		m_pTransform->SetWorldPos(DxVector3(0.0f, 0.0f, 0.0f));
 		m_pTransform->SetWorldRot(DxVector3(0.0f, 0.0f, 0.0f));

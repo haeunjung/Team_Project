@@ -60,8 +60,8 @@
 
 #define PI				3.141592f
 
-#define	KEYPUSH(key)	CInput::GetInst()->KeyPress(key)
-#define	KEYPRESS(key)	CInput::GetInst()->KeyPush(key)
+#define	KEYPRESS(key)	CInput::GetInst()->KeyPress(key)
+#define	KEYPUSH(key)	CInput::GetInst()->KeyPush(key)
 #define	KEYUP(key)		CInput::GetInst()->KeyUp(key)
 
 #define	WHEELDIR		CInput::GetInst()->GetWheelDir()

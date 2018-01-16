@@ -80,7 +80,7 @@ void CCameraArm::RotationDrag(float _fTime)
 		DxVector3 vAttachPos = pTransform->GetWorldPos();
 
 		// 마우스 RButton Drag상태 체크
-		if (true == KEYPRESS("RButton"))
+		if (true == KEYPUSH("RButton"))
 		{
 			POINT tMouseMove = MOUSEMOVE;
 			

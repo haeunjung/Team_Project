@@ -28,7 +28,7 @@ void CCameraFree::RotationDrag(float _fTime)
 	CCamera*	pCamera = m_pGameObject->FindComponentFromTypeID<CCamera>();
 
 	// 마우스 RButton Drag상태 체크
-	if (true == KEYPRESS("RButton"))
+	if (true == KEYPUSH("RButton"))
 	{
 		POINT tMouseMove = MOUSEMOVE;
 
