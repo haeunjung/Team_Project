@@ -30,13 +30,14 @@ typedef struct DLL _tagResolution
 typedef struct DLL _tagVertexBuffer
 {
 	ID3D11Buffer*	pBuffer;
+	void*			pData;
 	unsigned int	iCount;
 	unsigned int	iSize;
 	D3D11_PRIMITIVE_TOPOLOGY	ePrimitive;
 	D3D11_USAGE		eUsage;
 
 	_tagVertexBuffer() :
-		pBuffer(nullptr), iCount(0), iSize(0),
+		pBuffer(NULL), pData(NULL), iCount(0), iSize(0),
 		ePrimitive(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST),
 		eUsage(D3D11_USAGE_DEFAULT)
 	{
@@ -47,13 +48,14 @@ typedef struct DLL _tagVertexBuffer
 typedef struct DLL _tagIndexBuffer
 {
 	ID3D11Buffer*	pBuffer;
+	void*			pData;
 	unsigned int	iCount;
 	unsigned int	iSize;
 	DXGI_FORMAT		eFormat;
 	D3D11_USAGE		eUsage;
 
 	_tagIndexBuffer() :
-		pBuffer(nullptr), iCount(0), iSize(0),
+		pBuffer(NULL), pData(NULL), iCount(0), iSize(0),
 		eFormat(DXGI_FORMAT_R32_UINT),
 		eUsage(D3D11_USAGE_DEFAULT)
 	{
@@ -256,6 +258,108 @@ typedef struct DLL _tagVertexBump
 	}
 }VERTEXBUMP, *pVERTEXBUMP;
 
+// 애니메이션 범프 버텍스 버퍼
+typedef struct DLL _tagVertexAniBump
+{
+	DxVector3	vPos;
+	DxVector3	vNormal;
+	DxVector2	vUV;
+	DxVector3	vTangent;
+	DxVector3	vBinormal;
+	DxVector4	vWeight;
+	DxVector4	vIndices;
+
+	_tagVertexAniBump() :
+		vPos(0.f, 0.f, 0.f),
+		vNormal(0.f, 0.f, 0.f),
+		vUV(0.f, 0.f),
+		vTangent(0.f, 0.f, 0.f),
+		vBinormal(0.f, 0.f, 0.f),
+		vWeight(0.f, 0.f, 0.f, 0.f),
+		vIndices(0.f, 0.f, 0.f, 0.f)
+	{
+	}
+
+	_tagVertexAniBump(const _tagVertexAniBump& vtx)
+	{
+		*this = vtx;
+	}
+
+	_tagVertexAniBump(float x, float y, float z,
+		float nx, float ny, float nz,
+		float u, float v,
+		float tx, float ty, float tz,
+		float bx, float by, float bz,
+		float wx, float wy, float wz, float ww,
+		float ix, float iy, float iz, float iw) :
+		vPos(x, y, z),
+		vNormal(nx, ny, nz),
+		vUV(u, v),
+		vTangent(tx, ty, tz),
+		vBinormal(bx, by, bz),
+		vWeight(wx, wy, wz, ww),
+		vIndices(ix, iy, iz, iw)
+	{
+	}
+
+	void operator =(const _tagVertexAniBump& vtx)
+	{
+		vPos = vtx.vPos;
+		vNormal = vtx.vNormal;
+		vUV = vtx.vUV;
+		vTangent = vtx.vTangent;
+		vBinormal = vtx.vBinormal;
+		vWeight = vtx.vWeight;
+		vIndices = vtx.vIndices;
+	}
+}VERTEXANIBUMP, *pVERTEXANIBUMP;
+
+// 애니메이션 범프 버텍스 버퍼
+typedef struct DLL _tagVertexAni
+{
+	DxVector3	vPos;
+	DxVector3	vNormal;
+	DxVector2	vUV;
+	DxVector4	vWeight;
+	DxVector4	vIndices;
+
+	_tagVertexAni() :
+		vPos(0.f, 0.f, 0.f),
+		vNormal(0.f, 0.f, 0.f),
+		vUV(0.f, 0.f),
+		vWeight(0.f, 0.f, 0.f, 0.f),
+		vIndices(0.f, 0.f, 0.f, 0.f)
+	{
+	}
+
+	_tagVertexAni(const _tagVertexAni& vtx)
+	{
+		*this = vtx;
+	}
+
+	_tagVertexAni(float x, float y, float z,
+		float nx, float ny, float nz,
+		float u, float v,
+		float wx, float wy, float wz, float ww,
+		float ix, float iy, float iz, float iw) :
+		vPos(x, y, z),
+		vNormal(nx, ny, nz),
+		vUV(u, v),
+		vWeight(wx, wy, wz, ww),
+		vIndices(ix, iy, iz, iw)
+	{
+	}
+
+	void operator =(const _tagVertexAni& vtx)
+	{
+		vPos = vtx.vPos;
+		vNormal = vtx.vNormal;
+		vUV = vtx.vUV;
+		vWeight = vtx.vWeight;
+		vIndices = vtx.vIndices;
+	}
+}VERTEXANI, *pVERTEXANI;
+
 // 상수버퍼
 typedef struct DLL _tagConstBuffer
 {
@@ -421,7 +525,7 @@ typedef struct DLL _tagAnimationClip2D
 	class CTexture*		pTexture;
 	int					iTexRegister;
 	ANIMATION2D_TYPE	eType;
-	ANIMATION2D_OPTION	eOption;
+	ANIMATION_OPTION	eOption;
 	int					iFrameX;
 	int					iFrameY;
 	int					iFrameMaxX;

@@ -25,6 +25,14 @@ _tagDxVector4::_tagDxVector4(float _f[4])
 	w = _f[3];
 }
 
+_tagDxVector4::_tagDxVector4(int _i[4])
+{
+	x = (float)_i[0];
+	y = (float)_i[1];
+	z = (float)_i[2];
+	w = (float)_i[3];
+}
+
 _tagDxVector4::_tagDxVector4(const _tagDxVector4& vec)
 {
 	*this = vec;
@@ -44,6 +52,15 @@ void _tagDxVector4::operator =(float _f[4])
 	y = _f[1];
 	z = _f[2];
 	w = _f[3];
+}
+
+void _tagDxVector4::operator=(int _i[4])
+{
+	x = (float)_i[0];
+	y = (float)_i[1];
+	z = (float)_i[2];
+	w = (float)_i[3];
+
 }
 
 // +
@@ -495,6 +512,11 @@ bool _tagDxVector4::operator!=(float _f[4]) const
 bool _tagDxVector4::operator!=(int i[4]) const
 {
 	return x != i[0] || y != i[1] || z != i[2] || w != i[3];
+}
+
+XMVECTOR _tagDxVector4::Convert() const
+{
+	return XMLoadFloat4((XMFLOAT4*)this);
 }
 
 // ==================== Vector4 ====================

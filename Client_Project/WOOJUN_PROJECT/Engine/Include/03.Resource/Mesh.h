@@ -6,6 +6,7 @@ WOOJUN_BEGIN
 
 class CMaterial;
 class CFbxLoader;
+class CAnimation3D;
 class DLL CMesh : public CBaseObj
 {
 private:
@@ -17,6 +18,7 @@ private:
 	DxVector3		m_vMax;
 	DxVector3		m_vSize;
 	SPHEREINFO		m_tSphere;
+	CAnimation3D*	m_pAnimation;
 public:
 	DxVector3 GetMeshMin() const;
 	DxVector3 GetMeshMax() const;
@@ -26,6 +28,8 @@ public:
 	float GetRadius() const;
 	UINT GetContainerCount() const;
 	UINT GetSubsetCount(int _iContainer = 0) const;
+	CAnimation3D* CloneAnimation() const;
+	CAnimation3D* GetAnimation() const;
 public:
 	bool CreateMesh(const string& _strKey, void* _pVertices, unsigned int _iVtxCount, unsigned int _iVtxSize, D3D11_USAGE _eVtxUsage, D3D11_PRIMITIVE_TOPOLOGY _ePrimitive,
 		void* _pIndices = NULL, unsigned int _iIdxCount = 0, unsigned int _iIdxSize = 0, D3D11_USAGE _eIdxUsage = D3D11_USAGE_DEFAULT, DXGI_FORMAT _eFormat = DXGI_FORMAT_R32_UINT);

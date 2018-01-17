@@ -166,6 +166,7 @@
     <ClInclude Include="06.GameObject\GameObject.h" />
     <ClInclude Include="07.Component\Animation2D.h" />
     <ClInclude Include="07.Component\Animation3D.h" />
+    <ClInclude Include="07.Component\Animation3DClip.h" />
     <ClInclude Include="07.Component\Camera.h" />
     <ClInclude Include="07.Component\CameraArm.h" />
     <ClInclude Include="07.Component\CameraFree.h" />
@@ -204,7 +205,6 @@
     <ClInclude Include="Engine_Macro.h" />
     <ClInclude Include="Engine_Struct.h" />
     <ClInclude Include="Engine_TemplateFunc.h" />
-    <ClInclude Include="FBX_Struct.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
@@ -238,6 +238,7 @@
     <ClCompile Include="06.GameObject\GameObject.cpp" />
     <ClCompile Include="07.Component\Animation2D.cpp" />
     <ClCompile Include="07.Component\Animation3D.cpp" />
+    <ClCompile Include="07.Component\Animation3DClip.cpp" />
     <ClCompile Include="07.Component\Camera.cpp" />
     <ClCompile Include="07.Component\CameraArm.cpp" />
     <ClCompile Include="07.Component\CameraFree.cpp" />

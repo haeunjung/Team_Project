@@ -7,6 +7,7 @@ class CMesh;
 class CShader;
 class CRenderState;
 class CMaterial;
+class CTexture;
 class DLL CRenderer : public CComponent
 {
 private:
@@ -18,10 +19,12 @@ private:
 	CRenderState*		m_pRenderState[RST_END];
 	vector<vector<CMaterial*>>	m_vecMaterial;
 	unordered_map<string, pRENDERERCBUFFER>	m_mapCBuffer;
-
+	CTexture*	m_pBoneTexture;
 private:
 	void UpdateTransform();
-
+	void CheckAnimation();
+public:
+	void SetBoneTexture(CTexture* _pBoneTexture);
 // Mesh
 public:
 	CMesh* GetMesh() const;
@@ -50,13 +53,13 @@ public:
 	bool UpdateCBuffer(const string& _strKey, void* _pData);
 	pRENDERERCBUFFER FindConstBuffer(const string& _strKey);
 public:
-	virtual bool Init() override;
-	virtual void Input(float _fTime) override;
-	virtual void Update(float _fTime) override;
-	virtual void LateUpdate(float _fTime) override;
-	virtual void Collision(float _fTime) override;
-	virtual void Render(float _fTime) override;
-	virtual CRenderer* Clone() override;
+	bool Init() override;
+	void Input(float _fTime) override;
+	void Update(float _fTime) override;
+	void LateUpdate(float _fTime) override;
+	void Collision(float _fTime) override;
+	void Render(float _fTime) override;
+	CRenderer* Clone() override;
 private:
 	CRenderer();
 	CRenderer(const CRenderer& _Renderer);

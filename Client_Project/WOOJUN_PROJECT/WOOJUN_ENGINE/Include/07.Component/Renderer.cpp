@@ -5,6 +5,7 @@
 #include "Light.h"
 #include "Effect.h"
 #include "Animation2D.h"
+#include "Animation3D.h"
 #include "../Device.h"
 #include "../Engine_Core.h"
 #include "../03.Resource/Mesh.h"
@@ -15,6 +16,7 @@
 #include "../04.Rendering/RenderMgr.h"
 #include "../05.Scene/Scene.h"
 #include "../06.GameObject/GameObject.h"
+#include "../03.Resource/Texture.h"
 
 WOOJUN_USING
 
@@ -51,6 +53,31 @@ void CRenderer::UpdateTransform()
 	GET_SINGLE(CShaderMgr)->UpdateConstBuffer("Transform", &tTransform, CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);	
 }
 
+void CRenderer::CheckAnimation()
+{
+	CAnimation3D*	pAnimation = m_pMesh->CloneAnimation();
+
+	if (!pAnimation)
+		return;
+
+	m_pGameObject->AddComponent((CComponent*)pAnimation);
+
+	m_pBoneTexture = pAnimation->GetBoneTexture();
+
+	SAFE_RELEASE(pAnimation);
+}
+
+void CRenderer::SetBoneTexture(CTexture * _pBoneTexture)
+{
+	if (_pBoneTexture)
+	{
+		_pBoneTexture->AddRef();
+	}
+
+	SAFE_RELEASE(m_pBoneTexture);
+	m_pBoneTexture = _pBoneTexture;
+}
+
 CMesh * CRenderer::GetMesh() const
 {
 	m_pMesh->AddRef();
@@ -67,7 +94,7 @@ void CRenderer::SetMesh(const string & _strKey)
 		assert(m_pMesh);		
 	}
 
-
+	CheckAnimation();
 }
 
 void CRenderer::SetMesh(const string & _strKey, const TCHAR * _pFileName, const string & _strPathKey)
@@ -99,6 +126,8 @@ void CRenderer::SetMesh(const string & _strKey, const TCHAR * _pFileName, const 
 			m_vecMaterial[i].push_back(pMaterial);
 		}		
 	}
+
+	CheckAnimation();
 }
 
 void CRenderer::SetMesh(CMesh * _pMesh)
@@ -106,6 +135,8 @@ void CRenderer::SetMesh(CMesh * _pMesh)
 	SAFE_RELEASE(m_pMesh);
 	m_pMesh = _pMesh;
 	m_pMesh->AddRef();
+
+	CheckAnimation();
 }
 
 void CRenderer::SetShader(const string & _strKey)

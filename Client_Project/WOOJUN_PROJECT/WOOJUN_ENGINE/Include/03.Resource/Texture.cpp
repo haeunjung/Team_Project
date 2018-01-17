@@ -4,6 +4,20 @@
 
 WOOJUN_USING
 
+CTexture * CTexture::CreateTexture(const string & _strKey, UINT _iWidth, UINT _iHeight, UINT _iArrSize,
+	DXGI_FORMAT _eFormat, D3D11_USAGE _eUsage, D3D11_BIND_FLAG _eBindFlag, int _iCpuFlag)
+{
+	CTexture*	pTexture = new CTexture();
+
+	if (!pTexture->CreateResource(_strKey, _iWidth, _iHeight, _iArrSize, _eFormat, _eUsage, _eBindFlag, _iCpuFlag))	
+	{
+		SAFE_RELEASE(pTexture);
+		return NULL;
+	}
+
+	return pTexture;
+}
+
 bool CTexture::LoadTexture(const string & _strKey, TCHAR * _pFileName, const string & _strPathKey /*= TEXTUREPATH*/)
 {
 	// 유니코드 문자열을 멀티바이트 문자열로 만든다
@@ -247,6 +261,40 @@ bool CTexture::LoadTextureFromFullPath(const string & _strKey, const vector<stri
 	Safe_Release_VecList(vecTextureArray);
 
 	return true;
+}
+
+bool CTexture::CreateResource(const string & _strKey, UINT _iWidth, UINT _iHeight, UINT _iArrSize, DXGI_FORMAT _eFormat, D3D11_USAGE _eUsage, D3D11_BIND_FLAG _eBindFlag, int _iCpuFlag)
+{
+	::DirectX::ScratchImage*	pImage = new ::DirectX::ScratchImage();
+
+	if (FAILED(pImage->Initialize2D(_eFormat, _iWidth, _iHeight, _iArrSize, 1)))
+	{
+		SAFE_DELETE(pImage);
+		return false;
+	}
+
+	m_vecScratchImage.push_back(pImage);
+
+	if (FAILED(CreateShaderResourceViewEx(DEVICE, pImage->GetImages(), pImage->GetImageCount(),
+		pImage->GetMetadata(), _eUsage, _eBindFlag, _iCpuFlag, 0, false, &m_pShaderResourceView)))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void CTexture::UpdateData(void * _pData, int _iSize)
+{
+	ID3D11Texture2D*	pTexture = NULL;
+	m_pShaderResourceView->GetResource((ID3D11Resource**)&pTexture);
+
+	D3D11_MAPPED_SUBRESOURCE	tMap;
+	CONTEXT->Map(pTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &tMap);
+	memcpy(tMap.pData, _pData, _iSize);
+	CONTEXT->Unmap(pTexture, 0);
+
+	SAFE_RELEASE(pTexture);
 }
 
 void CTexture::SetTexture(int _iRegister, int _iShaderType)

@@ -10,10 +10,12 @@ typedef struct DLL _tagDxVector4 : public XMFLOAT4
 	_tagDxVector4();
 	_tagDxVector4(float _x, float _y, float _z, float _w);
 	_tagDxVector4(float _f[4]);
+	_tagDxVector4(int _i[4]);
 	_tagDxVector4(const _tagDxVector4& vec);
 
 	void operator =(const _tagDxVector4& vec);
 	void operator =(float _f[4]);
+	void operator =(int _i[4]);
 
 	// +
 	_tagDxVector4 operator +(const _tagDxVector4& _v) const;
@@ -84,6 +86,8 @@ typedef struct DLL _tagDxVector4 : public XMFLOAT4
 	bool operator !=(const _tagDxVector4& _v) const;
 	bool operator !=(float _f[4]) const;
 	bool operator !=(int i[4]) const;
+
+	XMVECTOR Convert() const;
 }DxVector4, *pDxVector4;
 
 

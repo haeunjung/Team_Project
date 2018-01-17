@@ -1,7 +1,8 @@
 #include "Mesh.h"
+#include "FbxLoader.h"
 #include "../Device.h"
 #include "../07.Component/Material.h"
-#include "FbxLoader.h"
+#include "../07.Component/Animation3D.h"
 
 WOOJUN_USING
 
@@ -43,6 +44,27 @@ UINT CMesh::GetContainerCount() const
 UINT CMesh::GetSubsetCount(int _iContainer) const
 {
 	return m_vecMeshContainer[_iContainer]->vecIndexBuffer.size();
+}
+
+CAnimation3D * CMesh::CloneAnimation() const
+{
+	if (!m_pAnimation)
+	{
+		return NULL;
+	}
+
+	return m_pAnimation->Clone();
+}
+
+CAnimation3D * CMesh::GetAnimation() const
+{
+	if (!m_pAnimation)
+	{
+		return NULL;
+	}
+
+	m_pAnimation->AddRef();
+	return m_pAnimation;
 }
 
 bool CMesh::CreateMesh(const string & _strKey, void * _pVertices, unsigned int _iVtxCount, unsigned int _iVtxSize, D3D11_USAGE _eVtxUsage, D3D11_PRIMITIVE_TOPOLOGY _ePrimitive,
@@ -380,6 +402,8 @@ bool CMesh::CreateVertexBuffer(void * _pVertices, unsigned int _iVtxCount, unsig
 	pVtxBuf->eUsage = _eVtxUsage;
 	pVtxBuf->ePrimitive = _ePrimitive;
 
+	SAFE_DELETE_ARR(pVtxBuf->pData);
+
 	D3D11_BUFFER_DESC tDesc = {};
 	tDesc.ByteWidth = _iVtxSize * _iVtxCount;
 	tDesc.Usage = _eVtxUsage;
@@ -391,8 +415,11 @@ bool CMesh::CreateVertexBuffer(void * _pVertices, unsigned int _iVtxCount, unsig
 	tDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	tDesc.StructureByteStride = 0;
 
+	pVtxBuf->pData = new char[_iVtxSize * _iVtxCount];
+	memcpy(pVtxBuf->pData, _pVertices, _iVtxSize * _iVtxCount);
+
 	D3D11_SUBRESOURCE_DATA tData = {};
-	tData.pSysMem = _pVertices;
+	tData.pSysMem = pVtxBuf->pData;
 
 	if (FAILED(DEVICE->CreateBuffer(&tDesc, &tData, &pVtxBuf->pBuffer)))
 	{
@@ -402,7 +429,7 @@ bool CMesh::CreateVertexBuffer(void * _pVertices, unsigned int _iVtxCount, unsig
 	return true;
 }
 
-bool CMesh::CreateIndexBuffer(void * pIndices, unsigned int _iIdxCount, unsigned int _iIdxSize, D3D11_USAGE _eIdxUsage, DXGI_FORMAT _eFormat, pMESHCONTAINER _pContainer)
+bool CMesh::CreateIndexBuffer(void * _pIndices, unsigned int _iIdxCount, unsigned int _iIdxSize, D3D11_USAGE _eIdxUsage, DXGI_FORMAT _eFormat, pMESHCONTAINER _pContainer)
 {
 	pINDEXBUFFER	pIdxBuf = new INDEXBUFFER();
 
@@ -412,6 +439,8 @@ bool CMesh::CreateIndexBuffer(void * pIndices, unsigned int _iIdxCount, unsigned
 	pIdxBuf->iSize = _iIdxSize;
 	pIdxBuf->eUsage = _eIdxUsage;
 	pIdxBuf->eFormat = _eFormat;
+
+	SAFE_DELETE_ARR(pIdxBuf->pData);
 
 	D3D11_BUFFER_DESC tDesc = {};
 	tDesc.ByteWidth = _iIdxCount * _iIdxSize;
@@ -424,8 +453,11 @@ bool CMesh::CreateIndexBuffer(void * pIndices, unsigned int _iIdxCount, unsigned
 	tDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	tDesc.StructureByteStride = 0;
 
+	pIdxBuf->pData = new char[_iIdxSize * _iIdxCount];
+	memcpy(pIdxBuf->pData, _pIndices, _iIdxSize * _iIdxCount);
+
 	D3D11_SUBRESOURCE_DATA tData = {};
-	tData.pSysMem = pIndices;
+	tData.pSysMem = pIdxBuf->pData;
 
 	if (FAILED(DEVICE->CreateBuffer(&tDesc, &tData, &pIdxBuf->pBuffer)))
 	{
@@ -584,49 +616,124 @@ bool CMesh::ConvertFbxData(CFbxLoader * _pLoader)
 
 		m_vecMeshContainer.push_back(pContainer);
 
+		int	iVtxSize = 0;
+
 		// 정점정보를 얻어와서 버텍스버퍼를 만든다
-		if ((*iter)->bBump)
+
+		// 애니메이션이 있는경우
+		if ((*iter)->bAnimation)
 		{
-			vector<VERTEXBUMP>	vecVtx;
-
-			size_t Count = (*iter)->vecPos.size();
-			for (size_t i = 0; i < Count; ++i)
+			// 애니메이션 있고 범프 있고
+			if ((*iter)->bBump)
 			{
-				VERTEXBUMP	tVtx = {};
+				iVtxSize = sizeof(VERTEXANIBUMP);
 
-				tVtx.vPos = (*iter)->vecPos[i];
-				tVtx.vNormal = (*iter)->vecNormal[i];
-				tVtx.vUV = (*iter)->vecUV[i];
-				tVtx.vTangent = (*iter)->vecTangent[i];
-				tVtx.vBinormal = (*iter)->vecBinormal[i];
+				vector<VERTEXANIBUMP>	vecVtx;
 
-				vecVtx.push_back(tVtx);
+				size_t Count = (*iter)->vecPos.size();
+				for (size_t i = 0; i < Count; ++i)
+				{
+					VERTEXANIBUMP	tVtx = {};
+
+					tVtx.vPos = (*iter)->vecPos[i];
+					tVtx.vNormal = (*iter)->vecNormal[i];
+					tVtx.vUV = (*iter)->vecUV[i];
+					tVtx.vTangent = (*iter)->vecTangent[i];
+					tVtx.vBinormal = (*iter)->vecBinormal[i];
+					tVtx.vWeight = (*iter)->vecBlendWeight[i];
+					tVtx.vIndices = (*iter)->vecBlendIndex[i];
+
+					vecVtx.push_back(tVtx);
+				}
+
+				if (false == CreateVertexBuffer(&vecVtx[0], vecVtx.size(), iVtxSize,
+					D3D11_USAGE_DEFAULT, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, pContainer))
+				{
+					return false;
+				}
 			}
-
-			if (false == CreateVertexBuffer(&vecVtx[0], vecVtx.size(), sizeof(VERTEXBUMP), D3D11_USAGE_DEFAULT, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, pContainer))
+			// 애니메이션 있고 범프 없고
+			else
 			{
-				return false;
+				iVtxSize = sizeof(VERTEXANI);
+
+				vector<VERTEXANI>	vecVtx;
+
+				size_t Count = (*iter)->vecPos.size();
+				for (size_t i = 0; i < Count; ++i)
+				{
+					VERTEXANI	tVtx = {};
+
+					tVtx.vPos = (*iter)->vecPos[i];
+					tVtx.vNormal = (*iter)->vecNormal[i];
+					tVtx.vUV = (*iter)->vecUV[i];
+					tVtx.vWeight = (*iter)->vecBlendWeight[i];
+					tVtx.vIndices = (*iter)->vecBlendIndex[i];
+
+					vecVtx.push_back(tVtx);
+				}
+
+				if (false == CreateVertexBuffer(&vecVtx[0], vecVtx.size(), iVtxSize,
+					D3D11_USAGE_DEFAULT, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, pContainer))
+				{
+					return false;
+				}
 			}
 		}
+		// 애니메이션이 없는경우
 		else
 		{
-			vector<VERTEXBUMP>	vecVtx;
-
-			size_t Count = (*iter)->vecPos.size();
-			for (size_t i = 0; i < Count; ++i)
+			// 애니메이션 없고 범프 있는경우
+			if ((*iter)->bBump)
 			{
-				VERTEXBUMP	tVtx = {};
+				iVtxSize = sizeof(VERTEXBUMP);
 
-				tVtx.vPos = (*iter)->vecPos[i];
-				tVtx.vNormal = (*iter)->vecNormal[i];
-				tVtx.vUV = (*iter)->vecUV[i];
+				vector<VERTEXBUMP>	vecVtx;
 
-				vecVtx.push_back(tVtx);
+				size_t Count = (*iter)->vecPos.size();
+				for (size_t i = 0; i < Count; ++i)
+				{
+					VERTEXBUMP	tVtx = {};
+
+					tVtx.vPos = (*iter)->vecPos[i];
+					tVtx.vNormal = (*iter)->vecNormal[i];
+					tVtx.vUV = (*iter)->vecUV[i];
+					tVtx.vTangent = (*iter)->vecTangent[i];
+					tVtx.vBinormal = (*iter)->vecBinormal[i];
+
+					vecVtx.push_back(tVtx);
+				}
+
+				if (false == CreateVertexBuffer(&vecVtx[0], vecVtx.size(), iVtxSize,
+					D3D11_USAGE_DEFAULT, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, pContainer))
+				{
+					return false;
+				}
 			}
-
-			if (false == CreateVertexBuffer(&vecVtx[0], vecVtx.size(), sizeof(VERTEXNORMALTEXTURE), D3D11_USAGE_DEFAULT, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, pContainer))
+			// 애니메이션 없고 범프 없고
+			else
 			{
-				return false;
+				iVtxSize = sizeof(VERTEXNORMALTEXTURE);
+
+				vector<VERTEXNORMALTEXTURE>	vecVtx;
+
+				size_t Count = (*iter)->vecPos.size();
+				for (size_t i = 0; i < Count; ++i)
+				{
+					VERTEXNORMALTEXTURE	tVtx = {};
+
+					tVtx.vPos = (*iter)->vecPos[i];
+					tVtx.vNormal = (*iter)->vecNormal[i];
+					tVtx.vUV = (*iter)->vecUV[i];
+
+					vecVtx.push_back(tVtx);
+				}
+
+				if (false == CreateVertexBuffer(&vecVtx[0], vecVtx.size(), iVtxSize,
+					D3D11_USAGE_DEFAULT, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, pContainer))
+				{
+					return false;
+				}
 			}
 		}
 
@@ -705,24 +812,120 @@ bool CMesh::ConvertFbxData(CFbxLoader * _pLoader)
 	m_tSphere.vCenter = (m_vMin + m_vMax) / 2.0f;
 	m_tSphere.fRadius = m_vSize.Length() / 2.0f;
 
+	// 애니메이션
+	const vector<pFBXBONE>* pvecBone = _pLoader->GetBones();
+	const vector<pFBXANIMATIONCLIP>* pvecClip = _pLoader->GetClip();
+
+	if (pvecBone->empty() || pvecClip->empty())
+	{
+		return true;
+	}
+
+	SAFE_RELEASE(m_pAnimation);
+
+	m_pAnimation = new CAnimation3D();
+
+	if (!m_pAnimation->Init())
+	{
+		SAFE_RELEASE(m_pAnimation);
+		return false;
+	}
+
+	// 본 갯수만큼 반복
+	vector<pFBXBONE>::const_iterator	iterB;
+	vector<pFBXBONE>::const_iterator	iterBEnd = pvecBone->end();
+
+	for (iterB = pvecBone->begin(); iterB != iterBEnd; ++iterB)
+	{
+		pBONE	pBone = new BONE();
+
+		pBone->strName = (*iterB)->strName;
+		pBone->iDepth = (*iterB)->iDepth;
+		pBone->iParentIndex = (*iterB)->iParentIndex;
+
+		float	fMat[4][4];
+
+		for (int i = 0; i < 4; ++i)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				fMat[i][j] = (*iterB)->matOffset.mData[i].mData[j];
+			}
+		}		
+
+		pBone->matOffset = new MATRIX();
+		*pBone->matOffset = fMat;
+
+		for (int i = 0; i < 4; ++i)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				fMat[i][j] = (*iterB)->matBone.mData[i].mData[j];
+			}
+		}
+
+		pBone->matBone = new MATRIX();
+		*pBone->matBone = fMat;
+
+		pBone->vecKeyFrame.reserve((*iterB)->vecKeyFrame.size());
+
+		for (int i = 0; i < (*iterB)->vecKeyFrame.size(); ++i)
+		{
+			pKEYFRAME	pKeyFrame = new KEYFRAME();
+			pKeyFrame->dTime = (*iterB)->vecKeyFrame[i].dTime;
+
+			FbxAMatrix	mat = (*iterB)->vecKeyFrame[i].matTransform;
+			FbxVector4	vPos, vScale;
+			FbxQuaternion	qRot;
+
+			vPos = mat.GetT();
+			vScale = mat.GetS();
+			qRot = mat.GetQ();
+
+			pKeyFrame->vScale = DxVector3(vScale.mData[0], vScale.mData[1], vScale.mData[2]);
+			pKeyFrame->vPos = DxVector3(vPos.mData[0], vPos.mData[1], vPos.mData[2]);
+			pKeyFrame->vRot = DxVector4(qRot.mData[0], qRot.mData[1], qRot.mData[2], qRot.mData[3]);
+
+			pBone->vecKeyFrame.push_back(pKeyFrame);
+		}	
+
+		m_pAnimation->AddBone(pBone);
+	}
+
+	m_pAnimation->CreateBoneTexture();
+
+	// 클립을 읽어온다
+	vector<pFBXANIMATIONCLIP>::const_iterator	iterC;
+	vector<pFBXANIMATIONCLIP>::const_iterator	iterCEnd = pvecClip->end();
+
+	for (iterC = pvecClip->begin(); iterC != iterCEnd; ++iterC)
+	{
+		m_pAnimation->AddClip(AO_LOOP, *iterC);
+	}
+
 	return true;
 }
 
-CMesh::CMesh()
+CMesh::CMesh() :
+	m_pAnimation(NULL)
 {
 }
 
 CMesh::~CMesh()
 {
+	SAFE_RELEASE(m_pAnimation);
+
 	for (size_t i = 0; i < m_vecMeshContainer.size(); ++i)
 	{		
+		SAFE_DELETE_ARR(m_vecMeshContainer[i]->pVtxBuffer->pData);
 		SAFE_RELEASE(m_vecMeshContainer[i]->pVtxBuffer->pBuffer);
 		SAFE_DELETE(m_vecMeshContainer[i]->pVtxBuffer);
 
 		Safe_Release_VecList(m_vecMeshContainer[i]->vecMaterial);
 
 		for (size_t j = 0; j < m_vecMeshContainer[i]->vecIndexBuffer.size(); ++j)
-		{			
+		{	
+			SAFE_DELETE_ARR(m_vecMeshContainer[i]->vecIndexBuffer[j]->pData);
 			SAFE_RELEASE(m_vecMeshContainer[i]->vecIndexBuffer[j]->pBuffer);
 		}
 

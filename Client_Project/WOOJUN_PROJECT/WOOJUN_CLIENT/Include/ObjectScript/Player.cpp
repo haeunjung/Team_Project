@@ -67,7 +67,7 @@ bool CPlayer::Init()
 		vecExplosion.push_back(strExplosion);
 	}
 
-	pAnimation2D->AddAnimation2DClip("Explosion", A2D_FRAME, A2DO_LOOP, vecExplosion.size(), 1, 1.0f, 0, 0.0f, "Explosion", 11, &vecExplosion);
+	pAnimation2D->AddAnimation2DClip("Explosion", A2D_FRAME, AO_LOOP, vecExplosion.size(), 1, 1.0f, 0, 0.0f, "Explosion", 11, &vecExplosion);
 	pAnimation2D->Start(false);
 
 	SAFE_RELEASE(pAnimation2D);

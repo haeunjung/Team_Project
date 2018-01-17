@@ -295,9 +295,6 @@
     <ClInclude Include="07.Component\Effect.h">
       <Filter>07. Component\08. Effect</Filter>
     </ClInclude>
-    <ClInclude Include="FBX_Struct.h">
-      <Filter>00. Header</Filter>
-    </ClInclude>
     <ClInclude Include="03.Resource\FbxLoader.h">
       <Filter>03. Resource\01. Mesh</Filter>
     </ClInclude>
@@ -361,6 +358,7 @@
     <ClInclude Include="07.Component\Animation3D.h">
       <Filter>07. Component\12. Animation3D</Filter>
     </ClInclude>
+    <ClInclude Include="07.Component\Animation3DClip.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -550,6 +548,7 @@
     <ClCompile Include="07.Component\Animation3D.cpp">
       <Filter>07. Component\12. Animation3D</Filter>
     </ClCompile>
+    <ClCompile Include="07.Component\Animation3DClip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\Standard.fx">

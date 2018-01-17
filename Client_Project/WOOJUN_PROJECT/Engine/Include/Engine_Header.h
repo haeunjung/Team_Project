@@ -37,7 +37,6 @@ using namespace std;
 #include "Engine_Struct.h"
 #include "Engine_TemplateFunc.h"
 #include "Engine_Enum.h"
-#include "FBX_Struct.h"
 
 #ifdef _DEBUG
 #pragma comment(lib, "DirectXTex_Debug")

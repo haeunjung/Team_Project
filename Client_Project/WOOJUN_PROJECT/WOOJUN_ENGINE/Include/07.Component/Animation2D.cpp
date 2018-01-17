@@ -9,7 +9,7 @@
 
 WOOJUN_USING
 
-void CAnimation2D::AddAnimation2DClip(const string& _strName, ANIMATION2D_TYPE _eType, ANIMATION2D_OPTION _eOption,
+void CAnimation2D::AddAnimation2DClip(const string& _strName, ANIMATION2D_TYPE _eType, ANIMATION_OPTION _eOption,
 	int _iFrameMaxX, int _iFrameMaxY, float _fLimitTime,
 	int _iLoopCount /*= 0*/, float _fLoopTime /*= 0.0f*/,
 	const string& _strTexKey /*= ""*/, int _iTexRegister /*= 0*/, TCHAR* _pFileName /*= NULL*/,
@@ -42,7 +42,7 @@ void CAnimation2D::AddAnimation2DClip(const string& _strName, ANIMATION2D_TYPE _
 	m_vecAnimationClip.push_back(pClip);
 }
 
-void CAnimation2D::AddAnimation2DClip(const string& _strName, ANIMATION2D_TYPE _eType, ANIMATION2D_OPTION _eOption,
+void CAnimation2D::AddAnimation2DClip(const string& _strName, ANIMATION2D_TYPE _eType, ANIMATION_OPTION _eOption,
 	int _iFrameMaxX, int _iFrameMaxY, float _fLimitTime,
 	int _iLoopCount /*= 0*/, float _fLoopTime /*= 0.0f*/,
 	const string& _strTexKey /*= ""*/, int _iTexRegister /*= 0*/, const vector<wstring>* _vecFileName /*= NULL*/,
@@ -179,21 +179,21 @@ void CAnimation2D::LateUpdate(float _fTime)
 
 				switch (pClip->eOption)
 				{
-				case A2DO_LOOP:
+				case AO_LOOP:
 					break;
-				case A2DO_ONCE_RETURN:
+				case AO_ONCE_RETURN:
 					ChangeAnimation(m_iDefaultAnimation);
 					break;
-				case A2DO_ONCE_DESTROY:
+				case AO_ONCE_DESTROY:
 					m_pGameObject->Death();
 					break;
-				case A2DO_COUNT_RETURN:
+				case AO_COUNT_RETURN:
 					break;
-				case A2DO_COUNT_DESTROY:
+				case AO_COUNT_DESTROY:
 					break;
-				case A2DO_TIME_RETURN:
+				case AO_TIME_RETURN:
 					break;
-				case A2DO_TIME_DESTROY:
+				case AO_TIME_DESTROY:
 					break;				
 				}
 			}
