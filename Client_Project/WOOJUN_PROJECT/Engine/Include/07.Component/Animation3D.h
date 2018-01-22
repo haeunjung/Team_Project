@@ -57,6 +57,11 @@ public:
 	void SetCurClipName(const string& _strName);
 	void ChangeClip(const string& _strName);
 	bool CreateBoneTexture();
+
+	void Save(const char* _pFileName, const string& _strPathKey = MESHPATH);
+	void SaveFromFullPath(const char* _pFileName);	
+	void Load(const char* _pFileName, const string& _strPathKey = MESHPATH);
+	void LoadFromFullPath(const char* _pFileName);
 public:
 	bool Init() override ;
 	void Input(float _fTime) override;

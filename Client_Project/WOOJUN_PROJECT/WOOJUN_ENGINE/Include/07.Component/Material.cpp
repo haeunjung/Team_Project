@@ -7,6 +7,16 @@
 
 WOOJUN_USING
 
+MATERIALINFO CMaterial::GetMaterialInfo() const
+{
+	return m_tInfo;
+}
+
+SKININFO CMaterial::GetBaseSkin() const
+{
+	return m_tBase;
+}
+
 void CMaterial::SetMaterialInfo(const MATERIALINFO & _tInfo)
 {
 	m_tInfo = _tInfo;

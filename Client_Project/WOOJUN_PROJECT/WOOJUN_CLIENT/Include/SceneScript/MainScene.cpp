@@ -365,7 +365,7 @@ void CMainScene::CreateHpBar()
 
 bool CMainScene::Init()
 {
-	CreateProtoType();
+	//CreateProtoType();
 	CreateTerrain();
 	CreateCheckBox();
 	CreateRadioButton();

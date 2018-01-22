@@ -55,6 +55,8 @@ void CRenderer::UpdateTransform()
 
 void CRenderer::CheckAnimation()
 {
+	SAFE_RELEASE(m_pBoneTexture);
+
 	CAnimation3D*	pAnimation = m_pMesh->CloneAnimation();
 
 	if (!pAnimation)
@@ -324,6 +326,20 @@ void CRenderer::Render(float _fTime)
 		}
 	}
 
+	if (m_pBoneTexture)
+	{
+		m_pBoneTexture->SetTexture(3, CUT_VERTEX);
+	}
+	else
+	{
+		CheckAnimation();
+
+		if (m_pBoneTexture)
+		{
+			m_pBoneTexture->SetTexture(3, CUT_VERTEX);
+		}
+	}
+
 	CONTEXT->IASetInputLayout(m_pInputLayout);
 	m_pShader->SetShader();
 
@@ -380,7 +396,8 @@ CRenderer * CRenderer::Clone()
 CRenderer::CRenderer() :
 	m_pMesh(NULL),
 	m_pShader(NULL),
-	m_pInputLayout(NULL)
+	m_pInputLayout(NULL),
+	m_pBoneTexture(NULL)
 {
 	SetTypeName("CRenderer");
 	SetTypeID<CRenderer>();
@@ -397,19 +414,22 @@ CRenderer::CRenderer(const CRenderer & _Renderer)
 {
 	*this = _Renderer;
 
-	if (NULL != m_pMesh)
+	if (m_pMesh)
 	{
 		m_pMesh->AddRef();
 	}
 
-	if (NULL != m_pShader)
+	if (m_pShader)
 	{
 		m_pShader->AddRef();
 	}
 
+	m_pBoneTexture = NULL;
+	CheckAnimation();
+
 	for (int i = 0; i < RST_END; ++i)
 	{
-		if (NULL != m_pRenderState[i])
+		if (m_pRenderState[i])
 		{
 			m_pRenderState[i]->AddRef();
 		}
@@ -428,10 +448,11 @@ CRenderer::CRenderer(const CRenderer & _Renderer)
 		}
 	}
 	
+	m_mapCBuffer.clear();
+
 	unordered_map<string, pRENDERERCBUFFER>::const_iterator	iter;
 	unordered_map<string, pRENDERERCBUFFER>::const_iterator	iterEnd = _Renderer.m_mapCBuffer.end();
 
-	m_mapCBuffer.clear();
 	for (iter = _Renderer.m_mapCBuffer.begin(); iter != iterEnd; ++iter)
 	{
 		pRENDERERCBUFFER	pBuffer = new RENDERERCBUFFER();
@@ -447,6 +468,7 @@ CRenderer::CRenderer(const CRenderer & _Renderer)
 
 CRenderer::~CRenderer()
 {
+	SAFE_RELEASE(m_pBoneTexture);
 	for (int i = 0; i < RST_END; ++i)
 	{
 		SAFE_RELEASE(m_pRenderState[i]);

@@ -42,6 +42,11 @@ public:
 	void Render();
 	void Render(int _iContainer, int _iSubset);
 	CMaterial* CloneMaterial(int _iContainer = 0, int _iSubset = 0);
+	void Save(const char* _pFileName, const string& _strPathKey = MESHPATH);
+	void SaveFromFullPath(const char* _pFileName);
+	void SaveTexture(struct _tagTexture* _pTexture, FILE* _pFile);
+	void Load(const char* _pFileName, const string& _strPathKey = MESHPATH);
+	void LoadFromFullPath(const char* _pFileName);
 private:
 	bool CreateVertexBuffer(void* _pVertices, unsigned int _iVtxCount, unsigned int _iVtxSize, D3D11_USAGE _eVtxUsage, D3D11_PRIMITIVE_TOPOLOGY _ePrimitive, pMESHCONTAINER _pContainer);
 	bool CreateIndexBuffer(void* _pIndices, unsigned int _iIdxCount, unsigned int _iIdxSize, D3D11_USAGE _eIdxUsage, DXGI_FORMAT _eFormat, pMESHCONTAINER _pContainer);

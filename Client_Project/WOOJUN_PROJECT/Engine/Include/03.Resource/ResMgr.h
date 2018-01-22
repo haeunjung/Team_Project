@@ -38,6 +38,8 @@ public:
 	CTexture* LoadTexture(const string& _strKey, const vector<wstring>& _vecFileName, const string& _strPathKey = TEXTUREPATH);
 	CTexture* LoadTextureFromMultibyte(const string& _strKey, const vector<string>& _vecFileName, const string& _strPathKey = TEXTUREPATH);
 	CTexture* LoadTextureFromFullPath(const string& _strKey, const vector<string>& _vecFullPath);
+	CTexture* CreateTexture(const string& _strKey, UINT _iWidth, UINT _iHeight, UINT _iArrSize,
+		DXGI_FORMAT _eFmt, D3D11_USAGE _eUsage, D3D11_BIND_FLAG _eBindFlag, int _iCpuFlag);
 	CTexture* FindTexture(const string& _strKey);
 
 	// Sampler

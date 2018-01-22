@@ -1,6 +1,9 @@
 #include "Mesh.h"
 #include "FbxLoader.h"
+#include "Texture.h"
+#include "Sampler.h"
 #include "../Device.h"
+#include "../01.Core/PathMgr.h"
 #include "../07.Component/Material.h"
 #include "../07.Component/Animation3D.h"
 
@@ -364,6 +367,183 @@ CMaterial * CMesh::CloneMaterial(int _iContainer /*= 0*/, int _iSubset /*= 0*/)
 	}
 
 	return pContainer->vecMaterial[_iSubset]->Clone();
+}
+
+void CMesh::Save(const char * _pFileName, const string & _strPathKey)
+{
+	// 풀경로를 만든다
+	const char*	pPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(_strPathKey);
+
+	string	strPath;
+	if (pPath)
+	{
+		strPath = pPath;
+	}
+
+	strPath += _pFileName;
+
+	return SaveFromFullPath(strPath.c_str());
+}
+
+void CMesh::SaveFromFullPath(const char * _pFileName)
+{
+	FILE*	pFile = NULL;
+	
+	fopen_s(&pFile, _pFileName, "wb");
+
+	if (!pFile)
+	{
+		return;
+	}
+
+	// 컨테이너 수를 저장
+	int	iCount = m_vecMeshContainer.size();
+
+	fwrite(&iCount, 4, 1, pFile);
+
+	for (int i = 0; i < iCount; ++i)
+	{
+		// 정점 수
+		fwrite(&m_vecMeshContainer[i]->pVtxBuffer->iCount, 4, 1, pFile);
+
+		// 정점 하나의 크기
+		fwrite(&m_vecMeshContainer[i]->pVtxBuffer->iSize, 4, 1, pFile);
+
+		// 위상구조
+		fwrite(&m_vecMeshContainer[i]->pVtxBuffer->ePrimitive, 4, 1, pFile);
+
+		// 용도
+		fwrite(&m_vecMeshContainer[i]->pVtxBuffer->eUsage, 4, 1, pFile);
+
+		// 정점 정보
+		fwrite(m_vecMeshContainer[i]->pVtxBuffer->pData,
+			m_vecMeshContainer[i]->pVtxBuffer->iSize,
+			m_vecMeshContainer[i]->pVtxBuffer->iCount,
+			pFile);
+
+		// 서브셋 수
+		int	iSubset = m_vecMeshContainer[i]->vecIndexBuffer.size();
+		fwrite(&iSubset, 4, 1, pFile);
+
+		for (int j = 0; j < iSubset; ++j)
+		{
+			// 인덱스 수 저장
+			fwrite(&m_vecMeshContainer[i]->vecIndexBuffer[j]->iCount, 4, 1, pFile);
+
+			// 인덱스 크기 저장
+			fwrite(&m_vecMeshContainer[i]->vecIndexBuffer[j]->iSize, 4, 1, pFile);
+
+			// 인덱스 포멧 저장
+			fwrite(&m_vecMeshContainer[i]->vecIndexBuffer[j]->eFormat, 4, 1, pFile);
+
+			// 인덱스 용도 저장
+			fwrite(&m_vecMeshContainer[i]->vecIndexBuffer[j]->eUsage, 4, 1, pFile);
+
+			// 현재 서브셋 인덱스 정보를 저장
+			fwrite(m_vecMeshContainer[i]->vecIndexBuffer[i]->pData,
+				m_vecMeshContainer[i]->vecIndexBuffer[i]->iSize,
+				m_vecMeshContainer[i]->vecIndexBuffer[i]->iCount,
+				pFile);
+		}
+
+		// 재질 정보 저장
+		int	iMtrlCount = m_vecMeshContainer[i]->vecMaterial.size();
+		fwrite(&iMtrlCount, 4, 1, pFile);
+
+		for (int j = 0; j < iMtrlCount; ++j)
+		{
+			MATERIALINFO	tMtrlInfo = m_vecMeshContainer[i]->vecMaterial[j]->GetMaterialInfo();
+			SKININFO	tBaseSkin = m_vecMeshContainer[i]->vecMaterial[j]->GetBaseSkin();
+
+			// 재질 색상정보 저장
+			fwrite(&tMtrlInfo, sizeof(MATERIALINFO), 1, pFile);
+
+			if (tBaseSkin.pDiffuse)
+			{
+				SaveTexture(tBaseSkin.pDiffuse, pFile);
+			}
+
+			if (tBaseSkin.pNormal)
+			{
+				SaveTexture(tBaseSkin.pNormal, pFile);
+			}
+
+			if (tBaseSkin.pSpecular)
+			{
+				SaveTexture(tBaseSkin.pSpecular, pFile);
+			}
+		}
+	}
+
+	fclose(pFile);
+
+	if (m_pAnimation)
+	{
+		char	strAniPath[MAX_PATH] = {};
+		memcpy(strAniPath, _pFileName, strlen(_pFileName));
+
+		memset(strAniPath + (strlen(_pFileName) - 3), 0, 3);
+		strcat_s(strAniPath, "anm");
+		m_pAnimation->Save(strAniPath);
+	}
+}
+
+void CMesh::SaveTexture(_tagTexture* _pTexture, FILE * _pFile)
+{
+	string	strKey = _pTexture->pTexture->GetKey();
+	const WCHAR*	pFullPath = _pTexture->pTexture->GetFullPath().c_str();
+
+	WCHAR	strPath[MAX_PATH] = {};
+
+	int	iCount = 0;
+	for (int i = lstrlen(pFullPath) - 1; i >= 0; --i)
+	{
+		if (pFullPath[i] == '\\' || pFullPath[i] == '/')
+		{
+			++iCount;
+		}
+
+		if (2 == iCount)
+		{
+			memcpy(strPath, pFullPath + (i + 1), sizeof(WCHAR) * (MAX_PATH - (i + 1)));
+			break;
+		}
+	}
+
+	int iLength = strKey.length();
+	// 키값 저장
+	fwrite(&iLength, 4, 1, _pFile);
+	fwrite(strKey.c_str(), 1, iLength, _pFile);
+
+	// 풀패스 저장
+	iLength = lstrlen(strPath);
+	fwrite(&iLength, 4, 1, _pFile);
+	fwrite(strPath, 2, iLength, _pFile);
+
+	// 패스 키 저장
+	iLength = strlen(MESHPATH);
+	fwrite(&iLength, 4, 1, _pFile);
+	fwrite(MESHPATH, 1, iLength, _pFile);
+
+	// 레지스터 저장
+	fwrite(&_pTexture->iTextureRegister, 4, 1, _pFile);
+
+	strKey = _pTexture->pSampler->GetKey();
+	iLength = strKey.length();
+
+	fwrite(&iLength, 4, 1, _pFile);
+	fwrite(strKey.c_str(), 1, iLength, _pFile);
+
+	fwrite(&_pTexture->iSamplerRegister, 4, 1, _pFile);
+	fwrite(&_pTexture->iShaderConstantType, 4, 1, _pFile);
+}
+
+void CMesh::Load(const char * _pFileName, const string & _strPathKey)
+{
+}
+
+void CMesh::LoadFromFullPath(const char * _pFileName)
+{
 }
 
 bool CMesh::CreateVertexBuffer(void * _pVertices, unsigned int _iVtxCount, unsigned int _iVtxSize, D3D11_USAGE _eVtxUsage, D3D11_PRIMITIVE_TOPOLOGY _ePrimitive, pMESHCONTAINER _pContainer)

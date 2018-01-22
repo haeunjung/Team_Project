@@ -3,6 +3,11 @@
 
 WOOJUN_USING
 
+string CSampler::GetKey() const
+{
+	return m_strKey;
+}
+
 bool CSampler::CreateSampler(const string& _strKey,
 	D3D11_FILTER _eFilter /*= D3D11_FILTER_MIN_MAG_MIP_LINEAR*/,
 	D3D11_TEXTURE_ADDRESS_MODE _eAddrU /*= D3D11_TEXTURE_ADDRESS_WRAP*/,

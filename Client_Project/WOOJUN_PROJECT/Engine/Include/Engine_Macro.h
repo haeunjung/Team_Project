@@ -81,4 +81,5 @@
 #define STANDARD_BUMP_SHADER		"StandardBumpShader"
 #define UI_SHADER					"UIShader"
 #define TERRAIN_SHADER				"TerrainShader"
+#define STANDARD_ANI_BUMP_SHADER	"StandardAniBumpShader"
  

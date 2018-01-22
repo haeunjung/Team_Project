@@ -358,7 +358,9 @@
     <ClInclude Include="07.Component\Animation3D.h">
       <Filter>07. Component\12. Animation3D</Filter>
     </ClInclude>
-    <ClInclude Include="07.Component\Animation3DClip.h" />
+    <ClInclude Include="07.Component\Animation3DClip.h">
+      <Filter>07. Component\12. Animation3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -548,7 +550,9 @@
     <ClCompile Include="07.Component\Animation3D.cpp">
       <Filter>07. Component\12. Animation3D</Filter>
     </ClCompile>
-    <ClCompile Include="07.Component\Animation3DClip.cpp" />
+    <ClCompile Include="07.Component\Animation3DClip.cpp">
+      <Filter>07. Component\12. Animation3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\Standard.fx">

@@ -18,6 +18,31 @@ CTexture * CTexture::CreateTexture(const string & _strKey, UINT _iWidth, UINT _i
 	return pTexture;
 }
 
+string CTexture::GetKey() const
+{
+	return m_strKey;
+}
+
+string CTexture::GetPathKey() const
+{
+	return m_strPathKey;
+}
+
+wstring CTexture::GetFullPath() const
+{
+	return m_strFullPath;
+}
+
+wstring CTexture::GetFileName() const
+{
+	return m_strFileName;
+}
+
+void CTexture::SetPathKey(const string & _strPathKey)
+{
+	m_strPathKey = _strPathKey;
+}
+
 bool CTexture::LoadTexture(const string & _strKey, TCHAR * _pFileName, const string & _strPathKey /*= TEXTUREPATH*/)
 {
 	// 유니코드 문자열을 멀티바이트 문자열로 만든다

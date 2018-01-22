@@ -70,6 +70,27 @@ VS_BUMP_OUTPUT StandardBumpVS(VS_BUMP_INPUT input)
     return output;
 }
 
+VS_BUMP_OUTPUT StandardAniBumpVS(VS_ANI_BUMP_INPUT input)
+{
+    VS_BUMP_OUTPUT output = (VS_BUMP_OUTPUT) 0;
+
+    // ½ºÅ°´×
+    _tagSkinning    tSkinning = Skinning(input.vPos, input.vNormal, input.vTangent, input.vBinormal, input.vWeights, input.vIndices);
+    
+    output.vPos = mul(float4(tSkinning.vPos, 1.0f), g_matWVP);
+    output.vUV = input.vUV;
+    output.vNormal = normalize(mul(float4(tSkinning.vNormal, 0.0f), g_matWV).xyz);
+    output.vViewPos = mul(float4(tSkinning.vPos, 1.0f), g_matWV);
+
+    if (1 == g_iBump)
+    {
+        output.vTangent = normalize(mul(float4(tSkinning.vTangent, 0.0f), g_matWV).xyz);
+        output.vBinormal = normalize(mul(float4(tSkinning.vBinormal, 0.0f), g_matWV).xyz);
+    }
+
+    return output;
+}
+
 PS_SINGLE_OUTPUT StandardBumpPS(VS_BUMP_OUTPUT input)
 {
     PS_SINGLE_OUTPUT output = (PS_SINGLE_OUTPUT) 0;

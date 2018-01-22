@@ -28,8 +28,8 @@ bool CPlayer::Init()
 		pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
 	}*/
 	pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
-	pPlayerRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pPlayerRenderer->SetInputLayout("BumpInputLayout");	
+	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
+	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");	
 	pPlayerRenderer->SetRenderState(ALPHABLEND);
 
 	//CMaterial* pMaterial = pPlayerRenderer->GetMaterial();

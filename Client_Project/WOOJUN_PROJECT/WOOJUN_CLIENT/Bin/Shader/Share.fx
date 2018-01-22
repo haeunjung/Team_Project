@@ -40,6 +40,17 @@ struct VS_BUMP_INPUT
     float3 vBinormal : BINORMAL;
 };
 
+struct VS_ANI_BUMP_INPUT
+{
+    float3 vPos      : POSITION;
+    float3 vNormal   : NORMAL;
+    float2 vUV       : TEXCOORD;
+    float3 vTangent  : TANGENT;
+    float3 vBinormal : BINORMAL;
+    float4 vWeights  : BLENDWEIGHTS;
+    float4 vIndices  : BLENDINDICES;
+};
+
 struct VS_BUMP_OUTPUT
 {
     float4 vPos      : SV_POSITION;
@@ -114,6 +125,10 @@ SamplerState g_NormalSampler : register(s1);
 // Specular Texture
 Texture2D    g_SpecularTexture : register(t2);
 SamplerState g_SpecularSampler : register(s2);
+
+// Bone Texture
+Texture2D    g_BoneTexture  : register(t3);
+SamplerState g_BoneSampler  : register(s3);
 
 struct _tagMaterial
 {
@@ -226,4 +241,52 @@ _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
     tMtrl.vSpecular = g_vLightSpecular * vSpecular * pow(max(0, dot(vReflect, vView)), g_fSpecularPower) * fIntensity;
 
     return tMtrl;
+}
+
+struct _tagSkinning
+{
+    float3 vPos;
+    float3 vNormal;
+    float3 vTangent;
+    float3 vBinormal;
+};
+
+matrix GetBoneMatrix(int idx)
+{
+    matrix matBone =
+    {
+        g_BoneTexture.Load(int3(idx * 4, 0, 0)),
+        g_BoneTexture.Load(int3(idx * 4 + 1, 0, 0)),
+        g_BoneTexture.Load(int3(idx * 4 + 2, 0, 0)),
+        g_BoneTexture.Load(int3(idx * 4 + 3, 0, 0))
+    };
+
+    return matBone;
+}
+
+_tagSkinning Skinning(float3 vPos, float3 vNormal, float3 vTangent, float3 vBinormal, float4 vWeights, float4 vIndices)
+{
+    _tagSkinning tSkinning = (_tagSkinning) 0;
+
+    float fWeights[4];
+    fWeights[0] = vWeights.x;
+    fWeights[1] = vWeights.y;
+    fWeights[2] = vWeights.z;
+    fWeights[3] = 1.0f - vWeights.x - vWeights.y - vWeights.z;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        matrix matBone = GetBoneMatrix((int)vIndices[i]);
+
+        tSkinning.vPos += fWeights[i] * mul(float4(vPos, 1.0f), matBone).xyz;
+        tSkinning.vNormal += fWeights[i] * mul(float4(vNormal, 0.0f), matBone).xyz;
+        tSkinning.vTangent += fWeights[i] * mul(float4(vTangent, 0.0f), matBone).xyz;
+        tSkinning.vBinormal += fWeights[i] * mul(float4(vBinormal, 0.0f), matBone).xyz;
+    }
+
+    tSkinning.vNormal = normalize(tSkinning.vNormal);
+    tSkinning.vTangent = normalize(tSkinning.vTangent);
+    tSkinning.vBinormal = normalize(tSkinning.vBinormal);
+
+    return tSkinning;
 }

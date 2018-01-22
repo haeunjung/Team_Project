@@ -1,8 +1,9 @@
 #include "Animation3D.h"
 #include "Animation3DClip.h"
 #include "Renderer.h"
-#include "../06.GameObject/GameObject.h"
+#include "../01.Core/PathMgr.h"
 #include "../03.Resource/Texture.h"
+#include "../06.GameObject/GameObject.h"
 
 WOOJUN_USING
 
@@ -15,6 +16,10 @@ CAnimation3D::CAnimation3D() :
 	m_fChangeTime(0.0f),
 	m_fAnimationTime(0.0f)
 {
+	SetTag("Animation3D");
+	SetTypeName("CAnimation3D");
+	SetTypeID<CAnimation3D>();
+	m_eComponentType = CT_ANIMATION3D;
 }
 
 CAnimation3D::CAnimation3D(const CAnimation3D & _Animation3D) :
@@ -50,6 +55,7 @@ CAnimation3D::CAnimation3D(const CAnimation3D & _Animation3D) :
 	{
 		CAnimation3DClip*	pClip = iter->second->Clone();
 		m_mapClip.insert(make_pair(iter->first, pClip));
+		SAFE_RELEASE(pClip);
 	}
 
 	m_iAnimationLimitFrame = _Animation3D.m_iAnimationLimitFrame;
@@ -65,6 +71,8 @@ CAnimation3D::CAnimation3D(const CAnimation3D & _Animation3D) :
 	m_fAnimationTime = 0.0f;
 	m_fChangeLimitTime = _Animation3D.m_fChangeLimitTime;
 
+	m_fFrameTime = _Animation3D.m_fFrameTime;
+
 	m_pBoneTexture = NULL;
 
 	CreateBoneTexture();
@@ -79,6 +87,7 @@ CAnimation3D::~CAnimation3D()
 		Safe_Delete_VecList(m_vecBones[i]->vecKeyFrame);
 	}
 
+	SAFE_RELEASE(m_pBoneTexture);
 	SAFE_RELEASE(m_pNextClip);
 	SAFE_RELEASE(m_pCurClip);
 	Safe_Release_Map(m_mapClip);
@@ -243,6 +252,87 @@ bool CAnimation3D::CreateBoneTexture()
 	return true;
 }
 
+void CAnimation3D::Save(const char * _pFileName, const string & _strPathKey)
+{
+	// 풀경로를 만든다
+	const char*	pPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(_strPathKey);
+
+	string	strPath;
+	if (pPath)
+	{
+		strPath = pPath;
+	}
+
+	strPath += _pFileName;
+
+	return SaveFromFullPath(strPath.c_str());
+}
+
+void CAnimation3D::SaveFromFullPath(const char * _pFileName)
+{
+	FILE*	pFile = NULL;
+
+	fopen_s(&pFile, _pFileName, "wb");
+
+	if (!pFile)
+	{
+		return;
+	}
+
+	int iSize = m_vecBones.size();
+
+	// 본 갯수 저장
+	fwrite(&iSize, 4, 1, pFile);
+
+	for (int i = 0; i < iSize; ++i)
+	{
+		// 이름 저장
+		int iLength = m_vecBones[i]->strName.length();
+
+		fwrite(&iLength, 4, 1, pFile);
+		fwrite(m_vecBones[i]->strName.c_str(), 1, iLength, pFile);
+
+		// 깊이 저장
+		fwrite(&m_vecBones[i]->iDepth, 4, 1, pFile);
+		fwrite(&m_vecBones[i]->iParentIndex, 4, 1, pFile);
+
+		for (int j = 0; j < 4; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				fwrite(&m_vecBones[i]->matOffset->m[i][j], 4, 1, pFile);
+			}
+		}
+
+		for (int j = 0; j < 4; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				fwrite(&m_vecBones[i]->matBone->m[i][j], 4, 1, pFile);
+			}
+		}
+
+		int iKeyCount = m_vecBones[i]->vecKeyFrame.size();
+
+		fwrite(&iKeyCount, 4, 1, pFile);
+
+		for(int j = 0; j < iKeyCount; ++j)
+		{
+
+		}
+	}
+
+	fclose(pFile);
+}
+
+void CAnimation3D::Load(const char * _pFileName, const string & _strPathKey)
+{
+}
+
+void CAnimation3D::LoadFromFullPath(const char * _pFileName)
+{
+}
+
 bool CAnimation3D::Init()
 {
 	return true;
@@ -380,6 +470,8 @@ void CAnimation3D::Update(float _fTime)
 			matBone = *m_vecBones[i]->matOffset * matBone;
 
 			vecBones.push_back(matBone);
+
+			int a = 0;
 		}
 	}
 

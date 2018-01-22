@@ -514,6 +514,31 @@ CTexture * CResMgr::LoadTextureFromFullPath(const string & _strKey, const vector
 	return pTexture;
 }
 
+CTexture * CResMgr::CreateTexture(const string & _strKey, UINT _iWidth, UINT _iHeight, UINT _iArrSize, DXGI_FORMAT _eFmt, D3D11_USAGE _eUsage, D3D11_BIND_FLAG _eBindFlag, int _iCpuFlag)
+{
+	CTexture*	pTexture = FindTexture(_strKey);
+
+	if (pTexture)
+	{
+		return pTexture;
+	}
+
+	pTexture = new CTexture();
+
+	if (!pTexture->CreateResource(_strKey, _iWidth, _iHeight, _iArrSize,
+		_eFmt, _eUsage, _eBindFlag, _iCpuFlag))
+	{
+		SAFE_RELEASE(pTexture);
+		return NULL;
+	}
+
+	pTexture->AddRef();
+
+	m_mapTexture.insert(make_pair(_strKey, pTexture));
+
+	return pTexture;
+}
+
 CTexture * CResMgr::FindTexture(const string & _strKey)
 {
 	m_iterTexture = m_mapTexture.find(_strKey);

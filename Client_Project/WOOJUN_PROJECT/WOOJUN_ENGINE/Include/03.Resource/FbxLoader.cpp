@@ -573,7 +573,7 @@ void CFbxLoader::LoadAnimationClip()
 			pClip->tStart.GetFrameCount(eTimeMode);
 		pClip->eTimeMode = eTimeMode;
 
-		m_vecClip.push_back(pClip);
+		m_vecClip.push_back(pClip);		
 	}
 }
 

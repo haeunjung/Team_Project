@@ -10,6 +10,9 @@ private:
 	friend class CResMgr;
 private:
 	ID3D11SamplerState*		m_pSampler;
+	string		m_strKey;
+public:
+	string GetKey() const;
 public:
 	bool CreateSampler(const string& _strKey,
 		D3D11_FILTER _eFilter = D3D11_FILTER_MIN_MAG_MIP_LINEAR,

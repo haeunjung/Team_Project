@@ -49,6 +49,9 @@ private:
 	SKININFO		m_tBase;
 	SKININFO		m_tMultiTexture;
 public:
+	MATERIALINFO GetMaterialInfo() const;
+	SKININFO GetBaseSkin() const;
+public:
 	void SetMaterialInfo(const MATERIALINFO& _tInfo);
 	void SetMaterialInfo(const DxVector4& _vDiffuse, const DxVector4& _vAmbient, const DxVector4& _vSpecular, const DxVector4& _vEmissive,
 		float _fSpecularPower);

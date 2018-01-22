@@ -16,6 +16,16 @@ private:
 	vector<::DirectX::ScratchImage*>	m_vecScratchImage;
 	ID3D11ShaderResourceView*			m_pShaderResourceView;
 	string		m_strKey;
+	string		m_strPathKey;
+	wstring		m_strFullPath;
+	wstring		m_strFileName;
+public:
+	string GetKey() const;
+	string GetPathKey() const;
+	wstring GetFullPath() const;
+	wstring GetFileName() const;
+public:
+	void SetPathKey(const string& _strPathKey);
 public:
 	bool LoadTexture(const string& _strKey, TCHAR* _pFileName, const string& _strPathKey = TEXTUREPATH);
 	bool LoadTexture(const string& _strKey, CHAR* _pFileName, const string& _strPathKey = TEXTUREPATH);
