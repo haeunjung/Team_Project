@@ -1,6 +1,6 @@
 #pragma once
-#include "afxwin.h"
-
+//#include "afxwin.h"
+#include "06.GameObject/GameObject.h"
 
 // CObjectDialog 대화 상자입니다.
 
@@ -40,17 +40,18 @@ public:
 private:
 	void SetObjectValue();
 	bool LoadFBX();
-	void CreateObject(const string& _strKey, const wstring & _FileName);
+	void CreateObject(const string& _strKey, const wstring & _FileName);	
 public:
-	afx_msg void OnPaint();
 	afx_msg void OnLbnSelchangeList1();
 private:
-	bool		m_bLoad;
-	CListBox	m_ObjectListBox;
-	int			m_iCurIndex;
+	bool			m_bLoad;
+	CListBox		m_ObjectListBox;
+	int				m_iCurIndex;
+	CGameObject*	m_pPickObject;
 public:
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	virtual BOOL OnInitDialog();
+	void ChangePickObject(CGameObject* _pGameObject);
+public:
 	afx_msg void OnBnClickedLoadButton();
 	afx_msg void OnBnClickedCreateButton();
+	afx_msg void OnChildActivate();
 };

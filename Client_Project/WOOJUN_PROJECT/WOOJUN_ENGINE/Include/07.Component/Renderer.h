@@ -31,6 +31,7 @@ public:
 public:
 	void SetMesh(const string& _strKey);
 	void SetMesh(const string& _strKey, const TCHAR* _pFileName, const string& _strPathKey = MESHPATH);
+	void SetMeshFromFullPath(const string& _strKey, const TCHAR* _pFullPath);
 	void SetMesh(CMesh* _pMesh);
 	void SetShader(const string& _strKey);
 	void SetInputLayout(const string& _strKey);

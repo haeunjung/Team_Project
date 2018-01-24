@@ -51,6 +51,7 @@ private:
 public:
 	MATERIALINFO GetMaterialInfo() const;
 	SKININFO GetBaseSkin() const;
+	void SetBaseSkin(const SKININFO& _tBaseSkin);
 public:
 	void SetMaterialInfo(const MATERIALINFO& _tInfo);
 	void SetMaterialInfo(const DxVector4& _vDiffuse, const DxVector4& _vAmbient, const DxVector4& _vSpecular, const DxVector4& _vEmissive,

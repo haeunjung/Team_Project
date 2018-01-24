@@ -50,6 +50,10 @@ bool CTexture::LoadTexture(const string & _strKey, TCHAR * _pFileName, const str
 
 	WideCharToMultiByte(CP_ACP, 0, _pFileName, -1, strPath, lstrlen(_pFileName), NULL, NULL);
 
+	m_strKey = _strKey;
+	m_strPathKey = _strPathKey;
+	m_strFileName = _pFileName;
+
 	return LoadTexture(_strKey, strPath, _strPathKey);
 }
 
@@ -64,6 +68,15 @@ bool CTexture::LoadTexture(const string & _strKey, CHAR * _pFileName, const stri
 	}
 
 	strPath += _pFileName;
+
+	m_strKey = _strKey;
+	m_strPathKey = _strPathKey;
+
+	WCHAR	strFileName[MAX_PATH] = {};
+
+	MultiByteToWideChar(CP_ACP, 0, _pFileName, -1, strFileName, strlen(_pFileName));
+
+	m_strFileName = strFileName;
 
 	return LoadTextureFromFullPath(_strKey, strPath.c_str());
 }
@@ -85,6 +98,9 @@ bool CTexture::LoadTextureFromFullPath(const string & _strKey, const CHAR * _pFu
 	// 전체 경로를 유니코드로 변환한다.
 	WCHAR	strFullPath[MAX_PATH] = {};
 	MultiByteToWideChar(CP_ACP, 0, _pFullPath, -1, strFullPath, strlen(_pFullPath));
+
+	m_strFullPath = strFullPath;
+	m_strKey = _strKey;
 
 	// 확장자 DDS파일일 경우
 	if (0 == strcmp(strExt, ".DDS"))
@@ -138,6 +154,9 @@ bool CTexture::LoadTexture(const string & _strKey, const vector<wstring>& _vecFi
 		vecPath.push_back(strPath);
 	}
 
+	m_strPathKey = _strPathKey;
+	m_strKey = _strKey;
+
 	return LoadTextureFromMultibyte(_strKey, vecPath, _strPathKey);
 }
 
@@ -161,6 +180,9 @@ bool CTexture::LoadTextureFromMultibyte(const string & _strKey, const vector<str
 
 		vecFullPath.push_back(strFullPath);
 	}
+
+	m_strPathKey = _strPathKey;
+	m_strKey = _strKey;
 
 	return LoadTextureFromFullPath(_strKey, vecFullPath);
 }

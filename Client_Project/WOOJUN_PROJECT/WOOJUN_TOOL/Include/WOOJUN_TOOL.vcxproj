@@ -200,6 +200,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AniDialog.h" />
+    <ClInclude Include="AnimationScene.h" />
     <ClInclude Include="EditForm.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MenuDialog.h" />
@@ -217,6 +219,8 @@
     <ClInclude Include="WOOJUN_TOOLView.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AniDialog.cpp" />
+    <ClCompile Include="AnimationScene.cpp" />
     <ClCompile Include="EditForm.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MenuDialog.cpp" />

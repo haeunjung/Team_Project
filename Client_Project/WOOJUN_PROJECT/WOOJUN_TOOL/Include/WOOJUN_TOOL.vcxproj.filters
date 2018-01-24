@@ -74,6 +74,10 @@
     <ClInclude Include="ToolObject.h">
       <Filter>05. ObjectScript</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationScene.h">
+      <Filter>04. SceneScript</Filter>
+    </ClInclude>
+    <ClInclude Include="AniDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -110,6 +114,10 @@
     <ClCompile Include="ToolObject.cpp">
       <Filter>05. ObjectScript</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationScene.cpp">
+      <Filter>04. SceneScript</Filter>
+    </ClCompile>
+    <ClCompile Include="AniDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WOOJUN_TOOL.rc">

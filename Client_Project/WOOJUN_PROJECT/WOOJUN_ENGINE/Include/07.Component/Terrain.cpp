@@ -193,9 +193,9 @@ bool CTerrain::CreateTerrain(const string & _strKey, UINT _iVtxNumX, UINT _iVtxN
 	SAFE_RELEASE(pRenderer);
 	SAFE_RELEASE(pMesh);
 
-	/*CColliderTerrain*	pTerrainCol = m_pGameObject->AddComponent<CColliderTerrain>("TerrainCol");
+	CColliderTerrain*	pTerrainCol = m_pGameObject->AddComponent<CColliderTerrain>("TerrainCol");
 	pTerrainCol->SetTerrainInfo(m_vecPos, m_iVtxNumX, m_iVtxNumZ);
-	SAFE_RELEASE(pTerrainCol);*/
+	SAFE_RELEASE(pTerrainCol);
 
 	return true;
 }

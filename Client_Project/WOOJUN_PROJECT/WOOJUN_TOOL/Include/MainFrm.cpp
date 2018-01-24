@@ -9,6 +9,7 @@
 #include "05.Scene/SceneMgr.h"
 #include "05.Scene/Scene.h"
 #include "ToolScene.h"
+#include "AnimationScene.h"
 #include "ToolValue.h"
 
 #ifdef _DEBUG
@@ -130,7 +131,12 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	}
 
 	CScene*		pCurScene = GET_SINGLE(CSceneMgr)->GetCurScene();
-	pCurScene->CreateScript<CToolScene>();
+	pCurScene->CreateScript<CToolScene>();	
+	GET_SINGLE(CSceneMgr)->InsertScene(pCurScene);
+
+	CScene* pAnimationScene = GET_SINGLE(CSceneMgr)->CreateScene("AnimationScene");
+	pAnimationScene->CreateScript<CAnimationScene>();
+	GET_SINGLE(CSceneMgr)->InsertScene(pAnimationScene);
 
 	return TRUE;
 }

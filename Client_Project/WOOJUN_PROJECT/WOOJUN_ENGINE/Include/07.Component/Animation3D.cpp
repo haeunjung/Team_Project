@@ -252,7 +252,7 @@ bool CAnimation3D::CreateBoneTexture()
 	return true;
 }
 
-void CAnimation3D::Save(const char * _pFileName, const string & _strPathKey)
+bool CAnimation3D::Save(const char * _pFileName, const string & _strPathKey)
 {
 	// 풀경로를 만든다
 	const char*	pPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(_strPathKey);
@@ -268,7 +268,80 @@ void CAnimation3D::Save(const char * _pFileName, const string & _strPathKey)
 	return SaveFromFullPath(strPath.c_str());
 }
 
-void CAnimation3D::SaveFromFullPath(const char * _pFileName)
+bool CAnimation3D::Save(FILE * _pFile)
+{
+	int iSize = m_vecBones.size();
+
+	// 본 수 저장
+	fwrite(&iSize, 4, 1, _pFile);
+
+	for (int i = 0; i < iSize; ++i)
+	{
+		// 이름 저장
+		int iLength = m_vecBones[i]->strName.length();
+
+		fwrite(&iLength, 4, 1, _pFile);
+		fwrite(m_vecBones[i]->strName.c_str(), 1, iLength, _pFile);
+
+		// 깊이 저장
+		fwrite(&m_vecBones[i]->iDepth, 4, 1, _pFile);
+		fwrite(&m_vecBones[i]->iParentIndex, 4, 1, _pFile);
+
+		for (int j = 0; j < 4; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				fwrite(&m_vecBones[i]->matOffset->m[j][k], 4, 1, _pFile);
+			}
+		}
+
+		for (int j = 0; j < 4; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				fwrite(&m_vecBones[i]->matBone->m[j][k], 4, 1, _pFile);
+			}
+		}
+
+		int iKeyCount = m_vecBones[i]->vecKeyFrame.size();
+
+		fwrite(&iKeyCount, 4, 1, _pFile);
+
+		for (int j = 0; j < iKeyCount; ++j)
+		{
+			fwrite(m_vecBones[i]->vecKeyFrame[j], sizeof(KEYFRAME), 1, _pFile);
+		}
+	}
+
+	// 클립 정보 저장
+	iSize = m_mapClip.size();
+	fwrite(&iSize, 4, 1, _pFile);
+
+	unordered_map<string, class CAnimation3DClip*>::iterator	iter;
+	unordered_map<string, class CAnimation3DClip*>::iterator	iterEnd = m_mapClip.end();
+
+	for (iter = m_mapClip.begin(); iter != iterEnd; ++iter)
+	{
+		iter->second->Save(_pFile);
+	}
+
+	fwrite(&m_iAnimationLimitFrame, 4, 1, _pFile);
+
+	int iLength = m_strDefaultClip.length();
+	fwrite(&iLength, 4, 1, _pFile);
+	fwrite(m_strDefaultClip.c_str(), 1, iLength, _pFile);
+
+	iLength = m_strCurClip.length();
+	fwrite(&iLength, 4, 1, _pFile);
+	fwrite(m_strCurClip.c_str(), 1, iLength, _pFile);
+
+	fwrite(&m_fChangeLimitTime, 4, 1, _pFile);
+	fwrite(&m_fFrameTime, 4, 1, _pFile);
+
+	return true;
+}
+
+bool CAnimation3D::SaveFromFullPath(const char * _pFileName)
 {
 	FILE*	pFile = NULL;
 
@@ -276,31 +349,71 @@ void CAnimation3D::SaveFromFullPath(const char * _pFileName)
 
 	if (!pFile)
 	{
-		return;
+		return false;
 	}
 
-	int iSize = m_vecBones.size();
+	Save(pFile);
 
-	// 본 갯수 저장
-	fwrite(&iSize, 4, 1, pFile);
+	fclose(pFile);
+
+	return true;
+}
+
+bool CAnimation3D::Load(const char * _pFileName, const string & _strPathKey)
+{
+	// 풀경로를 만든다
+	const char*	pPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(_strPathKey);
+
+	string	strPath;
+	if (pPath)
+	{
+		strPath = pPath;
+	}
+
+	strPath += _pFileName;
+
+	return LoadFromFullPath(strPath.c_str());
+}
+
+bool CAnimation3D::Load(FILE * _pFile)
+{
+	int	iSize = 0;
+
+	// 본 수 로드
+	fread(&iSize, 4, 1, _pFile);
+
+	for (int i = 0; i < m_vecBones.size(); ++i)
+	{
+		Safe_Delete_VecList(m_vecBones[i]->vecKeyFrame);
+		SAFE_DELETE(m_vecBones[i]);
+	}
+
+	m_vecBones.clear();
 
 	for (int i = 0; i < iSize; ++i)
 	{
-		// 이름 저장
-		int iLength = m_vecBones[i]->strName.length();
+		// 이름 로드
+		int		iLength = 0;
+		char	strName[256] = {};
 
-		fwrite(&iLength, 4, 1, pFile);
-		fwrite(m_vecBones[i]->strName.c_str(), 1, iLength, pFile);
+		pBONE	pBone = new BONE();
 
-		// 깊이 저장
-		fwrite(&m_vecBones[i]->iDepth, 4, 1, pFile);
-		fwrite(&m_vecBones[i]->iParentIndex, 4, 1, pFile);
+		fread(&iLength, 4, 1, _pFile);
+		fread(strName, 1, iLength, _pFile);
+		pBone->strName = strName;
+
+		// 깊이 로드
+		fread(&pBone->iDepth, 4, 1, _pFile);
+		fread(&pBone->iParentIndex, 4, 1, _pFile);
+
+		pBone->matOffset = new MATRIX();
+		pBone->matBone = new MATRIX();
 
 		for (int j = 0; j < 4; ++j)
 		{
 			for (int k = 0; k < 4; ++k)
 			{
-				fwrite(&m_vecBones[i]->matOffset->m[i][j], 4, 1, pFile);
+				fread(&pBone->matOffset->m[j][k], 4, 1, _pFile);
 			}
 		}
 
@@ -308,29 +421,88 @@ void CAnimation3D::SaveFromFullPath(const char * _pFileName)
 		{
 			for (int k = 0; k < 4; ++k)
 			{
-				fwrite(&m_vecBones[i]->matBone->m[i][j], 4, 1, pFile);
+				fread(&pBone->matBone->m[j][k], 4, 1, _pFile);
 			}
 		}
 
-		int iKeyCount = m_vecBones[i]->vecKeyFrame.size();
+		int	iKeyCount = 0;
 
-		fwrite(&iKeyCount, 4, 1, pFile);
+		fread(&iKeyCount, 4, 1, _pFile);
 
-		for(int j = 0; j < iKeyCount; ++j)
+		for (int j = 0; j < iKeyCount; ++j)
 		{
+			pKEYFRAME	pFrame = new KEYFRAME;
 
+			fread(pFrame, sizeof(KEYFRAME), 1, _pFile);
+
+			pBone->vecKeyFrame.push_back(pFrame);
 		}
+
+		m_vecBones.push_back(pBone);
 	}
 
+	// 클립정보 로드
+	Safe_Release_Map(m_mapClip);
+
+	iSize = 0;
+	fread(&iSize, 4, 1, _pFile);
+
+	for (int i = 0; i < iSize; ++i)
+	{
+		CAnimation3DClip*	pClip = new CAnimation3DClip();
+
+		pClip->Load(_pFile);
+
+		m_mapClip.insert(make_pair(pClip->m_tInfo.strName, pClip));
+	}
+
+	fread(&m_iAnimationLimitFrame, 4, 1, _pFile);
+
+	int		iLength = 0;
+	char	strName[256] = {};
+
+	fread(&iLength, 4, 1, _pFile);
+	fread(strName, 1, iLength, _pFile);
+	m_strDefaultClip = strName;
+
+	iLength = 0;
+	fread(&iLength, 4, 1, _pFile);
+	fread(strName, 1, iLength, _pFile);
+	m_strCurClip = strName;
+
+	fread(&m_fChangeLimitTime, 4, 1, _pFile);
+	fread(&m_fFrameTime, 4, 1, _pFile);
+
+	m_strNextClip = "";
+	m_pCurClip = FindClip(m_strCurClip);
+	m_pNextClip = NULL;
+	m_bChange = false;
+	m_fChangeTime = 0.0f;
+	m_fAnimationTime = 0.0f;
+
+	SAFE_RELEASE(m_pBoneTexture);
+
+	CreateBoneTexture();
+
+	return true;
+}
+
+bool CAnimation3D::LoadFromFullPath(const char * _pFileName)
+{
+	FILE*	pFile = NULL;
+
+	fopen_s(&pFile, _pFileName, "rb");
+
+	if (!pFile)
+	{
+		return false;
+	}
+
+	Load(pFile);
+
 	fclose(pFile);
-}
 
-void CAnimation3D::Load(const char * _pFileName, const string & _strPathKey)
-{
-}
-
-void CAnimation3D::LoadFromFullPath(const char * _pFileName)
-{
+	return true;
 }
 
 bool CAnimation3D::Init()

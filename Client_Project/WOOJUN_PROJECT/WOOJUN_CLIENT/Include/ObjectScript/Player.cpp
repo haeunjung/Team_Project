@@ -3,6 +3,8 @@
 #include "01.Core/Debug.h"
 #include "05.Scene/Layer.h"
 #include "05.Scene/Scene.h"
+#include "03.Resource/Mesh.h"
+#include "03.Resource/ResMgr.h"
 #include "06.GameObject/GameObject.h"
 #include "07.Component/Transform.h"
 #include "07.Component/Renderer.h"
@@ -19,6 +21,7 @@ bool CPlayer::Init()
 {		
 	CTransform*		pTransform = m_pGameObject->GetTransform();
 	pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
+	pTransform->SetLocalRotY(-PI * 0.5f);
 	SAFE_RELEASE(pTransform);
 
 	CRenderer* pPlayerRenderer = m_pGameObject->AddComponent<CRenderer>("Renderer");
@@ -27,10 +30,15 @@ bool CPlayer::Init()
 	{
 		pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
 	}*/
-	pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
+	//pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
+	pPlayerRenderer->SetMesh("PlayerMesh", L"PlayerMesh.msh");
 	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");	
 	pPlayerRenderer->SetRenderState(ALPHABLEND);
+
+	/*CMesh*	pMesh = GET_SINGLE(CResMgr)->FindMesh("PlayerMesh");
+	pMesh->Save("PlayerMesh.msh");
+	SAFE_RELEASE(pMesh);*/
 
 	//CMaterial* pMaterial = pPlayerRenderer->GetMaterial();
 	////pMaterial->SetDiffuseTexture("Linear", "Texture", L"Texture.png");
@@ -78,14 +86,13 @@ bool CPlayer::Init()
 	pSphere->SetSphereInfo(Vec3Zero, 0.5f);
 	SAFE_RELEASE(pSphere);
 
-	GET_SINGLE(CInput)->CreateKey("MoveUp", 'W');
-	GET_SINGLE(CInput)->CreateKey("MoveDown", 'S');
-	GET_SINGLE(CInput)->CreateKey("RotXUp", 'Q');
-	GET_SINGLE(CInput)->CreateKey("RotXDown", 'E');
-	GET_SINGLE(CInput)->CreateKey("RotYUp", 'A');
-	GET_SINGLE(CInput)->CreateKey("RotYDown", 'D');
-	GET_SINGLE(CInput)->CreateKey("RotZUp", 'Z');
-	GET_SINGLE(CInput)->CreateKey("RotZDown", 'C');
+	GET_SINGLE(CInput)->CreateKey("MoveUp", 'Q');
+	GET_SINGLE(CInput)->CreateKey("MoveDown", 'E');
+	GET_SINGLE(CInput)->CreateKey("MoveForward", 'W');
+	GET_SINGLE(CInput)->CreateKey("MoveBack", 'S');
+	GET_SINGLE(CInput)->CreateKey("RotLeft", 'A');
+	GET_SINGLE(CInput)->CreateKey("RotRight", 'D');
+
 	GET_SINGLE(CInput)->CreateKey("Fire", VK_SPACE);
 	GET_SINGLE(CInput)->CreateKey("Init", VK_CONTROL, VK_MENU);	
 	GET_SINGLE(CInput)->CreateKey("RotFire", 'R');
@@ -104,37 +111,26 @@ void CPlayer::Input(float _fTime)
 	{
 		m_bUp = false;
 	}
-
 	if (true == KEYPUSH("MoveDown"))
 	{
 		m_pTransform->Up(-m_fSpeed, _fTime);
 	}
 
-	if (true == KEYPUSH("RotXUp"))
+	if (true == KEYPUSH("MoveForward"))
 	{
-		m_pTransform->RotateX(PI, _fTime);
+		m_pTransform->Forward(m_fSpeed, _fTime);
 	}
-	if (true == KEYPUSH("RotXDown"))
+	if (true == KEYPUSH("MoveBack"))
 	{
-		m_pTransform->RotateX(-PI, _fTime);
+		m_pTransform->Forward(-m_fSpeed, _fTime);
 	}
-
-	if (true == KEYPUSH("RotYUp"))
+	if (true == KEYPUSH("RotLeft"))
 	{
 		m_pTransform->RotateY(-PI, _fTime);
 	}
-	if (true == KEYPUSH("RotYDown"))
+	if (true == KEYPUSH("RotRight"))
 	{
 		m_pTransform->RotateY(PI, _fTime);
-	}
-
-	if (true == KEYPUSH("RotZUp"))
-	{
-		m_pTransform->RotateZ(PI, _fTime);
-	}
-	if (true == KEYPUSH("RotZDown"))
-	{
-		m_pTransform->RotateZ(-PI, _fTime);
 	}
 
 	if (true == KEYPRESS("Fire"))

@@ -14,6 +14,8 @@ bool CSampler::CreateSampler(const string& _strKey,
 	D3D11_TEXTURE_ADDRESS_MODE _eAddrV /*= D3D11_TEXTURE_ADDRESS_WRAP*/,
 	D3D11_TEXTURE_ADDRESS_MODE _eAddrW /*= D3D11_TEXTURE_ADDRESS_WRAP*/)
 {
+	m_strKey = _strKey;
+
 	D3D11_SAMPLER_DESC	tDesc = {};
 
 	tDesc.Filter = _eFilter;

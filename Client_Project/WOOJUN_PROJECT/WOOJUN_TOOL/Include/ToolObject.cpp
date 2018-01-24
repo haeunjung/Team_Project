@@ -1,7 +1,12 @@
 #include "stdafx.h"
 #include "ToolObject.h"
 #include "ToolValue.h"
+#include "ObjectDialog.h"
+#include "AniDialog.h"
 #include "01.Core/Input.h"
+#include "05.Scene/SceneMgr.h"
+#include "05.Scene/Scene.h"
+#include "07.Component/Collider.h"
 
 bool CToolObject::Init()
 {
@@ -27,7 +32,24 @@ void CToolObject::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _
 {
 	if (true == KEYPRESS("LButton"))
 	{
-		int a = 0;
+		if ("MouseRay" == _pDest->GetTagStr())
+		{
+			CheckCurScene();			
+		}		
+	}	
+}
+
+void CToolObject::CheckCurScene()
+{
+	string	strCurScene = GET_SINGLE(CSceneMgr)->GetCurScene()->GetTag();
+
+	if (DEFAULTSCENE == strCurScene)
+	{
+		GET_SINGLE(CToolValue)->m_pObjectDialog->ChangePickObject(m_pGameObject);
+	}
+	else if ("AnimationScene" == strCurScene)
+	{
+		GET_SINGLE(CToolValue)->m_pAnimationDialog->ChangePickObject(m_pGameObject);
 	}	
 }
 

@@ -34,12 +34,14 @@ CObjectDialog::CObjectDialog(CWnd* pParent /*=NULL*/) :
 	m_fPosY(0),
 	m_fPosZ(0),
 	m_bLoad(false),
-	m_iCurIndex(0)	
+	m_iCurIndex(0),
+	m_pPickObject(NULL)
 {
 }
 
 CObjectDialog::~CObjectDialog()
 {
+	SAFE_RELEASE(m_pPickObject);
 }
 
 void CObjectDialog::DoDataExchange(CDataExchange* pDX)
@@ -62,11 +64,10 @@ void CObjectDialog::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CObjectDialog, CDialogEx)
-	ON_WM_PAINT()
 	ON_LBN_SELCHANGE(IDC_LIST1, &CObjectDialog::OnLbnSelchangeList1)
-	ON_WM_CREATE()
 	ON_BN_CLICKED(IDC_LOAD_BUTTON, &CObjectDialog::OnBnClickedLoadButton)
 	ON_BN_CLICKED(IDC_CREATE_BUTTON, &CObjectDialog::OnBnClickedCreateButton)
+	ON_WM_CHILDACTIVATE()
 END_MESSAGE_MAP()
 
 
@@ -97,9 +98,9 @@ BOOL CObjectDialog::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERIN
 	{
 		UpdateData(TRUE);
 
-		if (NULL != GET_SINGLE(CToolValue)->pPlayerObj)
+		if (NULL != m_pPickObject)
 		{
-			CTransform*		pTransform = GET_SINGLE(CToolValue)->pPlayerObj->GetTransform();
+			CTransform*		pTransform = m_pPickObject->GetTransform();
 
 			pTransform->SetWorldScale(m_fScaleX, m_fScaleY, m_fScaleZ);
 			pTransform->SetWorldRot(m_fRotationX, m_fRotationY, m_fRotationZ);
@@ -118,14 +119,14 @@ BOOL CObjectDialog::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERIN
 
 void CObjectDialog::SetObjectValue()
 {
-	if (NULL == GET_SINGLE(CToolValue)->pPlayerObj)
+	UpdateData(TRUE);
+
+	if (NULL == m_pPickObject)
 	{
 		return;
 	}
 
-	UpdateData(TRUE);
-
-	CTransform*		pTransform = GET_SINGLE(CToolValue)->pPlayerObj->GetTransform();
+	CTransform*		pTransform = m_pPickObject->GetTransform();
 
 	DxVector3	Scale = pTransform->GetWorldScale();
 	m_fScaleX = Scale.x;
@@ -168,8 +169,8 @@ bool CObjectDialog::LoadFBX()
 			CString FileName = FileFind.GetFileName();
 			m_ObjectListBox.AddString(FileName);
 			
-			CString FilePath = FileFind.GetFilePath();
-			strKey = GET_SINGLE(CToolValue)->CStringToString(FileName);
+			/*CString FilePath = FileFind.GetFilePath();
+			strKey = GET_SINGLE(CToolValue)->CStringToString(FileName);*/
 
 			/*CMesh* pMesh = GET_SINGLE(CResMgr)->LoadMeshFromFullPath(strKey, FilePath);
 			SAFE_RELEASE(pMesh);*/
@@ -209,43 +210,25 @@ void CObjectDialog::CreateObject(const string & _strKey, const wstring & _FileNa
 	SAFE_RELEASE(pLayer);
 }
 
-
-void CObjectDialog::OnPaint()
-{
-	CPaintDC dc(this); // device context for painting
-					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
-					   // 그리기 메시지에 대해서는 CDialogEx::OnPaint()을(를) 호출하지 마십시오.
-
-	SetObjectValue();
-}
-
-
 void CObjectDialog::OnLbnSelchangeList1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	m_iCurIndex = m_ObjectListBox.GetCurSel();
 }
 
-
-int CObjectDialog::OnCreate(LPCREATESTRUCT lpCreateStruct)
+void CObjectDialog::ChangePickObject(CGameObject * _pGameObject)
 {
-	if (CDialogEx::OnCreate(lpCreateStruct) == -1)
-		return -1;
+	if (NULL == _pGameObject)
+	{
+		return;
+	}
 
-	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
-	return 0;
+	SAFE_RELEASE(m_pPickObject);
+	m_pPickObject = _pGameObject;
+	m_pPickObject->AddRef();
+
+	SetObjectValue();
 }
-
-
-BOOL CObjectDialog::OnInitDialog()
-{
-	CDialogEx::OnInitDialog();
-
-	// TODO:  여기에 추가 초기화 작업을 추가합니다.
-	return TRUE;  // return TRUE unless you set the focus to a control
-				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
-}
-
 
 void CObjectDialog::OnBnClickedLoadButton()
 {
@@ -259,13 +242,12 @@ void CObjectDialog::OnBnClickedLoadButton()
 	m_bLoad = LoadFBX();
 }
 
-
 void CObjectDialog::OnBnClickedCreateButton()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.	
 	CString GetText;
 	m_ObjectListBox.GetText(m_iCurIndex, GetText);
-
+	
 	string strKey = GET_SINGLE(CToolValue)->CStringToString(GetText);
 	
 	int Num = 0;
@@ -280,4 +262,12 @@ void CObjectDialog::OnBnClickedCreateButton()
 	}
 
 	CreateObject(strKey, GetText.GetString());
+}
+
+void CObjectDialog::OnChildActivate()
+{
+	CDialogEx::OnChildActivate();
+
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+	GET_SINGLE(CSceneMgr)->ChangeScene(DEFAULTSCENE);
 }

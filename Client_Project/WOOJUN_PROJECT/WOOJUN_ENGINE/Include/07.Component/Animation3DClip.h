@@ -41,6 +41,9 @@ public:
 		float _fStartTime, float _fEndTime);
 	void SetClipInfo(ANIMATION_OPTION _eOption, pFBXANIMATIONCLIP _pClip);
 public:
+	void Save(FILE* _pFile);
+	void Load(FILE* _pFile);
+public:
 	bool Init();
 	int Update(float _fTime);
 	int LateUpdate(float _fTime);

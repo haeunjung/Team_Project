@@ -87,36 +87,36 @@ bool CToolScene::Init()
 
 	CCameraFree*	pCameraFree = pCameraObject->AddComponent<CCameraFree>("CameraFree");
 	SAFE_RELEASE(pCameraFree);
-
-	// 플레이어
-	CGameObject*		pPlayerObject = CGameObject::Create("PlayerObject");
-	pLayer->AddObject(pPlayerObject);
+	
+	//// 플레이어
+	//CGameObject*		pPlayerObject = CGameObject::Create("PlayerObject");
+	//pLayer->AddObject(pPlayerObject);
 	SAFE_RELEASE(pLayer);
 
-	//CCamera*	pCamera = m_pScene->GetMainCamera();	
-	//pCamera->Attach(pPlayerObject, DxVector3(0.0f, 0.0f, -5.0f));	
-	//SAFE_RELEASE(pCamera);
+	////CCamera*	pCamera = m_pScene->GetMainCamera();	
+	////pCamera->Attach(pPlayerObject, DxVector3(0.0f, 0.0f, -5.0f));	
+	////SAFE_RELEASE(pCamera);
 	SAFE_RELEASE(pCameraObject);
 
-	CTransform*		pTransform = pPlayerObject->GetTransform();	
-	pTransform->SetWorldPos(1.0f, 1.0f, 0.0f);
-	pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
-	SAFE_RELEASE(pTransform);
+	//CTransform*		pTransform = pPlayerObject->GetTransform();	
+	//pTransform->SetWorldPos(1.0f, 1.0f, 0.0f);
+	//pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
+	//SAFE_RELEASE(pTransform);
 
-	CRenderer* pPlayerRenderer = pPlayerObject->AddComponent<CRenderer>("Renderer");
-	pPlayerRenderer->SetMesh("PlayerMesh", L"Warehouse01.FBX");
-	pPlayerRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pPlayerRenderer->SetInputLayout("BumpInputLayout");
-	pPlayerRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pPlayerRenderer);	
+	//CRenderer* pPlayerRenderer = pPlayerObject->AddComponent<CRenderer>("Renderer");
+	//pPlayerRenderer->SetMesh("PlayerMesh", L"Warehouse01.FBX");
+	//pPlayerRenderer->SetShader(STANDARD_BUMP_SHADER);
+	//pPlayerRenderer->SetInputLayout("BumpInputLayout");
+	//pPlayerRenderer->SetRenderState(ALPHABLEND);
+	//SAFE_RELEASE(pPlayerRenderer);	
 
-	CColliderSphere*	pSphere = pPlayerObject->AddComponent<CColliderSphere>("Collider");
-	pSphere->SetSphereInfo(Vec3Zero, 1.0f);
-	SAFE_RELEASE(pSphere);
+	//CColliderSphere*	pSphere = pPlayerObject->AddComponent<CColliderSphere>("Collider");
+	//pSphere->SetSphereInfo(Vec3Zero, 1.0f);
+	//SAFE_RELEASE(pSphere);
 
-	pPlayerObject->AddRef();
-	GET_SINGLE(CToolValue)->pPlayerObj = pPlayerObject;
-	SAFE_RELEASE(pPlayerObject);
+	//pPlayerObject->AddRef();
+	//GET_SINGLE(CToolValue)->pPlayerObj = pPlayerObject;
+	//SAFE_RELEASE(pPlayerObject);
 
 	return true;
 }

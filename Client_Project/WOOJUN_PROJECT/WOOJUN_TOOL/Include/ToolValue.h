@@ -1,15 +1,15 @@
 #pragma once
 #include "Tool_Header.h"
-#include "06.GameObject/GameObject.h"
+
+WOOJUN_USING
 
 class CToolValue
 {
 public:
-	CGameObject* pPlayerObj;
-	CGameObject* pToolObject;
+	class CObjectDialog*		m_pObjectDialog;
+	class CAniDialog*		m_pAnimationDialog;
 public:
-	string CStringToString(CString _CString);
-	void ChangeToolObject(CGameObject* _pToolObject);
+	string CStringToString(CString _CString);	
 
 	DECLARE_SINGLE(CToolValue);
 };

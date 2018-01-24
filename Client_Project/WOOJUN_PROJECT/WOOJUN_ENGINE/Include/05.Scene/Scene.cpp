@@ -101,6 +101,11 @@ const list<CGameObject*>* CScene::GetLightList() const
 	return &m_LightList;
 }
 
+const string & CScene::GetTag() const
+{	
+	return m_strTag;
+}
+
 CLayer * CScene::CreateLayer(const string & _strTag, int _iZOrder /*= 0*/)
 {
 	CLayer* pLayer = new CLayer();

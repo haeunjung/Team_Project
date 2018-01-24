@@ -17,6 +17,32 @@ SKININFO CMaterial::GetBaseSkin() const
 	return m_tBase;
 }
 
+void CMaterial::SetBaseSkin(const SKININFO & _tBaseSkin)
+{
+	if (m_tBase.pDiffuse)
+	{
+		SAFE_RELEASE(m_tBase.pDiffuse->pTexture);
+		SAFE_RELEASE(m_tBase.pDiffuse->pSampler);
+		SAFE_DELETE(m_tBase.pDiffuse);
+	}
+
+	if (m_tBase.pNormal)
+	{
+		SAFE_RELEASE(m_tBase.pNormal->pTexture);
+		SAFE_RELEASE(m_tBase.pNormal->pSampler);
+		SAFE_DELETE(m_tBase.pNormal);
+	}
+
+	if (m_tBase.pSpecular)
+	{
+		SAFE_RELEASE(m_tBase.pSpecular->pTexture);
+		SAFE_RELEASE(m_tBase.pSpecular->pSampler);
+		SAFE_DELETE(m_tBase.pSpecular);
+	}
+
+	m_tBase = _tBaseSkin;
+}
+
 void CMaterial::SetMaterialInfo(const MATERIALINFO & _tInfo)
 {
 	m_tInfo = _tInfo;

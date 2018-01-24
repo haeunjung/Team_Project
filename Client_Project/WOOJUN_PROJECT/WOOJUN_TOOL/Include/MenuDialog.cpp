@@ -7,7 +7,9 @@
 #include "afxdialogex.h"
 
 #include "ObjectDialog.h"
+#include "AniDialog.h"
 #include "TestDialog.h"
+#include "ToolValue.h"
 
 // CMenuDialog 대화 상자입니다.
 
@@ -42,7 +44,8 @@ void CMenuDialog::ShowDialog(TAB_INDEX _Index)
 	m_TabCtrl.GetClientRect(&rc);
 	m_TabCtrl.AdjustRect(TRUE, &rc);
 
-	m_vecDialog[_Index]->SetWindowPos(&m_TabCtrl, rc.left * -1.0f, rc.top * -1.0f, rc.right + rc.left * 5.0f/* - rc.left * -10.0f*/, rc.bottom + rc.top * 5.0f/* - rc.top * -10.0f*/, SWP_NOZORDER);
+	m_vecDialog[_Index]->SetWindowPos(&m_TabCtrl, (int)rc.left * -1.0f, (int)rc.top * -1.0f,
+		(int)rc.right + rc.left * 5.0f/* - rc.left * -10.0f*/, (int)rc.bottom + rc.top * 5.0f/* - rc.top * -10.0f*/, SWP_NOZORDER);
 	m_vecDialog[_Index]->ShowWindow(SW_SHOW);
 
 	m_TabIndex = _Index;
@@ -72,8 +75,19 @@ BOOL CMenuDialog::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// TODO:  여기에 추가 초기화 작업을 추가합니다.
+		
+	CObjectDialog*	pObjectDialog =	CreateTab<CObjectDialog>(IDD_DIALOG_OBJECT, L"Object");
+	if (NULL != pObjectDialog)
+	{
+		GET_SINGLE(CToolValue)->m_pObjectDialog = pObjectDialog;
+	}
 
-	CreateTab<CObjectDialog>(IDD_DIALOG_OBJECT, L"Object");
+	CAniDialog*	pAniDialog = CreateTab<CAniDialog>(IDD_DIALOG_ANIMATION, L"Animation");
+	if (NULL != pAniDialog)
+	{
+		GET_SINGLE(CToolValue)->m_pAnimationDialog = pAniDialog;
+	}
+
 	CreateTab<CTestDialog>(IDD_DIALOG1, L"Test");
 
 	ShowDialog(TI_OBJECT);

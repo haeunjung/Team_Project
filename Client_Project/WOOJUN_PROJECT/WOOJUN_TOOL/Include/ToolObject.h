@@ -15,6 +15,8 @@ public:
 	CToolObject* Clone() override;
 public:
 	void OnCollisionStay(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
+private:
+	void CheckCurScene();
 public:
 	CToolObject();
 	CToolObject(const CToolObject& _Object);

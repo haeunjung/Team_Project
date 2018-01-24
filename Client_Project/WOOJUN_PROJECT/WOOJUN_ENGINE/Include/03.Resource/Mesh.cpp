@@ -4,6 +4,7 @@
 #include "Sampler.h"
 #include "../Device.h"
 #include "../01.Core/PathMgr.h"
+#include "../03.Resource/ResMgr.h"
 #include "../07.Component/Material.h"
 #include "../07.Component/Animation3D.h"
 
@@ -258,50 +259,116 @@ bool CMesh::CreateSphere(const string & _strKey, float _fRadius, unsigned int _i
 
 bool CMesh::LoadMesh(const string & _strKey, const wchar_t * _pFileName, const string & _strPathKey)
 {
-	CFbxLoader	Loader;
+	// 확장자명 비교하여
+	// FBX 파일인지
+	// 자체포멧 파일인지
 
-	if (false == Loader.LoadFBX(_pFileName, _strPathKey))
+	char	strFileName[MAX_PATH] = {};
+	WideCharToMultiByte(CP_ACP, 0, _pFileName, -1, strFileName, lstrlen(_pFileName), 0, 0);
+
+	char	strExt[_MAX_EXT] = {};
+	_splitpath_s(strFileName, 0, 0, 0, 0, 0, 0, strExt, _MAX_EXT);
+	_strupr_s(strExt);
+
+	if (0 == strcmp(strExt, ".FBX"))
 	{
-		return false;
-	}
+		CFbxLoader	Loader;
 
-	return ConvertFbxData(&Loader);
+		if (!Loader.LoadFBX(_pFileName, _strPathKey))
+		{
+			return false;
+		}
+
+		return ConvertFbxData(&Loader);
+	}	
+
+	Load(strFileName);
+
+	return true;
 }
 
 bool CMesh::LoadMesh(const string & _strKey, const char * _pFileName, const string & _strPathKey)
 {
-	CFbxLoader	Loader;
+	// 확장자명 비교하여
+	// FBX 파일인지
+	// 자체포멧 파일인지
 
-	if (false == Loader.LoadFBX(_pFileName, _strPathKey))
+	char	strExt[_MAX_EXT] = {};
+	_splitpath_s(_pFileName, 0, 0, 0, 0, 0, 0, strExt, _MAX_EXT);
+	_strupr_s(strExt);
+
+	if (0 == strcmp(strExt, ".FBX"))
 	{
-		return false;
+		CFbxLoader	Loader;
+
+		if (!Loader.LoadFBX(_pFileName, _strPathKey))
+		{
+			return false;
+		}
+
+		return ConvertFbxData(&Loader);
 	}
 
-	return ConvertFbxData(&Loader);
+	Load(_pFileName);
+
+	return true;
 }
 
 bool CMesh::LoadMeshFromFullPath(const string & _strKey, const wchar_t * _pFullPath)
 {
-	CFbxLoader	Loader;
+	// 확장자명 비교하여
+	// FBX 파일인지
+	// 자체포멧 파일인지
 
-	if (false == Loader.LoadFBXFullPath(_pFullPath))
+	char	strFullPath[MAX_PATH] = {};
+	WideCharToMultiByte(CP_ACP, 0, _pFullPath, -1, strFullPath, lstrlen(_pFullPath), 0, 0);
+
+	char	strExt[_MAX_EXT] = {};
+	_splitpath_s(strFullPath, 0, 0, 0, 0, 0, 0, strExt, _MAX_EXT);
+	_strupr_s(strExt);
+
+	if (0 == strcmp(strExt, ".FBX"))
 	{
-		return false;
+		CFbxLoader	Loader;
+
+		if (!Loader.LoadFBXFullPath(_pFullPath))
+		{
+			return false;
+		}
+
+		return ConvertFbxData(&Loader);
 	}
 
-	return ConvertFbxData(&Loader);
+	Load(strFullPath);
+
+	return true;
 }
 
 bool CMesh::LoadMeshFromFullPath(const string & _strKey, const char * _pFullPath)
 {
-	CFbxLoader	Loader;
+	// 확장자명 비교하여
+	// FBX 파일인지
+	// 자체포멧 파일인지
 
-	if (false == Loader.LoadFBXFullPath(_pFullPath))
+	char	strExt[_MAX_EXT] = {};
+	_splitpath_s(_pFullPath, 0, 0, 0, 0, 0, 0, strExt, _MAX_EXT);
+	_strupr_s(strExt);
+
+	if (0 == strcmp(strExt, ".FBX"))
 	{
-		return false;
+		CFbxLoader	Loader;
+
+		if (!Loader.LoadFBXFullPath(_pFullPath))
+		{
+			return false;
+		}
+
+		return ConvertFbxData(&Loader);
 	}
 
-	return ConvertFbxData(&Loader);
+	Load(_pFullPath);
+
+	return true;
 }
 
 void CMesh::Render()
@@ -440,9 +507,9 @@ void CMesh::SaveFromFullPath(const char * _pFileName)
 			fwrite(&m_vecMeshContainer[i]->vecIndexBuffer[j]->eUsage, 4, 1, pFile);
 
 			// 현재 서브셋 인덱스 정보를 저장
-			fwrite(m_vecMeshContainer[i]->vecIndexBuffer[i]->pData,
-				m_vecMeshContainer[i]->vecIndexBuffer[i]->iSize,
-				m_vecMeshContainer[i]->vecIndexBuffer[i]->iCount,
+			fwrite(m_vecMeshContainer[i]->vecIndexBuffer[j]->pData,
+				m_vecMeshContainer[i]->vecIndexBuffer[j]->iSize,
+				m_vecMeshContainer[i]->vecIndexBuffer[j]->iCount,
 				pFile);
 		}
 
@@ -458,19 +525,43 @@ void CMesh::SaveFromFullPath(const char * _pFileName)
 			// 재질 색상정보 저장
 			fwrite(&tMtrlInfo, sizeof(MATERIALINFO), 1, pFile);
 
+			bool	bTexture = false;
+
 			if (tBaseSkin.pDiffuse)
 			{
+				bTexture = true;
+				fwrite(&bTexture, 1, 1, pFile);
 				SaveTexture(tBaseSkin.pDiffuse, pFile);
 			}
+			else
+			{				
+				fwrite(&bTexture, 1, 1, pFile);
+			}
+
+			bTexture = false;
 
 			if (tBaseSkin.pNormal)
 			{
+				bTexture = true;				
+				fwrite(&bTexture, 1, 1, pFile);
 				SaveTexture(tBaseSkin.pNormal, pFile);
 			}
+			else
+			{				
+				fwrite(&bTexture, 1, 1, pFile);
+			}
+
+			bTexture = false;
 
 			if (tBaseSkin.pSpecular)
 			{
+				bTexture = true;
+				fwrite(&bTexture, 1, 1, pFile);
 				SaveTexture(tBaseSkin.pSpecular, pFile);
+			}
+			else
+			{
+				fwrite(&bTexture, 1, 1, pFile);
 			}
 		}
 	}
@@ -484,19 +575,20 @@ void CMesh::SaveFromFullPath(const char * _pFileName)
 
 		memset(strAniPath + (strlen(_pFileName) - 3), 0, 3);
 		strcat_s(strAniPath, "anm");
-		m_pAnimation->Save(strAniPath);
+
+		m_pAnimation->SaveFromFullPath(strAniPath);
 	}
 }
 
 void CMesh::SaveTexture(_tagTexture* _pTexture, FILE * _pFile)
 {
 	string	strKey = _pTexture->pTexture->GetKey();
-	const WCHAR*	pFullPath = _pTexture->pTexture->GetFullPath().c_str();
+	wstring	pFullPath = _pTexture->pTexture->GetFullPath().c_str();
 
 	WCHAR	strPath[MAX_PATH] = {};
 
 	int	iCount = 0;
-	for (int i = lstrlen(pFullPath) - 1; i >= 0; --i)
+	for (int i = pFullPath.length() - 1; i >= 0; --i)
 	{
 		if (pFullPath[i] == '\\' || pFullPath[i] == '/')
 		{
@@ -505,7 +597,7 @@ void CMesh::SaveTexture(_tagTexture* _pTexture, FILE * _pFile)
 
 		if (2 == iCount)
 		{
-			memcpy(strPath, pFullPath + (i + 1), sizeof(WCHAR) * (MAX_PATH - (i + 1)));
+			memcpy(strPath, pFullPath.c_str() + (i + 1), sizeof(WCHAR) * (MAX_PATH - (i + 1)));
 			break;
 		}
 	}
@@ -540,10 +632,216 @@ void CMesh::SaveTexture(_tagTexture* _pTexture, FILE * _pFile)
 
 void CMesh::Load(const char * _pFileName, const string & _strPathKey)
 {
+	// 전체 경로를 만든다
+	const char*	pPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(_strPathKey);
+
+	string strPath;
+	if (pPath)
+	{
+		strPath = pPath;
+	}
+
+	strPath += _pFileName;
+
+	return LoadFromFullPath(strPath.c_str());
 }
 
 void CMesh::LoadFromFullPath(const char * _pFileName)
 {
+	FILE* pFile = NULL;
+
+	fopen_s(&pFile, _pFileName, "rb");
+
+	if (!pFile)
+	{
+		return;
+	}
+
+	for (size_t i = 0; i < m_vecMeshContainer.size(); ++i)
+	{
+		SAFE_DELETE_ARR(m_vecMeshContainer[i]->pVtxBuffer->pData);
+		SAFE_RELEASE(m_vecMeshContainer[i]->pVtxBuffer->pBuffer);
+		SAFE_DELETE(m_vecMeshContainer[i]->pVtxBuffer);
+
+		Safe_Release_VecList(m_vecMeshContainer[i]->vecMaterial);
+
+		for (size_t j = 0; j < m_vecMeshContainer[i]->vecIndexBuffer.size(); ++j)
+		{
+			SAFE_DELETE_ARR(m_vecMeshContainer[i]->vecIndexBuffer[j]->pData);
+			SAFE_RELEASE(m_vecMeshContainer[i]->vecIndexBuffer[j]->pBuffer);
+		}
+
+		Safe_Delete_VecList(m_vecMeshContainer[i]->vecIndexBuffer);
+	}
+
+	Safe_Delete_VecList(m_vecMeshContainer);
+
+	// 컨테이너 수 저장
+	int	iCount = 0;
+
+	fread(&iCount, 4, 1, pFile);
+
+	for (int i = 0; i < iCount; ++i)
+	{
+		pMESHCONTAINER	pContainer = new MESHCONTAINER();
+
+		int	iSize, iCount = 0;
+		D3D11_USAGE	eUsage = (D3D11_USAGE)0;
+		D3D11_PRIMITIVE_TOPOLOGY	ePrimitive = (D3D11_PRIMITIVE_TOPOLOGY)0;
+
+		// 정점 수 저장
+		fread(&iCount, 4, 1, pFile);
+
+		// 정점 하나의 크기를 저장
+		fread(&iSize, 4, 1, pFile);
+
+		// 위상구조 저장
+		fread(&ePrimitive, 4, 1, pFile);
+
+		// 용도를 저장
+		fread(&eUsage, 4, 1, pFile);
+
+		void*	pData = new char[iSize * iCount];
+
+		// 정점정보 저장
+		fread(pData, iSize, iCount, pFile);
+
+		// 버텍스 버퍼 생성
+		CreateVertexBuffer(pData, iCount, iSize, eUsage, ePrimitive, pContainer);
+
+		SAFE_DELETE_ARR(pData);
+
+		// 서브셋 수 저장
+		int	iSubset = 0;
+		fread(&iSubset, 4, 1, pFile);
+
+		for (int j = 0; j < iSubset; ++j)
+		{
+			// 인덱스 수 저장
+			fread(&iCount, 4, 1, pFile);
+			
+			// 인덱스 크기 저장
+			fread(&iSize, 4, 1, pFile);
+
+			// 인덱스 포멧 저장
+			DXGI_FORMAT	eFormat = (DXGI_FORMAT)0;
+			fread(&eFormat, 4, 1, pFile);
+
+			// 인덱스 용도 저장
+			fread(&eUsage, 4, 1, pFile);
+
+			void*	pData = new char[iSize * iCount];
+
+			// 현재 서브셋 인덱스 정보 저장
+			fread(pData, iSize, iCount, pFile);
+
+			// 인덱스 버퍼 생성
+			CreateIndexBuffer(pData, iCount, iSize, eUsage, eFormat, pContainer);
+
+			SAFE_DELETE_ARR(pData);
+		}
+
+		// 재질 정보 저장
+		int iMtrlCount = 0;
+		fread(&iMtrlCount, 4, 1, pFile);
+
+		for (int j = 0; j < iMtrlCount; ++j)
+		{
+			CMaterial*	pMaterial = new CMaterial();
+			pMaterial->Init();
+
+			MATERIALINFO	tMtrlInfo;
+			SKININFO	tBaseSkin = {};
+
+			// 재질 색상정보 저장
+			fread(&tMtrlInfo, sizeof(MATERIALINFO), 1, pFile);
+
+			pMaterial->SetMaterialInfo(tMtrlInfo);
+
+			bool	bTexture = false;
+
+			fread(&bTexture, 1, 1, pFile);
+			if (bTexture)
+			{
+				tBaseSkin.pDiffuse = new TEXTURE();
+				LoadTexture(tBaseSkin.pDiffuse, pFile);
+			}
+
+			fread(&bTexture, 1, 1, pFile);
+			if (bTexture)
+			{
+				tBaseSkin.pNormal = new TEXTURE();
+				LoadTexture(tBaseSkin.pNormal, pFile);
+			}
+
+			fread(&bTexture, 1, 1, pFile);
+			if (bTexture)
+			{
+				tBaseSkin.pSpecular = new TEXTURE();
+				LoadTexture(tBaseSkin.pSpecular, pFile);
+			}
+
+			pMaterial->SetBaseSkin(tBaseSkin);
+
+			pContainer->vecMaterial.push_back(pMaterial);
+		}
+
+		m_vecMeshContainer.push_back(pContainer);
+	}
+
+	fclose(pFile);
+
+	SAFE_RELEASE(m_pAnimation);
+
+	m_pAnimation = new CAnimation3D();
+	m_pAnimation->Init();
+
+	char	strAniPath[MAX_PATH] = {};
+	memcpy(strAniPath, _pFileName, strlen(_pFileName));
+
+	memset(strAniPath + (strlen(_pFileName) - 3), 0, 3);
+	strcat_s(strAniPath, "anm");
+
+	if (!m_pAnimation->LoadFromFullPath(strAniPath))
+	{
+		SAFE_RELEASE(m_pAnimation);
+	}
+}
+
+void CMesh::LoadTexture(_tagTexture * _pTexture, FILE * _pFile)
+{
+	char	strKey[256] = {};
+
+	int	iLength = 0;
+
+	fread(&iLength, 4, 1, _pFile);
+	fread(strKey, 1, iLength, _pFile);
+
+	WCHAR	strPath[MAX_PATH] = {};
+	fread(&iLength, 4, 1, _pFile);
+	fread(strPath, 2, iLength, _pFile);
+
+	// 패스 키 저장
+	char	strPathKey[256] = {};
+	fread(&iLength, 4, 1, _pFile);
+	fread(strPathKey, 1, iLength, _pFile);
+
+	// 텍스쳐 로딩
+	_pTexture->pTexture = GET_SINGLE(CResMgr)->LoadTexture(strKey, strPath, strPathKey);
+
+	// 레지스터 저장
+	fread(&_pTexture->iTextureRegister, 4, 1, _pFile);
+
+	iLength = 0;
+	memset(strKey, 0, 256);
+	
+	fread(&iLength, 4, 1, _pFile);
+	fread(strKey, 1, iLength, _pFile);
+
+	_pTexture->pSampler = GET_SINGLE(CResMgr)->FindSampler(strKey);
+
+	fread(&_pTexture->iSamplerRegister, 4, 1, _pFile);
+	fread(&_pTexture->iShaderConstantType, 4, 1, _pFile);
 }
 
 bool CMesh::CreateVertexBuffer(void * _pVertices, unsigned int _iVtxCount, unsigned int _iVtxSize, D3D11_USAGE _eVtxUsage, D3D11_PRIMITIVE_TOPOLOGY _ePrimitive, pMESHCONTAINER _pContainer)

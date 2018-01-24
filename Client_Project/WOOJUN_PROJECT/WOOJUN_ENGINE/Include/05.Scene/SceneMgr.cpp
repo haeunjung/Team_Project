@@ -110,6 +110,56 @@ void CSceneMgr::Render(float _fTime)
 	m_pCurScene->Render(_fTime);
 }
 
+bool CSceneMgr::InsertScene(CScene* _pScene)
+{		
+	CScene*	pScene = FindScene(_pScene->m_strTag);
+
+	if (NULL == pScene && _pScene == m_pCurScene)
+	{
+		return false;
+	}
+
+	// 인서트 하려는 씬이 현재 씬이면
+	// 인서트 하지 않을래
+
+	m_mapScene.insert(make_pair(_pScene->m_strTag, _pScene));
+
+	return true;
+}
+
+CScene * CSceneMgr::FindScene(const string & _strKey)
+{
+	unordered_map<string, CScene*>::iterator	iter = m_mapScene.find(_strKey);
+
+	if (iter == m_mapScene.end())
+	{
+		return NULL;
+	}
+
+	return iter->second;
+}
+
+bool CSceneMgr::ChangeScene(const string & _strKey)
+{
+	CScene*	pScene = FindScene(_strKey);
+
+	if (NULL == pScene)
+	{
+		return false;
+	}
+	
+	// 현재씬이 추가되고
+	m_mapScene.insert(make_pair(m_pCurScene->m_strTag, m_pCurScene));
+
+	// 맵에는 바꿀씬이 지워지고
+	m_mapScene.erase(_strKey);
+
+	// 바꾸려는 씬이 현재 씬이 되어야하고
+	m_pCurScene = pScene;
+
+	return true;
+}
+
 CSceneMgr::CSceneMgr() : 
 	m_pCurScene(NULL),
 	m_pNextScene(NULL),
@@ -122,4 +172,12 @@ CSceneMgr::~CSceneMgr()
 	SAFE_DELETE(m_pPrevScene);
 	SAFE_DELETE(m_pNextScene);
 	SAFE_DELETE(m_pCurScene);
+
+	unordered_map<string, CScene*>::iterator	iter;
+	unordered_map<string, CScene*>::iterator	iterEnd = m_mapScene.end();
+
+	for (iter = m_mapScene.begin(); iter != iterEnd; ++iter)
+	{
+		SAFE_DELETE(iter->second);
+	}
 }

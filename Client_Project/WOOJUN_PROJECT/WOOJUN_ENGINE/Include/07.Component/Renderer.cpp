@@ -45,12 +45,12 @@ void CRenderer::UpdateTransform()
 	// XMMatrixTranspose
 	tTransform.matWorld = XMMatrixTranspose(tTransform.matWorld);
 	tTransform.matView = XMMatrixTranspose(tTransform.matView);
-	tTransform.matProj = XMMatrixTranspose(tTransform.matProj);
-	tTransform.matWV = XMMatrixTranspose(tTransform.matWV);
-	tTransform.matWVP = XMMatrixTranspose(tTransform.matWVP);
-	tTransform.matVP = XMMatrixTranspose(tTransform.matVP);
+tTransform.matProj = XMMatrixTranspose(tTransform.matProj);
+tTransform.matWV = XMMatrixTranspose(tTransform.matWV);
+tTransform.matWVP = XMMatrixTranspose(tTransform.matWVP);
+tTransform.matVP = XMMatrixTranspose(tTransform.matVP);
 
-	GET_SINGLE(CShaderMgr)->UpdateConstBuffer("Transform", &tTransform, CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);	
+GET_SINGLE(CShaderMgr)->UpdateConstBuffer("Transform", &tTransform, CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);
 }
 
 void CRenderer::CheckAnimation()
@@ -93,7 +93,7 @@ void CRenderer::SetMesh(const string & _strKey)
 
 	if (NULL == m_pMesh)
 	{
-		assert(m_pMesh);		
+		assert(m_pMesh);
 	}
 
 	CheckAnimation();
@@ -126,7 +126,37 @@ void CRenderer::SetMesh(const string & _strKey, const TCHAR * _pFileName, const 
 			CMaterial*	pMaterial = m_pMesh->CloneMaterial(i, j);
 
 			m_vecMaterial[i].push_back(pMaterial);
-		}		
+		}
+	}
+
+	CheckAnimation();
+}
+
+void CRenderer::SetMeshFromFullPath(const string & _strKey, const TCHAR * _pFullPath)
+{
+	SAFE_RELEASE(m_pMesh);
+	m_pMesh = GET_SINGLE(CResMgr)->LoadMeshFromFullPath(_strKey, _pFullPath);
+
+	for (size_t i = 0; i < m_vecMaterial.size(); ++i)
+	{
+		Safe_Release_VecList(m_vecMaterial[i]);
+	}
+
+	m_vecMaterial.clear();
+
+	for (UINT i = 0; i < m_pMesh->GetContainerCount(); ++i)
+	{
+		if (i == m_vecMaterial.size())
+		{
+			AddContainerMaterial();
+		}
+
+		for (UINT j = 0; j < m_pMesh->GetSubsetCount(i); ++j)
+		{
+			CMaterial*	pMaterial = m_pMesh->CloneMaterial(i, j);
+
+			m_vecMaterial[i].push_back(pMaterial);
+		}
 	}
 
 	CheckAnimation();

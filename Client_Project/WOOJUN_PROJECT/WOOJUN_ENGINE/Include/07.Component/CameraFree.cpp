@@ -107,19 +107,19 @@ bool CCameraFree::Init()
 
 void CCameraFree::Input(float _fTime)
 {
-	if (true == KEYPRESS("CameraForward"))
+	if (true == KEYPUSH("CameraForward"))
 	{
 		m_pTransform->Forward(10.0f, _fTime);
 	}
-	if (true == KEYPRESS("CameraBack"))
+	if (true == KEYPUSH("CameraBack"))
 	{
 		m_pTransform->Forward(-10.0f, _fTime);
 	}
-	if (true == KEYPRESS("CameraLeft"))
+	if (true == KEYPUSH("CameraLeft"))
 	{
 		m_pTransform->Right(-10.0f, _fTime);
 	}
-	if (true == KEYPRESS("CameraRight"))
+	if (true == KEYPUSH("CameraRight"))
 	{
 		m_pTransform->Right(10.0f, _fTime);
 	}

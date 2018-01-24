@@ -30,18 +30,20 @@ public:
 	void ShowDialog(TAB_INDEX _Index);
 public:
 	template <typename T>
-	void CreateTab(UINT _ID, TCHAR* _Key)
+	T* CreateTab(UINT _ID, TCHAR* _Key)
 	{
 		T* NewDialog = new T();
 
 		if (FALSE == NewDialog->Create(_ID, &m_TabCtrl))
 		{
 			AfxMessageBox(L"Error : Create Menu Dialog Failed", MB_OK | MB_ICONEXCLAMATION);
-			return;
+			return NULL;
 		}
 
 		m_TabCtrl.InsertItem((int)m_vecDialog.size(), _Key);
 		m_vecDialog.push_back(NewDialog);
+	
+		return NewDialog;
 	}
 
 	//void CreateTab(UINT _ID, wstring _Name)

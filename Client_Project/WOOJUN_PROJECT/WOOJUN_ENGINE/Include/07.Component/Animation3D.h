@@ -58,10 +58,12 @@ public:
 	void ChangeClip(const string& _strName);
 	bool CreateBoneTexture();
 
-	void Save(const char* _pFileName, const string& _strPathKey = MESHPATH);
-	void SaveFromFullPath(const char* _pFileName);	
-	void Load(const char* _pFileName, const string& _strPathKey = MESHPATH);
-	void LoadFromFullPath(const char* _pFileName);
+	bool Save(const char* _pFileName, const string& _strPathKey = MESHPATH);
+	bool Save(FILE* _pFile);
+	bool SaveFromFullPath(const char* _pFileName);	
+	bool Load(const char* _pFileName, const string& _strPathKey = MESHPATH);
+	bool Load(FILE* _pFile);
+	bool LoadFromFullPath(const char* _pFileName);
 public:
 	bool Init() override ;
 	void Input(float _fTime) override;

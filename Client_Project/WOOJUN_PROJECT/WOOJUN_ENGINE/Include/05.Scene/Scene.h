@@ -37,6 +37,7 @@ public:
 
 	const list<CGameObject*>* GetLightList() const;
 public:
+	const string& GetTag() const;
 	inline void SetTag(const string& _strTag) {
 		m_strTag = _strTag;
 	}
