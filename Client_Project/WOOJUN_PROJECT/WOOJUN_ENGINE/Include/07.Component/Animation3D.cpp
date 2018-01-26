@@ -1,5 +1,4 @@
 #include "Animation3D.h"
-#include "Animation3DClip.h"
 #include "Renderer.h"
 #include "../01.Core/PathMgr.h"
 #include "../03.Resource/Texture.h"
@@ -12,9 +11,11 @@ CAnimation3D::CAnimation3D() :
 	m_pNextClip(NULL),
 	m_pBoneTexture(NULL),
 	m_bChange(false),
+	m_bEnd(false),
 	m_fChangeLimitTime(0.2f),
 	m_fChangeTime(0.0f),
-	m_fAnimationTime(0.0f)
+	m_fAnimationTime(0.0f),
+	m_fAnimationProgress(0.0f)
 {
 	SetTag("Animation3D");
 	SetTypeName("CAnimation3D");
@@ -25,6 +26,9 @@ CAnimation3D::CAnimation3D() :
 CAnimation3D::CAnimation3D(const CAnimation3D & _Animation3D) :
 	CComponent(_Animation3D)
 {
+	m_bEnd = false;
+	m_fAnimationProgress = 0.0f;
+
 	m_vecBones.clear();
 	for (size_t i = 0; i < _Animation3D.m_vecBones.size(); ++i)
 	{
@@ -55,7 +59,7 @@ CAnimation3D::CAnimation3D(const CAnimation3D & _Animation3D) :
 	{
 		CAnimation3DClip*	pClip = iter->second->Clone();
 		m_mapClip.insert(make_pair(iter->first, pClip));
-		SAFE_RELEASE(pClip);
+		//SAFE_RELEASE(pClip);
 	}
 
 	m_iAnimationLimitFrame = _Animation3D.m_iAnimationLimitFrame;
@@ -92,6 +96,74 @@ CAnimation3D::~CAnimation3D()
 	SAFE_RELEASE(m_pCurClip);
 	Safe_Release_Map(m_mapClip);
 	Safe_Delete_VecList(m_vecBones);
+}
+
+bool CAnimation3D::GetAnimationEnd() const
+{
+	return m_bEnd;
+}
+
+float CAnimation3D::GetAnimationProgress() const
+{
+	return m_fAnimationProgress;
+}
+
+int CAnimation3D::GetAnimationProgressFrame() const
+{
+	return (m_fAnimationProgress * m_pCurClip->m_tInfo.fTimeLength + m_pCurClip->m_tInfo.fStartTime) *
+		m_iAnimationLimitFrame;
+}
+
+pBONE CAnimation3D::FindBone(const string & _strName) const
+{
+	for (size_t i = 0; i < m_vecBones.size(); ++i)
+	{
+		if (m_vecBones[i]->strName == _strName)
+		{
+			return m_vecBones[i];
+		}
+	}
+
+	return NULL;
+}
+
+void CAnimation3D::AddClipCallback(const string & _strName, int _iFrame, void(*_pFunc)(float))
+{
+	CAnimation3DClip*	pClip = FindClip(_strName);
+
+	if (!pClip)
+	{
+		return;
+	}
+
+	pClip->AddCallback(_iFrame, _pFunc);
+}
+
+void CAnimation3D::AddClipCallback(const string & _strName, float _fProgress, void(*_pFunc)(float))
+{
+	CAnimation3DClip*	pClip = FindClip(_strName);
+
+	if (!pClip)
+	{
+		return;
+	}
+
+	pClip->AddCallback(_fProgress, _pFunc);
+}
+
+void CAnimation3D::ReturnToDefaultClip()
+{
+	ChangeClip(m_strDefaultClip);
+}
+
+void CAnimation3D::ClearClip()
+{
+	m_strDefaultClip = "";
+	m_strCurClip = "";
+	SAFE_RELEASE(m_pCurClip);
+	Safe_Release_Map(m_mapClip);
+	m_fChangeTime = 0.0f;
+	m_fAnimationTime = 0.0f;
 }
 
 CTexture * CAnimation3D::GetBoneTexture() const
@@ -145,6 +217,7 @@ void CAnimation3D::AddClip(ANIMATION_OPTION _eOption, pFBXANIMATIONCLIP _pClip)
 		break;
 	}
 
+	pAniClip->m_iAnimationLimitFrame = m_iAnimationLimitFrame;
 	m_fFrameTime = 1.0f / m_iAnimationLimitFrame;
 
 	if (m_mapClip.empty())
@@ -180,6 +253,7 @@ void CAnimation3D::AddClip(const string & _strKey, ANIMATION_OPTION _eOption, in
 		return;
 	}
 
+	pAniClip->m_iAnimationLimitFrame = m_iAnimationLimitFrame;
 	m_fFrameTime = 1.0f / m_iAnimationLimitFrame;
 
 	if (m_mapClip.empty())
@@ -193,6 +267,74 @@ void CAnimation3D::AddClip(const string & _strKey, ANIMATION_OPTION _eOption, in
 	m_mapClip.insert(make_pair(_strKey, pAniClip));
 }
 
+void CAnimation3D::AddClip(const string & _strKey, ANIMATION_OPTION _eOption, int _iStartFrame, int _iEndFrame)
+{
+	CAnimation3DClip*	pAniClip = FindClip(_strKey);
+
+	if (pAniClip)
+	{
+		SAFE_RELEASE(pAniClip);
+		return;
+	}
+	
+	pAniClip = new CAnimation3DClip();
+
+	pAniClip->m_iAnimationLimitFrame = m_iAnimationLimitFrame;
+	m_fFrameTime = 1.0f / m_iAnimationLimitFrame;
+
+	float	fStartTime = _iStartFrame * m_fFrameTime;
+	float	fEndTime = _iEndFrame * m_fFrameTime;
+
+	pAniClip->SetClipInfo(_strKey, _eOption, m_iAnimationLimitFrame,
+		_iStartFrame, _iEndFrame, fStartTime, fEndTime);
+
+	if (!pAniClip->Init())
+	{
+		SAFE_RELEASE(pAniClip);
+		return;
+	}
+
+	if (m_mapClip.empty())
+	{
+		SetDefaultClipName(_strKey);
+		SetCurClipName(_strKey);
+		m_pCurClip = pAniClip;
+		pAniClip->AddRef();
+	}
+
+	m_mapClip.insert(make_pair(_strKey, pAniClip));
+}
+
+void CAnimation3D::ChangeClipInfo(const string & _strKey, const string& _strReplaceKey, ANIMATION_OPTION _eOption, int _iStartFrame, int _iEndFrame)
+{	
+	unordered_map<string, class CAnimation3DClip*>::iterator	iter = m_mapClip.find(_strKey);
+
+	if (iter == m_mapClip.end())
+	{
+		return;
+	}
+	
+	SAFE_RELEASE(iter->second);
+	m_mapClip.erase(_strKey);
+
+	CAnimation3DClip*	pAniClip = new CAnimation3DClip();
+
+	if (!pAniClip->Init())
+	{
+		SAFE_RELEASE(pAniClip);
+		return;
+	}
+
+	float	fStartTime = _iStartFrame * m_fFrameTime;
+	float	fEndTime = _iEndFrame * m_fFrameTime;
+
+	pAniClip->m_iAnimationLimitFrame = m_iAnimationLimitFrame;
+	pAniClip->SetClipInfo(_strKey, _eOption, m_iAnimationLimitFrame,
+		_iStartFrame, _iEndFrame, fStartTime, fEndTime);
+
+	m_mapClip.insert(make_pair(_strReplaceKey, pAniClip));
+}
+
 CAnimation3DClip * CAnimation3D::FindClip(const string & _strKey)
 {
 	unordered_map<string, class CAnimation3DClip*>::iterator	iter = m_mapClip.find(_strKey);
@@ -201,7 +343,7 @@ CAnimation3DClip * CAnimation3D::FindClip(const string & _strKey)
 	{
 		return NULL;
 	}
-
+		
 	iter->second->AddRef();
 
 	return iter->second;
@@ -452,6 +594,7 @@ bool CAnimation3D::Load(FILE * _pFile)
 		CAnimation3DClip*	pClip = new CAnimation3DClip();
 
 		pClip->Load(_pFile);
+		pClip->m_iAnimationLimitFrame = m_iAnimationLimitFrame;
 
 		m_mapClip.insert(make_pair(pClip->m_tInfo.strName, pClip));
 	}
@@ -516,6 +659,11 @@ void CAnimation3D::Input(float _fTime)
 
 void CAnimation3D::Update(float _fTime)
 {
+	if (!m_pCurClip)
+	{
+		return;
+	}
+
 	vector<MATRIX>		vecBones;
 
 	// 모션이 바뀌고있는 중이라면 기존에 동작되던 모션과
@@ -580,9 +728,24 @@ void CAnimation3D::Update(float _fTime)
 	{
 		m_fAnimationTime += _fTime;
 
+		m_fAnimationProgress = m_fAnimationTime / m_pCurClip->m_tInfo.fTimeLength;
+		m_fAnimationProgress = m_fAnimationProgress > 1.0f ? 1.0f : m_fAnimationProgress;
+
+		// Callback Func 체크
+		for (size_t i = 0; i < m_pCurClip->m_tInfo.vecCallback.size(); ++i)
+		{
+
+		}
+
 		while (m_fAnimationTime >= m_pCurClip->m_tInfo.fTimeLength)
 		{
 			m_fAnimationTime -= m_pCurClip->m_tInfo.fTimeLength;
+			m_bEnd = true;
+
+			if (AO_ONCE_RETURN == m_pCurClip->m_tInfo.eOption)
+			{
+				ChangeClip(m_strDefaultClip);
+			}
 		}
 
 		float fAnimationTime = m_fAnimationTime + m_pCurClip->m_tInfo.fStartTime;
@@ -661,6 +824,7 @@ void CAnimation3D::Collision(float _fTime)
 
 void CAnimation3D::Render(float _fTime)
 {
+	m_bEnd = false;
 }
 
 CAnimation3D * CAnimation3D::Clone()

@@ -1,5 +1,5 @@
 #pragma once
-//#include "afxwin.h"
+#include "afxwin.h"
 #include "06.GameObject/GameObject.h"
 
 // CObjectDialog 대화 상자입니다.

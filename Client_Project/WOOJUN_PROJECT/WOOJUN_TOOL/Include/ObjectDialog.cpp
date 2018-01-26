@@ -5,8 +5,9 @@
 #include "WOOJUN_TOOL.h"
 #include "ObjectDialog.h"
 #include "afxdialogex.h"
-#include "ToolValue.h"
 
+#include "ToolValue.h"
+#include "ToolObject.h"
 #include "01.Core/PathMgr.h"
 #include "03.Resource/ResMgr.h"
 #include "03.Resource/Mesh.h"
@@ -16,7 +17,6 @@
 #include "07.Component/Transform.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/ColliderSphere.h"
-#include "ToolObject.h"
 
 // CObjectDialog 대화 상자입니다.
 

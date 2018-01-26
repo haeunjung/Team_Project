@@ -25,8 +25,8 @@ public:
 		void* _pIndices = NULL, unsigned int _iIdxCount = 0, unsigned int _iIdxSize = 0, D3D11_USAGE _eIdxUsage = D3D11_USAGE_DEFAULT, DXGI_FORMAT _eFormat = DXGI_FORMAT_R32_UINT);
 	CMesh* CreateSphere(const string& _strKey, float _fRadius, unsigned int _iNumSub, const DxVector4& vColor);
 	CMesh* CreateSphere(const string& _strKey, float _fRadius, unsigned int _iNumSub);
-	CMesh* LoadMesh(const string& _strKey, const WCHAR* _pFileName, const string& _strPathKey = TEXTUREPATH);
-	CMesh* LoadMesh(const string& _strKey, const CHAR* _pFileName, const string& _strPathKey = TEXTUREPATH);
+	CMesh* LoadMesh(const string& _strKey, const WCHAR* _pFileName, const string& _strPathKey = MESHPATH);
+	CMesh* LoadMesh(const string& _strKey, const CHAR* _pFileName, const string& _strPathKey = MESHPATH);
 	CMesh* LoadMeshFromFullPath(const string& _strKey, const WCHAR* _pFullPath);
 	CMesh* LoadMeshFromFullPath(const string& _strKey, const CHAR* _pFullPath);
 	CMesh* FindMesh(const string& _strKey);

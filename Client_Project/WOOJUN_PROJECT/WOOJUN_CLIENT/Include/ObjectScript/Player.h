@@ -1,5 +1,6 @@
 #pragma once
 #include "07.Component/Script.h"
+#include "07.Component/Animation3D.h"
 
 WOOJUN_USING
 
@@ -10,6 +11,9 @@ private:
 	float	m_fSpeed;
 	int		m_iHp;
 	bool	m_bUp;
+	CAnimation3D*	m_pAniController;
+public:
+	void AniCallback(float _fTime);
 public:
 	bool Init() override;
 	void Input(float _fTime) override;

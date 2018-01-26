@@ -17,6 +17,11 @@
 #include "RotBullet.h"
 #include "PlayerBullet.h"
 
+void CPlayer::AniCallback(float _fTime)
+{
+	int a = 0;
+}
+
 bool CPlayer::Init()
 {		
 	CTransform*		pTransform = m_pGameObject->GetTransform();
@@ -31,7 +36,7 @@ bool CPlayer::Init()
 		pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
 	}*/
 	//pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
-	pPlayerRenderer->SetMesh("PlayerMesh", L"PlayerMesh.msh");
+	pPlayerRenderer->SetMesh("PlayerMesh", L"Elin.msh");
 	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");	
 	pPlayerRenderer->SetRenderState(ALPHABLEND);
@@ -86,6 +91,9 @@ bool CPlayer::Init()
 	pSphere->SetSphereInfo(Vec3Zero, 0.5f);
 	SAFE_RELEASE(pSphere);
 
+	m_pAniController = (CAnimation3D*)m_pGameObject->FindComponentFromType(CT_ANIMATION3D);
+	m_pAniController->AddClipCallback<CPlayer>("Run", 0.5f, this, &CPlayer::AniCallback);
+
 	GET_SINGLE(CInput)->CreateKey("MoveUp", 'Q');
 	GET_SINGLE(CInput)->CreateKey("MoveDown", 'E');
 	GET_SINGLE(CInput)->CreateKey("MoveForward", 'W');
@@ -119,11 +127,23 @@ void CPlayer::Input(float _fTime)
 	if (true == KEYPUSH("MoveForward"))
 	{
 		m_pTransform->Forward(m_fSpeed, _fTime);
+		m_pAniController->ChangeClip("Run");
 	}
+	else if (true == KEYUP("MoveForward"))
+	{
+		m_pAniController->ReturnToDefaultClip();
+	}
+
 	if (true == KEYPUSH("MoveBack"))
 	{
 		m_pTransform->Forward(-m_fSpeed, _fTime);
+		m_pAniController->ChangeClip("Run");
 	}
+	else if (true == KEYUP("MoveBack"))
+	{
+		m_pAniController->ReturnToDefaultClip();
+	}
+
 	if (true == KEYPUSH("RotLeft"))
 	{
 		m_pTransform->RotateY(-PI, _fTime);
@@ -132,6 +152,8 @@ void CPlayer::Input(float _fTime)
 	{
 		m_pTransform->RotateY(PI, _fTime);
 	}
+
+
 
 	if (true == KEYPRESS("Fire"))
 	{	
@@ -233,4 +255,5 @@ CPlayer::CPlayer() :
 CPlayer::~CPlayer()
 {		
 	SAFE_RELEASE(m_pChild);
+	SAFE_RELEASE(m_pAniController);
 }

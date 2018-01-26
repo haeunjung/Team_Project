@@ -4,6 +4,13 @@
 
 WOOJUN_BEGIN
 
+typedef struct DLL _tagAnimationCallback
+{
+	int		iAnimationProgress;
+	float	fAnimationProgress;
+	function<void(float)>	func;
+}ANIMATIONCALLBACK, *pANIMATIONCALLBACK;
+
 typedef struct DLL _tagAnimation3DClip
 {
 	ANIMATION_OPTION	eOption;
@@ -14,6 +21,7 @@ typedef struct DLL _tagAnimation3DClip
 	int			iStartFrame;
 	int			iEndFrame;
 	int			iFrameLength;
+	vector<pANIMATIONCALLBACK>	vecCallback;
 
 	_tagAnimation3DClip() :
 		eOption(AO_LOOP),
@@ -35,6 +43,35 @@ private:
 	friend class CAnimation3D;
 private:
 	ANIMATION3DCLIP		m_tInfo;
+	int		m_iAnimationLimitFrame;
+public:
+	ANIMATION3DCLIP GetInfo() const;
+public:
+	void AddCallback(int _iFrame, void(*_pFunc)(float));
+	template <typename T>
+	void AddCallback(int _iFrame, T* _pObj, void(T::*_pFunc)(float))
+	{
+		pANIMATIONCALLBACK	pCallback = new ANIMATIONCALLBACK();
+
+		pCallback->iAnimationProgress = _iFrame;
+		pCallback->fAnimationProgress = (_iFrame - m_tInfo.iStartFrame) / (float)m_tInfo.iEndFrame;
+		pCallback->func = bind(_pFunc, _pObj, placeholders::_1);
+
+		m_tInfo.vecCallback.push_back(pCallback);
+	}
+
+	void AddCallback(float _fProgress, void(*_pFunc)(float));
+	template <typename T>
+	void AddCallback(float _fProgress, T* _pObj, void(T::*_pFunc)(float))
+	{
+		pANIMATIONCALLBACK	pCallback = new ANIMATIONCALLBACK();
+
+		pCallback->iAnimationProgress = (_fProgress * m_tInfo.fTimeLength + m_tInfo.fStartTime) * m_iAnimationLimitFrame;
+		pCallback->fAnimationProgress = _fProgress;
+		pCallback->func = bind(_pFunc, _pObj, placeholders::_1);
+
+		m_tInfo.vecCallback.push_back(pCallback);
+	}
 public:
 	void SetClipInfo(const string& _strName, ANIMATION_OPTION _eOption,
 		int _iAnimationLimitFrame, int _iStartFrame, int _iEndFrame,

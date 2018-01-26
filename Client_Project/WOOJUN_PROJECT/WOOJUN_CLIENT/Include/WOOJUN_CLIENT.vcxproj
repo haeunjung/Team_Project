@@ -103,13 +103,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>../../Engine/Include;$(IncludePath)</IncludePath>
+    <IncludePath>../../Engine/Include;../../Engine/Include/03.Resource/FBXSDK/;$(IncludePath)</IncludePath>
     <LibraryPath>../Bin;$(LibraryPath)</LibraryPath>
     <OutDir>../Bin/</OutDir>
     <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>../../Engine/Include;$(IncludePath)</IncludePath>
+    <IncludePath>../../Engine/Include;../../Engine/Include/03.Resource/FBXSDK/;$(IncludePath)</IncludePath>
     <LibraryPath>../Bin;$(LibraryPath)</LibraryPath>
     <OutDir>../Bin/</OutDir>
   </PropertyGroup>

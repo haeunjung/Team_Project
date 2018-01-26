@@ -4,15 +4,49 @@ WOOJUN_USING
 
 CAnimation3DClip::CAnimation3DClip()
 {
+	SetTag("Animation3DClip");
+	SetTypeName("CAnimation3DClip");
+	SetTypeID<CAnimation3DClip>();
 }
 
 CAnimation3DClip::CAnimation3DClip(const CAnimation3DClip & _Clip)
 {
 	*this = _Clip;
+	m_iRefCount = 1;
+
+	m_tInfo.vecCallback.clear();
 }
 
 CAnimation3DClip::~CAnimation3DClip()
 {
+	Safe_Delete_VecList(m_tInfo.vecCallback);
+}
+
+ANIMATION3DCLIP CAnimation3DClip::GetInfo() const
+{
+	return m_tInfo;
+}
+
+void CAnimation3DClip::AddCallback(int _iFrame, void(*_pFunc)(float))
+{
+	pANIMATIONCALLBACK	pCallback = new ANIMATIONCALLBACK();
+
+	pCallback->iAnimationProgress = _iFrame;
+	pCallback->fAnimationProgress = (_iFrame - m_tInfo.iStartFrame) / (float)m_tInfo.iEndFrame;
+	pCallback->func = bind(_pFunc, placeholders::_1);
+
+	m_tInfo.vecCallback.push_back(pCallback);
+}
+
+void CAnimation3DClip::AddCallback(float _fProgress, void(*_pFunc)(float))
+{
+	pANIMATIONCALLBACK	pCallback = new ANIMATIONCALLBACK();
+
+	pCallback->iAnimationProgress = (_fProgress * m_tInfo.fTimeLength + m_tInfo.fStartTime) * m_iAnimationLimitFrame;
+	pCallback->fAnimationProgress = _fProgress;
+	pCallback->func = bind(_pFunc, placeholders::_1);
+
+	m_tInfo.vecCallback.push_back(pCallback);
 }
 
 void CAnimation3DClip::SetClipInfo(const string & _strName, ANIMATION_OPTION _eOption, int _iAnimationLimitFrame, int _iStartFrame, int _iEndFrame, float _fStartTime, float _fEndTime)

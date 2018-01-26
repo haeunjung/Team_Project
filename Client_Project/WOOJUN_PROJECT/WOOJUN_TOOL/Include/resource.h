@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++¿¡¼­ »ý¼ºÇÑ Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
-// WOOJUN_TOOL.rc¿¡¼­ »ç¿ëµÇ°í ÀÖ½À´Ï´Ù.
+// Microsoft Visual C++ì—ì„œ ìƒì„±í•œ í¬í•¨ íŒŒì¼ìž…ë‹ˆë‹¤.
+// WOOJUN_TOOL.rcì—ì„œ ì‚¬ìš©ë˜ê³  ìžˆìŠµë‹ˆë‹¤.
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
@@ -38,7 +38,6 @@
 #define IDC_STATIC_ROTATIONZ            1017
 #define IDC_EDIT_CURFBX                 1017
 #define IDC_EDIT1_ROTATIONZ             1018
-#define IDC_BUTTON_SETDEFAULTCLIP2      1018
 #define IDC_BUTTON_LOADFBX              1018
 #define IDC_STATIC_SCALEX               1019
 #define IDC_EDIT1_SCALEX                1020

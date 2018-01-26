@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "../03.Resource/FbxLoader.h"
+#include "Animation3DClip.h"
 
 WOOJUN_BEGIN
 
@@ -40,11 +41,48 @@ private:
 	string	m_strCurClip;
 	string	m_strNextClip;
 	bool	m_bChange;
+	bool	m_bEnd;
 	float	m_fChangeTime;
 	float	m_fChangeLimitTime;
 	float	m_fAnimationTime;
 	float	m_fFrameTime;
+	float	m_fAnimationProgress;
 public:
+	bool GetAnimationEnd() const;
+	float GetAnimationProgress() const;
+	int GetAnimationProgressFrame() const;
+	pBONE FindBone(const string& _strName) const;
+public:
+	void AddClipCallback(const string& _strName, int _iFrame, void(*_pFunc)(float));
+	template <typename T>
+	void AddClipCallback(const string& _strName, int _iFrame, T* _pObj, void(T::*_pFunc)(float))
+	{
+		CAnimation3DClip*	pClip = FindClip(_strName);
+
+		if (!pClip)
+		{
+			return;
+		}
+
+		pClip->AddCallback(_iFrame, _pObj, _pFunc);
+	}
+
+	void AddClipCallback(const string& _strName, float _fProgress, void(*_pFunc)(float));
+	template <typename T>						 
+	void AddClipCallback(const string& _strName, float _fProgress, T* _pObj, void(T::*_pFunc)(float))
+	{
+		CAnimation3DClip*	pClip = FindClip(_strName);
+
+		if (!pClip)
+		{
+			return;
+		}
+
+		pClip->AddCallback(_fProgress, _pObj, _pFunc);
+	}
+public:	
+	void ReturnToDefaultClip();
+	void ClearClip();
 	class CTexture* GetBoneTexture() const;
 	void SetChangeTime(float _fTime);
 	void AddBone(pBONE _pBone);
@@ -52,6 +90,10 @@ public:
 	void AddClip(const string& _strKey, ANIMATION_OPTION _eOption,
 		int _iAnimationLimitFrame, int _iStartFrame, int _iEndFrame,
 		float _fStartTime, float _fEndTime);
+	void AddClip(const string& _strKey, ANIMATION_OPTION _eOption,
+		int _iStartFrame, int _iEndFrame);
+	void ChangeClipInfo(const string& _strKey, const string& _strReplaceKey, ANIMATION_OPTION _eOption,
+		int _iStartFrame, int _iEndFrame);
 	class CAnimation3DClip* FindClip(const string& _strKey);
 	void SetDefaultClipName(const string& _strName);
 	void SetCurClipName(const string& _strName);

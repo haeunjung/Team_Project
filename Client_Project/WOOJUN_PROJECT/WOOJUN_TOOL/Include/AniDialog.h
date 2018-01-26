@@ -1,6 +1,6 @@
 #pragma once
-#include "06.GameObject/GameObject.h"
 #include "afxwin.h"
+#include "06.GameObject/GameObject.h"
 
 // CAniDialog 대화 상자입니다.
 
@@ -36,7 +36,7 @@ private:
 	CListBox	m_ClipList;
 	CString		m_strDefaultClip;
 	CString		m_strCurFBX;
-	int		m_iPosX;
+	float		m_fPosX;
 private:
 	void CreateAniObject(const string & _strKey, const wstring & _FullPath);
 public:
@@ -47,4 +47,5 @@ public:
 	afx_msg void OnBnClickedButtonSaveani();	
 	afx_msg void OnBnClickedButtonSetdefaultclip();
 	afx_msg void OnBnClickedButtonLoadfbx();
+	afx_msg void OnLbnSelchangeList1();
 };
