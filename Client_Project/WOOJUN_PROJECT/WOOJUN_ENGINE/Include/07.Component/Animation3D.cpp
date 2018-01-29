@@ -98,6 +98,21 @@ CAnimation3D::~CAnimation3D()
 	Safe_Delete_VecList(m_vecBones);
 }
 
+const string & CAnimation3D::GetDefaultClipName() const
+{
+	return m_strDefaultClip;
+}
+
+unordered_map<string, class CAnimation3DClip*>* CAnimation3D::GetClips()
+{	
+	return &m_mapClip;
+}
+
+float CAnimation3D::GetChangeLimitTime() const
+{
+	return m_fChangeLimitTime;
+}
+
 bool CAnimation3D::GetAnimationEnd() const
 {
 	return m_bEnd;
@@ -734,13 +749,23 @@ void CAnimation3D::Update(float _fTime)
 		// Callback Func üũ
 		for (size_t i = 0; i < m_pCurClip->m_tInfo.vecCallback.size(); ++i)
 		{
-
+			if (m_pCurClip->m_tInfo.vecCallback[i]->fAnimationProgress >= m_fAnimationProgress
+				&& !m_pCurClip->m_tInfo.vecCallback[i]->bCall)
+			{
+				m_pCurClip->m_tInfo.vecCallback[i]->bCall = true;
+				m_pCurClip->m_tInfo.vecCallback[i]->func(_fTime);
+			}
 		}
 
 		while (m_fAnimationTime >= m_pCurClip->m_tInfo.fTimeLength)
 		{
 			m_fAnimationTime -= m_pCurClip->m_tInfo.fTimeLength;
 			m_bEnd = true;
+
+			for (size_t i = 0; i < m_pCurClip->m_tInfo.vecCallback.size(); ++i)
+			{
+				m_pCurClip->m_tInfo.vecCallback[i]->bCall = false;
+			}
 
 			if (AO_ONCE_RETURN == m_pCurClip->m_tInfo.eOption)
 			{

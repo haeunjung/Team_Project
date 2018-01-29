@@ -145,6 +145,9 @@
     <Filter Include="07. Component\12. Animation3D">
       <UniqueIdentifier>{658e291a-3852-4be8-ab38-74bd46e27eb9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Rendering\03. RenderTarget">
+      <UniqueIdentifier>{f0e31842-89df-4c4f-b502-a40bf0fa53fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine_Core.h">
@@ -361,6 +364,9 @@
     <ClInclude Include="07.Component\Animation3DClip.h">
       <Filter>07. Component\12. Animation3D</Filter>
     </ClInclude>
+    <ClInclude Include="04.Rendering\MyRenderTarget.h">
+      <Filter>04. Rendering\03. RenderTarget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -552,6 +558,9 @@
     </ClCompile>
     <ClCompile Include="07.Component\Animation3DClip.cpp">
       <Filter>07. Component\12. Animation3D</Filter>
+    </ClCompile>
+    <ClCompile Include="04.Rendering\MyRenderTarget.cpp">
+      <Filter>04. Rendering\03. RenderTarget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

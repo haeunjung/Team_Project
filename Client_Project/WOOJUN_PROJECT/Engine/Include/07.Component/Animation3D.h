@@ -48,6 +48,9 @@ private:
 	float	m_fFrameTime;
 	float	m_fAnimationProgress;
 public:
+	const string& GetDefaultClipName() const;
+	unordered_map<string, class CAnimation3DClip*>* GetClips();
+	float GetChangeLimitTime() const;
 	bool GetAnimationEnd() const;
 	float GetAnimationProgress() const;
 	int GetAnimationProgressFrame() const;

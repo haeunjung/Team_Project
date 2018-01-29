@@ -45,10 +45,10 @@ void CRenderer::UpdateTransform()
 	// XMMatrixTranspose
 	tTransform.matWorld = XMMatrixTranspose(tTransform.matWorld);
 	tTransform.matView = XMMatrixTranspose(tTransform.matView);
-tTransform.matProj = XMMatrixTranspose(tTransform.matProj);
-tTransform.matWV = XMMatrixTranspose(tTransform.matWV);
-tTransform.matWVP = XMMatrixTranspose(tTransform.matWVP);
-tTransform.matVP = XMMatrixTranspose(tTransform.matVP);
+	tTransform.matProj = XMMatrixTranspose(tTransform.matProj);
+	tTransform.matWV = XMMatrixTranspose(tTransform.matWV);
+	tTransform.matWVP = XMMatrixTranspose(tTransform.matWVP);
+	tTransform.matVP = XMMatrixTranspose(tTransform.matVP);
 
 GET_SINGLE(CShaderMgr)->UpdateConstBuffer("Transform", &tTransform, CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);
 }
@@ -100,6 +100,39 @@ void CRenderer::SetMesh(const string & _strKey)
 }
 
 void CRenderer::SetMesh(const string & _strKey, const TCHAR * _pFileName, const string & _strPathKey)
+{
+	SAFE_RELEASE(m_pMesh);
+	m_pMesh = GET_SINGLE(CResMgr)->LoadMesh(_strKey, _pFileName, _strPathKey);
+
+	size_t size = m_vecMaterial.size();
+	for (size_t i = 0; i < size; ++i)
+	{
+		Safe_Release_VecList(m_vecMaterial[i]);
+	}
+
+	m_vecMaterial.clear();
+
+	size_t ContainerCount = m_pMesh->GetContainerCount();
+	for (size_t i = 0; i < ContainerCount; ++i)
+	{
+		if (i == m_vecMaterial.size())
+		{
+			AddContainerMaterial();
+		}
+
+		size_t SubsetCount = m_pMesh->GetSubsetCount(i);
+		for (size_t j = 0; j < SubsetCount; ++j)
+		{
+			CMaterial*	pMaterial = m_pMesh->CloneMaterial(i, j);
+
+			m_vecMaterial[i].push_back(pMaterial);
+		}
+	}
+
+	CheckAnimation();
+}
+
+void CRenderer::SetMesh(const string & _strKey, const CHAR * _pFileName, const string & _strPathKey)
 {
 	SAFE_RELEASE(m_pMesh);
 	m_pMesh = GET_SINGLE(CResMgr)->LoadMesh(_strKey, _pFileName, _strPathKey);

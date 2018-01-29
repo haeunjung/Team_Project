@@ -339,7 +339,7 @@ bool CMesh::LoadMeshFromFullPath(const string & _strKey, const wchar_t * _pFullP
 		return ConvertFbxData(&Loader);
 	}
 
-	Load(strFullPath);
+	LoadFromFullPath(strFullPath);
 
 	return true;
 }
@@ -366,7 +366,7 @@ bool CMesh::LoadMeshFromFullPath(const string & _strKey, const char * _pFullPath
 		return ConvertFbxData(&Loader);
 	}
 
-	Load(_pFullPath);
+	LoadFromFullPath(_pFullPath);
 
 	return true;
 }

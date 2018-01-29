@@ -562,4 +562,14 @@ typedef struct DLL _tagRendererCBuffer
 	int		iShaderType;
 }RENDERERCBUFFER, *pRENDERERCBUFFER;
 
+// Static Object Data
+typedef struct DLL _tagObjectData
+{
+	string		strKey;
+	wstring		FileName;
+	DxVector3	vPos;
+	DxVector3	vScale;
+	DxVector3	vRot;
+}OBJECTDATA, *pOBJECTDATA;
+
 WOOJUN_END

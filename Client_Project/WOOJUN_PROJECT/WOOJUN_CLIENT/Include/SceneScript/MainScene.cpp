@@ -49,6 +49,7 @@ void CMainScene::CreateProtoType()
 	SAFE_RELEASE(pMinion);
 	SAFE_RELEASE(pMinionObj);
 
+	/*
 	// WareHouse
 	CGameObject*	pWareHouseObject = CGameObject::Create("WareHouseObject", true);
 	CRenderer*		pRenderer = pWareHouseObject->AddComponent<CRenderer>("WareHouseRenderer");
@@ -138,6 +139,7 @@ void CMainScene::CreateProtoType()
 	pRenderer->SetRenderState(ALPHABLEND);
 	SAFE_RELEASE(pReturnPoint);
 	SAFE_RELEASE(pRenderer);
+	*/
 }
 
 void CMainScene::CreateCheckBox()
@@ -236,7 +238,7 @@ void CMainScene::CreateTerrain()
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
-	pTerrain->CreateTerrain("Terrain", 129, 129, 1, 1, "Terrain/Height1.bmp");
+	pTerrain->CreateTerrain("Terrain", TERRAINSIZE, TERRAINSIZE, 1, 1, "Terrain/Height1.bmp");
 	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/Terrain_Pebbles_01.dds");
 	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/Terrain_Pebbles_01_NRM.bmp");
 	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/Terrain_Pebbles_01_SPEC.bmp");
@@ -365,7 +367,7 @@ void CMainScene::CreateHpBar()
 
 bool CMainScene::Init()
 {
-	//CreateProtoType();
+	CreateProtoType();
 	CreateTerrain();
 	CreateCheckBox();
 	CreateRadioButton();

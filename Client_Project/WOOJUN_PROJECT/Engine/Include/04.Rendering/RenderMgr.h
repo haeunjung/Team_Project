@@ -7,11 +7,17 @@ class CRenderState;
 class CRasterizerState;
 class CBlendState;
 class CDepthStencilState;
+class CMyRenderTarget;
 class DLL CRenderMgr
 {
 private:
-	unordered_map<string, CRenderState*> m_mapRenderState;	
-	vector<D3D11_RENDER_TARGET_BLEND_DESC> m_vecRenderTargetBlend;
+	unordered_map<string, CRenderState*>	m_mapRenderState;	
+	vector<D3D11_RENDER_TARGET_BLEND_DESC>	m_vecRenderTargetBlend;
+	unordered_map<string, CMyRenderTarget*> m_mapRenderTarget;
+public:
+	CMyRenderTarget* CreateTarget(const string& _strKey, int _iWidth, int _iHeight, DXGI_FORMAT _eFormat);
+	void ChangeTarget(const string& _strKey);
+	CMyRenderTarget* FindTarget(const string& _strKey);
 public:
 	// Rasterizer State
 	CRasterizerState* CreateRasterizerState(const string& _strKey, D3D11_FILL_MODE fillMode = D3D11_FILL_SOLID,

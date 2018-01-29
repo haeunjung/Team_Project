@@ -72,10 +72,10 @@ bool CInput::Init()
 	CreateKey("F1", VK_F1);
 	CreateKey("F2", VK_F2);
 
-	CreateKey("CameraForward", VK_UP);
-	CreateKey("CameraBack", VK_DOWN);
-	CreateKey("CameraLeft", VK_LEFT);
-	CreateKey("CameraRight", VK_RIGHT);
+	CreateKey("CameraForward", 'W');
+	CreateKey("CameraBack", 'S');
+	CreateKey("CameraLeft", 'A');
+	CreateKey("CameraRight", 'D');
 
 	m_sWheel = 0;
 

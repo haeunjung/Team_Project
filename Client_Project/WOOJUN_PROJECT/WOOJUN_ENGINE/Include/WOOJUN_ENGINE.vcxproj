@@ -154,6 +154,7 @@
     <ClInclude Include="03.Resource\Texture.h" />
     <ClInclude Include="04.Rendering\BlendState.h" />
     <ClInclude Include="04.Rendering\DepthStencilState.h" />
+    <ClInclude Include="04.Rendering\MyRenderTarget.h" />
     <ClInclude Include="04.Rendering\RasterizerState.h" />
     <ClInclude Include="04.Rendering\RenderMgr.h" />
     <ClInclude Include="04.Rendering\RenderState.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="03.Resource\Texture.cpp" />
     <ClCompile Include="04.Rendering\BlendState.cpp" />
     <ClCompile Include="04.Rendering\DepthStencilState.cpp" />
+    <ClCompile Include="04.Rendering\MyRenderTarget.cpp" />
     <ClCompile Include="04.Rendering\RasterizerState.cpp" />
     <ClCompile Include="04.Rendering\RenderMgr.cpp" />
     <ClCompile Include="04.Rendering\RenderState.cpp" />

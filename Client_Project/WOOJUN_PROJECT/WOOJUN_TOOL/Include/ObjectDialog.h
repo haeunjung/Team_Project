@@ -41,6 +41,7 @@ private:
 	void SetObjectValue();
 	bool LoadFBX();
 	void CreateObject(const string& _strKey, const wstring & _FileName);	
+	void LoadObject(const string& _strKey, const DxVector3& _vPos, const DxVector3& _vScale, const DxVector3& _vRot);
 public:
 	afx_msg void OnLbnSelchangeList1();
 private:
@@ -48,10 +49,13 @@ private:
 	CListBox		m_ObjectListBox;
 	int				m_iCurIndex;
 	CGameObject*	m_pPickObject;
+	vector<CGameObject*>	m_vecObject;
 public:
 	void ChangePickObject(CGameObject* _pGameObject);
 public:
 	afx_msg void OnBnClickedLoadButton();
 	afx_msg void OnBnClickedCreateButton();
 	afx_msg void OnChildActivate();
+	afx_msg void OnBnClickedSaveobject();
+	afx_msg void OnBnClickedLoadobject();
 };

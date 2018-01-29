@@ -36,10 +36,10 @@ bool CPlayer::Init()
 		pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
 	}*/
 	//pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
-	pPlayerRenderer->SetMesh("PlayerMesh", L"Elin.msh");
+	pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.msh");
 	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");	
-	pPlayerRenderer->SetRenderState(ALPHABLEND);
+	//pPlayerRenderer->SetRenderState(ALPHABLEND);
 
 	/*CMesh*	pMesh = GET_SINGLE(CResMgr)->FindMesh("PlayerMesh");
 	pMesh->Save("PlayerMesh.msh");

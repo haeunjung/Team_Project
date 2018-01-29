@@ -34,6 +34,7 @@ void CAnimation3DClip::AddCallback(int _iFrame, void(*_pFunc)(float))
 	pCallback->iAnimationProgress = _iFrame;
 	pCallback->fAnimationProgress = (_iFrame - m_tInfo.iStartFrame) / (float)m_tInfo.iEndFrame;
 	pCallback->func = bind(_pFunc, placeholders::_1);
+	pCallback->bCall = false;
 
 	m_tInfo.vecCallback.push_back(pCallback);
 }
@@ -45,6 +46,7 @@ void CAnimation3DClip::AddCallback(float _fProgress, void(*_pFunc)(float))
 	pCallback->iAnimationProgress = (_fProgress * m_tInfo.fTimeLength + m_tInfo.fStartTime) * m_iAnimationLimitFrame;
 	pCallback->fAnimationProgress = _fProgress;
 	pCallback->func = bind(_pFunc, placeholders::_1);
+	pCallback->bCall = false;
 
 	m_tInfo.vecCallback.push_back(pCallback);
 }

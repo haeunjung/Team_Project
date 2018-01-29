@@ -32,6 +32,7 @@ CAniDialog::CAniDialog(CWnd* pParent /*=NULL*/)
 	, m_strDefaultClip(_T(""))
 	, m_strCurFBX(_T(""))
 	, m_fPosX(0.f)
+	, m_fChangeLimitTime(0)
 {
 
 }
@@ -69,6 +70,7 @@ void CAniDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST1, m_ClipList);
 	DDX_Text(pDX, IDC_EDIT_DEFAULTCLIP, m_strDefaultClip);
 	DDX_Text(pDX, IDC_EDIT_CURFBX, m_strCurFBX);
+	DDX_Text(pDX, IDC_EDIT_CHANGELIMITTIME, m_fChangeLimitTime);
 }
 
 
@@ -80,12 +82,14 @@ BEGIN_MESSAGE_MAP(CAniDialog, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_SETDEFAULTCLIP, &CAniDialog::OnBnClickedButtonSetdefaultclip)
 	ON_BN_CLICKED(IDC_BUTTON_LOADFBX, &CAniDialog::OnBnClickedButtonLoadfbx)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CAniDialog::OnLbnSelchangeList1)
+	ON_BN_CLICKED(IDC_BUTTON_LOADANI, &CAniDialog::OnBnClickedButtonLoadani)
+	ON_BN_CLICKED(IDC_BUTTON_SETCHANGELIMITTIME, &CAniDialog::OnBnClickedButtonSetchangelimittime)
 END_MESSAGE_MAP()
 
 
 // CAniDialog 메시지 처리기입니다.
 
-void CAniDialog::CreateAniObject(const string & _strKey, const wstring & _FullPath)
+void CAniDialog::CreateAniObject(const string & _strKey, const wstring & _FullPath, bool _bLoad /*= false*/)
 {
 	CLayer*	pLayer = GET_SINGLE(CSceneMgr)->GetCurScene()->FindLayer(DEFAULTLAYER);
 
@@ -104,6 +108,26 @@ void CAniDialog::CreateAniObject(const string & _strKey, const wstring & _FullPa
 	pRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pRenderer->SetInputLayout("AniBumpInputLayout");
 	pRenderer->SetRenderState(ALPHABLEND);
+
+	if (_bLoad)
+	{
+		CAnimation3D*	pAnimation3D = (CAnimation3D*)pGameObject->FindComponentFromType(CT_ANIMATION3D);
+		unordered_map<string, class CAnimation3DClip*>* pClipMap = pAnimation3D->GetClips();
+
+		unordered_map<string, class CAnimation3DClip*>::iterator	iter;
+		unordered_map<string, class CAnimation3DClip*>::iterator	iterEnd = pClipMap->end();
+
+		for (iter = pClipMap->begin(); iter != iterEnd; ++iter)
+		{			
+			m_ClipList.AddString(CString(iter->first.c_str()));
+		}		
+
+		string	strDefaultClip = pAnimation3D->GetDefaultClipName();
+		m_strDefaultClip.SetString(CString(strDefaultClip.c_str()));
+
+		SAFE_RELEASE(pAnimation3D);
+	}
+
 	SAFE_RELEASE(pRenderer);
 
 	CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");	
@@ -222,6 +246,20 @@ void CAniDialog::OnBnClickedButtonSaveani()
 	}
 }
 
+void CAniDialog::OnBnClickedButtonLoadani()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	WCHAR	strFilter[] = L"Mesh (*.msh)|*.msh|All Files(*.*)|*.*||";
+	CFileDialog	dlg(TRUE, L"Mesh", L"", OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, strFilter);
+
+	if (dlg.DoModal() == IDOK)
+	{
+		CString	strFullPath = dlg.GetPathName();
+		string	strFileName = GET_SINGLE(CToolValue)->CStringToString(dlg.GetFileTitle());
+		CreateAniObject(strFileName, strFullPath.GetString(), true);
+	}
+}
+
 void CAniDialog::OnBnClickedButtonSetdefaultclip()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
@@ -235,10 +273,10 @@ void CAniDialog::OnBnClickedButtonSetdefaultclip()
 	CString	strName;
 	m_ClipList.GetText(iCurSel, strName);
 
+	m_strDefaultClip.SetString(strName);
+
 	CAnimation3D*	pAnimation3D = (CAnimation3D*)m_pPickObject->FindComponentFromType(CT_ANIMATION3D);
-
-	pAnimation3D->SetDefaultClipName(GET_SINGLE(CToolValue)->CStringToString(strName));
-
+	pAnimation3D->SetDefaultClipName(GET_SINGLE(CToolValue)->CStringToString(strName));	
 	SAFE_RELEASE(pAnimation3D);
 }
 
@@ -274,9 +312,9 @@ void CAniDialog::OnLbnSelchangeList1()
 
 	CAnimation3D*	pAnimation3D = (CAnimation3D*)m_pPickObject->FindComponentFromType(CT_ANIMATION3D);
 	pAnimation3D->ChangeClip(strKey);
+	m_fChangeLimitTime = pAnimation3D->GetChangeLimitTime();
 
 	CAnimation3DClip*	pClip = pAnimation3D->FindClip(strKey);
-
 	m_strClipName = strName;
 	m_iStartFrame = pClip->GetInfo().iStartFrame;
 	m_iEndFrame = pClip->GetInfo().iEndFrame;
@@ -288,4 +326,20 @@ void CAniDialog::OnLbnSelchangeList1()
 	SAFE_RELEASE(pAnimation3D);
 
 	UpdateData(FALSE);
+}
+
+
+void CAniDialog::OnBnClickedButtonSetchangelimittime()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+
+	if (!m_pPickObject)
+	{
+		return;
+	}
+
+	CAnimation3D*	pAnimation3D = (CAnimation3D*)m_pPickObject->FindComponentFromType(CT_ANIMATION3D);
+	pAnimation3D->SetChangeTime(m_fChangeLimitTime);
+	SAFE_RELEASE(pAnimation3D);
 }

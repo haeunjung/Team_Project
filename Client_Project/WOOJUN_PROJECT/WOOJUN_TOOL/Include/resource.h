@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ì—ì„œ ìƒì„±í•œ í¬í•¨ íŒŒì¼ì…ë‹ˆë‹¤.
-// WOOJUN_TOOL.rcì—ì„œ ì‚¬ìš©ë˜ê³  ìˆìŠµë‹ˆë‹¤.
+// Microsoft Visual C++¿¡¼­ »ı¼ºÇÑ Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
+// WOOJUN_TOOL.rc¿¡¼­ »ç¿ëµÇ°í ÀÖ½À´Ï´Ù.
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
@@ -19,6 +19,7 @@
 #define IDC_LOAD_BUTTON                 1006
 #define IDC_CREATE_BUTTON               1007
 #define IDC_EDIT_CLIPNAME               1008
+#define IDC_SAVEOBJECT                  1008
 #define IDC_STATIC_POSY                 1009
 #define IDC_EDIT_STARTFRAME             1009
 #define IDC_EDIT1_POSY                  1010
@@ -40,11 +41,16 @@
 #define IDC_EDIT1_ROTATIONZ             1018
 #define IDC_BUTTON_LOADFBX              1018
 #define IDC_STATIC_SCALEX               1019
+#define IDC_EDIT_CHANGELIMITTIME        1019
 #define IDC_EDIT1_SCALEX                1020
+#define IDC_BUTTON_LOADANI              1020
 #define IDC_STATIC_SCALEY               1021
+#define IDC_BUTTON_SETDEFAULTCLIP2      1021
+#define IDC_BUTTON_SETCHANGELIMITTIME   1021
 #define IDC_EDIT1_SCALEY                1022
 #define IDC_STATIC_SCALEZ               1023
 #define IDC_EDIT1_SCALEZ                1024
+#define IDC_LOADOBJECT                  1025
 
 // Next default values for new objects
 // 

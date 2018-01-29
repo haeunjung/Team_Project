@@ -22,7 +22,7 @@ void CToolScene::CreateTerrain()
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
-	pTerrain->CreateTerrain("Terrain", 129, 129, 1, 1, "Terrain/Height1.bmp");
+	pTerrain->CreateTerrain("Terrain", TERRAINSIZE, TERRAINSIZE, 1, 1/*, "Terrain/Height1.bmp"*/);
 	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/Terrain_Pebbles_01.dds");
 	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/Terrain_Pebbles_01_NRM.bmp");
 	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/Terrain_Pebbles_01_SPEC.bmp");	
@@ -82,7 +82,7 @@ bool CToolScene::Init()
 	// 카메라 오브젝트 생성
 	CGameObject*	pCameraObject = m_pScene->GetMainCameraObject();
 	CTransform*		pCameraTransform = m_pScene->GetMainCameraTransform();
-	pCameraTransform->SetWorldPos(0.0f, 0.0f, -10.0f);
+	pCameraTransform->SetWorldPos(TERRAINSIZE * 0.5f, 10.0f, -10.0f);
 	SAFE_RELEASE(pCameraTransform);
 
 	CCameraFree*	pCameraFree = pCameraObject->AddComponent<CCameraFree>("CameraFree");

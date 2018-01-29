@@ -3,10 +3,55 @@
 #include "RasterizerState.h"
 #include "BlendState.h"
 #include "DepthStencilState.h"
+#include "MyRenderTarget.h"
+#include "../Engine_Core.h"
 
 WOOJUN_USING
 
 DEFINITION_SINGLE(CRenderMgr)
+
+CMyRenderTarget * CRenderMgr::CreateTarget(const string & _strKey, int _iWidth, int _iHeight, DXGI_FORMAT _eFormat)
+{
+	CMyRenderTarget*	pTarget = new CMyRenderTarget();
+
+	if (!pTarget->CreateTarget(_iWidth, _iHeight, _eFormat))
+	{
+		SAFE_RELEASE(pTarget);
+		return NULL;
+	}
+
+	pTarget->AddRef();
+
+	m_mapRenderTarget.insert(make_pair(_strKey, pTarget));
+
+	return pTarget;
+}
+
+void CRenderMgr::ChangeTarget(const string & _strKey)
+{
+	CMyRenderTarget*	pTarget = FindTarget(_strKey);
+
+	if (!pTarget)
+	{
+		return;
+	}
+
+	pTarget->ChangeTarget();
+}
+
+CMyRenderTarget * CRenderMgr::FindTarget(const string & _strKey)
+{
+	unordered_map<string, CMyRenderTarget*>::iterator	iter = m_mapRenderTarget.find(_strKey);
+
+	if (iter == m_mapRenderTarget.end())
+	{
+		return NULL;
+	}
+
+	iter->second->AddRef();
+
+	return iter->second;
+}
 
 CRasterizerState * CRenderMgr::CreateRasterizerState(const string & _strKey, D3D11_FILL_MODE fillMode, D3D11_CULL_MODE cullMode,
 	BOOL frontCounterClockwise, INT depthBias, FLOAT depthBiasClamp, FLOAT slopeScaledDepthBias,
@@ -158,6 +203,10 @@ bool CRenderMgr::Init()
 	pRenderState = CreateDepthStencilState(DEPTH_DISABLE, false);
 	SAFE_RELEASE(pRenderState);
 
+	// Albedo Target
+	CMyRenderTarget*	pTarget = CreateTarget("Albedo", _RESOLUTION.m_iWidth, _RESOLUTION.m_iHeight, DXGI_FORMAT_R8G8B8A8_UNORM);
+	SAFE_RELEASE(pTarget);
+
 	return true;
 }
 
@@ -167,6 +216,7 @@ CRenderMgr::CRenderMgr()
 
 CRenderMgr::~CRenderMgr()
 {
+	Safe_Release_Map(m_mapRenderTarget);
 	Safe_Release_Map(m_mapRenderState);
 	DESTROY_SINGLE(CShaderMgr);
 }
