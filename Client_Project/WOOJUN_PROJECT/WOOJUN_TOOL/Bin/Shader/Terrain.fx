@@ -116,10 +116,11 @@ VS_BUMP_OUTPUT TerrainVS(VS_BUMP_INPUT input)
 {
     VS_BUMP_OUTPUT output = (VS_BUMP_OUTPUT) 0;
 
-    output.vPos = mul(float4(input.vPos, 1.0f), g_matWVP);
+    output.vProjPos = mul(float4(input.vPos, 1.0f), g_matWVP);
     output.vUV = input.vUV;
     output.vNormal = normalize(mul(float4(input.vNormal, 0.0f), g_matWV).xyz);
-    output.vViewPos = mul(float4(input.vPos, 1.0f), g_matWV);
+    //output.vViewPos = mul(float4(input.vPos, 1.0f), g_matWV);
+    output.vPos = output.vProjPos;
 
     if (1 == g_iBump)
     {
@@ -130,9 +131,9 @@ VS_BUMP_OUTPUT TerrainVS(VS_BUMP_INPUT input)
     return output;
 }
 
-PS_SINGLE_OUTPUT TerrainPS(VS_BUMP_OUTPUT input)
+PS_OUTPUT TerrainPS(VS_BUMP_OUTPUT input)
 {
-    PS_SINGLE_OUTPUT output = (PS_SINGLE_OUTPUT) 0;
+    PS_OUTPUT output = (PS_OUTPUT) 0;
 
     // 법선맵이 있을 경우 법선을 새로 구한다.
     float3 vNormal = input.vNormal;
@@ -166,7 +167,7 @@ PS_SINGLE_OUTPUT TerrainPS(VS_BUMP_OUTPUT input)
         vNormal = normalize(vNormal);
     }
 
-    _tagMaterial tMaterial = ComputeTerrainLight(vNormal, input.vViewPos, vUV, input.vUV);
+    //_tagMaterial tMaterial = ComputeTerrainLight(vNormal, input.vViewPos, vUV, input.vUV);
 
     float4 vColor = g_DiffuseTexture.Sample(g_DiffuseSampler, vUV);
 
@@ -175,8 +176,7 @@ PS_SINGLE_OUTPUT TerrainPS(VS_BUMP_OUTPUT input)
     if (vColor.a == 0.f)
         clip(-1);
 
-    [unroll]
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 8; i++)
     {
         vUVW = float3(input.vUV, i);
         float fAlpha = g_AlphaTexArray.Sample(g_AlphaSampler, vUVW).r;
@@ -191,8 +191,37 @@ PS_SINGLE_OUTPUT TerrainPS(VS_BUMP_OUTPUT input)
 
     }
 
-    output.vTarget0.rgb = vColor.xyz * (tMaterial.vDiffuse.xyz + tMaterial.vAmbient.xyz) + tMaterial.vSpecular.xyz;
+    output.vTarget0.rgb = vColor.xyz; // * (tMaterial.vDiffuse.xyz + tMaterial.vAmbient.xyz) + tMaterial.vSpecular.xyz;
     output.vTarget0.a = vColor.a;
+
+    output.vTarget1.rgb = vNormal * 0.5f + 0.5f;
+    output.vTarget1.a = 1.0f;
+
+    output.vTarget2.rgb = (float3) (input.vProjPos.z / input.vProjPos.w);
+    output.vTarget2.a = 1.f;
+
+    float4 vSpc = g_vMaterialSpecular;
+
+    if (g_iSpecular == 1)
+    {
+        vSpc = g_SpecularTexture.Sample(g_SpecularSampler, vUV);
+
+        float3 vUVW;
+
+        for (int i = 0; i < 8; i++)
+        {
+            vUVW = float3(input.vUV, i);
+            float fAlpha = g_AlphaTexArray.Sample(g_AlphaSampler, vUVW).r;
+
+            if (fAlpha == 0.f)
+                continue;
+
+            vUVW = float3(vUV, i);
+            vSpc = vSpc * (1.f - fAlpha) + g_SplatSpcTexArray.Sample(g_SplatSpcrSampler, vUVW) * fAlpha;
+        }
+    }
+
+    output.vTarget3 = vSpc;
 
     return output;
 }

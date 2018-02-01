@@ -82,6 +82,7 @@
 #define UI_SHADER					"UIShader"
 #define TERRAIN_SHADER				"TerrainShader"
 #define STANDARD_ANI_BUMP_SHADER	"StandardAniBumpShader"
+#define ACC_BLEND					"AccBlend"
 
 #define TERRAINSIZE		65
  

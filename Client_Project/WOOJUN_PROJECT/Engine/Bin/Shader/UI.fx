@@ -29,9 +29,9 @@ VS_TEX_OUTPUT UIVS(VS_TEX_INPUT input)
     return output;
 }
 
-PS_SINGLE_OUTPUT UIPS(VS_TEX_OUTPUT input)
+PS_OUTPUT UIPS(VS_TEX_OUTPUT input)
 {
-    PS_SINGLE_OUTPUT output = (PS_SINGLE_OUTPUT) 0;
+    PS_OUTPUT output = (PS_OUTPUT) 0;
 
     output.vTarget0 = g_DiffuseTexture.Sample(g_DiffuseSampler, input.vUV) * g_vMaterialDiffuse;
 

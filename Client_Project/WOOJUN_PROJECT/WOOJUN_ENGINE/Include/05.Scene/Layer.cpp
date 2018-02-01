@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "SceneMgr.h"
 #include "../03.Resource/Mesh.h"
+#include "../04.Rendering/RenderMgr.h"
 #include "../06.GameObject/GameObject.h"
 #include "../07.Component/Transform.h"
 #include "../07.Component/Frustum.h"
@@ -207,7 +208,7 @@ void CLayer::Collision(float _fTime)
 
 void CLayer::Render(float _fTime)
 {
-	if (m_listGameObject.size() >= 2)
+	/*if (m_listGameObject.size() >= 2)
 	{
 		switch (m_eSortFlag)
 		{
@@ -218,7 +219,7 @@ void CLayer::Render(float _fTime)
 			m_listGameObject.sort(CLayer::ObjectZSortDescending);
 			break;
 		}
-	}
+	}*/
 
 	m_iterEnd = m_listGameObject.end();
 	for (m_iter = m_listGameObject.begin(); m_iter != m_iterEnd;)
@@ -282,7 +283,8 @@ void CLayer::Render(float _fTime)
 
 		if (false == bFrustum)
 		{
-			(*m_iter)->Render(_fTime);
+			GET_SINGLE(CRenderMgr)->AddRenderObject(*m_iter);
+			//(*m_iter)->Render(_fTime);
 		}
 		else
 		{

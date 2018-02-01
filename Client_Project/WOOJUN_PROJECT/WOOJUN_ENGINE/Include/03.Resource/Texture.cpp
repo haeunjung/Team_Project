@@ -18,6 +18,11 @@ CTexture * CTexture::CreateTexture(const string & _strKey, UINT _iWidth, UINT _i
 	return pTexture;
 }
 
+ID3D11Texture2D * CTexture::GetTexture() const
+{
+	return m_pTexture;
+}
+
 string CTexture::GetKey() const
 {
 	return m_strKey;
@@ -321,12 +326,14 @@ bool CTexture::CreateResource(const string & _strKey, UINT _iWidth, UINT _iHeigh
 	}
 
 	m_vecScratchImage.push_back(pImage);
-
+	
 	if (FAILED(CreateShaderResourceViewEx(DEVICE, pImage->GetImages(), pImage->GetImageCount(),
 		pImage->GetMetadata(), _eUsage, _eBindFlag, _iCpuFlag, 0, false, &m_pShaderResourceView)))
 	{
 		return false;
 	}
+
+	m_pShaderResourceView->GetResource((ID3D11Resource**)&m_pTexture);
 
 	return true;
 }
@@ -357,13 +364,58 @@ void CTexture::SetTexture(int _iRegister, int _iShaderType)
 	}
 }
 
+void CTexture::SaveTextureFile(const WCHAR * _pFileName, const string & _strPathKey)
+{
+	const wchar_t*	pPath = GET_SINGLE(CPathMgr)->FindPath(_strPathKey);
+
+	wstring	strFullPath;
+	if (pPath)
+		strFullPath = pPath;
+	strFullPath += _pFileName;
+
+	char	strFileName[MAX_PATH] = {};
+	WideCharToMultiByte(CP_ACP, 0, _pFileName, -1, strFileName, lstrlen(_pFileName),
+		0, 0);
+
+	char	strExt[_MAX_EXT] = {};
+
+	_splitpath_s(strFileName, NULL, 0, NULL, 0, NULL, 0, strExt, _MAX_EXT);
+
+	_strupr_s(strExt);
+
+	if (strcmp(strExt, ".DDS") == 0)
+	{
+		ScratchImage	img;
+		CaptureTexture(DEVICE, CONTEXT, m_pTexture, img);
+		SaveToDDSFile(img.GetImages(), img.GetImageCount(),
+			img.GetMetadata(), DDS_FLAGS_NONE, strFullPath.c_str());
+	}
+
+	else if (strcmp(strExt, ".TGA") == 0)
+	{
+		ScratchImage	img;
+		CaptureTexture(DEVICE, CONTEXT, m_pTexture, img);
+		SaveToTGAFile(img.GetImages()[0], strFullPath.c_str());
+	}
+
+	else
+	{
+		ScratchImage	img;
+		CaptureTexture(DEVICE, CONTEXT, m_pTexture, img);
+		SaveToWICFile(img.GetImages(), img.GetImageCount(),
+			WIC_FLAGS_NONE, GetWICCodec(WIC_CODEC_PNG), strFullPath.c_str());
+	}
+}
+
 CTexture::CTexture() :
-	m_pShaderResourceView(NULL)
+	m_pShaderResourceView(NULL),
+	m_pTexture(NULL)
 {
 }
 
 CTexture::~CTexture()
 {
+	SAFE_RELEASE(m_pTexture);
 	SAFE_RELEASE(m_pShaderResourceView);
 	Safe_Delete_VecList(m_vecScratchImage);
 }

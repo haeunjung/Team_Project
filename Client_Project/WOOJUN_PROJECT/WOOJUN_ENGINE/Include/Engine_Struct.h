@@ -84,6 +84,9 @@ typedef struct DLL _tagTransformCBuffer
 	XMMATRIX	matWV;
 	XMMATRIX	matWVP;
 	XMMATRIX	matVP;
+	XMMATRIX	matInvProj;
+	XMMATRIX	matInvView;
+	XMMATRIX	matInvVP;
 	DxVector3	vPivot;
 	float		fEmpty1;
 	DxVector3	vMeshSize;

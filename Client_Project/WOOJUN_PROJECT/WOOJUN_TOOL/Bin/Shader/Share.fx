@@ -27,7 +27,7 @@ struct VS_TEXTURENORMAL_OUTPUT
     float4 vPos     : SV_POSITION;
     float3 vNormal  : NORMAL;
     float2 vUV      : TEXCOORD;
-    float3 vViewPos : POSITION;
+    float4 vProjPos : POSITION;
 };
 
 // Texture Bump Vertex
@@ -56,15 +56,18 @@ struct VS_BUMP_OUTPUT
     float4 vPos      : SV_POSITION;
     float3 vNormal   : NORMAL;
     float2 vUV       : TEXCOORD;
-    float3 vViewPos  : POSITION;
+    float4 vProjPos  : POSITION;
     float3 vTangent  : TANGENT;
     float3 vBinormal : BINORMAL;
 };
 
 // Single Target Output Structure
-struct PS_SINGLE_OUTPUT
+struct PS_OUTPUT
 {
-	float4 vTarget0		: SV_TARGET;
+	float4 vTarget0	: SV_TARGET;
+    float4 vTarget1 : SV_TARGET1;
+    float4 vTarget2 : SV_TARGET2;
+    float4 vTarget3 : SV_TARGET3;
 };
 
 // 상수버퍼
@@ -77,6 +80,9 @@ cbuffer Transform : register(b0)
     matrix  g_matWV;
     matrix  g_matWVP;
     matrix  g_matVP;
+    matrix  g_matInvProj;
+    matrix  g_matInvView;
+    matrix  g_matInvVP;
 
     float3  g_vPivot;
     float   g_Empty1;

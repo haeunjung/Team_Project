@@ -39,11 +39,6 @@ struct GS_OUTPUT
     uint    iPrimID : SV_PrimitiveID;
 };
 
-struct PS_OUTPUT
-{
-    float4  vTarget0 : SV_Target;
-};
-
 Texture2DArray g_EffectTexArray : register(t11);
 
 float2 ComputeAtlasUV(float2 vCurUV)
@@ -119,9 +114,9 @@ void EffectGS(point VS_OUTPUT_POS input[1],
     }
 }
 
-PS_SINGLE_OUTPUT EffectPS(GS_OUTPUT input)
+PS_OUTPUT EffectPS(GS_OUTPUT input)
 {
-    PS_SINGLE_OUTPUT output = (PS_SINGLE_OUTPUT) 0;
+    PS_OUTPUT output = (PS_OUTPUT) 0;
 
     if (2 == g_iAniType)
     {

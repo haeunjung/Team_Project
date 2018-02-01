@@ -84,6 +84,9 @@ typedef struct DLL _tagTransformCBuffer
 	XMMATRIX	matWV;
 	XMMATRIX	matWVP;
 	XMMATRIX	matVP;
+	XMMATRIX	matInvProj;
+	XMMATRIX	matInvView;
+	XMMATRIX	matInvVP;
 	DxVector3	vPivot;
 	float		fEmpty1;
 	DxVector3	vMeshSize;
@@ -566,7 +569,7 @@ typedef struct DLL _tagRendererCBuffer
 typedef struct DLL _tagObjectData
 {
 	string		strKey;
-	wstring		FileName;
+	wstring		wstrFileName;
 	DxVector3	vPos;
 	DxVector3	vScale;
 	DxVector3	vRot;

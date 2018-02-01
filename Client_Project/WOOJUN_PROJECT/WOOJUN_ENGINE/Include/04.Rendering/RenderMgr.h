@@ -3,21 +3,51 @@
 
 WOOJUN_BEGIN
 
+typedef struct DLL _tagMRT
+{
+	vector<class CMyRenderTarget*>	vecTarget;
+	class CMyDepthTarget*		pDepth;
+	vector<ID3D11RenderTargetView*>	vecOldTarget;
+	ID3D11DepthStencilView*		pOldDepth;
+}MRT, *pMRT;
+
 class CRenderState;
 class CRasterizerState;
 class CBlendState;
 class CDepthStencilState;
 class CMyRenderTarget;
+class CMyDepthTarget;
+class CGameObject;
 class DLL CRenderMgr
 {
 private:
 	unordered_map<string, CRenderState*>	m_mapRenderState;	
 	vector<D3D11_RENDER_TARGET_BLEND_DESC>	m_vecRenderTargetBlend;
 	unordered_map<string, CMyRenderTarget*> m_mapRenderTarget;
+	unordered_map<string, CMyDepthTarget*>	m_mapDepthTarget;
+	vector<CGameObject*>	m_vecRender[RG_END];
+	unordered_map<string, pMRT>		m_mapMRT;
+private:
+	void RenderGBuffer(float _fTime);
+	void RenderLightAcc(float _fTime);
 public:
+	void AddRenderObject(CGameObject* _pGameObject);
+public:
+	bool AddMRTTarget(const string& _strMRTKey, const string& _strTargetKey);
+	bool SetMRTDepth(const string& _strMRTKey, const string& _strDepthKey);
+	pMRT FindMRT(const string& _strKey);
+	void ChangeMRT(const string& _strKey);
+	void ResetMRT(const string& _strKey);
+	void ClearMRT(const string& _strKey);
 	CMyRenderTarget* CreateTarget(const string& _strKey, int _iWidth, int _iHeight, DXGI_FORMAT _eFormat);
-	void ChangeTarget(const string& _strKey);
+	CMyDepthTarget* CreateDepthTarget(const string& _strKey, int _iWidth, int _iHeight, DXGI_FORMAT _eFormat);
+	void ChangeTarget(const string& _strKey);	
+	void ResetTarget(const string& _strKey);
+	void ClearTarget(const string& _strKey);
+	void ClearDepthTarget(const string& _strKey);
+	void SaveTarget(const string& _strKey, const WCHAR* _pFileName, const string& _strPathKey = TEXTUREPATH);
 	CMyRenderTarget* FindTarget(const string& _strKey);
+	CMyDepthTarget* FindDepthTarget(const string& _strKey);
 public:
 	// Rasterizer State
 	CRasterizerState* CreateRasterizerState(const string& _strKey, D3D11_FILL_MODE fillMode = D3D11_FILL_SOLID,
@@ -50,7 +80,11 @@ public:
 	CRenderState* FindRenderState(const string& _strKey);	
 public:
 	bool Init();
-	
+	void Render(float _fTime);
+public:
+	static bool ObjectZSort(CGameObject* _p1, CGameObject* _p2);
+	static bool ObjectZSortDescending(CGameObject* _p1, CGameObject* _p2);
+
 	DECLARE_SINGLE(CRenderMgr)
 };
 

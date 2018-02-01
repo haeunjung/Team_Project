@@ -16,9 +16,9 @@ VS_COLOR_OUTPUT ColliderVS(VS_COLOR_INPUT input)
     return output;
 }
 
-PS_SINGLE_OUTPUT ColliderPS(VS_COLOR_OUTPUT input)
+PS_OUTPUT ColliderPS(VS_COLOR_OUTPUT input)
 {
-    PS_SINGLE_OUTPUT output = (PS_SINGLE_OUTPUT) 0;
+    PS_OUTPUT output = (PS_OUTPUT) 0;
         
     output.vTarget0 = input.vColor;
 

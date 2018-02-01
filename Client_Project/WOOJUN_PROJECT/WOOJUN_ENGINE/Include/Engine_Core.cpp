@@ -172,6 +172,8 @@ void CEngine_Core::Render(float _fTime)
 
 	GET_SINGLE(CSceneMgr)->Render(_fTime);
 
+	GET_SINGLE(CRenderMgr)->Render(_fTime);
+
 	GET_SINGLE(CDevice)->Present();
 }
 

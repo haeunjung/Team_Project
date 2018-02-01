@@ -579,28 +579,28 @@ void CScene::Render(float _fTime)
 		m_vecSceneScript[i]->Render(_fTime);
 	}
 
-	list<CGameObject*>::iterator	iterObj;
-	list<CGameObject*>::iterator	iterObjEnd = m_LightList.end();
-	for (iterObj = m_LightList.begin(); iterObj != iterObjEnd;)
-	{
-		if (false == (*iterObj)->GetIsEnable())
-		{
-			++iterObj;
-			continue;
-		}
+	//list<CGameObject*>::iterator	iterObj;
+	//list<CGameObject*>::iterator	iterObjEnd = m_LightList.end();
+	//for (iterObj = m_LightList.begin(); iterObj != iterObjEnd;)
+	//{
+	//	if (false == (*iterObj)->GetIsEnable())
+	//	{
+	//		++iterObj;
+	//		continue;
+	//	}
 
-		(*iterObj)->Render(_fTime);
+	//	(*iterObj)->Render(_fTime);
 
-		if (false == (*iterObj)->GetIsAlive())
-		{
-			SAFE_RELEASE((*iterObj));
-			iterObj = m_LightList.erase(iterObj);
-		}
-		else
-		{
-			++iterObj;
-		}
-	}
+	//	if (false == (*iterObj)->GetIsAlive())
+	//	{
+	//		SAFE_RELEASE((*iterObj));
+	//		iterObj = m_LightList.erase(iterObj);
+	//	}
+	//	else
+	//	{
+	//		++iterObj;
+	//	}
+	//}
 
 	vector<CLayer*>::iterator	iterLayer;
 	vector<CLayer*>::iterator	iterLayerEnd = m_vecLayer.end();

@@ -367,6 +367,9 @@
     <ClInclude Include="04.Rendering\MyRenderTarget.h">
       <Filter>04. Rendering\03. RenderTarget</Filter>
     </ClInclude>
+    <ClInclude Include="04.Rendering\MyDepthTarget.h">
+      <Filter>04. Rendering\03. RenderTarget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -560,6 +563,9 @@
       <Filter>07. Component\12. Animation3D</Filter>
     </ClCompile>
     <ClCompile Include="04.Rendering\MyRenderTarget.cpp">
+      <Filter>04. Rendering\03. RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="04.Rendering\MyDepthTarget.cpp">
       <Filter>04. Rendering\03. RenderTarget</Filter>
     </ClCompile>
   </ItemGroup>

@@ -20,10 +20,12 @@ private:
 	vector<vector<CMaterial*>>	m_vecMaterial;
 	unordered_map<string, pRENDERERCBUFFER>	m_mapCBuffer;
 	CTexture*	m_pBoneTexture;
-private:
+	bool		m_bBlend;
+private:	
 	void UpdateTransform();
 	void CheckAnimation();
 public:
+	bool BlendEnable() const;
 	void SetBoneTexture(CTexture* _pBoneTexture);
 // Mesh
 public:

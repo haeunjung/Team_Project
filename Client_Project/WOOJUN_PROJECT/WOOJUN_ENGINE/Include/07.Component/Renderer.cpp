@@ -32,6 +32,9 @@ void CRenderer::UpdateTransform()
 	tTransform.matWV = tTransform.matWorld * tTransform.matView;
 	tTransform.matWVP = tTransform.matWV * tTransform.matProj;
 	tTransform.matVP = tTransform.matView * tTransform.matProj;
+	tTransform.matInvProj = XMMatrixInverse(&XMMatrixDeterminant(tTransform.matProj), tTransform.matProj);
+	tTransform.matInvView = XMMatrixInverse(&XMMatrixDeterminant(tTransform.matView), tTransform.matView);
+	tTransform.matInvVP = XMMatrixInverse(&XMMatrixDeterminant(tTransform.matVP), tTransform.matVP);
 	
 	tTransform.vPivot = m_pTransform->GetPivot();
 	tTransform.vMeshSize = m_pMesh->GetMeshSize();
@@ -49,6 +52,9 @@ void CRenderer::UpdateTransform()
 	tTransform.matWV = XMMatrixTranspose(tTransform.matWV);
 	tTransform.matWVP = XMMatrixTranspose(tTransform.matWVP);
 	tTransform.matVP = XMMatrixTranspose(tTransform.matVP);
+	tTransform.matInvProj = XMMatrixTranspose(tTransform.matInvProj);
+	tTransform.matInvView = XMMatrixTranspose(tTransform.matInvView);
+	tTransform.matInvVP = XMMatrixTranspose(tTransform.matInvVP);
 
 GET_SINGLE(CShaderMgr)->UpdateConstBuffer("Transform", &tTransform, CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);
 }
@@ -67,6 +73,11 @@ void CRenderer::CheckAnimation()
 	m_pBoneTexture = pAnimation->GetBoneTexture();
 
 	SAFE_RELEASE(pAnimation);
+}
+
+bool CRenderer::BlendEnable() const
+{
+	return m_bBlend;
 }
 
 void CRenderer::SetBoneTexture(CTexture * _pBoneTexture)
@@ -237,6 +248,11 @@ void CRenderer::SetRenderState(const string & _strKey)
 	}
 
 	m_pRenderState[pRenderState->GetType()] = pRenderState;
+
+	if (RST_BLEND == pRenderState->GetType())
+	{
+		m_bBlend = true;
+	}
 }
 
 CMaterial * CRenderer::GetMaterial(int _iContainer, int _iSubSet)
@@ -407,7 +423,7 @@ void CRenderer::Render(float _fTime)
 	m_pShader->SetShader();
 
 	// 조명 설정
-	const list<CGameObject*>* pLightList = m_pScene->GetLightList();
+	/*const list<CGameObject*>* pLightList = m_pScene->GetLightList();
 
 	if (false == pLightList->empty())
 	{
@@ -418,7 +434,7 @@ void CRenderer::Render(float _fTime)
 		pLight->SetLight();
 
 		SAFE_RELEASE(pLight);
-	}
+	}*/
 
 	// 상수버퍼들을 셰이더에 업데이트
 	unordered_map<string, pRENDERERCBUFFER>::iterator	iter;
@@ -460,7 +476,8 @@ CRenderer::CRenderer() :
 	m_pMesh(NULL),
 	m_pShader(NULL),
 	m_pInputLayout(NULL),
-	m_pBoneTexture(NULL)
+	m_pBoneTexture(NULL),
+	m_bBlend(false)
 {
 	SetTypeName("CRenderer");
 	SetTypeID<CRenderer>();
