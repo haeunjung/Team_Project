@@ -1,19 +1,5 @@
 #include "Share.fx"
 
-// Tex Vertex Input Structure
-struct VS_TEX_INPUT
-{
-    float3 vPos : POSITION;
-    float2 vUV : TEXCOORD;
-};
-
-struct VS_TEX_OUTPUT
-{
-    float4 vPos : SV_POSITION;
-    float2 vUV : TEXCOORD;
-};
-
-
 VS_TEX_OUTPUT UIVS(VS_TEX_INPUT input)
 {
     VS_TEX_OUTPUT output = (VS_TEX_OUTPUT) 0;

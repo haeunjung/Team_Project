@@ -68,6 +68,27 @@ bool CShaderMgr::Init()
 	pShader = LoadShader(TERRAIN_SHADER, L"Terrain.fx", pEntryPoint);
 	SAFE_RELEASE(pShader);
 
+	// LightAcc Shader
+	pEntryPoint[ST_VERTEX] = "LightAccVS";
+	pEntryPoint[ST_GEOMETRY] = NULL;
+	pEntryPoint[ST_PIXEL] = "LightAccPS";
+	pShader = LoadShader(LIGHT_ACC_SHADER, L"LightAcc.fx", pEntryPoint);
+	SAFE_RELEASE(pShader);
+
+	// LightBlend Shader
+	pEntryPoint[ST_VERTEX] = "LightBlendVS";
+	pEntryPoint[ST_GEOMETRY] = NULL;
+	pEntryPoint[ST_PIXEL] = "LightBlendPS";
+	pShader = LoadShader(LIGHT_BLEND_SHADER, L"LightBlend.fx", pEntryPoint);
+	SAFE_RELEASE(pShader);
+
+	// LightBlendTargetOutput Shader
+	pEntryPoint[ST_VERTEX] = "LightBlendVS";
+	pEntryPoint[ST_GEOMETRY] = NULL;
+	pEntryPoint[ST_PIXEL] = "LightBlendOutputPS";
+	pShader = LoadShader(LIGHT_BLEND_OUTPUT_SHADER, L"LightBlend.fx", pEntryPoint);
+	SAFE_RELEASE(pShader);
+
 	AddElement("POSITION", 0, 12, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
 	AddElement("COLOR", 0, 16, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
 	CreateInputLayout("ColorInputLayout", "StandardColorShader");
@@ -216,6 +237,18 @@ bool CShaderMgr::CreateInputLayout(const string & _strKey, const string & _strSh
 	SAFE_RELEASE(pShader);
 
 	return true;
+}
+
+void CShaderMgr::SetInputLayout(const string & _strKey)
+{
+	ID3D11InputLayout*	pInput = FindInputLayout(_strKey);
+
+	if (!pInput)
+	{
+		return;
+	}
+
+	CONTEXT->IASetInputLayout(pInput);
 }
 
 ID3D11InputLayout * CShaderMgr::FindInputLayout(const string & _strKey)

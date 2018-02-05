@@ -50,11 +50,16 @@ PS_OUTPUT StandardTextureNormalPS(VS_TEXTURENORMAL_OUTPUT input)
     output.vTarget0.rgb = vColor.xyz;// * (tMtrl.vDiffuse.xyz + tMtrl.vAmbient.xyz) + tMtrl.vSpecular.xyz;
     output.vTarget0.a = vColor.a;
 
-    output.vTarget1.rgb = input.vNormal * 0.5f + 0.5f;
-    output.vTarget1.a = 1.0f;
+    float fDiffuse = ColorToPixel(g_vMaterialDiffuse);
+    float fAmbient = ColorToPixel(g_vMaterialAmbient);
 
-    output.vTarget2.rgb = (float3)(input.vProjPos.z / input.vProjPos.w);
-    output.vTarget2.a = 1.f;
+    output.vTarget1.rgb = input.vNormal * 0.5f + 0.5f;
+    output.vTarget1.a = g_fSpecularPower;
+
+    output.vTarget2.r = input.vProjPos.z / input.vProjPos.w;
+    output.vTarget2.g = fDiffuse;
+    output.vTarget2.b = fAmbient;
+    output.vTarget2.a = input.vProjPos.w;
 
     float4 vSpc = g_vMaterialSpecular;
 
@@ -133,11 +138,16 @@ PS_OUTPUT StandardBumpPS(VS_BUMP_OUTPUT input)
     output.vTarget0.rgb = vColor.xyz;// * (tMaterial.vDiffuse.xyz + tMaterial.vAmbient.xyz) + tMaterial.vSpecular.xyz;
     output.vTarget0.a = vColor.a;
 
-    output.vTarget1.rgb = vNormal * 0.5f + 0.5f;
-    output.vTarget1.a = 1.0f;
+    float fDiffuse = ColorToPixel(g_vMaterialDiffuse);
+    float fAmbient = ColorToPixel(g_vMaterialAmbient);
 
-    output.vTarget2.rgb = (float3)(input.vProjPos.z / input.vProjPos.w);
-    output.vTarget2.a = 1.f;
+    output.vTarget1.rgb = input.vNormal * 0.5f + 0.5f;
+    output.vTarget1.a = g_fSpecularPower;
+
+    output.vTarget2.r = input.vProjPos.z / input.vProjPos.w;
+    output.vTarget2.g = g_vMaterialDiffuse.r;
+    output.vTarget2.b = g_vMaterialAmbient.r;
+    output.vTarget2.a = input.vProjPos.w;
 
     float4 vSpc = g_vMaterialSpecular;
 

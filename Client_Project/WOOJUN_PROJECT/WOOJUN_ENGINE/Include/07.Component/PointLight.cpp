@@ -9,7 +9,7 @@ WOOJUN_USING
 
 bool CPointLight::Init()
 {
-	m_pTransform->Move(DxVector3(-5.0f, 0.0f, 0.0f));
+	//m_pTransform->Move(DxVector3(-5.0f, 0.0f, 0.0f));
 	
 	/*CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("PointLight");
 	pSphere->SetSphereInfo(Vec3Zero, 0.25f);
@@ -69,7 +69,7 @@ void CPointLight::SetLight()
 	CLight::SetLight();
 
 	m_tCBuffer.vAttenuation = m_tInfo.vAttenuation;
-	m_tCBuffer.fRange = 25.0f;
+	m_tCBuffer.fRange = 10000.f;
 
 	// Transform의 Z축 == 조명의 방향
 	// 역방향으로 조명으로의 방향

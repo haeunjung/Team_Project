@@ -86,12 +86,12 @@ CGameObject * CCamera::GetAttachObject()
 	return m_pAttachObject;
 }
 
-void CCamera::CreateProjection(float _fAngle, float _fWidth, float _fHeight, float _fNear /*= 0.3f*/, float _fFar /*= 1000.0f*/)
+void CCamera::CreateProjection(float _fAngle, float _fWidth, float _fHeight, float _fNear /*= 0.1f*/, float _fFar /*= 1000.0f*/)
 {
 	*m_matProj = XMMatrixPerspectiveFovLH(_fAngle, _fWidth / _fHeight, _fNear, _fFar);
 }
 
-void CCamera::CreateOrthoProjection(float _fWidth, float _fHeight, float _fNear /*= 0.0f*/, float _fFar /*= 1000.0f*/)
+void CCamera::CreateOrthoProjection(float _fWidth, float _fHeight, float _fNear /*= 0.1f*/, float _fFar /*= 1000.0f*/)
 {
 	*m_matProj = XMMatrixOrthographicOffCenterLH(0.0f, _fWidth, _fHeight, 0.0f, _fNear, _fFar);
 }
@@ -140,7 +140,7 @@ bool CCamera::Init()
 	m_matProj = new MATRIX();
 
 	// 디폴트 투영행렬 생성
-	CreateProjection(PI / 3.0f, (float)_RESOLUTION.m_iWidth, (float)_RESOLUTION.m_iHeight);
+	CreateProjection(PI / 2.0f, (float)_RESOLUTION.m_iWidth, (float)_RESOLUTION.m_iHeight);
 
 	for (int i = 0; i < AXIS_MAX; ++i)
 	{

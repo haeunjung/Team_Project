@@ -32,8 +32,8 @@ public:
 	void Detach();
 	CGameObject* GetAttachObject();
 public:
-	void CreateProjection(float _fAngle, float _fWidth, float _fHeight, float _fNear = 0.3f, float _fFar = 1000.0f);
-	void CreateOrthoProjection(float _fWidth, float _fHeight, float _fNear = 0.0f, float _fFar = 1000.0f);
+	void CreateProjection(float _fAngle, float _fWidth, float _fHeight, float _fNear = 0.1f, float _fFar = 1000.0f);
+	void CreateOrthoProjection(float _fWidth, float _fHeight, float _fNear = 0.1f, float _fFar = 1000.0f);
 private:
 	void ComputeViewMatrix();
 public:

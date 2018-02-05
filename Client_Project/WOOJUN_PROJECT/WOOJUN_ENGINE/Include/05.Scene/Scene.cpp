@@ -292,18 +292,17 @@ bool CScene::Init()
 	SAFE_RELEASE(pMapLayer);
 
 	CLayer* pUILayer = CreateLayer("UILayer", INT_MAX);
-	SAFE_RELEASE(pUILayer);
 
-	CLayer* pEnvironmentLayer = CreateLayer("EnvironmentLayer", -1);
 	// 扁夯 券版甘 积己
-	CGameObject*	pEnvironmentObject = CGameObject::Create("Environment");
+	m_pEnvironment = CGameObject::Create("Environment");
+	m_pEnvironment->SetScene(this);
 	
-	CTransform*		pTransform = pEnvironmentObject->GetTransform();
+	CTransform*		pTransform = m_pEnvironment->GetTransform();
 	pTransform->SetWorldScale(1000.0f, 1000.0f, 1000.0f);
 
 	SAFE_RELEASE(pTransform);
 
-	CRenderer*	pRenderer = pEnvironmentObject->AddComponent<CRenderer>("Environment");
+	CRenderer*	pRenderer = m_pEnvironment->AddComponent<CRenderer>("Environment");
 	pRenderer->SetMesh("PosSphere");
 	pRenderer->SetShader("SkyShader");
 	pRenderer->SetInputLayout("PosInputLayout");
@@ -315,11 +314,7 @@ bool CScene::Init()
 		
 	SAFE_RELEASE(pMaterial);
 	SAFE_RELEASE(pRenderer);
-
-	pEnvironmentLayer->AddObject(pEnvironmentObject);
-	SAFE_RELEASE(pEnvironmentLayer);
-	SAFE_RELEASE(pEnvironmentObject);
-	
+		
 	// Scene 积己矫 Main Camera 积己
 	m_pCameraObject = CreateCamera(MAINCAMERA, DxVector3(0.0f, 0.0f, -5.0f));
 	m_pCamera = (CCamera*)m_pCameraObject->FindComponentFromTypeID<CCamera>();
@@ -337,24 +332,71 @@ bool CScene::Init()
 	pTransform->RotateX(PI / 4.0f);
 	pTransform->RotateY(PI / 2.0f);
 	SAFE_RELEASE(pTransform);
+	SAFE_RELEASE(pLightObject);
 
-	/*CGameObject*	pLightObject = CreateLight("PointLight", LT_POINT);
+	pLightObject = CreateLight("PointLight1", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(10.f, 5.f, 10.f);
+	SAFE_RELEASE(pTransform);
 	
-	CLight* pLight = (CLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
 
 	LIGHTINFO	tLightInfo = {};
 	tLightInfo.eType = LT_POINT;
-	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
-	tLightInfo.vAmbient = { 0.3f, 0.3f, 0.3f, 1.0f };
-	tLightInfo.vSpecular = { 1.0f, 1.0f, 1.0f, 3.2f };
+	tLightInfo.vDiffuse = { 1.f, 0.f, 0.f, 1.f };
+	tLightInfo.vAmbient = { 0.2f, 0.f, 0.f, 1.f };
+	tLightInfo.vSpecular = { 1.f, 0.f, 0.f, 1.f };
 	tLightInfo.vAttenuation = DxVector3(0.0f, 1.0f, 0.0f);
-	pLight->SetLightInfo(tLightInfo);
 
-	SAFE_RELEASE(pLight);*/
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
 		
-	//pUILayer->AddObject(pLightObject);
-	
+	pUILayer->AddObject(pLightObject);
 	SAFE_RELEASE(pLightObject);
+
+	pLightObject = CreateLight("PointLight2", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(10.f, 5.f, 20.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+
+	tLightInfo.eType = LT_POINT;
+	tLightInfo.vDiffuse = { 0.f, 1.f, 0.f, 1.0f };
+	tLightInfo.vAmbient = { 0.f, 0.2f, 0.f, 1.0f };
+	tLightInfo.vSpecular = { 0.f, 1.f, 0.f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(0.0f, 1.0f, 0.0f);
+
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = CreateLight("PointLight3", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(20.f, 5.f, 20.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+
+	tLightInfo = {};
+	tLightInfo.eType = LT_POINT;
+	tLightInfo.vDiffuse = { 0.f, 0.f, 1.f, 1.f };
+	tLightInfo.vAmbient = { 0.f, 0.f, 0.2f, 1.0f };
+	tLightInfo.vSpecular = { 0.f, 0.f, 1.f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(0.0f, 1.0f, 0.0f);
+
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	SAFE_RELEASE(pUILayer);
 
 	return true;
 }
@@ -417,6 +459,8 @@ void CScene::Input(float _fTime)
 
 void CScene::Update(float _fTime)
 {
+	m_pEnvironment->Update(_fTime);
+
 	for (size_t i = 0; i < m_vecSceneScript.size(); ++i)
 	{
 		m_vecSceneScript[i]->Update(_fTime);
@@ -473,6 +517,8 @@ void CScene::Update(float _fTime)
 
 void CScene::LateUpdate(float _fTime)
 {
+	m_pEnvironment->LateUpdate(_fTime);
+
 	for (size_t i = 0; i < m_vecSceneScript.size(); ++i)
 	{
 		m_vecSceneScript[i]->LateUpdate(_fTime);
@@ -574,33 +620,12 @@ void CScene::Collision(float _fTime)
 
 void CScene::Render(float _fTime)
 {
+	m_pEnvironment->Render(_fTime);
+
 	for (size_t i = 0; i < m_vecSceneScript.size(); ++i)
 	{
 		m_vecSceneScript[i]->Render(_fTime);
 	}
-
-	//list<CGameObject*>::iterator	iterObj;
-	//list<CGameObject*>::iterator	iterObjEnd = m_LightList.end();
-	//for (iterObj = m_LightList.begin(); iterObj != iterObjEnd;)
-	//{
-	//	if (false == (*iterObj)->GetIsEnable())
-	//	{
-	//		++iterObj;
-	//		continue;
-	//	}
-
-	//	(*iterObj)->Render(_fTime);
-
-	//	if (false == (*iterObj)->GetIsAlive())
-	//	{
-	//		SAFE_RELEASE((*iterObj));
-	//		iterObj = m_LightList.erase(iterObj);
-	//	}
-	//	else
-	//	{
-	//		++iterObj;
-	//	}
-	//}
 
 	vector<CLayer*>::iterator	iterLayer;
 	vector<CLayer*>::iterator	iterLayerEnd = m_vecLayer.end();
@@ -631,7 +656,8 @@ void CScene::Render(float _fTime)
 CScene::CScene() :
 	m_pCameraObject(NULL),
 	m_pCamera(NULL),
-	m_pFrustum(NULL)
+	m_pFrustum(NULL),
+	m_pEnvironment(NULL)
 {
 }
 
@@ -645,6 +671,7 @@ CScene::~CScene()
 	Safe_Release_VecList(m_vecLayer);	
 
 	Safe_Release_Map(m_mapCamera);
+	SAFE_RELEASE(m_pEnvironment);
 	SAFE_RELEASE(m_pFrustum);
 	SAFE_RELEASE(m_pCamera);
 	SAFE_RELEASE(m_pCameraObject);

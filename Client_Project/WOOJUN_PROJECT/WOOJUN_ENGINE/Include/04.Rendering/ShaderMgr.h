@@ -23,6 +23,7 @@ public:
 		D3D11_INPUT_CLASSIFICATION _eSlotClass, int _iInstanceStep);
 	// InputLayout
 	bool CreateInputLayout(const string& _strKey, const string& _strShaderKey);
+	void SetInputLayout(const string& _strKey);
 	ID3D11InputLayout* FindInputLayout(const string& _strKey);
 	// Const Buffer
 	bool CreateConstBuffer(const string& _strKey, int _iSize, int _iRegister);

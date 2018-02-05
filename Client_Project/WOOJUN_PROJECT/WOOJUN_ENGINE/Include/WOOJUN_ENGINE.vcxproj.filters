@@ -591,6 +591,12 @@
     <FxCompile Include="..\Bin\Shader\Terrain.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\Shader\LightAcc.fx">
+      <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\LightBlend.fx">
+      <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="03.Resource\DirectXTex.inl">

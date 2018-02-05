@@ -14,6 +14,19 @@ struct VS_COLOR_OUTPUT
 	float4 vColor	: COLOR;
 };
 
+// Tex Vertex Input Structure
+struct VS_TEX_INPUT
+{
+    float3 vPos : POSITION;
+    float3 vUV : TEXCOORD;
+};
+
+struct VS_TEX_OUTPUT
+{
+    float4 vPos : SV_POSITION;
+    float2 vUV : TEXCOORD;
+};
+
 // Texture Normal Vertex
 struct VS_TEXTURENORMAL_INPUT
 {
@@ -64,10 +77,10 @@ struct VS_BUMP_OUTPUT
 // Single Target Output Structure
 struct PS_OUTPUT
 {
-	float4 vTarget0	: SV_TARGET;
-    float4 vTarget1 : SV_TARGET1;
-    float4 vTarget2 : SV_TARGET2;
-    float4 vTarget3 : SV_TARGET3;
+	float4 vTarget0	: SV_Target;
+    float4 vTarget1 : SV_Target1;
+    float4 vTarget2 : SV_Target2;
+    float4 vTarget3 : SV_Target3;
 };
 
 // 상수버퍼
@@ -295,4 +308,39 @@ _tagSkinning Skinning(float3 vPos, float3 vNormal, float3 vTangent, float3 vBino
     tSkinning.vBinormal = normalize(tSkinning.vBinormal);
 
     return tSkinning;
+}
+
+int ColorToPixel(float4 vColor)
+{
+    int r, g, b, a;
+    r = vColor.r * 255;
+    g = vColor.g * 255;
+    b = vColor.b * 255;
+    a = vColor.a * 255;
+	
+    int iPixel = r;
+    iPixel <<= 8;
+    iPixel |= g;
+    iPixel <<= 8;
+    iPixel |= b;
+    iPixel <<= 8;
+    iPixel |= a;
+
+    return iPixel;
+}
+
+float4 PixelToColor(float fPixel)
+{
+    float4 vColor;
+    int iPixel = (int) fPixel;
+
+    vColor.a = iPixel & 0x000000ff;
+    iPixel >>= 8;
+    vColor.b = iPixel & 0x000000ff;
+    iPixel >>= 8;
+    vColor.g = iPixel & 0x000000ff;
+    iPixel >>= 8;
+    vColor.r = iPixel & 0x000000ff;
+
+    return vColor;
 }

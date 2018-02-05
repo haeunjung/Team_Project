@@ -7,6 +7,7 @@ typedef struct DLL _tagMRT
 {
 	vector<class CMyRenderTarget*>	vecTarget;
 	class CMyDepthTarget*		pDepth;
+	ID3D11DepthStencilView*		pNullDepth;
 	vector<ID3D11RenderTargetView*>	vecOldTarget;
 	ID3D11DepthStencilView*		pOldDepth;
 }MRT, *pMRT;
@@ -18,6 +19,8 @@ class CDepthStencilState;
 class CMyRenderTarget;
 class CMyDepthTarget;
 class CGameObject;
+class CSampler;
+class CShader;
 class DLL CRenderMgr
 {
 private:
@@ -25,11 +28,21 @@ private:
 	vector<D3D11_RENDER_TARGET_BLEND_DESC>	m_vecRenderTargetBlend;
 	unordered_map<string, CMyRenderTarget*> m_mapRenderTarget;
 	unordered_map<string, CMyDepthTarget*>	m_mapDepthTarget;
-	vector<CGameObject*>	m_vecRender[RG_END];
+	vector<CGameObject*>			m_vecRender[RG_END];
 	unordered_map<string, pMRT>		m_mapMRT;
+	CSampler*		m_pPointSampler;
+	CRenderState*	m_pBlendOne;
+	CRenderState*	m_pZDisable;
+	CRenderState*	m_pAlphaBlend;
+	CShader*		m_pLightAcc;
+	CShader*		m_pLightBlend;
+	CShader*		m_pLightBlendTarget;
 private:
 	void RenderGBuffer(float _fTime);
 	void RenderLightAcc(float _fTime);
+	void RenderLightBlend(float _fTime);
+	void RenderLightBlendTarget(float _fTime);
+	void UpdateTransform();
 public:
 	void AddRenderObject(CGameObject* _pGameObject);
 public:

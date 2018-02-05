@@ -22,6 +22,7 @@ private:
 	CCamera*		m_pCamera;
 	CFrustum*		m_pFrustum;
 	list<CGameObject*>	m_LightList;	
+	CGameObject*	m_pEnvironment;
 public:
 	static bool LayerZSort(CLayer* _p1, CLayer* _p2);
 public:
