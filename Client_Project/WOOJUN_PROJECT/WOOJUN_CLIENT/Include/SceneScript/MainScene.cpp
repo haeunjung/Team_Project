@@ -6,6 +6,7 @@
 #include "../ObjectScript/PlayerBullet.h"
 #include "01.Core/Debug.h"
 #include "01.Core/Input.h"
+#include "01.Core/PathMgr.h"
 #include "05.Scene/Scene.h"
 #include "05.Scene/Layer.h"
 #include "07.Component/Renderer.h"
@@ -23,6 +24,7 @@
 #include "07.Component/RadioButtonMgr.h"
 #include "07.Component/UIBack.h"
 #include "07.Component/Terrain.h"
+#include "07.Component/ColliderSphere.h"
 #include "../ObjectScript/Mouse.h"
 
 void CMainScene::CreateProtoType()
@@ -142,6 +144,84 @@ void CMainScene::CreateProtoType()
 	*/
 }
 
+// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+void CMainScene::CreateObject()
+{
+	string	strPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(MESHPATH);
+	strPath += "StaticObject.Data";
+
+	FILE*	pFile = NULL;
+	fopen_s(&pFile, strPath.c_str(), "rb");
+
+	if (!pFile)
+	{
+		return;
+	}
+
+	// Vector Size Load
+	size_t Size = 0;
+	fread(&Size, 4, 1, pFile);
+	for (size_t i = 0; i < Size; ++i)
+	{
+		// 이름 로드
+		int iLength = 0;
+		fread(&iLength, 4, 1, pFile);
+		char strKey[256] = {};
+		fread(strKey, 1, iLength, pFile);
+
+		// WorldPos 로드
+		DxVector3	vPos;
+		fread(&vPos, sizeof(DxVector3), 1, pFile);
+
+		// WorldScale 로드
+		DxVector3	vScale;
+		fread(&vScale, sizeof(DxVector3), 1, pFile);
+
+		// WorldRot 로드
+		DxVector3	vRot;
+		fread(&vRot, sizeof(DxVector3), 1, pFile);
+
+		LoadObject(strKey, vPos, vScale, vRot);
+	}
+
+	fclose(pFile);
+
+}
+
+void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, const DxVector3 & _vScale, const DxVector3 & _vRot)
+ {
+	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+	
+	CGameObject* pGameObject = CGameObject::Create(_strKey);
+	
+	CTransform* pTransform = pGameObject->GetTransform();
+	pTransform->SetWorldPos(_vPos);
+	pTransform->SetWorldScale(_vScale);
+	pTransform->SetWorldRot(_vRot);
+	SAFE_RELEASE(pTransform);
+	
+	/*CToolObject* pToolObject = pGameObject->AddComponent<CToolObject>(_strKey + "Object");
+	SAFE_RELEASE(pToolObject);*/
+	
+	string	FileName = _strKey + ".FBX";
+	
+	CRenderer* pRenderer = pGameObject->AddComponent<CRenderer>(_strKey + "Renderer");
+	pRenderer->SetMesh(_strKey, FileName.c_str());
+	pRenderer->SetShader(STANDARD_BUMP_SHADER);
+	pRenderer->SetInputLayout("BumpInputLayout");
+	SAFE_RELEASE(pRenderer);
+	
+	CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
+	pColSphere->SetSphereInfo(_vPos, 1.0f);
+	SAFE_RELEASE(pColSphere);
+	
+	pLayer->AddObject(pGameObject);
+	
+	SAFE_RELEASE(pGameObject);
+	SAFE_RELEASE(pLayer);
+	}
+
 void CMainScene::CreateCheckBox()
 {
 	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
@@ -238,7 +318,7 @@ void CMainScene::CreateTerrain()
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
-	pTerrain->CreateTerrain("Terrain", TERRAINSIZE, TERRAINSIZE, 1, 1, "Terrain/Height1.bmp");
+	pTerrain->CreateTerrain("Terrain", TERRAINSIZE, TERRAINSIZE, 1, 1/*, "Terrain/Height1.bmp"*/);
 	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cliff05.dds");
 	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/BD_Terrain_Cliff05_NRM.bmp");
 	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/BD_Terrain_Cliff05_SPEC.bmp");
@@ -368,6 +448,7 @@ void CMainScene::CreateHpBar()
 bool CMainScene::Init()
 {
 	CreateProtoType();
+	CreateObject();
 	CreateTerrain();
 	CreateCheckBox();
 	CreateRadioButton();
