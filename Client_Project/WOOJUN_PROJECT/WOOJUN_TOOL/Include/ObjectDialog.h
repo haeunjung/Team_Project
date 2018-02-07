@@ -58,4 +58,5 @@ public:
 	afx_msg void OnChildActivate();
 	afx_msg void OnBnClickedSaveobject();
 	afx_msg void OnBnClickedLoadobject();
+	afx_msg void OnBnClickedEraseobject();
 };

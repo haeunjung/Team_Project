@@ -45,12 +45,13 @@
 #define IDC_EDIT1_SCALEX                1020
 #define IDC_BUTTON_LOADANI              1020
 #define IDC_STATIC_SCALEY               1021
-#define IDC_BUTTON_SETDEFAULTCLIP2      1021
 #define IDC_BUTTON_SETCHANGELIMITTIME   1021
 #define IDC_EDIT1_SCALEY                1022
 #define IDC_STATIC_SCALEZ               1023
 #define IDC_EDIT1_SCALEZ                1024
 #define IDC_LOADOBJECT                  1025
+#define IDC_LOADOBJECT2                 1026
+#define IDC_ERASEOBJECT                 1026
 
 // Next default values for new objects
 // 
