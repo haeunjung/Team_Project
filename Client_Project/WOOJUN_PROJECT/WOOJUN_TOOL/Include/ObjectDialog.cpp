@@ -72,7 +72,6 @@ BEGIN_MESSAGE_MAP(CObjectDialog, CDialogEx)
 	ON_WM_CHILDACTIVATE()
 	ON_BN_CLICKED(IDC_SAVEOBJECT, &CObjectDialog::OnBnClickedSaveobject)
 	ON_BN_CLICKED(IDC_LOADOBJECT, &CObjectDialog::OnBnClickedLoadobject)
-	ON_BN_CLICKED(IDC_ERASEOBJECT, &CObjectDialog::OnBnClickedEraseobject)
 END_MESSAGE_MAP()
 
 
@@ -173,6 +172,12 @@ bool CObjectDialog::LoadFBX()
 		{
 			CString FileName = FileFind.GetFileName();
 			m_ObjectListBox.AddString(FileName);
+			
+			/*CString FilePath = FileFind.GetFilePath();
+			strKey = GET_SINGLE(CToolValue)->CStringToString(FileName);*/
+
+			/*CMesh* pMesh = GET_SINGLE(CResMgr)->LoadMeshFromFullPath(strKey, FilePath);
+			SAFE_RELEASE(pMesh);*/
 		}
 	}
 
@@ -197,7 +202,7 @@ void CObjectDialog::CreateObject(const string & _strKey, const wstring & _FileNa
 	pRenderer->SetMesh(_strKey, _FileName.c_str());
 	pRenderer->SetShader(STANDARD_BUMP_SHADER);
 	pRenderer->SetInputLayout("BumpInputLayout");
-	//pRenderer->SetRenderState(ALPHABLEND);
+	pRenderer->SetRenderState(ALPHABLEND);
 	SAFE_RELEASE(pRenderer);
 
 	CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
@@ -233,7 +238,7 @@ void CObjectDialog::LoadObject(const string & _strKey, const DxVector3 & _vPos, 
 	pRenderer->SetMesh(_strKey, FileName.c_str());
 	pRenderer->SetShader(STANDARD_BUMP_SHADER);
 	pRenderer->SetInputLayout("BumpInputLayout");
-	//pRenderer->SetRenderState(ALPHABLEND);
+	pRenderer->SetRenderState(ALPHABLEND);
 	SAFE_RELEASE(pRenderer);
 
 	CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
@@ -404,27 +409,4 @@ void CObjectDialog::OnBnClickedLoadobject()
 
 		fclose(pFile);
 	}
-}
-
-
-void CObjectDialog::OnBnClickedEraseobject()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	if (NULL == m_pPickObject)
-	{
-		return;
-	}
-
-	vector<CGameObject*>::iterator	FindIter = find(m_vecObject.begin(), m_vecObject.end(), m_pPickObject);
-
-	if (FindIter == m_vecObject.end())
-	{
-		return;
-	}
-	
-	SAFE_RELEASE((*FindIter));
-	m_vecObject.erase(FindIter);
-
-	m_pPickObject->Death();
-	SAFE_RELEASE(m_pPickObject);
 }

@@ -51,29 +51,29 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
 	// 점 조명일 경우
     if (g_iLightType == 1)
     {
-        //vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
-        //vLightDir = vLightPos - vViewPos;
-        //fDist = length(vLightDir);
+        vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
+        vLightDir = vLightPos - vViewPos;
+        fDist = length(vLightDir);
         
-        //if (fDist > g_fLightRange)
-        //{
-        //    vLightDir = float4(0.0f, 0.0f, 0.0f, 0.0f);
-        //}
-
-        //vLightDir /= fDist;
-
-        //fIntensity = 1.0f / dot(g_vAttenuation, float3(1.0f, fDist, fDist));
-
-        vLightDir = mul(float4(g_vLightPos, 1.f), g_matView);
-        vLightDir = vViewPos - vLightDir;
-
-        float fDist = length(vLightDir);
-        vLightDir = normalize(vLightDir);
-
-        fIntensity = (1.f - fDist / g_fLightRange) * 0.5f + 0.5f;
-        //fIntensity = 1.f;
         if (fDist > g_fLightRange)
-            fIntensity = 0.f;
+        {
+            vLightDir = float4(0.0f, 0.0f, 0.0f, 0.0f);
+        }
+
+        vLightDir /= fDist;
+
+        fIntensity = 1.0f / dot(g_vAttenuation, float3(1.0f, fDist, fDist));
+
+        //vLightDir = mul(float4(g_vLightPos, 1.f), g_matView);
+        //vLightDir = vViewPos - vLightDir;
+
+        //float fDist = length(vLightDir);
+        //vLightDir = normalize(vLightDir);
+
+        //fIntensity = (1.f - fDist / g_fLightRange) * 0.5f + 0.5f;
+        ////fIntensity = 1.f;
+        //if (fDist > g_fLightRange)
+        //    fIntensity = 0.f;
     }
 
 	// Spot

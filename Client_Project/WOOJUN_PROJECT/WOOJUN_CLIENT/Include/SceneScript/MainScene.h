@@ -16,8 +16,6 @@ private:
 	CUIBar*	m_pHpBar;
 private:
 	void CreateProtoType();
-	void CreateObject();
-	void LoadObject(const string& _strKey, const DxVector3& _vPos, const DxVector3& _vScale, const DxVector3& _vRot);
 	void CreateCheckBox();
 	void CreateRadioButton();	
 	void CreateTerrain();
