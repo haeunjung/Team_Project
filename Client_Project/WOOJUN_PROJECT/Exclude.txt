@@ -1,6 +1,0 @@
-.exp
-.iobj
-.ipdb
-.pdb
-.ilk
-.cso
