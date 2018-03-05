@@ -9,15 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02.Engine", "02.Engine", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.Tool", "03.Tool", "{166EC589-D69C-4E39-A6F8-F8BE19CB2152}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Client", "Alice_Client\Include\Alice_Client.vcxproj", "{B0E90B52-6948-447B-B842-622F4D297675}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Client", "Alice_Client\Alice_Client.vcxproj", "{B0E90B52-6948-447B-B842-622F4D297675}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FF3F4E06-53DA-4073-ACFE-54C103A592E4} = {FF3F4E06-53DA-4073-ACFE-54C103A592E4}
 		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D} = {840AB2A0-DDF6-4BDD-A531-5D131029CA2D}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Engine", "Alice_Engine\Include\Alice_Engine.vcxproj", "{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Engine", "Alice_Engine\Alice_Engine.vcxproj", "{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Tool", "Alice_Tool\Include\Alice_Tool.vcxproj", "{FF3F4E06-53DA-4073-ACFE-54C103A592E4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Tool", "Alice_Tool\Alice_Tool.vcxproj", "{FF3F4E06-53DA-4073-ACFE-54C103A592E4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D} = {840AB2A0-DDF6-4BDD-A531-5D131029CA2D}
 	EndProjectSection

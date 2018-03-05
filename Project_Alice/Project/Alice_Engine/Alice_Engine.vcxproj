@@ -71,15 +71,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>../../Lib/</OutDir>
+    <OutDir>../Lib/</OutDir>
     <TargetName>$(ProjectName)_Debug</TargetName>
     <IncludePath>03.Resource\FBXSDK\;..\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>../../Lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <LibraryPath>../Lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>../../Lib/</OutDir>
+    <OutDir>../Lib/</OutDir>
     <IncludePath>03.Resource\FBXSDK\;..\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>../../Lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <LibraryPath>../Lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -149,6 +149,11 @@
     <ClInclude Include="01.Core\ThreadQueue.h" />
     <ClInclude Include="01.Core\Timer.h" />
     <ClInclude Include="01.Core\TimerMgr.h" />
+    <ClInclude Include="02.Math\DxMath.h" />
+    <ClInclude Include="02.Math\Matrix.h" />
+    <ClInclude Include="02.Math\Vector2.h" />
+    <ClInclude Include="02.Math\Vector3.h" />
+    <ClInclude Include="02.Math\Vector4.h" />
     <ClInclude Include="03.Resource\DirectXTex.h" />
     <ClInclude Include="03.Resource\FbxLoader.h" />
     <ClInclude Include="03.Resource\Mesh.h" />
@@ -203,17 +208,12 @@
     <ClInclude Include="07.Component\UIButton.h" />
     <ClInclude Include="BaseObj.h" />
     <ClInclude Include="Device.h" />
-    <ClInclude Include="DxMath.h" />
     <ClInclude Include="Engine_Core.h" />
     <ClInclude Include="Engine_Enum.h" />
     <ClInclude Include="Engine_Header.h" />
     <ClInclude Include="Engine_Macro.h" />
     <ClInclude Include="Engine_Struct.h" />
     <ClInclude Include="Engine_TemplateFunc.h" />
-    <ClInclude Include="Matrix.h" />
-    <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Vector3.h" />
-    <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="01.Core\CollisionMgr.cpp" />
@@ -224,6 +224,10 @@
     <ClCompile Include="01.Core\ThreadMgr.cpp" />
     <ClCompile Include="01.Core\Timer.cpp" />
     <ClCompile Include="01.Core\TimerMgr.cpp" />
+    <ClCompile Include="02.Math\Matrix.cpp" />
+    <ClCompile Include="02.Math\Vector2.cpp" />
+    <ClCompile Include="02.Math\Vector3.cpp" />
+    <ClCompile Include="02.Math\Vector4.cpp" />
     <ClCompile Include="03.Resource\FbxLoader.cpp" />
     <ClCompile Include="03.Resource\Mesh.cpp" />
     <ClCompile Include="03.Resource\ResMgr.cpp" />
@@ -278,24 +282,20 @@
     <ClCompile Include="BaseObj.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine_Core.cpp" />
-    <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="Vector3.cpp" />
-    <ClCompile Include="Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="03.Resource\DirectXTex.inl" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\Fx\Collider.fx">
+    <FxCompile Include="..\Fx\Collider.fx">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ColliderVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ColliderVS</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ColliderVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Effect.fx">
+    <FxCompile Include="..\Fx\Effect.fx">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EffectVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -303,7 +303,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\LightAcc.fx">
+    <FxCompile Include="..\Fx\LightAcc.fx">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LightAccVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -311,7 +311,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\LightBlend.fx">
+    <FxCompile Include="..\Fx\LightBlend.fx">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LightBlendVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -319,7 +319,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Share.fx">
+    <FxCompile Include="..\Fx\Share.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
@@ -327,7 +327,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Sky.fx">
+    <FxCompile Include="..\Fx\Sky.fx">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SkyVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -335,7 +335,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Standard.fx">
+    <FxCompile Include="..\Fx\Standard.fx">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StandardColorVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -343,7 +343,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Terrain.fx">
+    <FxCompile Include="..\Fx\Terrain.fx">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">TerrainVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -351,7 +351,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\UI.fx">
+    <FxCompile Include="..\Fx\UI.fx">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UIVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>

@@ -1,5 +1,5 @@
 #include "Transform.h"
-#include "06.GameObject/GameObject.h"
+#include "../06.GameObject/GameObject.h"
 
 WOOJUN_USING
 

@@ -168,9 +168,6 @@
     <ClInclude Include="Engine_TemplateFunc.h">
       <Filter>00. Header</Filter>
     </ClInclude>
-    <ClInclude Include="DxMath.h">
-      <Filter>01. Core\01. Math</Filter>
-    </ClInclude>
     <ClInclude Include="01.Core\PathMgr.h">
       <Filter>01. Core\02. Path</Filter>
     </ClInclude>
@@ -188,15 +185,6 @@
     </ClInclude>
     <ClInclude Include="03.Resource\Mesh.h">
       <Filter>03. Resource\01. Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>01. Core\01. Math\01. Vector2</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>01. Core\01. Math\02. Vector3</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector4.h">
-      <Filter>01. Core\01. Math\03. Vector4</Filter>
     </ClInclude>
     <ClInclude Include="01.Core\TimerMgr.h">
       <Filter>01. Core\03. Timer</Filter>
@@ -233,9 +221,6 @@
     </ClInclude>
     <ClInclude Include="06.GameObject\GameObject.h">
       <Filter>06. GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix.h">
-      <Filter>01. Core\01. Math\04. Matrix</Filter>
     </ClInclude>
     <ClInclude Include="07.Component\Script.h">
       <Filter>07. Component\03. Script</Filter>
@@ -370,6 +355,21 @@
     <ClInclude Include="04.Rendering\MyDepthTarget.h">
       <Filter>04. Rendering\03. RenderTarget</Filter>
     </ClInclude>
+    <ClInclude Include="02.Math\Vector2.h">
+      <Filter>01. Core\01. Math\01. Vector2</Filter>
+    </ClInclude>
+    <ClInclude Include="02.Math\Vector3.h">
+      <Filter>01. Core\01. Math\02. Vector3</Filter>
+    </ClInclude>
+    <ClInclude Include="02.Math\Vector4.h">
+      <Filter>01. Core\01. Math\03. Vector4</Filter>
+    </ClInclude>
+    <ClInclude Include="02.Math\Matrix.h">
+      <Filter>01. Core\01. Math\04. Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="02.Math\DxMath.h">
+      <Filter>01. Core\01. Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -395,15 +395,6 @@
     </ClCompile>
     <ClCompile Include="03.Resource\Mesh.cpp">
       <Filter>03. Resource\01. Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector2.cpp">
-      <Filter>01. Core\01. Math\01. Vector2</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector3.cpp">
-      <Filter>01. Core\01. Math\02. Vector3</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector4.cpp">
-      <Filter>01. Core\01. Math\03. Vector4</Filter>
     </ClCompile>
     <ClCompile Include="BaseObj.cpp">
       <Filter>01. Core\BaseObj</Filter>
@@ -440,9 +431,6 @@
     </ClCompile>
     <ClCompile Include="06.GameObject\GameObject.cpp">
       <Filter>06. GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix.cpp">
-      <Filter>01. Core\01. Math\04. Matrix</Filter>
     </ClCompile>
     <ClCompile Include="07.Component\Script.cpp">
       <Filter>07. Component\03. Script</Filter>
@@ -568,6 +556,18 @@
     <ClCompile Include="04.Rendering\MyDepthTarget.cpp">
       <Filter>04. Rendering\03. RenderTarget</Filter>
     </ClCompile>
+    <ClCompile Include="02.Math\Vector2.cpp">
+      <Filter>01. Core\01. Math\01. Vector2</Filter>
+    </ClCompile>
+    <ClCompile Include="02.Math\Vector3.cpp">
+      <Filter>01. Core\01. Math\02. Vector3</Filter>
+    </ClCompile>
+    <ClCompile Include="02.Math\Vector4.cpp">
+      <Filter>01. Core\01. Math\03. Vector4</Filter>
+    </ClCompile>
+    <ClCompile Include="02.Math\Matrix.cpp">
+      <Filter>01. Core\01. Math\04. Matrix</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="03.Resource\DirectXTex.inl">
@@ -575,31 +575,31 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\Fx\Collider.fx">
+    <FxCompile Include="..\Fx\Collider.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Effect.fx">
+    <FxCompile Include="..\Fx\Effect.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\LightAcc.fx">
+    <FxCompile Include="..\Fx\LightAcc.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\LightBlend.fx">
+    <FxCompile Include="..\Fx\LightBlend.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Share.fx">
+    <FxCompile Include="..\Fx\Share.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Sky.fx">
+    <FxCompile Include="..\Fx\Sky.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Standard.fx">
+    <FxCompile Include="..\Fx\Standard.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\Terrain.fx">
+    <FxCompile Include="..\Fx\Terrain.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Fx\UI.fx">
+    <FxCompile Include="..\Fx\UI.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

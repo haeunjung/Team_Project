@@ -29,10 +29,10 @@ using namespace std;
 // 사용자 정의 헤더파일
 #include "Engine_Macro.h"
 
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Matrix.h"
+#include "02.Math/Vector2.h"
+#include "02.Math/Vector3.h"
+#include "02.Math/Vector4.h"
+#include "02.Math/Matrix.h"
 
 #include "Engine_Struct.h"
 #include "Engine_TemplateFunc.h"

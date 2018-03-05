@@ -104,15 +104,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>../../Alice_Engine/Include;../../Alice_Engine/Include/03.Resource/FBXSDK/;$(IncludePath)</IncludePath>
-    <LibraryPath>../../Lib;$(LibraryPath)</LibraryPath>
-    <OutDir>../../Lib/</OutDir>
+    <IncludePath>../Alice_Engine;../Alice_Engine/03.Resource/FBXSDK/;$(IncludePath)</IncludePath>
+    <LibraryPath>../Lib;$(LibraryPath)</LibraryPath>
+    <OutDir>../Lib/</OutDir>
     <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>../../Alice_Engine/Include;../../Alice_Engine/Include/03.Resource/FBXSDK/;$(IncludePath)</IncludePath>
-    <LibraryPath>../../Lib;$(LibraryPath)</LibraryPath>
-    <OutDir>../../Lib/</OutDir>
+    <IncludePath>../Alice_Engine;../Alice_Engine/03.Resource/FBXSDK/;$(IncludePath)</IncludePath>
+    <LibraryPath>../Lib;$(LibraryPath)</LibraryPath>
+    <OutDir>../Lib/</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

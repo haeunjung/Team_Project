@@ -6,24 +6,29 @@ DEFINITION_SINGLE(CPathMgr)
 
 bool CPathMgr::Init()
 {
-	WCHAR strPath[MAX_PATH] = {};	
-	GetModuleFileName(NULL, strPath, MAX_PATH);	
+	WCHAR strPath[MAX_PATH] = {};
+	GetModuleFileName(NULL, strPath, MAX_PATH);
 
 	int Num = 0;
 
 	for (int i = lstrlen(strPath) - 1; i >= 0; --i)
 	{
 		if ('\\' == strPath[i] || '/' == strPath[i])
-		{		
+		{
 			++Num;
 
 			if (3 == Num)
 			{
 				memset(&strPath[i + 1], 0, sizeof(WCHAR) * (MAX_PATH - (i + 1)));
 				break;
-			}			
+			}
 		}
 	}
+
+	WCHAR strResPath[MAX_PATH] = {};
+	lstrcpy(strResPath, strPath);
+	lstrcat(strResPath, L"Res\\");
+	m_mapPath.insert(make_pair(RESOURCEPATH, strResPath));
 
 	lstrcat(strPath, L"Project\\");	
 	m_mapPath.insert(make_pair(BASEPATH, strPath));
@@ -31,9 +36,9 @@ bool CPathMgr::Init()
 	//C:\Users\wooju\Desktop\Team_Project\Project_Alice\
 
 	AddPath(SHADERPATH, L"Fx\\");	
-	AddPath(TEXTUREPATH, L"Res\\Texture\\");
-	AddPath(MESHPATH, L"Res\\Mesh\\");
-	AddPath(DATAPATH, L"Res\\Data\\");
+	AddPath(TEXTUREPATH, L"Texture\\", RESOURCEPATH);
+	AddPath(MESHPATH, L"Mesh\\", RESOURCEPATH);
+	AddPath(DATAPATH, L"Data\\", RESOURCEPATH);
 
 	return true;
 }

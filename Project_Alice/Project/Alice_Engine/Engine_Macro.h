@@ -45,6 +45,7 @@
 #define CONTEXT			CDevice::GetInst()->GetDeviceContext()
 #define SWAPCHAIN		CDevice::GetInst()->GetSwapChain()
 
+#define RESOURCEPATH	"ResourcePath"
 #define BASEPATH		"BasePath"
 #define SHADERPATH		"ShaderPath"
 #define TEXTUREPATH		"TexturePath"
