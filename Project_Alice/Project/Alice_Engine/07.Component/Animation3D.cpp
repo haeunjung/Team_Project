@@ -409,6 +409,15 @@ bool CAnimation3D::CreateBoneTexture()
 	return true;
 }
 
+bool CAnimation3D::CheckClipName(const string & _strName)
+{
+	if (m_strCurClip == _strName)
+	{
+		return true;
+	}
+	return false;
+}
+
 bool CAnimation3D::Save(const char * _pFileName, const string & _strPathKey)
 {
 	// 풀경로를 만든다

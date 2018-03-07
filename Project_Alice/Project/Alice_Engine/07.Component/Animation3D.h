@@ -102,6 +102,7 @@ public:
 	void SetCurClipName(const string& _strName);
 	void ChangeClip(const string& _strName);
 	bool CreateBoneTexture();
+	bool CheckClipName(const string& _strName);
 
 	bool Save(const char* _pFileName, const string& _strPathKey = MESHPATH);
 	bool Save(FILE* _pFile);

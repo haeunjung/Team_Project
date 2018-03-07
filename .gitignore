@@ -269,3 +269,4 @@ __pycache__/
 /Project_Alice/Project/Lib/Alice_Engine_Debug.dll
 /Project_Alice/Project/Lib/Alice_Engine_Debug.exp
 /Project_Alice/Project/Lib/Alice_Engine_Debug.lib
+/Project_Alice/Res/Mesh/*.fbm

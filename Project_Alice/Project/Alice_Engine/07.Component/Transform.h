@@ -160,7 +160,7 @@ public:
 	// 대상을 바라보는 방향을 구한다.
 	void LookAt(CTransform* _pTransform, AXIS _Axis = AXIS_Z);
 	void LookAt(CGameObject* _pGameObject, AXIS _Axis = AXIS_Z);
-
+	void LookAt(const DxVector3& _vPos, AXIS _Axis = AXIS_Z);
 	void CopyTransform(CTransform* _pTransform);
 	void ComputeWorldMatrix();
 public:

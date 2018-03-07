@@ -50,98 +50,6 @@ void CMainScene::CreateProtoType()
 	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	SAFE_RELEASE(pMinion);
 	SAFE_RELEASE(pMinionObj);
-
-	/*
-	// WareHouse
-	CGameObject*	pWareHouseObject = CGameObject::Create("WareHouseObject", true);
-	CRenderer*		pRenderer = pWareHouseObject->AddComponent<CRenderer>("WareHouseRenderer");
-	pRenderer->SetMesh("WareHouse", L"Warehouse01.FBX");
-	pRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pRenderer->SetInputLayout("BumpInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pWareHouseObject);
-	SAFE_RELEASE(pRenderer);
-
-	// BurnHouse1
-	CGameObject*	pBurnHouse1 = CGameObject::Create("BurnHouse1Object", true);
-	pRenderer = pBurnHouse1->AddComponent<CRenderer>("BurnHouse1Renderer");
-	pRenderer->SetMesh("BurnHouse1", L"BurnHouse1.FBX");
-	pRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pRenderer->SetInputLayout("BumpInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pBurnHouse1);
-	SAFE_RELEASE(pRenderer);
-
-	// BurnHouse2
-	CGameObject*	pBurnHouse2 = CGameObject::Create("BurnHouse2Object", true);
-	pRenderer = pBurnHouse2->AddComponent<CRenderer>("BurnHouse2Renderer");
-	pRenderer->SetMesh("BurnHouse2", L"BurnHouse2.FBX");
-	pRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pRenderer->SetInputLayout("BumpInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pBurnHouse2);
-	SAFE_RELEASE(pRenderer);
-
-	// BurnHouse3
-	CGameObject*	pBurnHouse3 = CGameObject::Create("BurnHouse3Object", true);
-	pRenderer = pBurnHouse3->AddComponent<CRenderer>("BurnHouse3Renderer");
-	pRenderer->SetMesh("BurnHouse3", L"BurnHouse3.FBX");
-	pRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pRenderer->SetInputLayout("BumpInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pBurnHouse3);
-	SAFE_RELEASE(pRenderer);
-
-	// BurnHouse4
-	CGameObject*	pBurnHouse4 = CGameObject::Create("BurnHouse4Object", true);
-	pRenderer = pBurnHouse4->AddComponent<CRenderer>("BurnHouse4Renderer");
-	pRenderer->SetMesh("BurnHouse4", L"BurnHouse4.FBX");
-	pRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pRenderer->SetInputLayout("BumpInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pBurnHouse4);
-	SAFE_RELEASE(pRenderer);
-
-	// BurnHouse5
-	CGameObject*	pBurnHouse5 = CGameObject::Create("BurnHouse5Object", true);
-	pRenderer = pBurnHouse5->AddComponent<CRenderer>("BurnHouse5Renderer");
-	pRenderer->SetMesh("BurnHouse5", L"BurnHouse5.FBX");
-	pRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pRenderer->SetInputLayout("BumpInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pBurnHouse5);
-	SAFE_RELEASE(pRenderer);
-
-	// Sakura
-	CGameObject*	pSakura = CGameObject::Create("SakuraObject", true);
-	pRenderer = pSakura->AddComponent<CRenderer>("SakuraRenderer");
-	pRenderer->SetMesh("Sakura", L"Sakura_00.FBX");
-	pRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pRenderer->SetInputLayout("BumpInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pSakura);
-	SAFE_RELEASE(pRenderer);
-
-	// Insam
-	CGameObject*	pInsam = CGameObject::Create("InsamObject", true);
-	pRenderer = pInsam->AddComponent<CRenderer>("InsamRenderer");
-	pRenderer->SetMesh("Insam", L"InSam_00.FBX");
-	pRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pRenderer->SetInputLayout("BumpInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pInsam);
-	SAFE_RELEASE(pRenderer);
-
-	// ReturnPoint
-	CGameObject*	pReturnPoint = CGameObject::Create("ReturnPointObject", true);
-	pRenderer = pReturnPoint->AddComponent<CRenderer>("ReturnPointRenderer");
-	pRenderer->SetMesh("ReturnPoint", L"ReturnPoint.FBX");
-	pRenderer->SetShader(STANDARD_BUMP_SHADER);
-	pRenderer->SetInputLayout("BumpInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-	SAFE_RELEASE(pReturnPoint);
-	SAFE_RELEASE(pRenderer);
-	*/
 }
 
 // TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
@@ -450,9 +358,9 @@ bool CMainScene::Init()
 	CreateProtoType();
 	CreateObject();
 	CreateTerrain();
-	CreateCheckBox();
-	CreateRadioButton();
-	CreateHpBar();
+	//CreateCheckBox();
+	//CreateRadioButton();
+	//CreateHpBar();
 	//CreateInventory();	
 
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
@@ -468,7 +376,7 @@ bool CMainScene::Init()
 	pLayer->AddObject(pPlayerObject);
 
 	CCamera*	pCamera = m_pScene->GetMainCamera();
-	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 0.0f, -5.0f));
+	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 5.0f, -5.0f));
 
 	pPlayerObject->AddRef();
 	m_pPlayerObject = pPlayerObject;

@@ -4,13 +4,23 @@
 
 WOOJUN_USING
 
+enum PLAYER_STATE
+{
+	PS_DEFAULT,
+	PS_ATTACK,
+	PS_JUMP,
+	PS_MOVINGJUMP
+};
+
 class CPlayer : public CScript
 {
 private:
-	CGameObject*	m_pChild;	
+	PLAYER_STATE	m_ePlayerState;
+	bool	m_bAttack;
+	bool	m_bJump;
+
 	float	m_fSpeed;
 	int		m_iHp;
-	bool	m_bUp;
 	CAnimation3D*	m_pAniController;
 public:
 	void AniCallback(float _fTime);
@@ -20,6 +30,10 @@ public:
 	void Update(float _fTime) override;	
 public:
 	void OnCollisionEnter(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
+private:
+	void Attack();
+	void Jump();
+	void MovingJump(float _fTime);
 public:
 	CPlayer();
 	~CPlayer();

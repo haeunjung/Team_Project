@@ -13,7 +13,6 @@
 #include "07.Component/Material.h"
 #include "07.Component/Effect.h"
 #include "07.Component/Animation2D.h"
-
 #include "RotBullet.h"
 #include "PlayerBullet.h"
 
@@ -25,107 +24,56 @@ void CPlayer::AniCallback(float _fTime)
 bool CPlayer::Init()
 {		
 	CTransform*		pTransform = m_pGameObject->GetTransform();
+	pTransform->SetWorldPos(30.0f, 0.0f, 20.0f);
 	pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
 	pTransform->SetLocalRotY(-PI * 0.5f);
 	SAFE_RELEASE(pTransform);
 
 	CRenderer* pPlayerRenderer = m_pGameObject->AddComponent<CRenderer>("Renderer");
-	//pPlayerRenderer->SetMesh("TexNormalPyramid");
-	/*for (size_t i = 0; i < 100000; ++i)
-	{
-		pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
-	}*/
-	//pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.FBX");
-	pPlayerRenderer->SetMesh("PlayerMesh", L"SmallMonster.msh");
+	pPlayerRenderer->SetMesh("PlayerMesh", L"Elin.msh");
 	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");	
-	//pPlayerRenderer->SetRenderState(ALPHABLEND);
-
-	/*CMesh*	pMesh = GET_SINGLE(CResMgr)->FindMesh("PlayerMesh");
-	pMesh->Save("PlayerMesh.msh");
-	SAFE_RELEASE(pMesh);*/
-
-	//CMaterial* pMaterial = pPlayerRenderer->GetMaterial();
-	////pMaterial->SetDiffuseTexture("Linear", "Texture", L"Texture.png");
-	//pMaterial->SetDiffuseTexture("Linear", "Zero", L"0.png");
-	//SAFE_RELEASE(pMaterial);
 	SAFE_RELEASE(pPlayerRenderer);
-
-	CGameObject*	pChild = CGameObject::Create("BoostObject");
-
-	pTransform = pChild->GetTransform();
-	pTransform->SetLocalRotY(PI * 0.5f);
-	pTransform->SetWorldPos(0.0f, -1.0f, 0.0f);
-	SAFE_RELEASE(pTransform);
-
-	CRenderer*	pChildRenderer = pChild->AddComponent<CRenderer>("BoostRenderer");
-	pChildRenderer->SetMesh("PosMesh");
-	pChildRenderer->SetShader(EFFECT_SHADER);
-	pChildRenderer->SetInputLayout("PosInputLayout");
-	pChildRenderer->SetRenderState(ALPHABLEND);
-
-	SAFE_RELEASE(pChildRenderer);
-		
-	CEffect*	pEffect = pChild->AddComponent<CEffect>("Effect");
-	SAFE_RELEASE(pEffect);
-
-	CAnimation2D*	pAnimation2D = pChild->AddComponent<CAnimation2D>("EffectAnimation2D");
-
-	vector<wstring>	vecExplosion;
-	for (int i = 1; i <= 89; ++i)
-	{
-		TCHAR	strExplosion[MAX_PATH] = {};
-		wsprintf(strExplosion, L"Effect/Explosion/160x120/Explosion%d.png", i);
-
-		vecExplosion.push_back(strExplosion);
-	}
-
-	pAnimation2D->AddAnimation2DClip("Explosion", A2D_FRAME, AO_LOOP, vecExplosion.size(), 1, 1.0f, 0, 0.0f, "Explosion", 11, &vecExplosion);
-	pAnimation2D->Start(false);
-
-	SAFE_RELEASE(pAnimation2D);
-	m_pGameObject->AddChild(pChild);
-	m_pChild = pChild;
 	
 	CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("Player");
-	pSphere->SetSphereInfo(Vec3Zero, 0.5f);
+	pSphere->SetSphereInfo(Vector3(30.0f, 1.0f, 20.0f), 0.5f);
 	SAFE_RELEASE(pSphere);
 
 	m_pAniController = (CAnimation3D*)m_pGameObject->FindComponentFromType(CT_ANIMATION3D);
-	m_pAniController->AddClipCallback<CPlayer>("Run", 0.5f, this, &CPlayer::AniCallback);
+	//m_pAniController->AddClipCallback<CPlayer>("Run", 0.5f, this, &CPlayer::AniCallback);
 
-	GET_SINGLE(CInput)->CreateKey("MoveUp", 'Q');
-	GET_SINGLE(CInput)->CreateKey("MoveDown", 'E');
-	GET_SINGLE(CInput)->CreateKey("MoveForward", 'W');
-	GET_SINGLE(CInput)->CreateKey("MoveBack", 'S');
-	GET_SINGLE(CInput)->CreateKey("RotLeft", 'A');
-	GET_SINGLE(CInput)->CreateKey("RotRight", 'D');
+	GET_SINGLE(CInput)->CreateKey("MoveForward", VK_UP);
+	GET_SINGLE(CInput)->CreateKey("MoveBack", VK_DOWN);
+	GET_SINGLE(CInput)->CreateKey("RotLeft", VK_LEFT);
+	GET_SINGLE(CInput)->CreateKey("RotRight", VK_RIGHT);
 
-	GET_SINGLE(CInput)->CreateKey("Fire", VK_SPACE);
 	GET_SINGLE(CInput)->CreateKey("Init", VK_CONTROL, VK_MENU);	
-	GET_SINGLE(CInput)->CreateKey("RotFire", 'R');
+	GET_SINGLE(CInput)->CreateKey("Attack", VK_CONTROL);
+	GET_SINGLE(CInput)->CreateKey("Jump", 'Z');
 
 	return true;
 }
 
 void CPlayer::Input(float _fTime)
 {
-	if (true == KEYPUSH("MoveUp"))
+	if (m_bAttack || m_bJump)
 	{
-		m_pTransform->Up(m_fSpeed, _fTime);
-		m_bUp = true;
+		return;
 	}
-	else if (true == KEYUP("MoveUp"))
+
+	if (true == KEYPRESS("Attack"))
 	{
-		m_bUp = false;
-	}
-	if (true == KEYPUSH("MoveDown"))
-	{
-		m_pTransform->Up(-m_fSpeed, _fTime);
+		m_ePlayerState = PS_ATTACK;
+		return;
 	}
 
 	if (true == KEYPUSH("MoveForward"))
 	{
+		if (true == KEYPRESS("Jump"))
+		{
+			m_ePlayerState = PS_MOVINGJUMP;
+			return;
+		}
 		m_pTransform->Forward(m_fSpeed, _fTime);
 		m_pAniController->ChangeClip("Run");
 	}
@@ -153,55 +101,10 @@ void CPlayer::Input(float _fTime)
 		m_pTransform->RotateY(PI, _fTime);
 	}
 
-
-
-	if (true == KEYPRESS("Fire"))
-	{	
-		// Bullet Object CreateClone
-		CGameObject*	pBulletObject = CGameObject::CreateClone("PlayerBulletObject");		
-		// Bullet WorldPos Setting
-		// GetTransform() : pBulletObject의 Transform을 가져와서
-		// 근데 얘가 AddRef를 하네
-		// SetWorldPos() : pBulletObject의 WorldPos를 지정
-		CTransform*		pTransform = pBulletObject->GetTransform();
-		pTransform->SetWorldPos(m_pTransform->GetWorldPos());
-		pTransform->SetWorldRot(m_pTransform->GetWorldRot());
-		SAFE_RELEASE(pTransform);
-
-		// 현재 Layer에 추가
-		m_pLayer->AddObject(pBulletObject);
-		SAFE_RELEASE(pBulletObject);
-	}
-
-	if (true == KEYPRESS("RotFire"))
+	if (true == KEYPRESS("Jump"))
 	{
-		if (true == CRotBullet::m_IsFire)
-		{
-			return;
-		}		
-
-		CGameObject*	pRotBullet = CGameObject::Create("RotBullet");
-
-		CTransform*		pTransform = pRotBullet->GetTransform();
-		pTransform->SetWorldPos(m_pTransform->GetWorldPos());
-		pTransform->SetWorldRot(m_pTransform->GetWorldRot());
-		SAFE_RELEASE(pTransform);
-
-		// 카메라 체인지 하고
-		m_pScene->ChangeCamera("BulletCamera");
-		// 카메라 컴포넌트 불러와서
-		CCamera* pCamera = m_pScene->GetMainCamera();
-		// 어태치 시키고
-		pCamera->Attach(pRotBullet, DxVector3(0.0f, 0.0f, -5.0f));
-		// 릴리즈
-		SAFE_RELEASE(pCamera);	
-
-		CRotBullet*	pBullet = pRotBullet->AddComponent<CRotBullet>("RotBullet");
-		SAFE_RELEASE(pBullet);		
-
-		// 현재 Layer에 추가
-		m_pLayer->AddObject(pRotBullet);
-		SAFE_RELEASE(pRotBullet);		
+		m_ePlayerState = PS_JUMP;
+		return;
 	}
 
 	if (true == KEYPRESS("Init"))
@@ -213,47 +116,93 @@ void CPlayer::Input(float _fTime)
 
 void CPlayer::Update(float _fTime)
 {	
-	if (true == m_bUp)
+	switch (m_ePlayerState)
 	{
-		m_pChild->SetIsEnable(true);
+	case PS_DEFAULT:
+		break;
+	case PS_ATTACK:
+		Attack();
+		break;
+	case PS_JUMP:
+		Jump();
+		break;
+	case PS_MOVINGJUMP:
+		MovingJump(_fTime);
+		break;
 	}
-	else
-	{
-		m_pChild->SetIsEnable(false);
-	}
-
-	/*CTransform*	pTransform = m_pGameObject->GetTransform();
-	DxVector3	Pos = pTransform->GetWorldPos();
-
-	char strPos[256] = {};
-	sprintf_s(strPos, "X : %.2f ,Y : %.2f, Z : %.2f\n", Pos.x, Pos.y, Pos.z);
-	CDebug::OutputConsole(strPos);
-
-	SAFE_RELEASE(pTransform);*/
 }
 
 void CPlayer::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
-	if ("MonsterBullet" == _pDest->GetTagStr())
-	{
-		m_iHp -= 1;
+}
 
-		char strHp[256] = {};
-		sprintf_s(strHp, "Hp : %d\n", m_iHp);
-		CDebug::OutputConsole(strHp);
+void CPlayer::Attack()
+{
+	if (true == m_pAniController->CheckClipName("Attack01"))
+	{
+		if (true == m_pAniController->GetAnimationEnd())
+		{
+			m_pAniController->ReturnToDefaultClip();
+			m_bAttack = false;
+			m_ePlayerState = PS_DEFAULT;
+		}
+	}
+	else
+	{
+		m_pAniController->ChangeClip("Attack01");
+		m_bAttack = true;
+	}
+}
+
+void CPlayer::Jump()
+{
+	if (true == m_pAniController->CheckClipName("Jump"))
+	{
+		if (true == m_pAniController->GetAnimationEnd())
+		{
+			m_pAniController->ReturnToDefaultClip();
+			m_bJump = false;
+			m_ePlayerState = PS_DEFAULT;
+		}
+	}
+	else
+	{
+		m_pAniController->ChangeClip("Jump");
+		m_bJump = true;
+	}
+}
+
+void CPlayer::MovingJump(float _fTime)
+{
+	if (true == m_pAniController->CheckClipName("Jump"))
+	{
+		if (true == m_pAniController->GetAnimationEnd())
+		{
+			m_pAniController->ReturnToDefaultClip();
+			m_bJump = false;
+			m_ePlayerState = PS_DEFAULT;
+		}
+
+		m_pTransform->Forward(m_fSpeed, _fTime);
+	}
+	else
+	{
+		m_pAniController->ChangeClip("Jump");
+		m_bJump = true;
 	}
 }
 
 CPlayer::CPlayer() :
 	m_fSpeed(5.0f),
 	m_iHp(100),
-	m_bUp(false)
+	m_ePlayerState(PS_DEFAULT),
+	m_bAttack(false),
+	m_bJump(false)
 {
 	SetTypeID<CPlayer>();
 }
 
 CPlayer::~CPlayer()
 {		
-	SAFE_RELEASE(m_pChild);
 	SAFE_RELEASE(m_pAniController);
 }

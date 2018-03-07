@@ -926,6 +926,29 @@ void CTransform::LookAt(CGameObject * _pGameObject, AXIS _Axis)
 	}	
 }
 
+void CTransform::LookAt(const DxVector3 & _vPos, AXIS _Axis)
+{
+	DxVector3 vView = _vPos - m_vWorldPos;
+	vView = vView.Normalize();
+
+	DxVector3 vAxis = WORLDAXIS[_Axis];
+
+	DxVector3 vRotAxis = vAxis.Cross(vView);
+	float fAngle = vAxis.GetAngle(vView);
+
+	// 외적값이 0이면 XMMatrixRotationAxis에서 터진다.
+	if (DxVector3(0.0f, 0.0f, 0.0f) != vRotAxis)
+	{
+		// XMMatrixRotationAxis
+		// 지정 축, 지정 각도로 회전행렬을 만들어준다.
+		*m_matWorldRot = XMMatrixRotationAxis(vRotAxis.Convert(), fAngle);
+
+		ComputeWorldAxis();
+
+		ActiveUpdate();
+	}
+}
+
 void CTransform::CopyTransform(CTransform * _pTransform)
 {
 	m_vLocalScale = _pTransform->m_vLocalScale;
