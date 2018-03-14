@@ -44,12 +44,13 @@ bool CPlayer::Init()
 
 	GET_SINGLE(CInput)->CreateKey("MoveForward", VK_UP);
 	GET_SINGLE(CInput)->CreateKey("MoveBack", VK_DOWN);
-	GET_SINGLE(CInput)->CreateKey("RotLeft", VK_LEFT);
-	GET_SINGLE(CInput)->CreateKey("RotRight", VK_RIGHT);
+	GET_SINGLE(CInput)->CreateKey("MoveLeft", VK_LEFT);
+	GET_SINGLE(CInput)->CreateKey("MoveRight", VK_RIGHT);
 
 	GET_SINGLE(CInput)->CreateKey("Init", VK_CONTROL, VK_MENU);	
 	GET_SINGLE(CInput)->CreateKey("Attack", VK_CONTROL);
 	GET_SINGLE(CInput)->CreateKey("Jump", 'Z');
+	GET_SINGLE(CInput)->CreateKey("ChangeCamera", 'C');
 
 	return true;
 }
@@ -92,19 +93,51 @@ void CPlayer::Input(float _fTime)
 		m_pAniController->ReturnToDefaultClip();
 	}
 
-	if (true == KEYPUSH("RotLeft"))
+	if (true == KEYPUSH("MoveLeft"))
 	{
-		m_pTransform->RotateY(-PI, _fTime);
+		//m_pTransform->RotateY(-PI, _fTime);
+		m_pTransform->Right(-m_fSpeed, _fTime);
 	}
-	if (true == KEYPUSH("RotRight"))
+	if (true == KEYPUSH("MoveRight"))
 	{
-		m_pTransform->RotateY(PI, _fTime);
+		//m_pTransform->RotateY(PI, _fTime);
+		m_pTransform->Right(m_fSpeed, _fTime);
 	}
 
 	if (true == KEYPRESS("Jump"))
 	{
 		m_ePlayerState = PS_JUMP;
 		return;
+	}
+
+	if (true == KEYPRESS("ChangeCamera"))
+	{
+		if (false == m_bChange)
+		{
+			// 카메라 체인지 하고
+			m_pScene->ChangeCamera("SubCamera");
+			// 카메라 컴포넌트 불러와서
+			CCamera* pCamera = m_pScene->FindCamera("SubCamera");
+			// 어태치 시키고
+			pCamera->Attach(m_pGameObject, DxVector3(2.5f, 0.0f, 0.0f));
+			// 릴리즈
+			SAFE_RELEASE(pCamera);
+
+			m_bChange = true;
+		}
+		else
+		{
+			// 카메라 체인지 하고
+			m_pScene->ChangeCamera(MAINCAMERA);
+			// 카메라 컴포넌트 불러와서
+			CCamera* pCamera = m_pScene->GetMainCamera();
+			// 어태치 시키고
+			pCamera->Attach(m_pGameObject, DxVector3(0.0f, 0.0f, -2.5f));
+			// 릴리즈
+			SAFE_RELEASE(pCamera);
+
+			m_bChange = false;
+		}		
 	}
 
 	if (true == KEYPRESS("Init"))
@@ -197,7 +230,8 @@ CPlayer::CPlayer() :
 	m_iHp(100),
 	m_ePlayerState(PS_DEFAULT),
 	m_bAttack(false),
-	m_bJump(false)
+	m_bJump(false),
+	m_bChange(false)
 {
 	SetTypeID<CPlayer>();
 }

@@ -4,6 +4,11 @@
 
 WOOJUN_USING
 
+// 타이머 기능
+// 특정상태마다 카메라
+// 엎드리기
+// 기어오르기
+
 enum PLAYER_STATE
 {
 	PS_DEFAULT,
@@ -22,6 +27,9 @@ private:
 	float	m_fSpeed;
 	int		m_iHp;
 	CAnimation3D*	m_pAniController;
+
+	//////////
+	bool m_bChange;
 public:
 	void AniCallback(float _fTime);
 public:

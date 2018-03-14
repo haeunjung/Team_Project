@@ -316,7 +316,7 @@ bool CScene::Init()
 	SAFE_RELEASE(pRenderer);
 		
 	// Scene 持失獣 Main Camera 持失
-	m_pCameraObject = CreateCamera(MAINCAMERA, DxVector3(0.0f, 0.0f, -5.0f));
+	m_pCameraObject = CreateCamera(MAINCAMERA/*, DxVector3(0.0f, 0.0f, -5.0f)*/);
 	m_pCamera = (CCamera*)m_pCameraObject->FindComponentFromTypeID<CCamera>();
 	m_pFrustum = (CFrustum*)m_pCameraObject->FindComponentFromTypeID<CFrustum>();
 

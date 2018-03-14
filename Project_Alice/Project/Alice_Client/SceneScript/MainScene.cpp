@@ -368,15 +368,15 @@ bool CMainScene::Init()
 	// 카메라 오브젝트 생성
 	CGameObject*	pCameraObject = m_pScene->GetMainCameraObject();
 
-	CCameraArm*	pCameraArm = pCameraObject->AddComponent<CCameraArm>("CameraArm");
-	SAFE_RELEASE(pCameraArm);	
+	//CCameraArm*	pCameraArm = pCameraObject->AddComponent<CCameraArm>("CameraArm");
+	//SAFE_RELEASE(pCameraArm);	
 	
 	// 플레이어
 	CGameObject*		pPlayerObject = CGameObject::Create("PlayerObject");	
 	pLayer->AddObject(pPlayerObject);
 
 	CCamera*	pCamera = m_pScene->GetMainCamera();
-	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 5.0f, -5.0f));
+	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 0.0f, -2.5f));
 
 	pPlayerObject->AddRef();
 	m_pPlayerObject = pPlayerObject;
@@ -387,6 +387,10 @@ bool CMainScene::Init()
 	
 	SAFE_RELEASE(pCamera);
 	SAFE_RELEASE(pCameraObject);
+
+	pCameraObject = m_pScene->CreateCamera("SubCamera"/*, DxVector3(0.0f, 0.0f, -5.0f)*/);
+	SAFE_RELEASE(pCameraObject);
+
 
 	//int num = 10;
 	//while (0 <= num)
@@ -486,9 +490,6 @@ bool CMainScene::Init()
 	SAFE_RELEASE(pObejct);*/
 
 	SAFE_RELEASE(pLayer);
-
-	pCameraObject = m_pScene->CreateCamera("BulletCamera", DxVector3(0.0f, 0.0f, -5.0f));
-	SAFE_RELEASE(pCameraObject);
 
 	return true;
 }
