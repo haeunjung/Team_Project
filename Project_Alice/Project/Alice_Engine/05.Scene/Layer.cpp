@@ -293,6 +293,7 @@ void CLayer::Render(float _fTime)
 
 		if (false == (*m_iter)->GetIsAlive())
 		{
+			GET_SINGLE(CRenderMgr)->EraseRenderObject(*m_iter);
 			SAFE_RELEASE((*m_iter));
 			m_iter = m_listGameObject.erase(m_iter);
 		}

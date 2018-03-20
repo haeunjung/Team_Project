@@ -21,6 +21,7 @@ typedef struct DLL _tagBone
 	pMATRIX		matOffset;
 	pMATRIX		matBone;
 	vector<pKEYFRAME>	vecKeyFrame;
+	int			iIndex;
 }BONE, *pBONE;
 
 class DLL CAnimation3D :
@@ -31,6 +32,7 @@ private:
 	friend class CMesh;
 private:
 	vector<pBONE>		m_vecBones;
+	vector<MATRIX>		m_vecFinalBoneMat;
 	class CTexture*		m_pBoneTexture;
 
 	unordered_map<string, class CAnimation3DClip*>	m_mapClip;
@@ -55,6 +57,9 @@ public:
 	float GetAnimationProgress() const;
 	int GetAnimationProgressFrame() const;
 	pBONE FindBone(const string& _strName) const;
+	int FindBoneIndex(const string& _strName) const;
+	MATRIX GetBoneMatrixFromName(const string& _strName) const;
+	MATRIX GetBoneMatrixFromIndex(int _Index) const;
 public:
 	void AddClipCallback(const string& _strName, int _iFrame, void(*_pFunc)(float));
 	template <typename T>

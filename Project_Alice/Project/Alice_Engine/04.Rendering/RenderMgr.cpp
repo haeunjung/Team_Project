@@ -204,6 +204,69 @@ void CRenderMgr::AddRenderObject(CGameObject * _pGameObject)
 	}
 }
 
+void CRenderMgr::EraseRenderObject(CGameObject * _pGameObject)
+{
+	size_t Size = 0;
+
+	if (_pGameObject->CheckComponentFromType(CT_UI))
+	{
+		Size = m_vecRender[RG_UI].size();
+		for (size_t i = 0; i < Size; ++i)
+		{
+			if (_pGameObject == m_vecRender[RG_UI][i])
+			{
+				m_vecRender[RG_UI].erase(m_vecRender[RG_UI].begin() + i);
+			}
+		}
+	}
+	else
+	{
+		CRenderer*	pRenderer = (CRenderer*)_pGameObject->FindComponentFromType(CT_RENDERER);
+
+		if (pRenderer)
+		{
+			if (pRenderer->BlendEnable())
+			{
+				Size = m_vecRender[RG_ALPHA3].size();
+				for (size_t i = 0; i < Size; ++i)
+				{
+					if (_pGameObject == m_vecRender[RG_ALPHA3][i])
+					{
+						m_vecRender[RG_ALPHA3].erase(m_vecRender[RG_ALPHA3].begin() + i);
+					}
+				}
+				//m_vecRender[RG_ALPHA3].push_back(_pGameObject);
+			}
+			else
+			{
+				Size = m_vecRender[RG_DEFAULT].size();
+				for (size_t i = 0; i < Size; ++i)
+				{
+					if (_pGameObject == m_vecRender[RG_DEFAULT][i])
+					{
+						m_vecRender[RG_DEFAULT].erase(m_vecRender[RG_DEFAULT].begin() + i);
+					}
+				}
+				//m_vecRender[RG_DEFAULT].push_back(_pGameObject);
+			}
+
+			SAFE_RELEASE(pRenderer);
+		}
+		else
+		{
+			Size = m_vecRender[RG_ALPHA3].size();
+			for (size_t i = 0; i < Size; ++i)
+			{
+				if (_pGameObject == m_vecRender[RG_ALPHA3][i])
+				{
+					m_vecRender[RG_ALPHA3].erase(m_vecRender[RG_ALPHA3].begin() + i);
+				}
+			}
+			//m_vecRender[RG_ALPHA3].push_back(_pGameObject);
+		}
+	}
+}
+
 bool CRenderMgr::AddMRTTarget(const string & _strMRTKey, const string & _strTargetKey)
 {
 	pMRT	pMRT = FindMRT(_strMRTKey);

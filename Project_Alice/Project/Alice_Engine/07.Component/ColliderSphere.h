@@ -10,8 +10,11 @@ private:
 	friend class CGameObject;
 private:
 	SPHEREINFO	m_tSphereInfo;
+	bool		m_bAniCollider;
+	int			m_iBoneIndex;
 public:
 	SPHEREINFO GetSphereInfo() const;
+	void SetBoneIndex(int _BoneIndex);
 public:
 	void SetSphereInfo(const SPHEREINFO& _tSphereInfo);
 	void SetSphereInfo(const DxVector3& _vCenter, float _fRadius);

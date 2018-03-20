@@ -45,6 +45,7 @@ private:
 	void UpdateTransform();
 public:
 	void AddRenderObject(CGameObject* _pGameObject);
+	void EraseRenderObject(CGameObject* _pGameObject);
 public:
 	bool AddMRTTarget(const string& _strMRTKey, const string& _strTargetKey);
 	bool SetMRTDepth(const string& _strMRTKey, const string& _strDepthKey);

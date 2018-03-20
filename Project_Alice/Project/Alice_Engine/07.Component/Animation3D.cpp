@@ -40,6 +40,7 @@ CAnimation3D::CAnimation3D(const CAnimation3D & _Animation3D) :
 		pBone->matBone = new MATRIX();
 		*pBone->matOffset = *_Animation3D.m_vecBones[i]->matOffset;
 		*pBone->matBone = *_Animation3D.m_vecBones[i]->matBone;
+		pBone->iIndex = i;
 
 		for (size_t j = 0; j < _Animation3D.m_vecBones[i]->vecKeyFrame.size(); ++j)
 		{
@@ -48,6 +49,7 @@ CAnimation3D::CAnimation3D(const CAnimation3D & _Animation3D) :
 			pBone->vecKeyFrame.push_back(pFrame);
 		}
 
+		//m_vecBones[i]->iIndex = i;
 		m_vecBones.push_back(pBone);
 	}
 
@@ -140,6 +142,37 @@ pBONE CAnimation3D::FindBone(const string & _strName) const
 	}
 
 	return NULL;
+}
+
+int CAnimation3D::FindBoneIndex(const string & _strName) const
+{
+	for (size_t i = 0; i < m_vecBones.size(); ++i)
+	{
+		if (m_vecBones[i]->strName == _strName)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+MATRIX CAnimation3D::GetBoneMatrixFromName(const string& _strName) const
+{
+	for (size_t i = 0; i < m_vecBones.size(); ++i)
+	{
+		if (m_vecBones[i]->strName == _strName)
+		{
+			return XMMatrixInverse(NULL, m_vecBones[i]->matOffset->mat) * m_vecFinalBoneMat[i].mat;
+		}
+	}
+
+	return NULL;
+}
+
+MATRIX CAnimation3D::GetBoneMatrixFromIndex(int _Index) const
+{
+	return XMMatrixInverse(NULL, m_vecBones[_Index]->matOffset->mat) * m_vecFinalBoneMat[_Index].mat;
 }
 
 void CAnimation3D::AddClipCallback(const string & _strName, int _iFrame, void(*_pFunc)(float))
@@ -688,7 +721,7 @@ void CAnimation3D::Update(float _fTime)
 		return;
 	}
 
-	vector<MATRIX>		vecBones;
+	//vector<MATRIX>		vecBones;
 
 	// 모션이 바뀌고있는 중이라면 기존에 동작되던 모션과
 	// 교체될 모션을 보간한다. (자연스럽게 처리하기 위해)
@@ -704,7 +737,8 @@ void CAnimation3D::Update(float _fTime)
 
 		float	fAnimationTime = m_fAnimationTime + m_pCurClip->m_tInfo.fStartTime;
 
-		vecBones.reserve(m_vecBones.size());
+		//vecBones.reserve(m_vecBones.size());
+		m_vecFinalBoneMat.resize(m_vecBones.size());
 
 		// 본 수만큼 반복한다.
 		for (size_t i = 0; i < m_vecBones.size(); ++i)
@@ -712,7 +746,8 @@ void CAnimation3D::Update(float _fTime)
 			// 키프레임이 없을경우
 			if (m_vecBones[i]->vecKeyFrame.empty())
 			{
-				vecBones.push_back(*m_vecBones[i]->matBone);
+				//vecBones.push_back(*m_vecBones[i]->matBone);
+				m_vecFinalBoneMat[i] = *m_vecBones[i]->matBone;
 				continue;
 			}
 
@@ -732,7 +767,8 @@ void CAnimation3D::Update(float _fTime)
 			MATRIX		matBone = XMMatrixAffineTransformation(vScale, vZero, vRot, vPos);
 			matBone = *m_vecBones[i]->matOffset * matBone;
 
-			vecBones.push_back(matBone);
+			//vecBones.push_back(matBone);
+			m_vecFinalBoneMat[i] = matBone;
 		}
 
 		if (!m_bChange)
@@ -787,7 +823,8 @@ void CAnimation3D::Update(float _fTime)
 		int iStartFrame = m_pCurClip->m_tInfo.iStartFrame;
 		int iEndFrame = m_pCurClip->m_tInfo.iEndFrame;
 
-		vecBones.reserve(m_vecBones.size());
+		//vecBones.reserve(m_vecBones.size());
+		m_vecFinalBoneMat.resize(m_vecBones.size());
 
 		// 본 수만큼 반복한다.
 		for (size_t i = 0; i < m_vecBones.size(); ++i)
@@ -795,7 +832,8 @@ void CAnimation3D::Update(float _fTime)
 			// 키프레임이 없을경우
 			if (m_vecBones[i]->vecKeyFrame.empty())
 			{
-				vecBones.push_back(*m_vecBones[i]->matBone);
+				//vecBones.push_back(*m_vecBones[i]->matBone);
+				m_vecFinalBoneMat[i] = *m_vecBones[i]->matBone;
 				continue;
 			}
 
@@ -838,13 +876,14 @@ void CAnimation3D::Update(float _fTime)
 			MATRIX		matBone = XMMatrixAffineTransformation(vScale, vZero, vRot, vPos);
 			matBone = *m_vecBones[i]->matOffset * matBone;
 
-			vecBones.push_back(matBone);
+			//vecBones.push_back(matBone);
+			m_vecFinalBoneMat[i] = matBone;
 
 			int a = 0;
 		}
 	}
 
-	m_pBoneTexture->UpdateData(&vecBones[0], sizeof(MATRIX) * vecBones.size());
+	m_pBoneTexture->UpdateData(&m_vecFinalBoneMat[0], sizeof(MATRIX) * m_vecFinalBoneMat.size());
 }
 
 void CAnimation3D::LateUpdate(float _fTime)

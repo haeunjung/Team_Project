@@ -356,7 +356,7 @@ void CMainScene::CreateHpBar()
 bool CMainScene::Init()
 {
 	CreateProtoType();
-	CreateObject();
+	//CreateObject();
 	CreateTerrain();
 	//CreateCheckBox();
 	//CreateRadioButton();
@@ -368,8 +368,8 @@ bool CMainScene::Init()
 	// 카메라 오브젝트 생성
 	CGameObject*	pCameraObject = m_pScene->GetMainCameraObject();
 
-	//CCameraArm*	pCameraArm = pCameraObject->AddComponent<CCameraArm>("CameraArm");
-	//SAFE_RELEASE(pCameraArm);	
+	CCameraArm*	pCameraArm = pCameraObject->AddComponent<CCameraArm>("CameraArm");
+	SAFE_RELEASE(pCameraArm);	
 	
 	// 플레이어
 	CGameObject*		pPlayerObject = CGameObject::Create("PlayerObject");	
@@ -391,32 +391,23 @@ bool CMainScene::Init()
 	pCameraObject = m_pScene->CreateCamera("SubCamera"/*, DxVector3(0.0f, 0.0f, -5.0f)*/);
 	SAFE_RELEASE(pCameraObject);
 
+	/*CGameObject*	pMinionObj = CGameObject::CreateClone("MinionObject");
 
-	//int num = 10;
-	//while (0 <= num)
-	//{
-	//	m_fRespawnTime -= m_fRespawnLimitTime;
+	CTransform*	pTransform = pMinionObj->GetTransform();
+	pTransform->SetWorldPos(40.0f, 0.0f, 20.0f);
+	SAFE_RELEASE(pTransform);
 
-	//	DxVector3	vPos = DxVector3(rand() % 6 - 2.5f, rand() % 4 - 1.5f, rand() % 8 + 3.f);
+	CMinion*	pMinion = pMinionObj->FindComponentFromTypeID<CMinion>();
+	pMinion->SetPlayer(m_pPlayerObject);
+	SAFE_RELEASE(pMinion);*/
 
-	//	CGameObject*	pMinionObj = CGameObject::CreateClone("MinionObject");
+	CGameObject*	pMinionObj = CGameObject::Create("Minion");
+	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	SAFE_RELEASE(pMinion);
 
-	//	CTransform*	pTransform = pMinionObj->GetTransform();
-	//	pTransform->SetWorldPos(vPos);
-	//	SAFE_RELEASE(pTransform);
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
 
-	//	CMinion*	pMinion = pMinionObj->FindComponentFromTypeID<CMinion>();
-	//	pMinion->SetPlayer(m_pPlayerObject);
-	//	SAFE_RELEASE(pMinion);
-
-	//	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
-	//	pLayer->AddObject(pMinionObj);
-	//	SAFE_RELEASE(pLayer);
-
-	//	SAFE_RELEASE(pMinionObj);
-
-	//	--num;
-	//}
 	/*CGameObject*	pObejct = CGameObject::CreateClone("WareHouseObject");
 	pLayer->AddObject(pObejct);
 	CTransform*		pTransform = pObejct->GetTransform();

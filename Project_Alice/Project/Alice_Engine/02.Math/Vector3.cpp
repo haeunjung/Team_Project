@@ -504,6 +504,10 @@ float _tagDxVector3::Distance(const _tagDxVector3 & _v) const
 
 _tagDxVector3 _tagDxVector3::Normalize() const
 {
+	if (0 == Length())
+	{
+		return _tagDxVector3(0.0f, 0.0f, 0.0f);
+	}
 	return _tagDxVector3(x / Length(), y / Length(), z / Length());
 }
 

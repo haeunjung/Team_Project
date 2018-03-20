@@ -1,16 +1,24 @@
 #include "ColliderSphere.h"
 #include "Transform.h"
 #include "Camera.h"
-#include "../05.Scene/Scene.h"
-#include "../Device.h"
 #include "ColliderRay.h"
 #include "ColliderTerrain.h"
+#include "Animation3D.h"
+#include "../05.Scene/Scene.h"
+#include "../Device.h"
+#include "../06.GameObject/GameObject.h"
 
 WOOJUN_USING
 
 SPHEREINFO CColliderSphere::GetSphereInfo() const
 {
 	return m_tSphereInfo;
+}
+
+void CColliderSphere::SetBoneIndex(int _BoneIndex)
+{
+	m_iBoneIndex = _BoneIndex;
+	m_bAniCollider = true;
 }
 
 void CColliderSphere::SetSphereInfo(const SPHEREINFO & _tSphereInfo)
@@ -52,8 +60,27 @@ void CColliderSphere::Input(float _fTime)
 void CColliderSphere::Update(float _fTime)
 {
 	CCollider::Update(_fTime);
-
 	m_tSphereInfo.vCenter += m_vMove;
+
+	if (true == m_bAniCollider)
+	{
+		CAnimation3D* pAnimation3D = m_pGameObject->FindComponentFromTypeID<CAnimation3D>();
+		MATRIX matBone = pAnimation3D->GetBoneMatrixFromIndex(m_iBoneIndex);
+		//MATRIX matWorld = m_pTransform->GetWorldMatrix();
+		//MATRIX matLocal = m_pTransform->GetLocalMatrix();
+
+		// Position
+		matBone = matBone * m_pTransform->GetLocalMatrix() * m_pTransform->GetWorldMatrix();
+
+		DxVector3 vOffset;
+		vOffset.x = matBone._41;
+		vOffset.y = matBone._42;
+		vOffset.z = matBone._43;
+
+		m_tSphereInfo.vCenter = vOffset;
+
+		SAFE_RELEASE(pAnimation3D);
+	}
 }
 
 void CColliderSphere::LateUpdate(float _fTime)
@@ -122,7 +149,9 @@ bool CColliderSphere::Collision(CCollider * _pCollider)
 	return false;
 }
 
-CColliderSphere::CColliderSphere()
+CColliderSphere::CColliderSphere() :
+	m_bAniCollider(false),
+	m_iBoneIndex(0)
 {
 	m_eColType = COL_SPHERE;
 	SetTag("ColliderSphere");
@@ -134,6 +163,8 @@ CColliderSphere::CColliderSphere(const CColliderSphere & _ColliderSphere) :
 	CCollider(_ColliderSphere)
 {
 	m_tSphereInfo = _ColliderSphere.m_tSphereInfo;
+	m_bAniCollider = _ColliderSphere.m_bAniCollider;
+	m_iBoneIndex = _ColliderSphere.m_iBoneIndex;
 }
 
 CColliderSphere::~CColliderSphere()

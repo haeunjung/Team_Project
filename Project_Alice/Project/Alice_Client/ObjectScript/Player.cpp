@@ -9,10 +9,10 @@
 #include "07.Component/Transform.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/Camera.h"
-#include "07.Component/ColliderSphere.h"
 #include "07.Component/Material.h"
 #include "07.Component/Effect.h"
 #include "07.Component/Animation2D.h"
+#include "07.Component/ColliderSphere.h"
 #include "RotBullet.h"
 #include "PlayerBullet.h"
 
@@ -34,13 +34,14 @@ bool CPlayer::Init()
 	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");	
 	SAFE_RELEASE(pPlayerRenderer);
-	
-	CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("Player");
-	pSphere->SetSphereInfo(Vector3(30.0f, 1.0f, 20.0f), 0.5f);
-	SAFE_RELEASE(pSphere);
 
 	m_pAniController = (CAnimation3D*)m_pGameObject->FindComponentFromType(CT_ANIMATION3D);
 	//m_pAniController->AddClipCallback<CPlayer>("Run", 0.5f, this, &CPlayer::AniCallback);
+
+	CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("PlayerAtt");
+	pSphere->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.3f);
+	pSphere->SetBoneIndex(m_pAniController->FindBoneIndex("HandR"));
+	SAFE_RELEASE(pSphere);
 
 	GET_SINGLE(CInput)->CreateKey("MoveForward", VK_UP);
 	GET_SINGLE(CInput)->CreateKey("MoveBack", VK_DOWN);
@@ -231,7 +232,8 @@ CPlayer::CPlayer() :
 	m_ePlayerState(PS_DEFAULT),
 	m_bAttack(false),
 	m_bJump(false),
-	m_bChange(false)
+	m_bChange(false),
+	m_pAniController(NULL)
 {
 	SetTypeID<CPlayer>();
 }
