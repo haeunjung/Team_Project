@@ -20,6 +20,8 @@ public:
 	CMinion* Clone() override;
 public:
 	void OnCollisionEnter(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
+private:
+	bool BackAttackCheck(const DxVector3& _SrcForward, const DxVector3& _DestForward);
 public:
 	CMinion();
 	CMinion(const CMinion& _Minion);

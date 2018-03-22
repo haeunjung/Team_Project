@@ -1,6 +1,7 @@
 #pragma once
 #include "07.Component/Script.h"
 #include "07.Component/Animation3D.h"
+#include "07.Component/ColliderSphere.h"
 
 WOOJUN_USING
 
@@ -26,7 +27,8 @@ private:
 
 	float	m_fSpeed;
 	int		m_iHp;
-	CAnimation3D*	m_pAniController;
+	CAnimation3D*		m_pAniController;
+	CColliderSphere*	m_pAttCol;
 
 	//////////
 	bool m_bChange;

@@ -69,9 +69,21 @@ void CMinion::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 {		
 	if ("PlayerAtt" == _pDest->GetTagStr())
 	{
-		_pDest->Death();
-		m_pGameObject->Death();
+		if (true == BackAttackCheck(_pSrc->GetTransformWorldAxis(AXIS_Z), _pDest->GetTransformWorldAxis(AXIS_Z)))
+		{
+			_pDest->SetIsEnable(false);
+			m_pGameObject->Death();
+		}		
 	}
+}
+
+bool CMinion::BackAttackCheck(const DxVector3 & _SrcForward, const DxVector3 & _DestForward)
+{
+	if (0.0f < _SrcForward.Dot(_DestForward))
+	{
+		return true;
+	}
+	return false;
 }
 
 CMinion::CMinion() :

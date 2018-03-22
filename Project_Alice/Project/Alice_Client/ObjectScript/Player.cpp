@@ -38,10 +38,15 @@ bool CPlayer::Init()
 	m_pAniController = (CAnimation3D*)m_pGameObject->FindComponentFromType(CT_ANIMATION3D);
 	//m_pAniController->AddClipCallback<CPlayer>("Run", 0.5f, this, &CPlayer::AniCallback);
 
-	CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("PlayerAtt");
+	/*CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("PlayerAtt");
 	pSphere->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.3f);
 	pSphere->SetBoneIndex(m_pAniController->FindBoneIndex("HandR"));
-	SAFE_RELEASE(pSphere);
+	SAFE_RELEASE(pSphere);*/
+
+	m_pAttCol = m_pGameObject->AddComponent<CColliderSphere>("PlayerAtt");
+	m_pAttCol->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.3f);
+	m_pAttCol->SetBoneIndex(m_pAniController->FindBoneIndex("HandR"));
+	m_pAttCol->SetIsEnable(false);
 
 	GET_SINGLE(CInput)->CreateKey("MoveForward", VK_UP);
 	GET_SINGLE(CInput)->CreateKey("MoveBack", VK_DOWN);
@@ -96,13 +101,13 @@ void CPlayer::Input(float _fTime)
 
 	if (true == KEYPUSH("MoveLeft"))
 	{
-		//m_pTransform->RotateY(-PI, _fTime);
-		m_pTransform->Right(-m_fSpeed, _fTime);
+		m_pTransform->RotateY(-PI, _fTime);
+		//m_pTransform->Right(-m_fSpeed, _fTime);
 	}
 	if (true == KEYPUSH("MoveRight"))
 	{
-		//m_pTransform->RotateY(PI, _fTime);
-		m_pTransform->Right(m_fSpeed, _fTime);
+		m_pTransform->RotateY(PI, _fTime);
+		//m_pTransform->Right(m_fSpeed, _fTime);
 	}
 
 	if (true == KEYPRESS("Jump"))
@@ -174,9 +179,15 @@ void CPlayer::Attack()
 {
 	if (true == m_pAniController->CheckClipName("Attack01"))
 	{
+		if (20 == m_pAniController->GetAnimationProgressFrame())
+		{
+			m_pAttCol->SetIsEnable(true);
+		}
+
 		if (true == m_pAniController->GetAnimationEnd())
 		{
 			m_pAniController->ReturnToDefaultClip();
+			m_pAttCol->SetIsEnable(false);
 			m_bAttack = false;
 			m_ePlayerState = PS_DEFAULT;
 		}
@@ -233,12 +244,14 @@ CPlayer::CPlayer() :
 	m_bAttack(false),
 	m_bJump(false),
 	m_bChange(false),
-	m_pAniController(NULL)
+	m_pAniController(NULL),
+	m_pAttCol(NULL)
 {
 	SetTypeID<CPlayer>();
 }
 
 CPlayer::~CPlayer()
 {		
+	SAFE_RELEASE(m_pAttCol);
 	SAFE_RELEASE(m_pAniController);
 }

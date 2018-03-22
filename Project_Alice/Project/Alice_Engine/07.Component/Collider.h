@@ -33,6 +33,7 @@ protected:
 
 public:
 	COLLIDER_TYPE GetColliderType() const;
+	DxVector3 GetTransformWorldAxis(AXIS _Axis) const;
 public:
 	void AddColList(CCollider* _pCol);
 	void EraseColList(CCollider* _pCol);

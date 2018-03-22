@@ -17,6 +17,11 @@ COLLIDER_TYPE CCollider::GetColliderType() const
 	return m_eColType;
 }
 
+DxVector3 CCollider::GetTransformWorldAxis(AXIS _Axis) const
+{
+	return m_pTransform->GetWorldAxis(_Axis);
+}
+
 void CCollider::AddColList(CCollider * _pCol)
 {
 	m_listCollider.push_back(_pCol);
