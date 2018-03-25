@@ -2,6 +2,7 @@
 #include "07.Component/Script.h"
 #include "07.Component/Animation3D.h"
 #include "07.Component/ColliderSphere.h"
+#include "07.Component/UIBar.h"
 
 WOOJUN_USING
 
@@ -27,8 +28,10 @@ private:
 
 	float	m_fSpeed;
 	int		m_iHp;
+	int		m_iHpMax;
 	CAnimation3D*		m_pAniController;
 	CColliderSphere*	m_pAttCol;
+	CUIBar*				m_pHpBar;
 
 	//////////
 	bool m_bChange;
@@ -41,6 +44,7 @@ public:
 public:
 	void OnCollisionEnter(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
 private:
+	void CreateHpBar();
 	void Attack();
 	void Jump();
 	void MovingJump(float _fTime);

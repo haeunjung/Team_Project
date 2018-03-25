@@ -9,7 +9,6 @@ class CMinion : public CScript
 {
 private:
 	CAnimation3D*	m_pAniController;
-
 	CGameObject*	m_pPlayer;
 	float		m_fTime;
 public:

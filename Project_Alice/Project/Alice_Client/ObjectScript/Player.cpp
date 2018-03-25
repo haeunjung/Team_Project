@@ -13,6 +13,7 @@
 #include "07.Component/Effect.h"
 #include "07.Component/Animation2D.h"
 #include "07.Component/ColliderSphere.h"
+#include "07.Component/Renderer2D.h"
 #include "RotBullet.h"
 #include "PlayerBullet.h"
 
@@ -23,6 +24,8 @@ void CPlayer::AniCallback(float _fTime)
 
 bool CPlayer::Init()
 {		
+	CreateHpBar();
+
 	CTransform*		pTransform = m_pGameObject->GetTransform();
 	pTransform->SetWorldPos(30.0f, 0.0f, 20.0f);
 	pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
@@ -57,6 +60,7 @@ bool CPlayer::Init()
 	GET_SINGLE(CInput)->CreateKey("Attack", VK_CONTROL);
 	GET_SINGLE(CInput)->CreateKey("Jump", 'Z');
 	GET_SINGLE(CInput)->CreateKey("ChangeCamera", 'C');
+	GET_SINGLE(CInput)->CreateKey("HitPlayer", VK_F5);
 
 	return true;
 }
@@ -146,6 +150,25 @@ void CPlayer::Input(float _fTime)
 		}		
 	}
 
+	if (true == KEYPRESS("F1"))
+	{
+		if (0 < m_iHp)
+		{
+			m_iHp -= 10;
+			m_pHpBar->SetCurValue(m_iHp);
+		}
+		//m_pHpBar->AddValue(-10.0f);
+	}
+	else if (true == KEYPRESS("F2"))
+	{
+		if (m_iHpMax > m_iHp)
+		{
+			m_iHp += 10;
+			m_pHpBar->SetCurValue(m_iHp);
+		}		
+		//m_pHpBar->AddValue(10.0f);
+	}
+
 	if (true == KEYPRESS("Init"))
 	{
 		m_pTransform->SetWorldPos(DxVector3(0.0f, 0.0f, 0.0f));
@@ -173,6 +196,40 @@ void CPlayer::Update(float _fTime)
 
 void CPlayer::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
+}
+
+void CPlayer::CreateHpBar()
+{
+	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
+
+	CGameObject*	pHpBarObejct = CGameObject::Create("HpBarObejct");
+
+	CTransform*	pTransform = pHpBarObejct->GetTransform();
+	DxVector3	vScale = { 400.0f, 50.0f, 1.0f };
+	pTransform->SetWorldScale(vScale);
+	pTransform->SetWorldPos(850.0f, 25.0f, 0.0f);
+	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
+	SAFE_RELEASE(pTransform);
+
+	CRenderer2D*	pRenderer = pHpBarObejct->AddComponent<CRenderer2D>("HpBarRenderer2D");
+	pRenderer->SetMesh("UIMesh");
+	pRenderer->SetShader(UI_SHADER);
+	pRenderer->SetInputLayout("TexInputLayout");
+	pRenderer->SetRenderState(ALPHABLEND);
+
+	CMaterial*	pMaterial = pRenderer->GetMaterial();
+	pMaterial->SetDiffuseTexture("Linear", "HpBar", L"SmallHpBar.png");
+	SAFE_RELEASE(pMaterial);
+	SAFE_RELEASE(pRenderer);
+
+	m_pHpBar = pHpBarObejct->AddComponent<CUIBar>("HpBar");
+	m_pHpBar->SetMinMax(0.0f, m_iHp);
+	m_pHpBar->SetBarDir(BD_LEFT);
+
+	pUILayer->AddObject(pHpBarObejct);
+	SAFE_RELEASE(pHpBarObejct);
+
+	SAFE_RELEASE(pUILayer);
 }
 
 void CPlayer::Attack()
@@ -240,18 +297,22 @@ void CPlayer::MovingJump(float _fTime)
 CPlayer::CPlayer() :
 	m_fSpeed(5.0f),
 	m_iHp(100),
+	m_iHpMax(100),
 	m_ePlayerState(PS_DEFAULT),
 	m_bAttack(false),
 	m_bJump(false),
 	m_bChange(false),
 	m_pAniController(NULL),
-	m_pAttCol(NULL)
+	m_pAttCol(NULL),
+	m_pHpBar(NULL)
 {
 	SetTypeID<CPlayer>();
+	SetTypeName("CPlayer");
 }
 
 CPlayer::~CPlayer()
 {		
 	SAFE_RELEASE(m_pAttCol);
 	SAFE_RELEASE(m_pAniController);
+	SAFE_RELEASE(m_pHpBar);
 }

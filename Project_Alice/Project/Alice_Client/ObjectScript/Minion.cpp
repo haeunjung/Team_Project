@@ -16,17 +16,6 @@ void CMinion::SetPlayer(CGameObject * _pPlayer)
 
 bool CMinion::Init()
 {	
-	// 兄希君 持失
-	//CRenderer*	pRenderer = m_pGameObject->AddComponent<CRenderer>("Renderer");
-	//pRenderer->SetMesh("ColorPyramid");
-	//pRenderer->SetShader("StandardColorShader");
-	//pRenderer->SetInputLayout("ColorInputLayout");
-	//SAFE_RELEASE(pRenderer);
-
-	//CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("Minion");
-	//pSphere->SetSphereInfo(Vec3Zero, 0.5f);
-	//SAFE_RELEASE(pSphere);
-
 	CTransform*		pTransform = m_pGameObject->GetTransform();
 	pTransform->SetWorldPos(40.0f, 0.0f, 20.0f);
 	pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
@@ -55,9 +44,6 @@ bool CMinion::Init()
 void CMinion::Update(float _fTime)
 {
 	//m_pTransform->LookAt(m_pPlayer, AXIS_Y);
-
-	//m_pTransform->Forward(1.0f, _fTime);
-	
 }
 
 CMinion * CMinion::Clone()
@@ -92,6 +78,7 @@ CMinion::CMinion() :
 	m_fTime(0.0f)
 {
 	SetTypeID<CMinion>();
+	SetTypeName("CMinion");
 }
 
 CMinion::CMinion(const CMinion & _Minion) :

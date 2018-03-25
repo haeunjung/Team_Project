@@ -319,40 +319,6 @@ void CMainScene::CreateInventory()
 	SAFE_RELEASE(pUILayer);
 }
 
-void CMainScene::CreateHpBar()
-{
-	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
-
-	CGameObject*	pHpBarObejct = CGameObject::Create("HpBarObejct");
-
-	CTransform*	pTransform = pHpBarObejct->GetTransform();
-	DxVector3	vScale = { 400.0f, 50.0f, 1.0f };
-	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(10.0f, 10.0f, 0.0f);	
-	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
-	SAFE_RELEASE(pTransform);
-
-	CRenderer2D*	pRenderer = pHpBarObejct->AddComponent<CRenderer2D>("HpBarRenderer2D");
-	pRenderer->SetMesh("UIMesh");
-	pRenderer->SetShader(UI_SHADER);
-	pRenderer->SetInputLayout("TexInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-
-	CMaterial*	pMaterial = pRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "HpBar", L"SmallHpBar.png");
-	SAFE_RELEASE(pMaterial);
-	SAFE_RELEASE(pRenderer);
-	
-	m_pHpBar = pHpBarObejct->AddComponent<CUIBar>("HpBar");
-	m_pHpBar->SetMinMax(0.0f, 1000.0f);
-	m_pHpBar->SetBarDir(BD_LEFT);	
-
-	pUILayer->AddObject(pHpBarObejct);
-	SAFE_RELEASE(pHpBarObejct);
-
-	SAFE_RELEASE(pUILayer);
-}
-
 bool CMainScene::Init()
 {
 	CreateProtoType();
@@ -360,7 +326,6 @@ bool CMainScene::Init()
 	CreateTerrain();
 	//CreateCheckBox();
 	//CreateRadioButton();
-	//CreateHpBar();
 	//CreateInventory();	
 
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
@@ -407,78 +372,6 @@ bool CMainScene::Init()
 
 	pLayer->AddObject(pMinionObj);
 	SAFE_RELEASE(pMinionObj);
-
-	/*CGameObject*	pObejct = CGameObject::CreateClone("WareHouseObject");
-	pLayer->AddObject(pObejct);
-	CTransform*		pTransform = pObejct->GetTransform();
-	pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
-	pTransform->SetWorldPos(5.0f, 0.0f, 5.0f);
-	SAFE_RELEASE(pTransform);	
-	SAFE_RELEASE(pObejct);
-
-	pObejct = CGameObject::CreateClone("BurnHouse1Object");
-	pLayer->AddObject(pObejct);
-	pTransform = pObejct->GetTransform();
-	pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
-	pTransform->SetWorldPos(-5.0f, 0.0f, 5.0f);
-	SAFE_RELEASE(pTransform);
-	SAFE_RELEASE(pObejct);
-
-	pObejct = CGameObject::CreateClone("BurnHouse2Object");
-	pLayer->AddObject(pObejct);
-	pTransform = pObejct->GetTransform();
-	pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
-	pTransform->SetWorldPos(0.0f, 0.0f, 20.0f);
-	SAFE_RELEASE(pTransform);
-	SAFE_RELEASE(pObejct);
-
-	pObejct = CGameObject::CreateClone("BurnHouse3Object");
-	pLayer->AddObject(pObejct);
-	pTransform = pObejct->GetTransform();
-	pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
-	pTransform->SetWorldPos(-10.0f, 0.0f, 10.0f);
-	SAFE_RELEASE(pTransform);
-	SAFE_RELEASE(pObejct);
-
-	pObejct = CGameObject::CreateClone("BurnHouse4Object");
-	pLayer->AddObject(pObejct);
-	pTransform = pObejct->GetTransform();
-	pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
-	pTransform->SetWorldPos(15.0f, 0.0f, 15.0f);
-	SAFE_RELEASE(pTransform);
-	SAFE_RELEASE(pObejct);
-
-	pObejct = CGameObject::CreateClone("BurnHouse5Object");
-	pLayer->AddObject(pObejct);
-	pTransform = pObejct->GetTransform();
-	pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
-	pTransform->SetWorldPos(-15.0f, 0.0f, 15.0f);
-	SAFE_RELEASE(pTransform);
-	SAFE_RELEASE(pObejct);
-
-	pObejct = CGameObject::CreateClone("SakuraObject");
-	pLayer->AddObject(pObejct);
-	pTransform = pObejct->GetTransform();
-	pTransform->SetWorldScale(0.1f, 0.1f, 0.1f);
-	pTransform->SetWorldPos(-20.0f, 0.0f, 0.0f);
-	SAFE_RELEASE(pTransform);
-	SAFE_RELEASE(pObejct);
-
-	pObejct = CGameObject::CreateClone("InsamObject");
-	pLayer->AddObject(pObejct);
-	pTransform = pObejct->GetTransform();
-	pTransform->SetWorldScale(0.1f, 0.1f, 0.1f);
-	pTransform->SetWorldPos(20.0f, 5.0f, 0.0f);
-	SAFE_RELEASE(pTransform);
-	SAFE_RELEASE(pObejct);
-
-	pObejct = CGameObject::CreateClone("ReturnPointObject");
-	pLayer->AddObject(pObejct);
-	pTransform = pObejct->GetTransform();
-	pTransform->SetWorldScale(0.1f, 0.1f, 0.1f);
-	pTransform->SetWorldPos(-30.0f, 0.0f, 30.0f);
-	SAFE_RELEASE(pTransform);
-	SAFE_RELEASE(pObejct);*/
 
 	SAFE_RELEASE(pLayer);
 
@@ -530,16 +423,6 @@ void CMainScene::Update(float _fTime)
 	//	SAFE_RELEASE(pLayer);	
 	//}
 
-	if (true == KEYPRESS("F1"))
-	{
-		m_pHpBar->AddValue(-100.0f * _fTime);
-	}
-
-	if (true == KEYPRESS("F2"))
-	{
-		m_pHpBar->AddValue(100.0f * _fTime);
-	}
-
 	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 	pLayer->SetIsEnable(m_bCheck);
 	SAFE_RELEASE(pLayer);
@@ -570,8 +453,7 @@ void CMainScene::RadioButton(CGameObject * _pObj, float _fTime)
 CMainScene::CMainScene() :
 	m_pPlayerObject(NULL),
 	m_fRespawnTime(0.0f),
-	m_fRespawnLimitTime(5.0f),
-	m_pHpBar(NULL)
+	m_fRespawnLimitTime(5.0f)
 {
 	m_bCheck = true;
 }
@@ -579,6 +461,4 @@ CMainScene::CMainScene() :
 CMainScene::~CMainScene()
 {
 	SAFE_RELEASE(m_pPlayerObject);
-
-	SAFE_RELEASE(m_pHpBar);
 }
