@@ -135,10 +135,17 @@ void CEngine_Core::Logic()
 
 	GET_SINGLE(CInput)->Update(m_fMainDeltaTime);
 
+	// 여기서 시간체크를 해서
+	// 비율로 나타내보기
+
 	Input(m_fMainDeltaTime);
+
 	Update(m_fMainDeltaTime);
+
 	LateUpdate(m_fMainDeltaTime);
+
 	Collision(m_fMainDeltaTime);
+
 	Render(m_fMainDeltaTime);	
 
 	GET_SINGLE(CInput)->ClearWheel();

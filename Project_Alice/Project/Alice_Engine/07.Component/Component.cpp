@@ -6,6 +6,12 @@
 
 WOOJUN_USING
 
+CGameObject * CComponent::GetGameObject() const
+{
+	m_pGameObject->AddRef();
+	return m_pGameObject;
+}
+
 CTransform * CComponent::GetTransform() const
 {
 	m_pTransform->AddRef();

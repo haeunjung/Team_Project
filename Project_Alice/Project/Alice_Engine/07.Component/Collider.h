@@ -11,6 +11,8 @@ class DLL CCollider :
 {
 protected:
 	COLLIDER_TYPE	m_eColType;
+	COLLIDER_CHECK	m_eColCheck;
+
 	DxVector3		m_vPrevPos;
 	DxVector3		m_vMove;
 
@@ -33,6 +35,7 @@ protected:
 
 public:
 	COLLIDER_TYPE GetColliderType() const;
+	COLLIDER_CHECK GetColliderCheck() const;
 	DxVector3 GetTransformWorldAxis(AXIS _Axis) const;
 public:
 	void AddColList(CCollider* _pCol);
@@ -46,6 +49,7 @@ public:
 	void Setcolor(const DxVector4& _vColor);
 	void SetColColor(float r, float g, float b, float a);
 	void SetColcolor(const DxVector4& _vColColor);
+	void SetColCheck(COLLIDER_CHECK _eColCheck);
 public:
 	virtual bool Init() = 0;
 	virtual void Input(float _fTime) = 0;

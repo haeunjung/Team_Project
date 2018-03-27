@@ -31,6 +31,7 @@ private:
 	int		m_iHpMax;
 	CAnimation3D*		m_pAniController;
 	CColliderSphere*	m_pAttCol;
+	CColliderSphere*	m_pHitCol;
 	CUIBar*				m_pHpBar;
 
 	//////////
@@ -42,7 +43,7 @@ public:
 	void Input(float _fTime) override;
 	void Update(float _fTime) override;	
 public:
-	void OnCollisionEnter(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
+	void OnCollisionStay(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
 private:
 	void CreateHpBar();
 	void Attack();

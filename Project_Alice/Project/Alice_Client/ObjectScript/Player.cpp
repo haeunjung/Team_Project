@@ -47,9 +47,15 @@ bool CPlayer::Init()
 	SAFE_RELEASE(pSphere);*/
 
 	m_pAttCol = m_pGameObject->AddComponent<CColliderSphere>("PlayerAtt");
-	m_pAttCol->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.3f);
+	m_pAttCol->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.5f);
 	m_pAttCol->SetBoneIndex(m_pAniController->FindBoneIndex("HandR"));
+	m_pAttCol->SetColCheck(CC_ATT);
 	m_pAttCol->SetIsEnable(false);
+
+	m_pHitCol = m_pGameObject->AddComponent<CColliderSphere>("PlayerHit");
+	m_pHitCol->SetSphereInfo(0.0f, 0.0f, 0.0f, 0.5f);
+	m_pHitCol->SetBoneIndex(m_pAniController->FindBoneIndex("Bip01-Spine1"));
+	m_pHitCol->SetColCheck(CC_HIT);
 
 	GET_SINGLE(CInput)->CreateKey("MoveForward", VK_UP);
 	GET_SINGLE(CInput)->CreateKey("MoveBack", VK_DOWN);
@@ -194,8 +200,18 @@ void CPlayer::Update(float _fTime)
 	}
 }
 
-void CPlayer::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTime)
+void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
+	if (CC_HIT == _pSrc->GetColliderCheck())
+	{
+		if ("MonsterAttCol" == _pDest->GetTagStr() &&
+			true == _pDest->GetIsEnable())
+		{
+			m_iHp -= 10;
+			m_pHpBar->SetCurValue(m_iHp);
+			_pDest->SetIsEnable(false);
+		}
+	}
 }
 
 void CPlayer::CreateHpBar()
@@ -236,7 +252,7 @@ void CPlayer::Attack()
 {
 	if (true == m_pAniController->CheckClipName("Attack01"))
 	{
-		if (20 == m_pAniController->GetAnimationProgressFrame())
+		if (20 <= m_pAniController->GetAnimationProgressFrame())
 		{
 			m_pAttCol->SetIsEnable(true);
 		}
@@ -304,6 +320,7 @@ CPlayer::CPlayer() :
 	m_bChange(false),
 	m_pAniController(NULL),
 	m_pAttCol(NULL),
+	m_pHitCol(NULL),
 	m_pHpBar(NULL)
 {
 	SetTypeID<CPlayer>();
@@ -312,6 +329,7 @@ CPlayer::CPlayer() :
 
 CPlayer::~CPlayer()
 {		
+	SAFE_RELEASE(m_pHitCol);
 	SAFE_RELEASE(m_pAttCol);
 	SAFE_RELEASE(m_pAniController);
 	SAFE_RELEASE(m_pHpBar);

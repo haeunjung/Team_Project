@@ -15,7 +15,8 @@ void CDebug::OutputVisual(char * pMsg)
 
 void CDebug::OutputTitle(char * pMsg)
 {
-#ifdef _DEBUG
 	SetWindowTextA(WINDOWHANDLE, pMsg);
-#endif
+//#ifdef _DEBUG
+//	SetWindowTextA(WINDOWHANDLE, pMsg);
+//#endif
 }

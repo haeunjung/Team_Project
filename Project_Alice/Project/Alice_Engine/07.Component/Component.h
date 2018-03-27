@@ -19,6 +19,7 @@ protected:
 	CTransform*		m_pTransform;
 	COMPONENT_TYPE	m_eComponentType;
 public:
+	CGameObject* GetGameObject() const;
 	CTransform* GetTransform() const;
 	inline COMPONENT_TYPE& GetComponentType() {
 		return m_eComponentType;

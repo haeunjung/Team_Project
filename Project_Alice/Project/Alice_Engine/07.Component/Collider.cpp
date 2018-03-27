@@ -17,6 +17,11 @@ COLLIDER_TYPE CCollider::GetColliderType() const
 	return m_eColType;
 }
 
+COLLIDER_CHECK CCollider::GetColliderCheck() const
+{
+	return m_eColCheck;
+}
+
 DxVector3 CCollider::GetTransformWorldAxis(AXIS _Axis) const
 {
 	return m_pTransform->GetWorldAxis(_Axis);
@@ -115,6 +120,11 @@ void CCollider::SetColcolor(const DxVector4 & _vColColor)
 	m_vColColor = _vColColor;
 #endif // _DEBUG
 
+}
+
+void CCollider::SetColCheck(COLLIDER_CHECK _eColCheck)
+{
+	m_eColCheck = _eColCheck;
 }
 
 void CCollider::Update(float _fTime)
@@ -315,6 +325,7 @@ CCollider::CCollider(const CCollider & _Collider) :
 	CComponent(_Collider)
 {
 	m_eColType = _Collider.m_eColType;
+	m_eColCheck = _Collider.m_eColCheck;
 	m_vPrevPos = _Collider.m_vPrevPos;
 
 #ifdef _DEBUG

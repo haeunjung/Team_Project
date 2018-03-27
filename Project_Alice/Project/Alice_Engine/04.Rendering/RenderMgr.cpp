@@ -784,14 +784,6 @@ void CRenderMgr::Render(float _fTime)
 		}
 	}
 
-	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
-	{
-		SaveTarget("Albedo", L"Albedo.png");
-		SaveTarget("Normal", L"Normal.png");
-		SaveTarget("Depth", L"Depth.png");
-		SaveTarget("Shininess", L"Shininess.png");
-	}
-
 	for (int i = 0; i < RG_END; ++i)
 	{
 		m_vecRender[i].clear();
