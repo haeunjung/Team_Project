@@ -23,14 +23,23 @@ private:
 	CGameObject*	m_pPlayer;
 	CTransform*		m_pPlayerTransform;
 
-	float			m_fSpeed;
-	float			m_fTime;
-	float			m_fDist;
+	float	m_fSpeed;
+	float	m_fTime;
+	float	m_fDist;
 
 	CColliderSphere*	m_pViewCol;
 	CColliderSphere*	m_pAttCol;
+
+	// Test¿ë
+private:
+	bool	m_bTest;
+public:
+	inline void SetIsTest(bool _bTest) {
+		m_bTest = _bTest;
+	}
 public:
 	void SetPlayer(CGameObject* _pPlayer);
+	void SetMonsterWorldPos(const DxVector3 _Pos);
 public:
 	bool Init() override;	
 	void Update(float _fTime) override;	

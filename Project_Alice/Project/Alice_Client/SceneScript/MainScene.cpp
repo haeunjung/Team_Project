@@ -368,10 +368,20 @@ bool CMainScene::Init()
 
 	CGameObject*	pMinionObj = CGameObject::Create("Minion");
 	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 20.0f));
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
 	SAFE_RELEASE(pMinionObj);
+
+	CGameObject*	pMonsterObj = CGameObject::Create("Monster");
+	CMinion*	pMonster = pMonsterObj->AddComponent<CMinion>("MinionScript");
+	pMonster->SetMonsterWorldPos(DxVector3(30.0f, 0.0f, 30.0f));
+	pMonster->SetIsTest(true);
+	SAFE_RELEASE(pMonster);
+
+	pLayer->AddObject(pMonsterObj);
+	SAFE_RELEASE(pMonsterObj);
 
 	SAFE_RELEASE(pLayer);
 

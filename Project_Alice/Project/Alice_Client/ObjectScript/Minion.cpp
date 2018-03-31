@@ -15,10 +15,15 @@ void CMinion::SetPlayer(CGameObject * _pPlayer)
 	m_pPlayer = _pPlayer;
 }
 
+void CMinion::SetMonsterWorldPos(const DxVector3 _Pos)
+{
+	m_pTransform->SetWorldPos(_Pos);
+}
+
 bool CMinion::Init()
 {	
 	CTransform*		pTransform = m_pGameObject->GetTransform();
-	pTransform->SetWorldPos(40.0f, 0.0f, 20.0f);
+	//pTransform->SetWorldPos(40.0f, 0.0f, 20.0f);
 	pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
 	pTransform->SetLocalRotY(-PI * 0.5f);
 	pTransform->SetWorldRotY(PI);
@@ -88,6 +93,11 @@ CMinion * CMinion::Clone()
 
 void CMinion::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {		
+	if (true == m_bTest)
+	{
+		return;
+	}
+
 	if (CC_VIEW == _pSrc->GetColliderCheck())
 	{
 		//if (CC_HIT == _pDest->GetColliderCheck())
@@ -130,6 +140,11 @@ bool CMinion::BackAttackCheck(const DxVector3 & _SrcForward, const DxVector3 & _
 
 void CMinion::MonsterIdle(float _fTime)
 {
+	if (true == m_bTest)
+	{
+		return;
+	}
+
 	// 일정 시간이 되면 Walk로 가자
 	m_fTime += _fTime;
 
@@ -245,6 +260,9 @@ CMinion::CMinion() :
 {
 	SetTypeID<CMinion>();
 	SetTypeName("CMinion");
+
+	// Test용
+	m_bTest = false;
 }
 
 CMinion::CMinion(const CMinion & _Minion) :
