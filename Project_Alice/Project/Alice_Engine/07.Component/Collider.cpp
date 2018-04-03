@@ -269,6 +269,8 @@ bool CCollider::ColRayToSphere(RAY & _tRay, const SPHEREINFO & _tSphere)
 
 bool CCollider::ColTerrainToPosition(const TERRAININFO & _tTerrainInfo, CTransform * _pDestTransform, const DxVector3 & _vTerrainScale)
 {
+	return true;
+
 	DxVector3	vPos = _pDestTransform->GetWorldPos();
 
 	// 지형 그리드의 인덱스를 구한다.

@@ -57,7 +57,7 @@ void CMainScene::CreateProtoType()
 void CMainScene::CreateObject()
 {
 	string	strPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(DATAPATH);
-	strPath += "StaticObject.Data";
+	strPath += "Stage1.Data";
 
 	FILE*	pFile = NULL;
 	fopen_s(&pFile, strPath.c_str(), "rb");
@@ -94,7 +94,6 @@ void CMainScene::CreateObject()
 	}
 
 	fclose(pFile);
-
 }
 
 void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, const DxVector3 & _vScale, const DxVector3 & _vRot)
@@ -237,9 +236,9 @@ void CMainScene::CreateTerrain()
 	vector<wstring>	vecMultiTex;
 
 	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01.dds");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11.dds");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13.dds");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large.dds");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11.dds");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13.dds");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large.dds");
 
 	pTerrain->SetSplatTexture("TerrainSplat", vecMultiTex);
 
@@ -247,27 +246,27 @@ void CMainScene::CreateTerrain()
 	vecMultiTex.clear();
 
 	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01_NRM.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_NRM.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_NRM.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_NRM.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_NRM.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_NRM.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_NRM.bmp");
 
 	pTerrain->SetSplatNormalTexture("TerrainSplatNormal", vecMultiTex);
 
 	vecMultiTex.clear();
 
 	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01_SPC.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_SPEC.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_SPEC.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_SPEC.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_SPEC.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_SPEC.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_SPEC.bmp");
 
 	pTerrain->SetSplatSpecularTexture("TerrainSplatSpecular", vecMultiTex);
 
 	vecMultiTex.clear();
 
 	vecMultiTex.push_back(L"Terrain/RoadAlpha.bmp");
-	vecMultiTex.push_back(L"Terrain/SandBaseAlpha.bmp");
-	vecMultiTex.push_back(L"Terrain/StonAlpha.bmp");
-	vecMultiTex.push_back(L"Terrain/WaterBaseAlpha.bmp");
+	//vecMultiTex.push_back(L"Terrain/SandBaseAlpha.bmp");
+	//vecMultiTex.push_back(L"Terrain/StonAlpha.bmp");
+	//vecMultiTex.push_back(L"Terrain/WaterBaseAlpha.bmp");
 
 	pTerrain->SetSplatAlphaTexture("TerrainSplatAlpha", vecMultiTex);
 	pTerrain->SetSplatCount(vecMultiTex.size());
@@ -322,7 +321,7 @@ void CMainScene::CreateInventory()
 bool CMainScene::Init()
 {
 	CreateProtoType();
-	//CreateObject();
+	CreateObject();
 	CreateTerrain();
 	//CreateCheckBox();
 	//CreateRadioButton();
@@ -384,6 +383,9 @@ bool CMainScene::Init()
 	SAFE_RELEASE(pMonsterObj);
 
 	SAFE_RELEASE(pLayer);
+
+	// Test Box Mesh »ý¼º
+	//LoadObject("box", DxVector3(-1.0f, 0.0f, 1.0f), DxVector3(1.0f, 1.0f, 1.0f), DxVector3(PI, 0.0f, 0.0f));
 
 	return true;
 }

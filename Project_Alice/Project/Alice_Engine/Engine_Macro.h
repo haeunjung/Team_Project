@@ -90,5 +90,5 @@
 
 #define ACC_BLEND					"AccBlend"
 
-#define TERRAINSIZE		65
+#define TERRAINSIZE		129
  

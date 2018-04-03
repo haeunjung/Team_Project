@@ -1,5 +1,6 @@
 #include "Material.h"
 #include "../Device.h"
+#include "../01.Core/PathMgr.h"
 #include "../03.Resource/Texture.h"
 #include "../03.Resource/Sampler.h"
 #include "../03.Resource/ResMgr.h"
@@ -104,6 +105,13 @@ bool CMaterial::SetDiffuseTexture(CTexture * _pTexture, int _iTexRegister)
 
 bool CMaterial::SetDiffuseTextureFromFullPath(const string & _strSamplerKey, const string & _strKey, const char * _pFullPath)
 {
+	string strMeshPath = _pFullPath;
+	if ('b' == _pFullPath[0])
+	{
+		strMeshPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(MESHPATH);
+		strMeshPath += _pFullPath;
+	}
+
 	if (NULL == m_tBase.pDiffuse)
 	{
 		m_tBase.pDiffuse = new TEXTURE();
@@ -112,7 +120,8 @@ bool CMaterial::SetDiffuseTextureFromFullPath(const string & _strSamplerKey, con
 	SAFE_RELEASE(m_tBase.pDiffuse->pTexture);
 	SAFE_RELEASE(m_tBase.pDiffuse->pSampler);
 
-	m_tBase.pDiffuse->pTexture = GET_SINGLE(CResMgr)->LoadTextureFromFullPath(_strKey, _pFullPath);
+	//m_tBase.pDiffuse->pTexture = GET_SINGLE(CResMgr)->LoadTextureFromFullPath(_strKey, _pFullPath);
+	m_tBase.pDiffuse->pTexture = GET_SINGLE(CResMgr)->LoadTextureFromFullPath(_strKey, strMeshPath.c_str());
 	m_tBase.pDiffuse->pSampler = GET_SINGLE(CResMgr)->FindSampler(_strSamplerKey);
 
 	return true;
