@@ -5,7 +5,6 @@
 #include "ColliderTerrain.h"
 #include "Animation3D.h"
 #include "../05.Scene/Scene.h"
-#include "../Device.h"
 #include "../06.GameObject/GameObject.h"
 
 WOOJUN_USING

@@ -416,6 +416,32 @@ typedef struct DLL _tagSphereInfo
 	}
 }SPHEREINFO, *pSPHEREINFO;
 
+typedef struct DLL _tagAABBInfo
+{
+	DxVector3	vCenter;
+	DxVector3	vMin;
+	DxVector3	vMax;
+
+	_tagAABBInfo() :
+		vCenter(0.0f, 0.0f, 0.0f),
+		vMin(0.0f, 0.0f, 0.0f),
+		vMax(0.0f, 0.0f, 0.0f)
+	{
+	}
+
+	_tagAABBInfo(const _tagAABBInfo& _tAABB)
+	{
+		*this = _tAABB;
+	}
+
+	_tagAABBInfo(const DxVector3& _vCenter, const DxVector3& _vMin, const DxVector3& _vMax) :
+		vCenter(_vCenter),
+		vMin(_vMin),
+		vMax(_vMax)
+	{
+	}
+}AABBINFO, *pAABBINFO;
+
 typedef struct _tagRectInfo
 {
 	float	fTop;

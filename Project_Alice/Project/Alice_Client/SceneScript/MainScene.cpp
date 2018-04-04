@@ -25,6 +25,7 @@
 #include "07.Component/UIBack.h"
 #include "07.Component/Terrain.h"
 #include "07.Component/ColliderSphere.h"
+#include "07.Component/ColliderAABB.h"
 #include "../ObjectScript/Mouse.h"
 
 void CMainScene::CreateProtoType()
@@ -106,6 +107,8 @@ void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, con
 	pTransform->SetWorldPos(_vPos);
 	pTransform->SetWorldScale(_vScale);
 	pTransform->SetWorldRot(_vRot);
+
+	pTransform->SetLocalPos(-0.5f, 0.5f, -0.5f);
 	SAFE_RELEASE(pTransform);
 	
 	/*CToolObject* pToolObject = pGameObject->AddComponent<CToolObject>(_strKey + "Object");
@@ -119,10 +122,13 @@ void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, con
 	pRenderer->SetInputLayout("BumpInputLayout");
 	SAFE_RELEASE(pRenderer);
 	
-	CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
-	pColSphere->SetSphereInfo(_vPos, 1.0f);
-	SAFE_RELEASE(pColSphere);
+	//CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
+	//pColSphere->SetSphereInfo(_vPos, 1.0f);
+	//SAFE_RELEASE(pColSphere);
 	
+	CColliderAABB* pColAABB = pGameObject->AddComponent<CColliderAABB>(_strKey + "ColAABB");
+	SAFE_RELEASE(pColAABB);
+
 	pLayer->AddObject(pGameObject);
 	
 	SAFE_RELEASE(pGameObject);
@@ -321,7 +327,7 @@ void CMainScene::CreateInventory()
 bool CMainScene::Init()
 {
 	CreateProtoType();
-	CreateObject();
+	//CreateObject();
 	CreateTerrain();
 	//CreateCheckBox();
 	//CreateRadioButton();
@@ -386,6 +392,7 @@ bool CMainScene::Init()
 
 	// Test Box Mesh »ý¼º
 	//LoadObject("box", DxVector3(-1.0f, 0.0f, 1.0f), DxVector3(1.0f, 1.0f, 1.0f), DxVector3(PI, 0.0f, 0.0f));
+	LoadObject("box", Vec3Zero, DxVector3(1.0f, 1.0f, 1.0f), Vec3Zero);
 
 	return true;
 }

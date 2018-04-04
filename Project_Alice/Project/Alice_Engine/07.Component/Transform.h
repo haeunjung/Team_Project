@@ -125,6 +125,7 @@ private:
 	pMATRIX		m_matWorld;
 public:
 	MATRIX GetLocalMatrix()	const;
+	MATRIX GetWorldScaleMatrix() const;
 	MATRIX GetWorldRotMatrix() const;
 	MATRIX GetWorldPosMatrix() const;
 	MATRIX GetWorldMatrix()	const;

@@ -370,6 +370,9 @@
     <ClInclude Include="02.Math\DxMath.h">
       <Filter>01. Core\01. Math</Filter>
     </ClInclude>
+    <ClInclude Include="07.Component\ColliderAABB.h">
+      <Filter>07. Component\05. Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -567,6 +570,9 @@
     </ClCompile>
     <ClCompile Include="02.Math\Matrix.cpp">
       <Filter>01. Core\01. Math\04. Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\ColliderAABB.cpp">
+      <Filter>07. Component\05. Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -182,6 +182,7 @@
     <ClInclude Include="07.Component\CameraFree.h" />
     <ClInclude Include="07.Component\CheckBox.h" />
     <ClInclude Include="07.Component\Collider.h" />
+    <ClInclude Include="07.Component\ColliderAABB.h" />
     <ClInclude Include="07.Component\ColliderPoint.h" />
     <ClInclude Include="07.Component\ColliderRay.h" />
     <ClInclude Include="07.Component\ColliderRect.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="07.Component\CameraFree.cpp" />
     <ClCompile Include="07.Component\CheckBox.cpp" />
     <ClCompile Include="07.Component\Collider.cpp" />
+    <ClCompile Include="07.Component\ColliderAABB.cpp" />
     <ClCompile Include="07.Component\ColliderPoint.cpp" />
     <ClCompile Include="07.Component\ColliderRay.cpp" />
     <ClCompile Include="07.Component\ColliderRect.cpp" />

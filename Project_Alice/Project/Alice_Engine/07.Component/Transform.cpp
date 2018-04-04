@@ -619,6 +619,11 @@ MATRIX CTransform::GetLocalMatrix() const
 	return *m_matLocal;
 }
 
+MATRIX CTransform::GetWorldScaleMatrix() const
+{
+	return *m_matWorldScale;
+}
+
 MATRIX CTransform::GetWorldRotMatrix() const
 {
 	return *m_matWorldRot;
