@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "ColliderRay.h"
 #include "ColliderTerrain.h"
+#include "ColliderAABB.h"
 #include "Animation3D.h"
 #include "../05.Scene/Scene.h"
 #include "../06.GameObject/GameObject.h"
@@ -140,10 +141,14 @@ bool CColliderSphere::Collision(CCollider * _pCollider)
 	case COL_RAY:
 		return ColRayToSphere(((CColliderRay*)_pCollider)->GetRay(), m_tSphereInfo);
 	case COL_TERRAIN:
+	{
 		CTransform*	pTransform = _pCollider->GetTransform();
 		bool bReturn = ColTerrainToPosition(((CColliderTerrain*)_pCollider)->GetTerrainInfo(), m_pTransform, pTransform->GetWorldScale());
 		SAFE_RELEASE(pTransform);
 		return bReturn;
+	}
+	case COL_AABB:
+		return ColSphereToAABB(m_tSphereInfo, ((CColliderAABB*)_pCollider)->GetAABBInfo());
 	}
 	return false;
 }

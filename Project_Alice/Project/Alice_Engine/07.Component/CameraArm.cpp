@@ -84,43 +84,43 @@ void CCameraArm::RotationDrag(float _fTime)
 		{
 			POINT tMouseMove = MOUSEMOVE;
 			
-			// X이동
-			if (0 != tMouseMove.x)
-			{
-				DxVector3	vAxis[AXIS_MAX];
-				DxVector3	vPos = m_pTransform->GetWorldPos();
+			//// X이동
+			//if (0 != tMouseMove.x)
+			//{
+			//	DxVector3	vAxis[AXIS_MAX];
+			//	DxVector3	vPos = m_pTransform->GetWorldPos();
 
-				for (int i = 0; i < AXIS_MAX; ++i)
-				{
-					vAxis[i] = pCamera->GetAxis((AXIS)i);
-				}
+			//	for (int i = 0; i < AXIS_MAX; ++i)
+			//	{
+			//		vAxis[i] = pCamera->GetAxis((AXIS)i);
+			//	}
 
-				// 마우스가 이동한 양을 이용해서 각도를 구한다
-				float fAngle = tMouseMove.x * _fTime;
+			//	// 마우스가 이동한 양을 이용해서 각도를 구한다
+			//	float fAngle = tMouseMove.x * _fTime;
 
-				// 마우스가 X로 움직였으니까 Y축 회전
-				MATRIX	matRot = XMMatrixRotationY(fAngle);
+			//	// 마우스가 X로 움직였으니까 Y축 회전
+			//	MATRIX	matRot = XMMatrixRotationY(fAngle);
 
-				// 축을 다시 구한다
-				for (int i = 0; i < AXIS_MAX; ++i)
-				{
-					vAxis[i] = vAxis[i].TransformNormal(matRot).Normalize();
-					//vAxis[i] = vAxis[i].Normalize();
+			//	// 축을 다시 구한다
+			//	for (int i = 0; i < AXIS_MAX; ++i)
+			//	{
+			//		vAxis[i] = vAxis[i].TransformNormal(matRot).Normalize();
+			//		//vAxis[i] = vAxis[i].Normalize();
 
-					pCamera->SetAxis(vAxis);
-				}
+			//		pCamera->SetAxis(vAxis);
+			//	}
 
-				// 행렬의 회전 중점을 AttachObject의 위치로 설정
-				// 이동에 관련있는 4행에 값을 세팅
-				matRot._41 = vAttachPos.x;
-				matRot._42 = vAttachPos.y;
-				matRot._43 = vAttachPos.z;
+			//	// 행렬의 회전 중점을 AttachObject의 위치로 설정
+			//	// 이동에 관련있는 4행에 값을 세팅
+			//	matRot._41 = vAttachPos.x;
+			//	matRot._42 = vAttachPos.y;
+			//	matRot._43 = vAttachPos.z;
 
-				// AttachObject로 부터 상대적인 위치를 구한다
-				DxVector3	vDist = vPos - vAttachPos;
-				vPos = vDist.TransformCoord(matRot);
-				m_pTransform->SetWorldPos(vPos);
-			}
+			//	// AttachObject로 부터 상대적인 위치를 구한다
+			//	DxVector3	vDist = vPos - vAttachPos;
+			//	vPos = vDist.TransformCoord(matRot);
+			//	m_pTransform->SetWorldPos(vPos);
+			//}
 			// Y이동
 			if (tMouseMove.y != 0)
 			{
@@ -175,6 +175,52 @@ void CCameraArm::SetZoomDistance(float _fMin, float _fMax)
 void CCameraArm::SetZoomSpeed(float _fSpeed)
 {
 	m_fZoomSpeed = _fSpeed;
+}
+
+void CCameraArm::RotateY(float _fAngle, float _fTime)
+{
+	CCamera*	pCamera = m_pGameObject->FindComponentFromTypeID<CCamera>();
+	CGameObject*	pAttachObject = pCamera->GetAttachObject();
+
+	if (NULL != pAttachObject)
+	{
+		CTransform* pTransform = pAttachObject->GetTransform();
+		DxVector3 vAttachPos = pTransform->GetWorldPos();
+
+		DxVector3	vAxis[AXIS_MAX];
+		DxVector3	vPos = m_pTransform->GetWorldPos();
+
+		for (int i = 0; i < AXIS_MAX; ++i)
+		{
+			vAxis[i] = pCamera->GetAxis((AXIS)i);
+		}
+
+		// 회전 각도
+		float fAngle = _fAngle * _fTime;
+
+		MATRIX	matRot = XMMatrixRotationY(fAngle);
+
+		// 축을 다시 구한다
+		for (int i = 0; i < AXIS_MAX; ++i)
+		{
+			vAxis[i] = vAxis[i].TransformNormal(matRot).Normalize();
+
+
+			pCamera->SetAxis(vAxis);
+		}
+
+		// 행렬의 회전 중점을 AttachObject의 위치로 설정
+		// 이동에 관련있는 4행에 값을 세팅
+		matRot._41 = vAttachPos.x;
+		matRot._42 = vAttachPos.y;
+		matRot._43 = vAttachPos.z;
+
+		// AttachObject로 부터 상대적인 위치를 구한다
+		DxVector3	vDist = vPos - vAttachPos;
+		vPos = vDist.TransformCoord(matRot);
+		m_pTransform->SetWorldPos(vPos);
+
+	}
 }
 
 bool CCameraArm::Init()

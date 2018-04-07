@@ -22,6 +22,8 @@ protected:
 
 	bool			m_bCollision;
 
+	DxVector3		m_Point;
+
 #ifdef _DEBUG
 	// 디버그모드일때만 충돌체 렌더
 	CMesh*				m_pMesh;
@@ -65,6 +67,7 @@ protected:
 	bool ColRectToPoint(const RECTINFO& _tSrc, const DxVector3& _vPos);
 	bool ColRayToSphere(RAY& _tRay, const SPHEREINFO& _tSphere);
 	bool ColTerrainToPosition(const TERRAININFO& _tTerrainInfo, CTransform* _pDestTransform, const DxVector3& _vTerrainScale);
+	bool ColSphereToAABB(const SPHEREINFO& _tSrc, const AABBINFO& _tDest);
 protected:
 	CCollider();
 	CCollider(const CCollider& _Collider);

@@ -108,7 +108,7 @@ void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, con
 	pTransform->SetWorldScale(_vScale);
 	pTransform->SetWorldRot(_vRot);
 
-	pTransform->SetLocalPos(-0.5f, 0.5f, -0.5f);
+	//pTransform->SetLocalPos(-0.5f, 0.5f, -0.5f);
 	SAFE_RELEASE(pTransform);
 	
 	/*CToolObject* pToolObject = pGameObject->AddComponent<CToolObject>(_strKey + "Object");
@@ -339,7 +339,7 @@ bool CMainScene::Init()
 	CGameObject*	pCameraObject = m_pScene->GetMainCameraObject();
 
 	CCameraArm*	pCameraArm = pCameraObject->AddComponent<CCameraArm>("CameraArm");
-	SAFE_RELEASE(pCameraArm);	
+	SAFE_RELEASE(pCameraArm);
 	
 	// 플레이어
 	CGameObject*		pPlayerObject = CGameObject::Create("PlayerObject");	
@@ -348,8 +348,8 @@ bool CMainScene::Init()
 	CCamera*	pCamera = m_pScene->GetMainCamera();
 	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 0.0f, -2.5f));
 
-	pPlayerObject->AddRef();
 	m_pPlayerObject = pPlayerObject;
+	pPlayerObject->AddRef();
 	
 	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");	
 	SAFE_RELEASE(pPlayerScript);
@@ -392,7 +392,7 @@ bool CMainScene::Init()
 
 	// Test Box Mesh 생성
 	//LoadObject("box", DxVector3(-1.0f, 0.0f, 1.0f), DxVector3(1.0f, 1.0f, 1.0f), DxVector3(PI, 0.0f, 0.0f));
-	LoadObject("box", Vec3Zero, DxVector3(1.0f, 1.0f, 1.0f), Vec3Zero);
+	LoadObject("Box2", DxVector3(5.0f, 2.5f, 5.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
 
 	return true;
 }

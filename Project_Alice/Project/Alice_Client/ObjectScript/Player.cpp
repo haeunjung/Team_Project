@@ -12,7 +12,6 @@
 #include "07.Component/Material.h"
 #include "07.Component/Effect.h"
 #include "07.Component/Animation2D.h"
-#include "07.Component/ColliderSphere.h"
 #include "07.Component/Renderer2D.h"
 #include "RotBullet.h"
 #include "PlayerBullet.h"
@@ -56,6 +55,10 @@ bool CPlayer::Init()
 	m_pHitCol->SetSphereInfo(0.0f, 0.0f, 0.0f, 0.5f);
 	m_pHitCol->SetBoneIndex(m_pAniController->FindBoneIndex("Bip01-Spine1"));
 	m_pHitCol->SetColCheck(CC_HIT);
+
+	CGameObject* pCameraObject = m_pScene->GetMainCameraObject();
+	m_pCameraArm = (CCameraArm*)pCameraObject->FindComponentFromType(CT_CAMERAARM);
+	SAFE_RELEASE(pCameraObject);
 
 	GET_SINGLE(CInput)->CreateKey("MoveForward", VK_UP);
 	GET_SINGLE(CInput)->CreateKey("MoveBack", VK_DOWN);
@@ -111,12 +114,14 @@ void CPlayer::Input(float _fTime)
 
 	if (true == KEYPUSH("MoveLeft"))
 	{
-		m_pTransform->RotateY(-PI, _fTime);
+		m_pTransform->RotateY(-PI_HALF, _fTime);
+		m_pCameraArm->RotateY(-PI_HALF, _fTime);
 		//m_pTransform->Right(-m_fSpeed, _fTime);
 	}
 	if (true == KEYPUSH("MoveRight"))
 	{
-		m_pTransform->RotateY(PI, _fTime);
+		m_pTransform->RotateY(PI_HALF, _fTime);
+		m_pCameraArm->RotateY(PI_HALF, _fTime);
 		//m_pTransform->Right(m_fSpeed, _fTime);
 	}
 
@@ -177,8 +182,8 @@ void CPlayer::Input(float _fTime)
 
 	if (true == KEYPRESS("Init"))
 	{
-		m_pTransform->SetWorldPos(DxVector3(0.0f, 0.0f, 0.0f));
-		m_pTransform->SetWorldRot(DxVector3(0.0f, 0.0f, 0.0f));
+		//m_pTransform->SetWorldPos(DxVector3(0.0f, 0.0f, 0.0f));
+		//m_pTransform->SetWorldRot(DxVector3(0.0f, 0.0f, 0.0f));
 	}
 }
 
@@ -321,7 +326,8 @@ CPlayer::CPlayer() :
 	m_pAniController(NULL),
 	m_pAttCol(NULL),
 	m_pHitCol(NULL),
-	m_pHpBar(NULL)
+	m_pHpBar(NULL),
+	m_pCameraArm(NULL)
 {
 	SetTypeID<CPlayer>();
 	SetTypeName("CPlayer");
@@ -329,6 +335,7 @@ CPlayer::CPlayer() :
 
 CPlayer::~CPlayer()
 {		
+	SAFE_RELEASE(m_pCameraArm);
 	SAFE_RELEASE(m_pHitCol);
 	SAFE_RELEASE(m_pAttCol);
 	SAFE_RELEASE(m_pAniController);

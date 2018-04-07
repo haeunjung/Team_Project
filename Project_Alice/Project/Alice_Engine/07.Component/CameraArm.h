@@ -18,6 +18,7 @@ private:
 public:
 	void SetZoomDistance(float _fMin, float _fMax);
 	void SetZoomSpeed(float _fSpeed);
+	void RotateY(float _fAngle, float _fTime);
 public:
 	bool Init() override;
 	void Input(float _fTime) override;

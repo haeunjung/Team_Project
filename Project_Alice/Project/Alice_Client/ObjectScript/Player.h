@@ -3,6 +3,7 @@
 #include "07.Component/Animation3D.h"
 #include "07.Component/ColliderSphere.h"
 #include "07.Component/UIBar.h"
+#include "07.Component/CameraArm.h"
 
 WOOJUN_USING
 
@@ -33,6 +34,7 @@ private:
 	CColliderSphere*	m_pAttCol;
 	CColliderSphere*	m_pHitCol;
 	CUIBar*				m_pHpBar;
+	CCameraArm*			m_pCameraArm;
 
 	//////////
 	bool m_bChange;

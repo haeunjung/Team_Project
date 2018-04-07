@@ -61,6 +61,7 @@
 #define WINDOWHANDLE	CEngine_Core::GetInst()->GetWindowHandle()
 
 #define PI				3.141592f
+#define PI_HALF			1.570796f
 
 #define	KEYPRESS(key)	CInput::GetInst()->KeyPress(key)
 #define	KEYPUSH(key)	CInput::GetInst()->KeyPush(key)

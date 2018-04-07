@@ -163,8 +163,9 @@ void CCamera::Update(float _fTime)
 		DxVector3	vMove = vAttachPos - m_vPrevPos;
 
 		m_pTransform->Move(vMove);
-
 		m_vPrevPos = vAttachPos;
+
+		m_pTransform->SetWorldRot(m_pAttachTransform->GetWorldRot());
 	}
 }
 

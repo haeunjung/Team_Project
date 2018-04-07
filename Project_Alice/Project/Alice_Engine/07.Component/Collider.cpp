@@ -307,6 +307,53 @@ bool CCollider::ColTerrainToPosition(const TERRAININFO & _tTerrainInfo, CTransfo
 	return true;
 }
 
+bool CCollider::ColSphereToAABB(const SPHEREINFO & _tSrc, const AABBINFO & _tDest)
+{
+	if (_tSrc.vCenter.x < _tDest.vCenter.x - _tDest.fLength * 0.5f)
+	{
+		m_Point.x = _tDest.vCenter.x - _tDest.fLength * 0.5f;
+	}
+	else if (_tSrc.vCenter.x > _tDest.vCenter.x + _tDest.fLength * 0.5f)
+	{
+		m_Point.x = _tDest.vCenter.x + _tDest.fLength * 0.5f;
+	}
+	else
+	{
+		m_Point.x = _tSrc.vCenter.x;
+	}
+
+	if (_tSrc.vCenter.y < _tDest.vCenter.y - _tDest.fLength * 0.5f)
+	{
+		m_Point.y = _tDest.vCenter.y - _tDest.fLength * 0.5f;
+	}
+	else if (_tSrc.vCenter.y > _tDest.vCenter.y + _tDest.fLength * 0.5f)
+	{
+		m_Point.y = _tDest.vCenter.y + _tDest.fLength * 0.5f;
+	}
+	else
+	{
+		m_Point.y = _tSrc.vCenter.y;
+	}
+
+	if (_tSrc.vCenter.z < _tDest.vCenter.z - _tDest.fLength * 0.5f)
+	{
+		m_Point.z = _tDest.vCenter.z - _tDest.fLength * 0.5f;
+	}
+	else if (_tSrc.vCenter.z > _tDest.vCenter.z + _tDest.fLength * 0.5f)
+	{
+		m_Point.z = _tDest.vCenter.z + _tDest.fLength * 0.5f;
+	}
+	else
+	{
+		m_Point.z = _tSrc.vCenter.z;
+	}
+
+
+
+
+	return true;
+}
+
 CCollider::CCollider()
 {
 	m_eComponentType = CT_COLLIDER;
