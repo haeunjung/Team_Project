@@ -418,14 +418,14 @@ typedef struct DLL _tagSphereInfo
 
 typedef struct DLL _tagAABBInfo
 {
-	DxVector3	vCenter;
-	DxVector3	vScale;
-	float		fLength;
+	DxVector3		vCenter;
+	DxVector3		vScale;
+	COL_AABB_POS	eColAABB;
 
 	_tagAABBInfo() :
 		vCenter(0.0f, 0.0f, 0.0f),
 		vScale(0.0f, 0.0f, 0.0f),
-		fLength(0.0f)
+		eColAABB(CAP_DEFAULT)
 	{
 	}
 
@@ -434,10 +434,9 @@ typedef struct DLL _tagAABBInfo
 		*this = _tAABB;
 	}
 
-	_tagAABBInfo(const DxVector3& _vCenter, const DxVector3& _vLength, float _fLength) :
+	_tagAABBInfo(const DxVector3& _vCenter, const DxVector3& _vLength) :
 		vCenter(_vCenter),
-		vScale(_vLength),
-		fLength(_fLength)
+		vScale(_vLength)
 	{
 	}
 }AABBINFO, *pAABBINFO;

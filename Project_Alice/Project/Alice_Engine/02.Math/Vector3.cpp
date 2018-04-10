@@ -577,6 +577,50 @@ _tagDxVector3 _tagDxVector3::TransformCoord(const _tagDxMatrix & _mat) const
 	return v1;
 }
 
+float _tagDxVector3::Max() const
+{
+	float Temp;
+	if (x > y)
+	{
+		Temp = x;
+	}
+	else
+	{
+		Temp = y;
+	}
+
+	if (Temp > z)
+	{
+		return Temp;
+	}
+	else
+	{
+		return z;
+	}
+}
+
+float _tagDxVector3::Min() const
+{
+	float Temp;
+	if (x < y)
+	{
+		Temp = x;
+	}
+	else
+	{
+		Temp = y;
+	}
+
+	if (Temp < z)
+	{
+		return Temp;
+	}
+	else
+	{
+		return z;
+	}
+}
+
 
 // ==================== Vector3 ====================
 _tagVector3::_tagVector3() :

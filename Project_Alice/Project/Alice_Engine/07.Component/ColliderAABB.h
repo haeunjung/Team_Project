@@ -11,7 +11,7 @@ private:
 private:
 	AABBINFO	m_tAABBInfo;
 public:
-	AABBINFO GetAABBInfo() const;
+	AABBINFO& GetAABBInfo();
 public:
 	bool Init() override;
 	void Input(float _fTime) override;

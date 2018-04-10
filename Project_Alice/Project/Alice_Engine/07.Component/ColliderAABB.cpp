@@ -26,7 +26,7 @@ CColliderAABB::CColliderAABB(const CColliderAABB & _ColliderSphere)
 {
 }
 
-AABBINFO CColliderAABB::GetAABBInfo() const
+AABBINFO& CColliderAABB::GetAABBInfo()
 {
 	return m_tAABBInfo;
 }
@@ -47,8 +47,7 @@ void CColliderAABB::Input(float _fTime)
 void CColliderAABB::Update(float _fTime)
 {
 	m_tAABBInfo.vCenter = m_pTransform->GetWorldPos();
-	m_tAABBInfo.vScale = m_pTransform->GetWorldScale();
-	m_tAABBInfo.fLength = m_tAABBInfo.vScale.Length();
+	m_tAABBInfo.vScale = m_pTransform->GetWorldScale();	
 }
 
 void CColliderAABB::LateUpdate(float _fTime)

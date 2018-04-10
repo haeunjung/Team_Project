@@ -30,14 +30,23 @@ private:
 	float	m_fSpeed;
 	int		m_iHp;
 	int		m_iHpMax;
+
+	bool	m_bFrontCol;
+	bool	m_bBackCol;
+	bool	m_bLeftCol;
+	bool	m_bRightCol;
+
 	CAnimation3D*		m_pAniController;
 	CColliderSphere*	m_pAttCol;
 	CColliderSphere*	m_pHitCol;
 	CUIBar*				m_pHpBar;
 	CCameraArm*			m_pCameraArm;
+	DxVector3			m_vPrePos;
+	DxVector3			m_vColAxis[AXIS_MAX];
 
 	//////////
 	bool m_bChange;
+	
 public:
 	void AniCallback(float _fTime);
 public:
@@ -46,7 +55,9 @@ public:
 	void Update(float _fTime) override;	
 public:
 	void OnCollisionStay(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
+	void OnCollisionLeave(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
 private:
+	void PlayerMove(float _fTime);
 	void CreateHpBar();
 	void Attack();
 	void Jump();

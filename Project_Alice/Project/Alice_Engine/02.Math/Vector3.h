@@ -105,6 +105,8 @@ typedef struct DLL _tagDxVector3 : public XMFLOAT3
 	XMVECTOR Convert() const;
 	_tagDxVector3 TransformNormal(const union _tagDxMatrix& _mat) const;
 	_tagDxVector3 TransformCoord(const union _tagDxMatrix& _mat) const;
+	float Max() const;
+	float Min() const;
 }DxVector3, *pDxVector3;
 
 static DxVector3 Vec3Zero = { 0.0f, 0.0f, 0.0f };

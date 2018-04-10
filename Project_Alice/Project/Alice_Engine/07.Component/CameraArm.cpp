@@ -220,7 +220,11 @@ void CCameraArm::RotateY(float _fAngle, float _fTime)
 		vPos = vDist.TransformCoord(matRot);
 		m_pTransform->SetWorldPos(vPos);
 
+		SAFE_RELEASE(pTransform);
+		SAFE_RELEASE(pAttachObject);
 	}
+
+	SAFE_RELEASE(pCamera);
 }
 
 bool CCameraArm::Init()

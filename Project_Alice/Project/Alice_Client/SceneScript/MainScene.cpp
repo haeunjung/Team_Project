@@ -127,6 +127,7 @@ void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, con
 	//SAFE_RELEASE(pColSphere);
 	
 	CColliderAABB* pColAABB = pGameObject->AddComponent<CColliderAABB>(_strKey + "ColAABB");
+	pColAABB->SetColCheck(CC_OBJ);
 	SAFE_RELEASE(pColAABB);
 
 	pLayer->AddObject(pGameObject);
@@ -392,7 +393,8 @@ bool CMainScene::Init()
 
 	// Test Box Mesh »ý¼º
 	//LoadObject("box", DxVector3(-1.0f, 0.0f, 1.0f), DxVector3(1.0f, 1.0f, 1.0f), DxVector3(PI, 0.0f, 0.0f));
-	LoadObject("Box2", DxVector3(5.0f, 2.5f, 5.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
+	LoadObject("Box2", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
+	LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
 
 	return true;
 }

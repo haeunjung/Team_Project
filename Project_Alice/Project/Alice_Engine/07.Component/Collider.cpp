@@ -307,51 +307,80 @@ bool CCollider::ColTerrainToPosition(const TERRAININFO & _tTerrainInfo, CTransfo
 	return true;
 }
 
-bool CCollider::ColSphereToAABB(const SPHEREINFO & _tSrc, const AABBINFO & _tDest)
+bool CCollider::ColSphereToAABB(const SPHEREINFO & _tSrc, AABBINFO & _tDest)
 {
-	if (_tSrc.vCenter.x < _tDest.vCenter.x - _tDest.fLength * 0.5f)
+	if (_tSrc.vCenter.x < _tDest.vCenter.x - (_tDest.vScale.x / 2.0f))
 	{
-		m_Point.x = _tDest.vCenter.x - _tDest.fLength * 0.5f;
+		m_Point.x = _tDest.vCenter.x - (_tDest.vScale.x / 2.0f);
 	}
-	else if (_tSrc.vCenter.x > _tDest.vCenter.x + _tDest.fLength * 0.5f)
+	else if (_tSrc.vCenter.x > _tDest.vCenter.x + (_tDest.vScale.x / 2.0f))
 	{
-		m_Point.x = _tDest.vCenter.x + _tDest.fLength * 0.5f;
+		m_Point.x = _tDest.vCenter.x + (_tDest.vScale.x / 2.0f);
 	}
 	else
 	{
 		m_Point.x = _tSrc.vCenter.x;
 	}
 
-	if (_tSrc.vCenter.y < _tDest.vCenter.y - _tDest.fLength * 0.5f)
+	if (_tSrc.vCenter.y < _tDest.vCenter.y - (_tDest.vScale.y / 2.0f))
 	{
-		m_Point.y = _tDest.vCenter.y - _tDest.fLength * 0.5f;
+		m_Point.y = _tDest.vCenter.y - (_tDest.vScale.y / 2.0f);
 	}
-	else if (_tSrc.vCenter.y > _tDest.vCenter.y + _tDest.fLength * 0.5f)
+	else if (_tSrc.vCenter.y > _tDest.vCenter.y + (_tDest.vScale.y / 2.0f))
 	{
-		m_Point.y = _tDest.vCenter.y + _tDest.fLength * 0.5f;
+		m_Point.y = _tDest.vCenter.y + (_tDest.vScale.y / 2.0f);
 	}
 	else
 	{
 		m_Point.y = _tSrc.vCenter.y;
 	}
 
-	if (_tSrc.vCenter.z < _tDest.vCenter.z - _tDest.fLength * 0.5f)
+	if (_tSrc.vCenter.z < _tDest.vCenter.z - (_tDest.vScale.z / 2.0f))
 	{
-		m_Point.z = _tDest.vCenter.z - _tDest.fLength * 0.5f;
+		m_Point.z = _tDest.vCenter.z - (_tDest.vScale.z / 2.0f);
 	}
-	else if (_tSrc.vCenter.z > _tDest.vCenter.z + _tDest.fLength * 0.5f)
+	else if (_tSrc.vCenter.z > _tDest.vCenter.z + (_tDest.vScale.z / 2.0f))
 	{
-		m_Point.z = _tDest.vCenter.z + _tDest.fLength * 0.5f;
+		m_Point.z = _tDest.vCenter.z + (_tDest.vScale.z / 2.0f);
 	}
 	else
 	{
 		m_Point.z = _tSrc.vCenter.z;
 	}
 
+	// MAX == Z : FRONT
 
 
+	// 구의 반지름과 구와 m_Point의 거리 비교
+	// 구의 반지름이 더 크면 충돌
+	DxVector3 vDist = _tSrc.vCenter - m_Point;
+	if (_tSrc.fRadius > vDist.Length())
+	{
+		if (vDist.x == vDist.Max()
+			&& vDist.y == vDist.z)
+		{
+			_tDest.eColAABB = CAP_RIGHT;
+		}
+		else if (vDist.z == vDist.Max()
+			&& vDist.x == vDist.y)
+		{
+			_tDest.eColAABB = CAP_FRONT;
+		}
+		else if (vDist.x == vDist.Min()
+			&& vDist.y == vDist.z)
+		{
+			_tDest.eColAABB = CAP_LEFT;
+		}
+		else if (vDist.z == vDist.Min()
+			&& vDist.x == vDist.y)
+		{
+			_tDest.eColAABB = CAP_BACK;
+		}
 
-	return true;
+		return true;
+	}
+	
+	return false;
 }
 
 CCollider::CCollider()

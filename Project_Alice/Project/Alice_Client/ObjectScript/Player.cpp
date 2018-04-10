@@ -13,6 +13,7 @@
 #include "07.Component/Effect.h"
 #include "07.Component/Animation2D.h"
 #include "07.Component/Renderer2D.h"
+#include "07.Component/ColliderAABB.h"
 #include "RotBullet.h"
 #include "PlayerBullet.h"
 
@@ -57,7 +58,9 @@ bool CPlayer::Init()
 	m_pHitCol->SetColCheck(CC_HIT);
 
 	CGameObject* pCameraObject = m_pScene->GetMainCameraObject();
+	
 	m_pCameraArm = (CCameraArm*)pCameraObject->FindComponentFromType(CT_CAMERAARM);
+	
 	SAFE_RELEASE(pCameraObject);
 
 	GET_SINGLE(CInput)->CreateKey("MoveForward", VK_UP);
@@ -87,49 +90,20 @@ void CPlayer::Input(float _fTime)
 		return;
 	}
 
-	if (true == KEYPUSH("MoveForward"))
-	{
-		if (true == KEYPRESS("Jump"))
-		{
-			m_ePlayerState = PS_MOVINGJUMP;
-			return;
-		}
-		m_pTransform->Forward(m_fSpeed, _fTime);
-		m_pAniController->ChangeClip("Run");
-	}
-	else if (true == KEYUP("MoveForward"))
-	{
-		m_pAniController->ReturnToDefaultClip();
-	}
+	PlayerMove(_fTime);
 
-	if (true == KEYPUSH("MoveBack"))
+	if (KEYPRESS("Jump")
+		&& KEYPUSH("MoveForward"))
 	{
-		m_pTransform->Forward(-m_fSpeed, _fTime);
-		m_pAniController->ChangeClip("Run");
-	}
-	else if (true == KEYUP("MoveBack"))
-	{
-		m_pAniController->ReturnToDefaultClip();
-	}
-
-	if (true == KEYPUSH("MoveLeft"))
-	{
-		m_pTransform->RotateY(-PI_HALF, _fTime);
-		m_pCameraArm->RotateY(-PI_HALF, _fTime);
-		//m_pTransform->Right(-m_fSpeed, _fTime);
-	}
-	if (true == KEYPUSH("MoveRight"))
-	{
-		m_pTransform->RotateY(PI_HALF, _fTime);
-		m_pCameraArm->RotateY(PI_HALF, _fTime);
-		//m_pTransform->Right(m_fSpeed, _fTime);
+		m_ePlayerState = PS_MOVINGJUMP;
+		return;
 	}
 
 	if (true == KEYPRESS("Jump"))
 	{
 		m_ePlayerState = PS_JUMP;
 		return;
-	}
+	}	
 
 	if (true == KEYPRESS("ChangeCamera"))
 	{
@@ -168,7 +142,6 @@ void CPlayer::Input(float _fTime)
 			m_iHp -= 10;
 			m_pHpBar->SetCurValue(m_iHp);
 		}
-		//m_pHpBar->AddValue(-10.0f);
 	}
 	else if (true == KEYPRESS("F2"))
 	{
@@ -177,13 +150,6 @@ void CPlayer::Input(float _fTime)
 			m_iHp += 10;
 			m_pHpBar->SetCurValue(m_iHp);
 		}		
-		//m_pHpBar->AddValue(10.0f);
-	}
-
-	if (true == KEYPRESS("Init"))
-	{
-		//m_pTransform->SetWorldPos(DxVector3(0.0f, 0.0f, 0.0f));
-		//m_pTransform->SetWorldRot(DxVector3(0.0f, 0.0f, 0.0f));
 	}
 }
 
@@ -216,6 +182,143 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 			m_pHpBar->SetCurValue(m_iHp);
 			_pDest->SetIsEnable(false);
 		}
+	}
+	
+	if (CC_HIT == _pSrc->GetColliderCheck() &&
+		CC_OBJ == _pDest->GetColliderCheck())
+	{		
+		COL_AABB_POS Col = ((CColliderAABB*)_pDest)->GetAABBInfo().eColAABB;
+		if (CAP_LEFT == Col)
+		{
+			m_bLeftCol = true;
+		}
+		else if(CAP_RIGHT == Col)
+		{			
+			m_bRightCol = true;
+		}
+		else if (CAP_FRONT == Col)
+		{
+			m_bFrontCol = true;
+		}
+		else if(CAP_BACK == Col)
+		{
+			m_bBackCol = true;
+		}
+
+		for (int i = 0; i < AXIS_MAX; ++i)
+		{
+			m_vColAxis[i] = _pDest->GetTransformWorldAxis((AXIS)i);
+		}
+	}
+}
+
+void CPlayer::OnCollisionLeave(CCollider * _pSrc, CCollider * _pDest, float _fTime)
+{
+	if (CC_HIT == _pSrc->GetColliderCheck() &&
+		CC_OBJ == _pDest->GetColliderCheck())
+	{
+		m_bFrontCol = false;
+		m_bBackCol = false; 
+		m_bLeftCol = false;
+		m_bRightCol = false;
+	}
+}
+
+void CPlayer::PlayerMove(float _fTime)
+{
+	if (true == KEYPUSH("MoveForward"))
+	{
+		m_vPrePos = m_pTransform->GetWorldPos();
+		m_pTransform->Forward(m_fSpeed, _fTime);
+
+		if (m_bFrontCol)
+		{			
+			if (0.0f > m_vColAxis[AXIS_Z].Dot(m_pTransform->GetWorldAxis(AXIS_Z)))
+			{
+				m_pTransform->SetWorldPosZ(m_vPrePos.z);
+			}
+		}
+		else if (m_bBackCol)
+		{
+			if (0.0f < m_vColAxis[AXIS_Z].Dot(m_pTransform->GetWorldAxis(AXIS_Z)))
+			{
+				m_pTransform->SetWorldPosZ(m_vPrePos.z);
+			}
+		}
+
+		if (m_bLeftCol)
+		{
+			if (0.0f < m_vColAxis[AXIS_X].Dot(m_pTransform->GetWorldAxis(AXIS_Z)))
+			{
+				m_pTransform->SetWorldPosX(m_vPrePos.x);
+			}
+		}
+		else if (m_bRightCol)
+		{
+			if (0.0f > m_vColAxis[AXIS_X].Dot(m_pTransform->GetWorldAxis(AXIS_Z)))
+			{
+				m_pTransform->SetWorldPosX(m_vPrePos.x);
+			}			
+		}
+
+		m_pAniController->ChangeClip("Run");
+	}
+	else if (true == KEYUP("MoveForward"))
+	{
+		m_pAniController->ReturnToDefaultClip();
+	}
+
+	if (true == KEYPUSH("MoveBack"))
+	{
+		m_vPrePos = m_pTransform->GetWorldPos();
+		m_pTransform->Forward(-m_fSpeed, _fTime);
+
+		if (m_bFrontCol)
+		{
+			if (0.0f < m_vColAxis[AXIS_Z].Dot(m_pTransform->GetWorldAxis(AXIS_Z)))
+			{
+				m_pTransform->SetWorldPosZ(m_vPrePos.z);
+			}
+		}
+		else if (m_bBackCol)
+		{
+			if (0.0f > m_vColAxis[AXIS_Z].Dot(m_pTransform->GetWorldAxis(AXIS_Z)))
+			{
+				m_pTransform->SetWorldPosZ(m_vPrePos.z);
+			}
+		}
+
+		if (m_bLeftCol)
+		{
+			if (0.0f > m_vColAxis[AXIS_X].Dot(m_pTransform->GetWorldAxis(AXIS_Z)))
+			{
+				m_pTransform->SetWorldPosX(m_vPrePos.x);
+			}
+		}
+		else if (m_bRightCol)
+		{
+			if (0.0f < m_vColAxis[AXIS_X].Dot(m_pTransform->GetWorldAxis(AXIS_Z)))
+			{
+				m_pTransform->SetWorldPosX(m_vPrePos.x);
+			}
+		}
+
+		m_pAniController->ChangeClip("Run");
+	}
+	else if (true == KEYUP("MoveBack"))
+	{
+		m_pAniController->ReturnToDefaultClip();
+	}
+
+	if (true == KEYPUSH("MoveLeft"))
+	{
+		m_pTransform->RotateY(-PI_HALF, _fTime);
+		m_pCameraArm->RotateY(-PI_HALF, _fTime);
+	}
+	if (true == KEYPUSH("MoveRight"))
+	{
+		m_pTransform->RotateY(PI_HALF, _fTime);
+		m_pCameraArm->RotateY(PI_HALF, _fTime);
 	}
 }
 
@@ -280,7 +383,7 @@ void CPlayer::Attack()
 void CPlayer::Jump()
 {
 	if (true == m_pAniController->CheckClipName("Jump"))
-	{
+	{		
 		if (true == m_pAniController->GetAnimationEnd())
 		{
 			m_pAniController->ReturnToDefaultClip();
@@ -323,6 +426,10 @@ CPlayer::CPlayer() :
 	m_bAttack(false),
 	m_bJump(false),
 	m_bChange(false),
+	m_bFrontCol(false),
+	m_bBackCol(false),
+	m_bLeftCol(false),
+	m_bRightCol(false),
 	m_pAniController(NULL),
 	m_pAttCol(NULL),
 	m_pHitCol(NULL),
