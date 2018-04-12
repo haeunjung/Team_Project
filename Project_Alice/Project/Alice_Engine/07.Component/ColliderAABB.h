@@ -12,6 +12,10 @@ private:
 	AABBINFO	m_tAABBInfo;
 public:
 	AABBINFO& GetAABBInfo();
+	float GetTop() const;
+	float GetBottom() const;
+	float GetLeft() const;
+	float GetRight() const;
 public:
 	bool Init() override;
 	void Input(float _fTime) override;

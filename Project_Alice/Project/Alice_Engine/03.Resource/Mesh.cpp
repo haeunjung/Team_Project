@@ -791,6 +791,10 @@ void CMesh::LoadFromFullPath(const char * _pFileName)
 
 	fclose(pFile);
 
+	m_vSize = m_vMax - m_vMin;
+	m_tSphere.vCenter = (m_vMin + m_vMax) / 2.0f;
+	m_tSphere.fRadius = m_vSize.Length() / 2.0f;
+
 	SAFE_RELEASE(m_pAnimation);
 
 	m_pAnimation = new CAnimation3D();

@@ -15,6 +15,26 @@ SPHEREINFO CColliderSphere::GetSphereInfo() const
 	return m_tSphereInfo;
 }
 
+float CColliderSphere::GetSphereTop() const
+{
+	return m_tSphereInfo.vCenter.y + m_tSphereInfo.fRadius;
+}
+
+float CColliderSphere::GetSphereBottom() const
+{
+	return m_tSphereInfo.vCenter.y - m_tSphereInfo.fRadius;
+}
+
+float CColliderSphere::GetSphereLeft() const
+{
+	return m_tSphereInfo.vCenter.x - m_tSphereInfo.fRadius;
+}
+
+float CColliderSphere::GetSphereRight() const
+{
+	return m_tSphereInfo.vCenter.x + m_tSphereInfo.fRadius;
+}
+
 void CColliderSphere::SetBoneIndex(int _BoneIndex)
 {
 	m_iBoneIndex = _BoneIndex;

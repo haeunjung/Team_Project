@@ -4,6 +4,7 @@
 #include "07.Component/ColliderSphere.h"
 #include "07.Component/UIBar.h"
 #include "07.Component/CameraArm.h"
+#include "07.Component/ColliderAABB.h"
 
 WOOJUN_USING
 
@@ -17,7 +18,8 @@ enum PLAYER_STATE
 	PS_DEFAULT,
 	PS_ATTACK,
 	PS_JUMP,
-	PS_MOVINGJUMP
+	PS_MOVINGJUMP,
+	PS_CLIMB
 };
 
 class CPlayer : public CScript
@@ -44,6 +46,9 @@ private:
 	DxVector3			m_vPrePos;
 	DxVector3			m_vColAxis[AXIS_MAX];
 
+	AABBINFO			m_pOtherCol;
+	bool	m_bClimb;
+
 	//////////
 	bool m_bChange;
 	
@@ -58,10 +63,15 @@ public:
 	void OnCollisionLeave(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
 private:
 	void PlayerMove(float _fTime);
+	void MoveForward(float _fTime);
+	void MoveBack(float _fTime);
+	void MoveUp(float _fTime);
+	void MoveDown(float _fTime);
 	void CreateHpBar();
 	void Attack();
 	void Jump();
 	void MovingJump(float _fTime);
+	void Climb();
 public:
 	CPlayer();
 	~CPlayer();

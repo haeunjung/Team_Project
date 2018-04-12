@@ -30,6 +30,12 @@ public:
 // Mesh
 public:
 	CMesh* GetMesh() const;
+	DxVector3 GetMeshMin() const;
+	DxVector3 GetMeshMax() const;
+	DxVector3 GetMeshSize() const;
+	SPHEREINFO GetSphereInfo() const;
+	DxVector3 GetCenter() const;
+	float GetRadius() const;
 public:
 	void SetMesh(const string& _strKey);
 	void SetMesh(const string& _strKey, const TCHAR* _pFileName, const string& _strPathKey = MESHPATH);

@@ -31,6 +31,26 @@ AABBINFO& CColliderAABB::GetAABBInfo()
 	return m_tAABBInfo;
 }
 
+float CColliderAABB::GetTop() const
+{
+	return m_tAABBInfo.vCenter.y + (m_tAABBInfo.vScale.y * 0.5f);
+}
+
+float CColliderAABB::GetBottom() const
+{
+	return m_tAABBInfo.vCenter.y - (m_tAABBInfo.vScale.y * 0.5f);
+}
+
+float CColliderAABB::GetLeft() const
+{
+	return m_tAABBInfo.vCenter.x - (m_tAABBInfo.vScale.x * 0.5f);
+}
+
+float CColliderAABB::GetRight() const
+{
+	return m_tAABBInfo.vCenter.x + (m_tAABBInfo.vScale.x * 0.5f);
+}
+
 bool CColliderAABB::Init()
 {
 	SetMesh("ColorBox");

@@ -97,6 +97,36 @@ CMesh * CRenderer::GetMesh() const
 	return m_pMesh;
 }
 
+DxVector3 CRenderer::GetMeshMin() const
+{
+	return m_pMesh->GetMeshMin();
+}
+
+DxVector3 CRenderer::GetMeshMax() const
+{
+	return m_pMesh->GetMeshMax();
+}
+
+DxVector3 CRenderer::GetMeshSize() const
+{
+	return m_pMesh->GetMeshSize();
+}
+
+SPHEREINFO CRenderer::GetSphereInfo() const
+{
+	return m_pMesh->GetSphereInfo();
+}
+
+DxVector3 CRenderer::GetCenter() const
+{
+	return m_pMesh->GetCenter();
+}
+
+float CRenderer::GetRadius() const
+{
+	return m_pMesh->GetRadius();
+}
+
 void CRenderer::SetMesh(const string & _strKey)
 {
 	SAFE_RELEASE(m_pMesh);

@@ -309,39 +309,39 @@ bool CCollider::ColTerrainToPosition(const TERRAININFO & _tTerrainInfo, CTransfo
 
 bool CCollider::ColSphereToAABB(const SPHEREINFO & _tSrc, AABBINFO & _tDest)
 {
-	if (_tSrc.vCenter.x < _tDest.vCenter.x - (_tDest.vScale.x / 2.0f))
+	if (_tSrc.vCenter.x < _tDest.vCenter.x - (_tDest.vScale.x * 0.5f))
 	{
-		m_Point.x = _tDest.vCenter.x - (_tDest.vScale.x / 2.0f);
+		m_Point.x = _tDest.vCenter.x - (_tDest.vScale.x * 0.5f);
 	}
-	else if (_tSrc.vCenter.x > _tDest.vCenter.x + (_tDest.vScale.x / 2.0f))
+	else if (_tSrc.vCenter.x > _tDest.vCenter.x + (_tDest.vScale.x * 0.5f))
 	{
-		m_Point.x = _tDest.vCenter.x + (_tDest.vScale.x / 2.0f);
+		m_Point.x = _tDest.vCenter.x + (_tDest.vScale.x * 0.5f);
 	}
 	else
 	{
 		m_Point.x = _tSrc.vCenter.x;
 	}
 
-	if (_tSrc.vCenter.y < _tDest.vCenter.y - (_tDest.vScale.y / 2.0f))
+	if (_tSrc.vCenter.y < _tDest.vCenter.y - (_tDest.vScale.y * 0.5f))
 	{
-		m_Point.y = _tDest.vCenter.y - (_tDest.vScale.y / 2.0f);
+		m_Point.y = _tDest.vCenter.y - (_tDest.vScale.y * 0.5f);
 	}
-	else if (_tSrc.vCenter.y > _tDest.vCenter.y + (_tDest.vScale.y / 2.0f))
+	else if (_tSrc.vCenter.y > _tDest.vCenter.y + (_tDest.vScale.y * 0.5f))
 	{
-		m_Point.y = _tDest.vCenter.y + (_tDest.vScale.y / 2.0f);
+		m_Point.y = _tDest.vCenter.y + (_tDest.vScale.y * 0.5f);
 	}
 	else
 	{
 		m_Point.y = _tSrc.vCenter.y;
 	}
 
-	if (_tSrc.vCenter.z < _tDest.vCenter.z - (_tDest.vScale.z / 2.0f))
+	if (_tSrc.vCenter.z < _tDest.vCenter.z - (_tDest.vScale.z * 0.5f))
 	{
-		m_Point.z = _tDest.vCenter.z - (_tDest.vScale.z / 2.0f);
+		m_Point.z = _tDest.vCenter.z - (_tDest.vScale.z * 0.5f);
 	}
-	else if (_tSrc.vCenter.z > _tDest.vCenter.z + (_tDest.vScale.z / 2.0f))
+	else if (_tSrc.vCenter.z > _tDest.vCenter.z + (_tDest.vScale.z * 0.5f))
 	{
-		m_Point.z = _tDest.vCenter.z + (_tDest.vScale.z / 2.0f);
+		m_Point.z = _tDest.vCenter.z + (_tDest.vScale.z * 0.5f);
 	}
 	else
 	{

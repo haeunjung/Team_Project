@@ -14,6 +14,10 @@ private:
 	int			m_iBoneIndex;
 public:
 	SPHEREINFO GetSphereInfo() const;
+	float GetSphereTop() const;
+	float GetSphereBottom() const;
+	float GetSphereLeft() const;
+	float GetSphereRight() const;
 	void SetBoneIndex(int _BoneIndex);
 public:
 	void SetSphereInfo(const SPHEREINFO& _tSphereInfo);
