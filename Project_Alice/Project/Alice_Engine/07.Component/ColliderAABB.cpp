@@ -67,7 +67,7 @@ void CColliderAABB::Input(float _fTime)
 void CColliderAABB::Update(float _fTime)
 {
 	m_tAABBInfo.vCenter = m_pTransform->GetWorldPos();
-	m_tAABBInfo.vScale = m_pTransform->GetWorldScale();	
+	m_tAABBInfo.vScale = m_pTransform->GetWorldScale()/* * 0.95f*/;	
 }
 
 void CColliderAABB::LateUpdate(float _fTime)
@@ -85,9 +85,6 @@ void CColliderAABB::Render(float _fTime)
 
 	XMMATRIX	matScale, matRot, matPos;
 
-	//DxVector3 vScale = m_tAABBInfo.vMax - m_tAABBInfo.vMin;
-	DxVector3 vScale = m_pTransform->GetWorldScale();
-
 	// 크기
 	matScale = XMMatrixScaling(m_tAABBInfo.vScale.x, m_tAABBInfo.vScale.y, m_tAABBInfo.vScale.z);
 
@@ -96,7 +93,6 @@ void CColliderAABB::Render(float _fTime)
 	matRot = m_pTransform->GetWorldRotMatrix().mat;
 
 	// 이동
-	DxVector3 vPos = m_pTransform->GetWorldPos();
 	matPos = XMMatrixTranslation(m_tAABBInfo.vCenter.x, m_tAABBInfo.vCenter.y, m_tAABBInfo.vCenter.z);
 
 	// 공전 부모 - 없음

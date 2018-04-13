@@ -19,7 +19,8 @@ enum PLAYER_STATE
 	PS_ATTACK,
 	PS_JUMP,
 	PS_MOVINGJUMP,
-	PS_CLIMB
+	PS_CLIMB,
+	PS_FALL
 };
 
 class CPlayer : public CScript
@@ -37,16 +38,18 @@ private:
 	bool	m_bBackCol;
 	bool	m_bLeftCol;
 	bool	m_bRightCol;
+	bool	m_bUpCol;
 
 	CAnimation3D*		m_pAniController;
 	CColliderSphere*	m_pAttCol;
 	CColliderSphere*	m_pHitCol;
+	CColliderSphere*	m_pFootCol;
 	CUIBar*				m_pHpBar;
 	CCameraArm*			m_pCameraArm;
 	DxVector3			m_vPrePos;
 	DxVector3			m_vColAxis[AXIS_MAX];
 
-	AABBINFO			m_pOtherCol;
+	CCollider*			m_pOtherCol;
 	bool	m_bClimb;
 
 	//////////
@@ -68,10 +71,11 @@ private:
 	void MoveUp(float _fTime);
 	void MoveDown(float _fTime);
 	void CreateHpBar();
-	void Attack();
-	void Jump();
-	void MovingJump(float _fTime);
-	void Climb();
+	void PlayerAttack();
+	void PlayerJump();
+	void PlayerMovingJump(float _fTime);
+	void PlayerClimb();
+	void PlayerFall(float _fTime);
 public:
 	CPlayer();
 	~CPlayer();
