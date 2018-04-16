@@ -148,6 +148,12 @@
     <Filter Include="04. Rendering\03. RenderTarget">
       <UniqueIdentifier>{f0e31842-89df-4c4f-b502-a40bf0fa53fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. Component\13. SoundPlayer">
+      <UniqueIdentifier>{4b933f8b-17cc-4b33-a216-6d085bc58f5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Resource\03. Sound">
+      <UniqueIdentifier>{609a5261-ae51-48a7-87ec-4f0fed8a2bc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine_Core.h">
@@ -373,6 +379,12 @@
     <ClInclude Include="07.Component\ColliderAABB.h">
       <Filter>07. Component\05. Collider</Filter>
     </ClInclude>
+    <ClInclude Include="07.Component\SoundPlayer.h">
+      <Filter>07. Component\13. SoundPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="03.Resource\Sound.h">
+      <Filter>03. Resource\03. Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -573,6 +585,12 @@
     </ClCompile>
     <ClCompile Include="07.Component\ColliderAABB.cpp">
       <Filter>07. Component\05. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\SoundPlayer.cpp">
+      <Filter>07. Component\13. SoundPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="03.Resource\Sound.cpp">
+      <Filter>03. Resource\03. Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

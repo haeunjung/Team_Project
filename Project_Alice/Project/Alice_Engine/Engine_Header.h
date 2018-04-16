@@ -11,6 +11,14 @@
 #include <functional>
 #include <process.h>
 
+#include <fmod.hpp>
+
+#ifdef _WIN32
+#pragma comment(lib, "fmod_vc.lib")
+#else
+#pragma comment(lib, "fmod64_vc.lib")
+#endif
+
 // DirectX
 #include <d3d11.h>
 #include <d3dcompiler.h>

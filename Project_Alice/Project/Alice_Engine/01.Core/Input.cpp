@@ -230,8 +230,8 @@ void CInput::ComputeMouse(bool bStart)
 	RECT	rcClient = {};
 	GetClientRect(WINDOWHANDLE, &rcClient);
 
-	float	x = rcClient.right - rcClient.left;
-	float	y = rcClient.bottom - rcClient.top;
+	float	x = (float)(rcClient.right - rcClient.left);
+	float	y = (float)(rcClient.bottom - rcClient.top);
 
 	RESOLUTION	tRS = _RESOLUTION;
 
@@ -253,5 +253,5 @@ void CInput::ComputeMouse(bool bStart)
 
 	m_tMousePos = tMousePos;
 
-	m_pMouseTr->SetWorldPos(tMousePos.x, tMousePos.y, 0.f);
+	m_pMouseTr->SetWorldPos((float)tMousePos.x, (float)tMousePos.y, 0.f);
 }

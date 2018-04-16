@@ -2,6 +2,9 @@
 #include "Mesh.h"
 #include "Sampler.h"
 #include "Texture.h"
+#include "Sound.h"
+#include "../01.Core/PathMgr.h"
+#include "../07.Component/SoundPlayer.h"
 
 WOOJUN_USING
 
@@ -173,6 +176,8 @@ bool CResMgr::Init()
 
 	pSampler = CreateSampler("Point", D3D11_FILTER_MIN_MAG_MIP_POINT);
 	SAFE_RELEASE(pSampler);
+
+	SoundInit();
 
 	return true;
 }
@@ -590,6 +595,56 @@ CSampler * CResMgr::FindSampler(const string & _strKey)
 	return m_iterSampler->second;
 }
 
+void CResMgr::SoundInit()
+{
+	FMOD::System_Create(&m_FmodSystem);
+
+	if (nullptr == m_FmodSystem)
+	{
+		return;
+	}
+
+	m_FmodSystem->init(128, FMOD_DEFAULT, nullptr);
+	CSoundPlayer::SystemInit(m_FmodSystem);
+}
+
+CSound * CResMgr::FindSound(const string & _strKey)
+{
+	m_iterSound = m_mapSound.find(_strKey);
+
+	if (m_mapSound.end() == m_iterSound)
+	{
+		return NULL;
+	}
+
+	m_iterSound->second->AddRef();
+
+	return m_iterSound->second;
+}
+
+CSound* CResMgr::SoundLoad(const string & _strKey, const string& _strPath /*= SOUNDPATH*/)
+{
+	//CSound* pSound = FindSound(_strKey);
+
+	//if (nullptr != pSound)
+	//{
+	//	return pSound;
+	//}
+
+	CSound* pSound = new CSound();
+
+	if (false == pSound->LoadSound(m_FmodSystem, _strKey, _strPath))
+	{
+		SAFE_DELETE(pSound);
+		return NULL;
+	}
+
+	pSound->AddRef();
+	m_mapSound.insert(make_pair(_strKey, pSound));
+
+	return pSound;
+}
+
 CResMgr::CResMgr()
 {
 }
@@ -599,4 +654,5 @@ CResMgr::~CResMgr()
 	Safe_Release_Map(m_mapMesh);
 	Safe_Release_Map(m_mapTexture);
 	Safe_Release_Map(m_mapSampler);
+	Safe_Release_Map(m_mapSound);
 }

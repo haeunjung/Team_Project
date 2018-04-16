@@ -26,6 +26,7 @@
 #include "07.Component/Terrain.h"
 #include "07.Component/ColliderSphere.h"
 #include "07.Component/ColliderAABB.h"
+#include "07.Component/SoundPlayer.h"
 #include "../ObjectScript/Mouse.h"
 
 void CMainScene::CreateProtoType()
@@ -341,6 +342,15 @@ bool CMainScene::Init()
 
 	CCameraArm*	pCameraArm = pCameraObject->AddComponent<CCameraArm>("CameraArm");
 	SAFE_RELEASE(pCameraArm);
+
+	// BGM
+	CGameObject* pBGM = CGameObject::Create("BGM");
+	CSoundPlayer* pSoundPlayer = pBGM->AddComponent<CSoundPlayer>("BGMPlayer");
+	pSoundPlayer->MyPlaySound("Title.mp3");
+	SAFE_RELEASE(pSoundPlayer);
+
+	pLayer->AddObject(pBGM);
+	SAFE_RELEASE(pBGM);
 	
 	// 플레이어
 	CGameObject*		pPlayerObject = CGameObject::Create("PlayerObject");	

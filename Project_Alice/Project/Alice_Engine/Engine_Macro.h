@@ -51,6 +51,7 @@
 #define TEXTUREPATH		"TexturePath"
 #define MESHPATH		"MeshPath"
 #define DATAPATH		"DataPath"
+#define SOUNDPATH		"SoundPath"
 
 #define MAINTIMER		"MainThread"
 #define DEFAULTSCENE	"DefaultScene"

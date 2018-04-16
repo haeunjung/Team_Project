@@ -866,7 +866,7 @@ void CAnimation3D::Update(float _fTime)
 			// 현재 프레임의 시간을 얻어온다.
 			double	dFrameTime = pCurKey->dTime;
 
-			float	fPercent = (fAnimationTime - dFrameTime) / m_fFrameTime;
+			float	fPercent = ((double)fAnimationTime - dFrameTime) / m_fFrameTime;
 
 			XMVECTOR	vScale = XMVectorLerp(pCurKey->vScale.Convert(), pNextKey->vScale.Convert(), fPercent);
 			XMVECTOR	vPos = XMVectorLerp(pCurKey->vPos.Convert(), pNextKey->vPos.Convert(), fPercent);

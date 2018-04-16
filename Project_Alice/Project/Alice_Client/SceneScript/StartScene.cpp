@@ -18,9 +18,15 @@ bool CStartScene::Init()
 {
 	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
 
+	CGameObject* pBGM = CGameObject::Create("BGM");
+	m_pSoundPlayer = pBGM->AddComponent<CSoundPlayer>("BGMPlayer");
+	m_pSoundPlayer->MyPlaySound("Title.mp3");
+	SAFE_RELEASE(pBGM);
+
 	CGameObject*	pBGObject = CGameObject::Create("BGObject");
 
 	CTransform*		pTransform = pBGObject->GetTransform();
+	pTransform->SetWorldPos(640.0f, 360.0f, 0.0f);
 	pTransform->SetWorldScale(1280.0f, 720.0f, 1.0f);
 	SAFE_RELEASE(pTransform);
 
@@ -67,11 +73,13 @@ void CStartScene::CreateStartButton()
 	CTransform*	pTransform = pStartButtonObject->GetTransform();
 	DxVector3	vScale = { 200.0f, 100.0f, 1.0f };
 	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(340.0f, 400.0f, 0.0f);
+	pTransform->SetWorldPos(440.0f, 500.0f, 0.0f);
 
 	CColliderRect*	pColRect = pStartButtonObject->AddComponent<CColliderRect>("ButtonCol");
 	DxVector3	vPos = pTransform->GetWorldPos();
-	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
+	DxVector3	vPivot = pTransform->GetPivot();
+	DxVector3	vLeft = vPivot * vScale * -1.f;
+	pColRect->SetRectInfo(vLeft.x, vLeft.y, vLeft.x + vScale.x, vLeft.y + vScale.y);
 
 	SAFE_RELEASE(pColRect);
 	SAFE_RELEASE(pTransform);
@@ -117,11 +125,13 @@ void CStartScene::CreateEndButton()
 	CTransform*	pTransform = pStartButtonObject->GetTransform();
 	DxVector3	vScale = { 200.0f, 100.0f, 1.0f };
 	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(740.0f, 400.0f, 0.0f);
+	pTransform->SetWorldPos(840.0f, 500.0f, 0.0f);
 
 	CColliderRect*	pColRect = pStartButtonObject->AddComponent<CColliderRect>("ButtonCol");
 	DxVector3	vPos = pTransform->GetWorldPos();
-	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
+	DxVector3	vPivot = pTransform->GetPivot();
+	DxVector3	vLeft = vPivot * vScale * -1.f;
+	pColRect->SetRectInfo(vLeft.x, vLeft.y, vLeft.x + vScale.x, vLeft.y + vScale.y);
 
 	SAFE_RELEASE(pColRect);
 	SAFE_RELEASE(pTransform);
@@ -151,11 +161,13 @@ void CStartScene::StartButton(CGameObject * _pObj, float _fTime)
 	GET_SINGLE(CSceneMgr)->ReplaceScene(pScene);
 }
 
-CStartScene::CStartScene()
+CStartScene::CStartScene() :
+	m_pSoundPlayer(NULL)
 {
 }
 
 
 CStartScene::~CStartScene()
 {
+	SAFE_RELEASE(m_pSoundPlayer);
 }

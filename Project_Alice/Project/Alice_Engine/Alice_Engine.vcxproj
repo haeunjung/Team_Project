@@ -73,13 +73,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>../Lib/</OutDir>
     <TargetName>$(ProjectName)_Debug</TargetName>
-    <IncludePath>03.Resource\FBXSDK\;..\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>../Lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <IncludePath>03.Resource\FBXSDK\;..\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc;</IncludePath>
+    <LibraryPath>../Lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>../Lib/</OutDir>
-    <IncludePath>03.Resource\FBXSDK\;..\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>../Lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <IncludePath>03.Resource\FBXSDK\;..\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc;</IncludePath>
+    <LibraryPath>../Lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -159,6 +159,7 @@
     <ClInclude Include="03.Resource\Mesh.h" />
     <ClInclude Include="03.Resource\ResMgr.h" />
     <ClInclude Include="03.Resource\Sampler.h" />
+    <ClInclude Include="03.Resource\Sound.h" />
     <ClInclude Include="03.Resource\Texture.h" />
     <ClInclude Include="04.Rendering\BlendState.h" />
     <ClInclude Include="04.Rendering\DepthStencilState.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="07.Component\Renderer.h" />
     <ClInclude Include="07.Component\Renderer2D.h" />
     <ClInclude Include="07.Component\Script.h" />
+    <ClInclude Include="07.Component\SoundPlayer.h" />
     <ClInclude Include="07.Component\SpotLight.h" />
     <ClInclude Include="07.Component\Terrain.h" />
     <ClInclude Include="07.Component\Transform.h" />
@@ -233,6 +235,7 @@
     <ClCompile Include="03.Resource\Mesh.cpp" />
     <ClCompile Include="03.Resource\ResMgr.cpp" />
     <ClCompile Include="03.Resource\Sampler.cpp" />
+    <ClCompile Include="03.Resource\Sound.cpp" />
     <ClCompile Include="03.Resource\Texture.cpp" />
     <ClCompile Include="04.Rendering\BlendState.cpp" />
     <ClCompile Include="04.Rendering\DepthStencilState.cpp" />
@@ -274,6 +277,7 @@
     <ClCompile Include="07.Component\Renderer.cpp" />
     <ClCompile Include="07.Component\Renderer2D.cpp" />
     <ClCompile Include="07.Component\Script.cpp" />
+    <ClCompile Include="07.Component\SoundPlayer.cpp" />
     <ClCompile Include="07.Component\SpotLight.cpp" />
     <ClCompile Include="07.Component\Terrain.cpp" />
     <ClCompile Include="07.Component\Transform.cpp" />

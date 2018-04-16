@@ -6,6 +6,7 @@ WOOJUN_BEGIN
 class CMesh;
 class CTexture;
 class CSampler;
+class CSound;
 class DLL CResMgr
 {
 private:
@@ -17,6 +18,9 @@ private:
 
 	unordered_map<string, CSampler*> m_mapSampler;
 	unordered_map<string, CSampler*>::iterator m_iterSampler;
+
+	unordered_map<string, CSound*> m_mapSound;
+	unordered_map<string, CSound*>::iterator m_iterSound;
 public:
 	bool Init();
 
@@ -49,6 +53,14 @@ public:
 		D3D11_TEXTURE_ADDRESS_MODE _eAddrV = D3D11_TEXTURE_ADDRESS_WRAP,
 		D3D11_TEXTURE_ADDRESS_MODE _eAddrW = D3D11_TEXTURE_ADDRESS_WRAP);
 	CSampler* FindSampler(const string& _strKey);
+
+	// Sound
+	void SoundInit();
+	CSound* FindSound(const string& _strKey);
+	CSound* SoundLoad(const string& _strKey, const string& _strPath = SOUNDPATH);
+
+private:
+	FMOD::System* m_FmodSystem;
 
 	DECLARE_SINGLE(CResMgr)
 };

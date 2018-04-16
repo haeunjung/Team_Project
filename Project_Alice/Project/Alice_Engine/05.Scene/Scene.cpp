@@ -322,7 +322,7 @@ bool CScene::Init()
 
 	// UI Camera
 	CGameObject*	pUICameraObject = CreateCamera("UICamera", DxVector3(0.0f, 0.0f, -5.0f));
-	CreateOrthoProjection("UICamera", _RESOLUTION.m_iWidth, _RESOLUTION.m_iHeight);
+	CreateOrthoProjection("UICamera", (float)_RESOLUTION.m_iWidth, (float)_RESOLUTION.m_iHeight);
 	SAFE_RELEASE(pUICameraObject);
 
 	// Create Default Global Light 

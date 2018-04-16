@@ -39,6 +39,7 @@ bool CPathMgr::Init()
 	AddPath(TEXTUREPATH, L"Texture\\", RESOURCEPATH);
 	AddPath(MESHPATH, L"Mesh\\", RESOURCEPATH);
 	AddPath(DATAPATH, L"Data\\", RESOURCEPATH);
+	AddPath(SOUNDPATH, L"Sound\\", RESOURCEPATH);
 
 	return true;
 }
