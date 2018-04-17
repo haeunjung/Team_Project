@@ -106,7 +106,7 @@ bool CMaterial::SetDiffuseTexture(CTexture * _pTexture, int _iTexRegister)
 bool CMaterial::SetDiffuseTextureFromFullPath(const string & _strSamplerKey, const string & _strKey, const char * _pFullPath)
 {
 	string strMeshPath = _pFullPath;
-	if ('b' == _pFullPath[0])
+	if ('C' != _pFullPath[0])
 	{
 		strMeshPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(MESHPATH);
 		strMeshPath += _pFullPath;

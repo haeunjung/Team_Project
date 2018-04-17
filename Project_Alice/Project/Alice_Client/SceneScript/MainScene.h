@@ -15,11 +15,10 @@ private:
 private:
 	void CreateProtoType();
 	void CreateObject();
-	void LoadObject(const string& _strKey, const DxVector3& _vPos, const DxVector3& _vScale, const DxVector3& _vRot);
-	void CreateCheckBox();
+	void LoadObject(const string& _strKey, const DxVector3& _vPos, const DxVector3& _vScale, const DxVector3& _vRot);	
 	void CreateRadioButton();	
 	void CreateTerrain();
-	void CreateInventory();
+	void CreateInventory();	
 public:
 	virtual bool Init();
 	virtual void Update(float _fTime);

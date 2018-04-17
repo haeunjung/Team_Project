@@ -19,13 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClientMgr\UIMgr.h" />
     <ClInclude Include="Client_Header.h" />
+    <ClInclude Include="ObjectScript\Battery.h" />
+    <ClInclude Include="ObjectScript\BatteryCount.h" />
     <ClInclude Include="ObjectScript\MonsterBullet.h" />
     <ClInclude Include="ObjectScript\Minion.h" />
     <ClInclude Include="ObjectScript\Mouse.h" />
     <ClInclude Include="ObjectScript\Player.h" />
     <ClInclude Include="ObjectScript\PlayerBullet.h" />
     <ClInclude Include="ObjectScript\RotBullet.h" />
+    <ClInclude Include="ObjectScript\TimeBar.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneScript\LoadingScene.h" />
     <ClInclude Include="SceneScript\MainScene.h" />
@@ -33,13 +37,17 @@
     <ClInclude Include="Thread\LoadingThread.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClientMgr\UIMgr.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ObjectScript\Battery.cpp" />
+    <ClCompile Include="ObjectScript\BatteryCount.cpp" />
     <ClCompile Include="ObjectScript\MonsterBullet.cpp" />
     <ClCompile Include="ObjectScript\Minion.cpp" />
     <ClCompile Include="ObjectScript\Mouse.cpp" />
     <ClCompile Include="ObjectScript\Player.cpp" />
     <ClCompile Include="ObjectScript\PlayerBullet.cpp" />
     <ClCompile Include="ObjectScript\RotBullet.cpp" />
+    <ClCompile Include="ObjectScript\TimeBar.cpp" />
     <ClCompile Include="SceneScript\LoadingScene.cpp" />
     <ClCompile Include="SceneScript\MainScene.cpp" />
     <ClCompile Include="SceneScript\StartScene.cpp" />

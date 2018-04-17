@@ -33,6 +33,13 @@ public:
 	bool GetIsAlive() const {
 		return m_IsAlive;
 	}
+	template <class T>
+	bool TypeEquals() {
+		if (m_TypeID == &typeid(T))
+			return true;
+
+		return false;
+	}
 public:
 	template <typename T>
 	void SetTypeID() {

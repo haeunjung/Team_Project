@@ -41,6 +41,15 @@
     <Filter Include="04. Thread">
       <UniqueIdentifier>{86d9d7d9-7281-4f11-a618-c896617b5c15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. ObjectScript\05. Battery">
+      <UniqueIdentifier>{4183aa22-9caf-40db-b51f-f6e47c97fb76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. ClientMgr">
+      <UniqueIdentifier>{7da5cd54-1941-4bfd-a34c-ca38577e3b52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\06. TimeBar">
+      <UniqueIdentifier>{89ed31d8-9f57-4b0a-a168-03f0aefe62c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneScript\MainScene.h">
@@ -79,6 +88,18 @@
     <ClInclude Include="Thread\LoadingThread.h">
       <Filter>04. Thread</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectScript\Battery.h">
+      <Filter>03. ObjectScript\05. Battery</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientMgr\UIMgr.h">
+      <Filter>05. ClientMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\BatteryCount.h">
+      <Filter>03. ObjectScript\05. Battery</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\TimeBar.h">
+      <Filter>03. ObjectScript\06. TimeBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -113,6 +134,18 @@
     </ClCompile>
     <ClCompile Include="Thread\LoadingThread.cpp">
       <Filter>04. Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Battery.cpp">
+      <Filter>03. ObjectScript\05. Battery</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientMgr\UIMgr.cpp">
+      <Filter>05. ClientMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\BatteryCount.cpp">
+      <Filter>03. ObjectScript\05. Battery</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\TimeBar.cpp">
+      <Filter>03. ObjectScript\06. TimeBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

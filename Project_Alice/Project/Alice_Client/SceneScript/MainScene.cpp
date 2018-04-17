@@ -1,9 +1,10 @@
 #include "MainScene.h"
+#include "../ClientMgr/UIMgr.h"
 #include "../ObjectScript/Player.h"
 #include "../ObjectScript/MonsterBullet.h"
 #include "../ObjectScript/Minion.h"
-#include "../ObjectScript/RotBullet.h"
-#include "../ObjectScript/PlayerBullet.h"
+#include "../ObjectScript/Battery.h"
+#include "../ObjectScript/Mouse.h"
 #include "01.Core/Debug.h"
 #include "01.Core/Input.h"
 #include "01.Core/PathMgr.h"
@@ -27,25 +28,15 @@
 #include "07.Component/ColliderSphere.h"
 #include "07.Component/ColliderAABB.h"
 #include "07.Component/SoundPlayer.h"
-#include "../ObjectScript/Mouse.h"
 
 void CMainScene::CreateProtoType()
 {
-	// 총알 프로토타입
-	CGameObject*	pMonsterBulletObject = CGameObject::Create("MonsterBulletObject", true);
-	// Create 함수 두번째 디폴트인자를 true로 주면 프로토타입으로 생성한다
-	CMonsterBullet*	pMonsterBulletScript = pMonsterBulletObject->AddComponent<CMonsterBullet>("MonsterBulletScript");
+	// Battery 프로토타입
+	CGameObject*	pBattery = CGameObject::Create("BatteryObject", true);	
+	CBattery*	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
 
-	SAFE_RELEASE(pMonsterBulletScript);
-	SAFE_RELEASE(pMonsterBulletObject);
-
-	// 총알 프로토타입
-	CGameObject*	pPlayerBulletObject = CGameObject::Create("PlayerBulletObject", true);
-	// Create 함수 두번째 디폴트인자를 true로 주면 프로토타입으로 생성한다
-	CPlayerBullet*	pPlayerBulletScript = pPlayerBulletObject->AddComponent<CPlayerBullet>("PlayerBulletScript");
-
-	SAFE_RELEASE(pPlayerBulletScript);
-	SAFE_RELEASE(pPlayerBulletObject);	
+	SAFE_RELEASE(pBattertScript);
+	SAFE_RELEASE(pBattery);
 
 	// Monster
 	CGameObject*	pMinionObj = CGameObject::Create("MinionObject", true);
@@ -109,7 +100,7 @@ void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, con
 	pTransform->SetWorldScale(_vScale);
 	pTransform->SetWorldRot(_vRot);
 
-	//pTransform->SetLocalPos(-0.5f, 0.5f, -0.5f);
+	//pTransform->SetLocalPos(0.0f, 0.0f, -2.0f);
 	SAFE_RELEASE(pTransform);
 	
 	/*CToolObject* pToolObject = pGameObject->AddComponent<CToolObject>(_strKey + "Object");
@@ -132,50 +123,9 @@ void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, con
 	SAFE_RELEASE(pColAABB);
 
 	pLayer->AddObject(pGameObject);
-	
+
 	SAFE_RELEASE(pGameObject);
 	SAFE_RELEASE(pLayer);
-	}
-
-void CMainScene::CreateCheckBox()
-{
-	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
-
-	CGameObject*	pCheckButtonObject = CGameObject::Create("CheckButtonObject");
-
-	CTransform*	pTransform = pCheckButtonObject->GetTransform();
-	DxVector3	vScale = { 128.0f, 128.0f, 1.0f };
-	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(1100.0f, 550.0f, 0.0f);
-	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
-
-	CColliderRect*	pColRect = pCheckButtonObject->AddComponent<CColliderRect>("ButtonCol");
-	DxVector3	vPos = pTransform->GetWorldPos();
-	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
-
-	SAFE_RELEASE(pColRect);
-	SAFE_RELEASE(pTransform);
-
-	CRenderer2D*	pRenderer = pCheckButtonObject->AddComponent<CRenderer2D>("CheckButtonRenderer2D");
-	pRenderer->SetMesh("UIMesh");
-	pRenderer->SetShader(UI_SHADER);
-	pRenderer->SetInputLayout("TexInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-
-	CMaterial*	pMaterial = pRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "CheckBox", L"free2you2.png");
-	SAFE_RELEASE(pMaterial);
-	SAFE_RELEASE(pRenderer);
-			
-	CCheckBox*	pCheckBox = pCheckButtonObject->AddComponent<CCheckBox>("CheckBox");
-	pCheckBox->CheckBoxTrue();
-	pCheckBox->SetButtonFunc(this, &CMainScene::CheckButton);
-	SAFE_RELEASE(pCheckBox);
-
-	pUILayer->AddObject(pCheckButtonObject);
-	SAFE_RELEASE(pCheckButtonObject);
-
-	SAFE_RELEASE(pUILayer);
 }
 
 void CMainScene::CreateRadioButton()
@@ -330,11 +280,12 @@ bool CMainScene::Init()
 {
 	CreateProtoType();
 	//CreateObject();
-	CreateTerrain();
-	//CreateCheckBox();
+	CreateTerrain();	
 	//CreateRadioButton();
 	//CreateInventory();	
 
+	GET_SINGLE(CUIMgr)->Init(m_pScene);
+	
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 	
 	// 카메라 오브젝트 생성
@@ -399,60 +350,24 @@ bool CMainScene::Init()
 	pLayer->AddObject(pMonsterObj);
 	SAFE_RELEASE(pMonsterObj);
 
+	CGameObject* pBattery = CGameObject::CreateClone("BatteryObject");
+	pLayer->AddObject(pBattery);
+	SAFE_RELEASE(pBattery);
+
 	SAFE_RELEASE(pLayer);
 
 	// Test Box Mesh 생성
 	//LoadObject("box", DxVector3(-1.0f, 0.0f, 1.0f), DxVector3(1.0f, 1.0f, 1.0f), DxVector3(PI, 0.0f, 0.0f));
 	LoadObject("Box2", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
 	LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
-
+	//LoadObject("battery", DxVector3(35.0f, 1.0f, 15.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
+		
 	return true;
 }
 
 void CMainScene::Update(float _fTime)
 {
-	/*m_fRespawnTime += _fTime;
-
-	while (m_fRespawnTime >= m_fRespawnLimitTime)
-	{
-		m_fRespawnTime -= m_fRespawnLimitTime;
-
-		DxVector3	vPos = DxVector3(rand() % 6 - 2.5f, rand() % 4 - 1.5f, rand() % 8 + 3.f);
-
-		CGameObject*	pMinionObj = CGameObject::CreateClone("MinionObject");
-
-		CTransform*	pTransform = pMinionObj->GetTransform();
-		pTransform->SetWorldPos(vPos);
-		SAFE_RELEASE(pTransform);
-
-		CMinion*	pMinion = pMinionObj->FindComponentFromTypeID<CMinion>();
-		pMinion->SetPlayer(m_pPlayerObject);
-		SAFE_RELEASE(pMinion);
-
-		CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
-		pLayer->AddObject(pMinionObj);
-		SAFE_RELEASE(pLayer);
-
-		SAFE_RELEASE(pMinionObj);
-	}*/
-
-	//static bool	bEnable = true;
-	//static bool	bPush = false;
-
-	//if (GetAsyncKeyState(VK_RETURN) & 0x8000)
-	//{
-	//	bPush = true;
-	//}
-	//else if (bPush)
-	//{
-	//	bPush = false;
-	//	bEnable = !bEnable;
-	//	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
-
-	//	pLayer->SetIsEnable(bEnable);
-
-	//	SAFE_RELEASE(pLayer);	
-	//}
+	GET_SINGLE(CUIMgr)->Update(_fTime);
 
 	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 	pLayer->SetIsEnable(m_bCheck);
@@ -492,4 +407,6 @@ CMainScene::CMainScene() :
 CMainScene::~CMainScene()
 {
 	SAFE_RELEASE(m_pPlayerObject);
+
+	DESTROY_SINGLE(CUIMgr);
 }

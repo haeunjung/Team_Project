@@ -24,7 +24,7 @@ void CPlayer::AniCallback(float _fTime)
 
 bool CPlayer::Init()
 {		
-	CreateHpBar();
+	//CreateHpBar();
 
 	m_pTransform->SetWorldPos(30.0f, 0.0f, 20.0f);
 	m_pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
@@ -47,17 +47,17 @@ bool CPlayer::Init()
 	m_pAttCol = m_pGameObject->AddComponent<CColliderSphere>("PlayerAtt");
 	m_pAttCol->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.5f);
 	m_pAttCol->SetBoneIndex(m_pAniController->FindBoneIndex("HandR"));
-	m_pAttCol->SetColCheck(CC_ATT);
+	m_pAttCol->SetColCheck(CC_PLAYER_ATT);
 	m_pAttCol->SetIsEnable(false);
 	
 	m_pHitCol = m_pGameObject->AddComponent<CColliderSphere>("PlayerHit");
 	m_pHitCol->SetSphereInfo(0.0f, 0.0f, 0.0f, 0.5f);
 	m_pHitCol->SetBoneIndex(m_pAniController->FindBoneIndex("Bip01-Spine1"));
-	m_pHitCol->SetColCheck(CC_HIT);
+	m_pHitCol->SetColCheck(CC_PLAYER_HIT);
 
 	m_pFootCol = m_pGameObject->AddComponent<CColliderSphere>("PlayerFoot");
 	m_pFootCol->SetSphereInfo(m_pTransform->GetWorldPos(), 0.5f);
-	m_pFootCol->SetColCheck(CC_FOOT);
+	m_pFootCol->SetColCheck(CC_PLAYER_FOOT);
 
 	CGameObject* pCameraObject = m_pScene->GetMainCameraObject();
 	
@@ -144,23 +144,6 @@ void CPlayer::Input(float _fTime)
 			m_bChange = false;
 		}		
 	}
-
-	if (true == KEYPRESS("F1"))
-	{
-		if (0 < m_iHp)
-		{
-			m_iHp -= 10;
-			m_pHpBar->SetCurValue(m_iHp);
-		}
-	}
-	else if (true == KEYPRESS("F2"))
-	{
-		if (m_iHpMax > m_iHp)
-		{
-			m_iHp += 10;
-			m_pHpBar->SetCurValue(m_iHp);
-		}		
-	}
 }
 
 void CPlayer::Update(float _fTime)
@@ -244,7 +227,7 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 		}
 	}
 
-	if (CC_FOOT == _pSrc->GetColliderCheck() &&
+	if (CC_PLAYER_FOOT == _pSrc->GetColliderCheck() &&
 		CC_OBJ == _pDest->GetColliderCheck())
 	{
 		m_bUpCol = true;
@@ -262,7 +245,7 @@ void CPlayer::OnCollisionLeave(CCollider * _pSrc, CCollider * _pDest, float _fTi
 		m_bRightCol = false;
 	}
 
-	if (CC_FOOT == _pSrc->GetColliderCheck() &&
+	if (CC_PLAYER_FOOT == _pSrc->GetColliderCheck() &&
 		CC_OBJ == _pDest->GetColliderCheck())
 	{
 		m_bUpCol = false;

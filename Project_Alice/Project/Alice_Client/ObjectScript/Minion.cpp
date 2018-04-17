@@ -100,8 +100,7 @@ void CMinion::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 
 	if (CC_VIEW == _pSrc->GetColliderCheck())
 	{
-		//if (CC_HIT == _pDest->GetColliderCheck())
-		if("PlayerHit" == _pDest->GetTagStr())
+		if (CC_PLAYER_HIT == _pDest->GetColliderCheck())
 		{
 			SAFE_RELEASE(m_pPlayerTransform);
 			m_pPlayerTransform = _pDest->GetTransform();
@@ -115,8 +114,7 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 {
 	if (CC_HIT == _pSrc->GetColliderCheck())
 	{
-		//if (CC_ATT == _pDest->GetColliderCheck())
-		if ("PlayerAtt" == _pDest->GetTagStr() &&
+		if (CC_PLAYER_ATT == _pDest->GetColliderCheck() &&
 			true == _pDest->GetIsEnable())
 		{
 			if (true == BackAttackCheck(_pSrc->GetTransformWorldAxis(AXIS_Z), _pDest->GetTransformWorldAxis(AXIS_Z)))
