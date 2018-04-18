@@ -170,4 +170,33 @@ void CUIMgr::CreateSpring(CLayer * _pLayer)
 
 	_pLayer->AddObject(pSpringObject);
 	SAFE_RELEASE(pSpringObject);
+
+	CGameObject* pTimeBar = CGameObject::Create("HpBar");
+
+	vScale = DxVector3(1000.0f, 50.0f, 1.0f);
+	DxVector3 vPos = { 135.0f, 610.0f, 500.0f };
+
+	CTransform* pTransform = pTimeBar->GetTransform();
+	pTransform->SetWorldScale(vScale);
+	pTransform->SetWorldPos(vPos);
+	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
+	SAFE_RELEASE(pTransform);
+
+	CRenderer2D*	pTimeBarRenderer = pTimeBar->AddComponent<CRenderer2D>("TimeBarMaxRenderer");
+	pTimeBarRenderer->SetMesh("UIMesh");
+	pTimeBarRenderer->SetShader(UI_SHADER);
+	pTimeBarRenderer->SetInputLayout("TexInputLayout");
+	pTimeBarRenderer->SetRenderState(ALPHABLEND);
+
+	pMaterial = pTimeBarRenderer->GetMaterial();
+	pMaterial->SetDiffuseTexture("Linear", "TimeBar1", L"TimeBar1.png");
+	//pMaterial->SetDiffuseColor(DxVector4(0.5f, 0.5f, 0.5f, 1.0f));
+	SAFE_RELEASE(pMaterial);
+	SAFE_RELEASE(pTimeBarRenderer);
+
+	pUI = pTimeBar->AddComponent<CUIBack>("TimeBarRenderer");
+	SAFE_RELEASE(pUI);
+
+	_pLayer->AddObject(pTimeBar);
+	SAFE_RELEASE(pTimeBar);
 }

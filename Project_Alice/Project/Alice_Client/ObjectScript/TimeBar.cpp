@@ -26,19 +26,23 @@ CTimeBar::~CTimeBar()
 }
 
 bool CTimeBar::Init()
-{		
-	m_pTransform->SetWorldScale(1000.0f, 30.0f, 1.0f);
-	m_pTransform->SetWorldPos(135.0f, 610.0f, 1000.0f);
-	//m_pTransform->SetPivot(0.0f, 0.0f, 0.0f);
+{	
+	DxVector3 vScale = { 1000.0f, 50.0f, 1.0f };
+	DxVector3 vPos = { 135.0f, 610.0f, 1000.0f };		
+	
+	m_pTransform->SetWorldScale(vScale);
+	m_pTransform->SetWorldPos(vPos);
+	m_pTransform->SetPivot(0.0f, 0.0f, 0.0f);
 
-	CRenderer2D*	pTimeBarRenderer = m_pGameObject->AddComponent<CRenderer2D>("TimeBarRenderer");
+	CRenderer2D* pTimeBarRenderer = m_pGameObject->AddComponent<CRenderer2D>("TimeBarRenderer");
 	pTimeBarRenderer->SetMesh("UIMesh");
 	pTimeBarRenderer->SetShader(UI_SHADER);
 	pTimeBarRenderer->SetInputLayout("TexInputLayout");
 	pTimeBarRenderer->SetRenderState(ALPHABLEND);	
 
 	CMaterial* pMaterial = pTimeBarRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "TimeBar", L"Striped-Bar-01.png");
+	pMaterial->SetDiffuseTexture("Linear", "TimeBar2", L"TimeBar2.png");
+	pMaterial->SetDiffuseColor(DxVector4(0.5f, 0.5f, 0.5f, 1.0f));
 	SAFE_RELEASE(pMaterial);
 	SAFE_RELEASE(pTimeBarRenderer);
 
@@ -51,7 +55,9 @@ bool CTimeBar::Init()
 
 void CTimeBar::Update(float _fTime)
 {
-	/*if (true == KEYPRESS("F1"))
+	m_fTime -= _fTime;
+	m_pUIBar->SetCurValue(m_fTime);
+	if (true == KEYPRESS("F1"))
 	{
 		if (0 < m_fTime)
 		{
@@ -66,7 +72,7 @@ void CTimeBar::Update(float _fTime)
 			m_fTime += 10;
 			m_pUIBar->SetCurValue(m_fTime);
 		}
-	}*/
+	}
 }
 
 CTimeBar * CTimeBar::Clone()
