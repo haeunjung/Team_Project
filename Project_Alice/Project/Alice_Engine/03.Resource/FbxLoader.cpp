@@ -230,6 +230,10 @@ bool CFbxLoader::LoadMesh(FbxMesh * _pMesh)
 
 	// 재질 정보를 얻어온다
 	FbxGeometryElementMaterial*	pMaterial = _pMesh->GetElementMaterial();
+	if (NULL == pMaterial)
+	{
+		int a = 0;
+	}
 
 	// 삼각형 수만큼 반복한다
 	for (int i = 0; i < iPolygonCount; ++i)

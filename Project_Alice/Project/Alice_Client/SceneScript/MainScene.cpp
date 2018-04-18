@@ -99,8 +99,6 @@ void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, con
 	pTransform->SetWorldPos(_vPos);
 	pTransform->SetWorldScale(_vScale);
 	pTransform->SetWorldRot(_vRot);
-
-	//pTransform->SetLocalPos(0.0f, 0.0f, -2.0f);
 	SAFE_RELEASE(pTransform);
 	
 	/*CToolObject* pToolObject = pGameObject->AddComponent<CToolObject>(_strKey + "Object");
@@ -279,7 +277,7 @@ void CMainScene::CreateInventory()
 bool CMainScene::Init()
 {
 	CreateProtoType();
-	//CreateObject();
+	CreateObject();
 	CreateTerrain();	
 	//CreateRadioButton();
 	//CreateInventory();	
@@ -343,7 +341,7 @@ bool CMainScene::Init()
 
 	CGameObject*	pMonsterObj = CGameObject::Create("Monster");
 	CMinion*	pMonster = pMonsterObj->AddComponent<CMinion>("MinionScript");
-	pMonster->SetMonsterWorldPos(DxVector3(30.0f, 0.0f, 30.0f));
+	pMonster->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 30.0f));
 	pMonster->SetIsTest(true);
 	SAFE_RELEASE(pMonster);
 
@@ -357,9 +355,8 @@ bool CMainScene::Init()
 	SAFE_RELEASE(pLayer);
 
 	// Test Box Mesh »ý¼º
-	//LoadObject("box", DxVector3(-1.0f, 0.0f, 1.0f), DxVector3(1.0f, 1.0f, 1.0f), DxVector3(PI, 0.0f, 0.0f));
-	LoadObject("Box2", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
-	LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
+	//LoadObject("My_Box", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
+	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
 	//LoadObject("battery", DxVector3(35.0f, 1.0f, 15.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 		
 	return true;

@@ -172,18 +172,18 @@ void CPlayer::Update(float _fTime)
 
 void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
-	if (CC_HIT == _pSrc->GetColliderCheck())
+	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck())
 	{
-		if ("MonsterAttCol" == _pDest->GetTagStr() &&
+		/*if ("MonsterAttCol" == _pDest->GetTagStr() &&
 			true == _pDest->GetIsEnable())
 		{
 			m_iHp -= 10;
 			m_pHpBar->SetCurValue(m_iHp);
 			_pDest->SetIsEnable(false);
-		}
+		}*/
 	}
 	
-	if (CC_HIT == _pSrc->GetColliderCheck() &&
+	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
 		CC_OBJ == _pDest->GetColliderCheck())
 	{		
 		if (true == KEYPRESS("Jump"))
@@ -191,6 +191,7 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 			if (!m_bClimb)
 			{
 				m_ePlayerState = PS_CLIMB;
+				m_pFootCol->SetIsEnable(false);
 
 				SAFE_RELEASE(m_pOtherCol);
 				m_pOtherCol = _pDest;
@@ -236,13 +237,15 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 
 void CPlayer::OnCollisionLeave(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
-	if (CC_HIT == _pSrc->GetColliderCheck() &&
+	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
 		CC_OBJ == _pDest->GetColliderCheck())
 	{
 		m_bFrontCol = false;
 		m_bBackCol = false; 
 		m_bLeftCol = false;
 		m_bRightCol = false;
+
+		m_pFootCol->SetIsEnable(true);
 	}
 
 	if (CC_PLAYER_FOOT == _pSrc->GetColliderCheck() &&

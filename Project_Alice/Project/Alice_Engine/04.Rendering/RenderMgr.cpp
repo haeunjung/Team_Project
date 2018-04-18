@@ -661,6 +661,8 @@ bool CRenderMgr::Init()
 	SAFE_RELEASE(pRenderState);
 	pRenderState = CreateRasterizerState(CULLING_CW, D3D11_FILL_SOLID, D3D11_CULL_FRONT);
 	SAFE_RELEASE(pRenderState);
+	pRenderState = CreateRasterizerState("CULLING_NONE", D3D11_FILL_SOLID, D3D11_CULL_NONE);
+	SAFE_RELEASE(pRenderState);
 
 	AddRenderTargetBlendInfo();		// 디폴트 설정 : 알파블렌딩
 	m_pAlphaBlend = CreateBlendState(ALPHABLEND);	
