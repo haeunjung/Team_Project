@@ -22,8 +22,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	CScene*		pScene = GET_SINGLE(CSceneMgr)->GetCurScene();
 
-	pScene->CreateScript<CMainScene>();
-	//pScene->CreateScript<CStartScene>();
+	//pScene->CreateScript<CMainScene>();
+	pScene->CreateScript<CStartScene>();
 
 	int iReturnValue = GET_SINGLE(CEngine_Core)->Run();
 

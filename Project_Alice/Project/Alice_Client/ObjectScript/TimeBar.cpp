@@ -25,6 +25,11 @@ CTimeBar::~CTimeBar()
 	SAFE_RELEASE(m_pUIBar);
 }
 
+void CTimeBar::GetTime()
+{
+	m_fTime += 10;
+}
+
 bool CTimeBar::Init()
 {	
 	DxVector3 vScale = { 1000.0f, 50.0f, 1.0f };
@@ -57,7 +62,7 @@ void CTimeBar::Update(float _fTime)
 {
 	m_fTime -= _fTime;
 	m_pUIBar->SetCurValue(m_fTime);
-	if (true == KEYPRESS("F1"))
+	/*if (true == KEYPRESS("F1"))
 	{
 		if (0 < m_fTime)
 		{
@@ -72,7 +77,7 @@ void CTimeBar::Update(float _fTime)
 			m_fTime += 10;
 			m_pUIBar->SetCurValue(m_fTime);
 		}
-	}
+	}*/
 }
 
 CTimeBar * CTimeBar::Clone()

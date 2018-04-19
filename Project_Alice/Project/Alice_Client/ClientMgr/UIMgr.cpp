@@ -33,18 +33,18 @@ void CUIMgr::GetBattery()
 
 void CUIMgr::UseBattery()
 {
-	m_pBatteryCount->MinusCount();
+	m_pTimeBar->GetTime();
 }
 
 bool CUIMgr::Init(CScene* _pScene)
 {
 	CLayer*		pUILayer = _pScene->FindLayer("UILayer");
 
-	CreateBattery2D(pUILayer);
+	//CreateBattery2D(pUILayer);
 	CreateBatteryCount(pUILayer);
 	//CreateHpIcon(_pScene);
-	CreateTimeBar(pUILayer);
-	CreateSpring(pUILayer);
+	//CreateTimeBar(pUILayer);
+	//CreateSpring(pUILayer);
 
 	SAFE_RELEASE(pUILayer);
 
@@ -53,7 +53,7 @@ bool CUIMgr::Init(CScene* _pScene)
 
 void CUIMgr::Update(float _fTime)
 {
-	m_pSpringTransform->RotateZ(-1.57f, _fTime);
+	//m_pSpringTransform->RotateZ(-1.57f, _fTime);
 }
 
 void CUIMgr::CreateBattery2D(CLayer* _pLayer)

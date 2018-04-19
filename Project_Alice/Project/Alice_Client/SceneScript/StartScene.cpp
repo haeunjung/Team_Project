@@ -10,7 +10,6 @@
 #include "07.Component/UIButton.h"
 #include "07.Component/ColliderRect.h"
 #include "../ObjectScript/Mouse.h"
-
 #include "MainScene.h"
 #include "LoadingScene.h"
 
@@ -18,10 +17,10 @@ bool CStartScene::Init()
 {
 	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
 
-	CGameObject* pBGM = CGameObject::Create("BGM");
+	/*CGameObject* pBGM = CGameObject::Create("BGM");
 	m_pSoundPlayer = pBGM->AddComponent<CSoundPlayer>("BGMPlayer");
 	m_pSoundPlayer->MyPlaySound("Title.mp3");
-	SAFE_RELEASE(pBGM);
+	SAFE_RELEASE(pBGM);*/
 
 	CGameObject*	pBGObject = CGameObject::Create("BGObject");
 

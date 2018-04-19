@@ -1,6 +1,8 @@
 #include "BatteryCount.h"
+#include "../ClientMgr/UIMgr.h"
 #include "01.Core/Input.h"
 #include "03.Resource/ResMgr.h"
+#include "03.Resource/Texture.h"
 #include "06.GameObject/GameObject.h"
 #include "07.Component/Renderer2D.h"
 #include "07.Component/Transform.h"
@@ -48,16 +50,26 @@ void CBatteryCount::MinusCount()
 
 bool CBatteryCount::Init()
 {
-	GET_SINGLE(CResMgr)->LoadTexture("Zero", "0.png");
-	GET_SINGLE(CResMgr)->LoadTexture("One", "1.png");
-	GET_SINGLE(CResMgr)->LoadTexture("Two", "2.png");
-	GET_SINGLE(CResMgr)->LoadTexture("Three", "3.png");
-	GET_SINGLE(CResMgr)->LoadTexture("Four", "4.png");
-	GET_SINGLE(CResMgr)->LoadTexture("Five", "5.png");
-	GET_SINGLE(CResMgr)->LoadTexture("Six", "6.png");
-	GET_SINGLE(CResMgr)->LoadTexture("Seven", "7.png");
-	GET_SINGLE(CResMgr)->LoadTexture("Eight", "8.png");
-	GET_SINGLE(CResMgr)->LoadTexture("Nine", "9.png");
+	CTexture* pTexture = GET_SINGLE(CResMgr)->LoadTexture("Zero", "0.png");
+	SAFE_RELEASE(pTexture);
+	pTexture = GET_SINGLE(CResMgr)->LoadTexture("One", "1.png");
+	SAFE_RELEASE(pTexture);
+	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Two", "2.png");
+	SAFE_RELEASE(pTexture);
+	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Three", "3.png");
+	SAFE_RELEASE(pTexture);
+	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Four", "4.png");
+	SAFE_RELEASE(pTexture);
+	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Five", "5.png");
+	SAFE_RELEASE(pTexture);
+	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Six", "6.png");
+	SAFE_RELEASE(pTexture);
+	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Seven", "7.png");
+	SAFE_RELEASE(pTexture);
+	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Eight", "8.png");
+	SAFE_RELEASE(pTexture);
+	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Nine", "9.png");
+	SAFE_RELEASE(pTexture);
 
 	DxVector3	vScale = { 49.2f, 57.0f, 1.0f };
 	m_pTransform->SetWorldScale(vScale);
@@ -74,29 +86,44 @@ bool CBatteryCount::Init()
 	pRenderer->SetRenderState(ALPHABLEND);
 
 	m_pMaterial = pRenderer->GetMaterial();
-	//m_pMaterial->SetDiffuseTexture()
 	m_pMaterial->SetDiffuseColor(DxVector4(0.8f, 0.8f, 0.8f, 1.0f));
+	//CMaterial* pMaterial = pRenderer->GetMaterial();
+	//pMaterial->SetDiffuseColor(DxVector4(0.8f, 0.8f, 0.8f, 1.0f));
+
+	//SAFE_RELEASE(pMaterial);
 	SAFE_RELEASE(pRenderer);
 
 	return true;
 }
 
-void CBatteryCount::Update(float _fTime)
+void CBatteryCount::Input(float _fTime)
 {
 	if (true == KEYPRESS("F1"))
 	{
 		if (0 < m_iCount)
 		{
 			--m_iCount;
+			GET_SINGLE(CUIMgr)->UseBattery();
 		}
 	}
-	else if (true == KEYPRESS("F2"))
-	{
-		if (10 > m_iCount)
-		{
-			++m_iCount;
-		}
-	}
+}
+
+void CBatteryCount::Update(float _fTime)
+{
+	//if (true == KEYPRESS("F1"))
+	//{
+	//	if (0 < m_iCount)
+	//	{
+	//		--m_iCount;
+	//	}
+	//}
+	//else if (true == KEYPRESS("F2"))
+	//{
+	//	if (10 > m_iCount)
+	//	{
+	//		++m_iCount;
+	//	}
+	//}
 
 	SetTexture();
 }
@@ -142,5 +169,10 @@ void CBatteryCount::SetTexture()
 		break;
 	}
 
+	//CRenderer2D* pRenderer = (CRenderer2D*)m_pGameObject->FindComponentFromTypeName("CRenderer2D");
+	//CMaterial* pMaterial = pRenderer->GetMaterial();
 	m_pMaterial->SetDiffuseTexture("Linear", m_strKey);
+
+	//SAFE_RELEASE(pMaterial);
+	//SAFE_RELEASE(pRenderer);
 }

@@ -72,7 +72,7 @@ bool CPlayer::Init()
 
 	GET_SINGLE(CInput)->CreateKey("Init", VK_CONTROL, VK_MENU);	
 	GET_SINGLE(CInput)->CreateKey("Attack", VK_CONTROL);
-	GET_SINGLE(CInput)->CreateKey("Jump", 'Z');
+	GET_SINGLE(CInput)->CreateKey("Jump", VK_SPACE);
 	GET_SINGLE(CInput)->CreateKey("ChangeCamera", 'C');
 	GET_SINGLE(CInput)->CreateKey("HitPlayer", VK_F5);
 

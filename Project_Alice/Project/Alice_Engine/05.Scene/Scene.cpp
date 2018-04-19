@@ -294,26 +294,26 @@ bool CScene::Init()
 	CLayer* pUILayer = CreateLayer("UILayer", INT_MAX);
 
 	// 扁夯 券版甘 积己
-	m_pEnvironment = CGameObject::Create("Environment");
-	m_pEnvironment->SetScene(this);
+	//m_pEnvironment = CGameObject::Create("Environment");
+	//m_pEnvironment->SetScene(this);
 	
-	CTransform*		pTransform = m_pEnvironment->GetTransform();
-	pTransform->SetWorldScale(1000.0f, 1000.0f, 1000.0f);
+	//CTransform*		pTransform = m_pEnvironment->GetTransform();
+	//pTransform->SetWorldScale(1000.0f, 1000.0f, 1000.0f);
 
-	SAFE_RELEASE(pTransform);
+	//SAFE_RELEASE(pTransform);
 
-	CRenderer*	pRenderer = m_pEnvironment->AddComponent<CRenderer>("Environment");
-	pRenderer->SetMesh("PosSphere");
-	pRenderer->SetShader("SkyShader");
-	pRenderer->SetInputLayout("PosInputLayout");
-	pRenderer->SetRenderState(CULLING_CW);	
-	pRenderer->SetRenderState(DEPTH_LESS_EQUAL);
+	//CRenderer*	pRenderer = m_pEnvironment->AddComponent<CRenderer>("Environment");
+	//pRenderer->SetMesh("PosSphere");
+	//pRenderer->SetShader("SkyShader");
+	//pRenderer->SetInputLayout("PosInputLayout");
+	//pRenderer->SetRenderState(CULLING_CW);	
+	//pRenderer->SetRenderState(DEPTH_LESS_EQUAL);
 	
-	CMaterial*	pMaterial = pRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "Sky", L"Sky.dds");
+	//CMaterial*	pMaterial = pRenderer->GetMaterial();
+	//pMaterial->SetDiffuseTexture("Linear", "Sky", L"Sky.dds");
 		
-	SAFE_RELEASE(pMaterial);
-	SAFE_RELEASE(pRenderer);
+	//SAFE_RELEASE(pMaterial);
+	//SAFE_RELEASE(pRenderer);
 		
 	// Scene 积己矫 Main Camera 积己
 	m_pCameraObject = CreateCamera(MAINCAMERA/*, DxVector3(0.0f, 0.0f, -5.0f)*/);
@@ -328,7 +328,7 @@ bool CScene::Init()
 	// Create Default Global Light 
 	CGameObject*	pLightObject = CreateLight("GlobalLight", LT_DIR);
 
-	pTransform = pLightObject->GetTransform();
+	CTransform* pTransform = pLightObject->GetTransform();
 	pTransform->RotateX(PI / 4.0f);
 	pTransform->RotateY(PI / 2.0f);
 	SAFE_RELEASE(pTransform);
@@ -344,9 +344,9 @@ bool CScene::Init()
 
 	LIGHTINFO	tLightInfo = {};
 	tLightInfo.eType = LT_POINT;
-	tLightInfo.vDiffuse = { 1.f, 0.f, 0.f, 1.f };
-	tLightInfo.vAmbient = { 0.2f, 0.f, 0.f, 1.f };
-	tLightInfo.vSpecular = { 1.f, 0.f, 0.f, 1.f };
+	tLightInfo.vDiffuse = { 0.8f, 0.8f, 0.8f, 1.f };
+	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vSpecular = { 1.0f, 1.0f, 1.0f, 1.f };
 	tLightInfo.vAttenuation = DxVector3(0.0f, 1.0f, 0.0f);
 
 	pPointLight->SetLightInfo(tLightInfo);
@@ -355,7 +355,7 @@ bool CScene::Init()
 	pUILayer->AddObject(pLightObject);
 	SAFE_RELEASE(pLightObject);
 
-	pLightObject = CreateLight("PointLight2", LT_POINT);
+	/*pLightObject = CreateLight("PointLight2", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
 	pTransform->SetWorldPos(10.f, 5.f, 20.f);
@@ -394,7 +394,7 @@ bool CScene::Init()
 	SAFE_RELEASE(pPointLight);
 
 	pUILayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
+	SAFE_RELEASE(pLightObject);*/
 
 	SAFE_RELEASE(pUILayer);
 
@@ -459,7 +459,7 @@ void CScene::Input(float _fTime)
 
 void CScene::Update(float _fTime)
 {
-	m_pEnvironment->Update(_fTime);
+	//m_pEnvironment->Update(_fTime);
 
 	for (size_t i = 0; i < m_vecSceneScript.size(); ++i)
 	{
@@ -517,7 +517,7 @@ void CScene::Update(float _fTime)
 
 void CScene::LateUpdate(float _fTime)
 {
-	m_pEnvironment->LateUpdate(_fTime);
+	//m_pEnvironment->LateUpdate(_fTime);
 
 	for (size_t i = 0; i < m_vecSceneScript.size(); ++i)
 	{
@@ -620,7 +620,7 @@ void CScene::Collision(float _fTime)
 
 void CScene::Render(float _fTime)
 {
-	m_pEnvironment->Render(_fTime);
+	//m_pEnvironment->Render(_fTime);
 
 	for (size_t i = 0; i < m_vecSceneScript.size(); ++i)
 	{
@@ -656,8 +656,8 @@ void CScene::Render(float _fTime)
 CScene::CScene() :
 	m_pCameraObject(NULL),
 	m_pCamera(NULL),
-	m_pFrustum(NULL),
-	m_pEnvironment(NULL)
+	m_pFrustum(NULL)
+	//m_pEnvironment(NULL)
 {
 }
 
@@ -671,7 +671,7 @@ CScene::~CScene()
 	Safe_Release_VecList(m_vecLayer);	
 
 	Safe_Release_Map(m_mapCamera);
-	SAFE_RELEASE(m_pEnvironment);
+	//SAFE_RELEASE(m_pEnvironment);
 	SAFE_RELEASE(m_pFrustum);
 	SAFE_RELEASE(m_pCamera);
 	SAFE_RELEASE(m_pCameraObject);

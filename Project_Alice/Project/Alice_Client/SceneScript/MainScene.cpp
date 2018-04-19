@@ -181,7 +181,7 @@ void CMainScene::CreateTerrain()
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
-	pTerrain->CreateTerrain("Terrain", TERRAINSIZE, TERRAINSIZE, 1, 1/*, "Terrain/Height1.bmp"*/);
+	pTerrain->CreateTerrain("Terrain", TERRAINSIZE + 20, TERRAINSIZE, 1, 1/*, "Terrain/Height1.bmp"*/);
 	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cliff05.dds");
 	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/BD_Terrain_Cliff05_NRM.bmp");
 	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/BD_Terrain_Cliff05_SPEC.bmp");
@@ -333,7 +333,7 @@ bool CMainScene::Init()
 
 	CGameObject*	pMinionObj = CGameObject::Create("Minion");
 	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 20.0f));
+	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 10.0f));
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -349,6 +349,18 @@ bool CMainScene::Init()
 	SAFE_RELEASE(pMonsterObj);
 
 	CGameObject* pBattery = CGameObject::CreateClone("BatteryObject");
+	CTransform* pTransform = pBattery->GetTransform();
+	pTransform->SetWorldPos(35.0f, 1.0f, 15.0f);
+	SAFE_RELEASE(pTransform);
+
+	pLayer->AddObject(pBattery);
+	SAFE_RELEASE(pBattery);
+
+	pBattery = CGameObject::CreateClone("BatteryObject");
+	pTransform = pBattery->GetTransform();
+	pTransform->SetWorldPos(15.0f, 1.0f, 30.0f);
+	SAFE_RELEASE(pTransform);
+
 	pLayer->AddObject(pBattery);
 	SAFE_RELEASE(pBattery);
 
@@ -357,7 +369,6 @@ bool CMainScene::Init()
 	// Test Box Mesh »ý¼º
 	//LoadObject("My_Box", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
-	//LoadObject("battery", DxVector3(35.0f, 1.0f, 15.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 		
 	return true;
 }
@@ -403,7 +414,7 @@ CMainScene::CMainScene() :
 
 CMainScene::~CMainScene()
 {
+	DESTROY_SINGLE(CUIMgr);
 	SAFE_RELEASE(m_pPlayerObject);
 
-	DESTROY_SINGLE(CUIMgr);
 }

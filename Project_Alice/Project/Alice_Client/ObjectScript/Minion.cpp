@@ -1,4 +1,5 @@
 #include "Minion.h"
+#include "Battery.h"
 #include "01.Core/Debug.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/Transform.h"
@@ -237,12 +238,21 @@ void CMinion::MonsterDeath()
 	{
 		if (true == m_pAniController->GetAnimationEnd())
 		{
+			CGameObject* pBattery = CGameObject::CreateClone("BatteryObject");
+			CTransform* pTransform = pBattery->GetTransform();
+			pTransform->SetWorldPos(m_pTransform->GetWorldPos());
+			pTransform->SetWorldPosY(1.0f);
+			SAFE_RELEASE(pTransform);
+
+			m_pLayer->AddObject(pBattery);
+			SAFE_RELEASE(pBattery);
+
 			m_pGameObject->Death();
 		}
 	}
 	else
 	{
-		m_pAniController->ChangeClip("Death");
+		m_pAniController->ChangeClip("Death");		
 	}
 }
 

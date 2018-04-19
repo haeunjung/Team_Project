@@ -10,6 +10,8 @@ private:
 	CUIBar * m_pUIBar;
 	float m_fTime;
 public:
+	void GetTime();
+public:
 	bool Init() override;
 	void Update(float _fTime) override;
 	CTimeBar* Clone() override;

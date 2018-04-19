@@ -15,13 +15,13 @@ bool CPointLight::Init()
 	pSphere->SetSphereInfo(Vec3Zero, 0.25f);
 	SAFE_RELEASE(pSphere);*/
 
-	CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("PointLight");
+	/*CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("PointLight");
 	pRenderer->SetMesh("ColorSphere");
 	pRenderer->SetShader("ColliderColorShader");
 	pRenderer->SetInputLayout("ColorInputLayout");
 	pRenderer->SetRenderState(WIRE_FRAME);
 
-	SAFE_RELEASE(pRenderer);
+	SAFE_RELEASE(pRenderer);*/
 
 	return true;
 }

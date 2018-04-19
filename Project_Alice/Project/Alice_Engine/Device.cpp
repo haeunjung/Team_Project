@@ -113,7 +113,9 @@ CDevice::CDevice()
 	m_pDepthView(nullptr)
 {
 	memset(m_fClearColor, 0, sizeof(m_fClearColor) * 4);
-	m_fClearColor[2] = 1.0f;
+	//m_fClearColor[0] = 1.0f;
+	//m_fClearColor[1] = 1.0f;
+	//m_fClearColor[2] = 1.0f;
 }
 
 

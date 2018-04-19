@@ -7,13 +7,16 @@
 #include "07.Component/Renderer.h"
 #include "07.Component/ColliderSphere.h"
 
-CBattery::CBattery()
+CBattery::CBattery() :
+	m_fSpeed(10.0f)
 {
 }
 
 CBattery::CBattery(const CBattery & _Battery) :
 	CScript(_Battery)
 {
+	m_fSpeed = _Battery.m_fSpeed;
+	m_IsCreate = _Battery.m_IsCreate;
 }
 
 CBattery::~CBattery()
@@ -28,7 +31,7 @@ void CBattery::SetBatteryPos(const DxVector3 & _vPos)
 bool CBattery::Init()
 {	
 	CTransform* pTransform = m_pGameObject->GetTransform();
-	pTransform->SetWorldPos(35.0f, 1.0f, 15.0f);
+	pTransform->SetWorldPos(0.0f, 0.0f, 0.0f);
 	pTransform->SetWorldScale(0.1f, 0.1f, 0.1f);
 	SAFE_RELEASE(pTransform);
 
@@ -39,7 +42,7 @@ bool CBattery::Init()
 	SAFE_RELEASE(pRenderer);
 
 	CColliderSphere* pColSphere = m_pGameObject->AddComponent<CColliderSphere>("BatteryColSphere");
-	pColSphere->SetSphereInfo(35.0f, 1.0f, 15.0f, 0.5f);
+	pColSphere->SetSphereInfo(0.0f, 0.0f, 0.0f, 0.5f);
 	SAFE_RELEASE(pColSphere);
 
 	return true;
@@ -47,17 +50,35 @@ bool CBattery::Init()
 
 void CBattery::Update(float _fTime)
 {
-	m_pTransform->RotateX(3.14f, _fTime);
-	m_pTransform->RotateZ(3.14f, _fTime);	
+	if (m_IsCreate)
+	{
+		m_pTransform->Up(m_fSpeed, _fTime);
+		m_fSpeed -= _fTime * 20;
+	}
+
+	if (1.0f > m_pTransform->GetWorldPos().y)
+	{
+		m_pTransform->SetWorldPosY(1.0f);
+		m_IsCreate = false;
+	}
+
+	m_pTransform->RotateX(3.14f, _fTime, true);
+	m_pTransform->RotateZ(3.14f, _fTime, true);
 }
 
 CBattery * CBattery::Clone()
 {
+	m_IsCreate = true;
 	return new CBattery(*this);
 }
 
 void CBattery::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
+	if (m_IsCreate)
+	{
+		return;
+	}
+
 	if (CC_PLAYER_HIT == _pDest->GetColliderCheck())
 	{
 		GET_SINGLE(CUIMgr)->GetBattery();

@@ -6,6 +6,7 @@ WOOJUN_USING
 class CBattery : public CScript
 {
 private:
+	float m_fSpeed;
 	bool m_IsCreate;
 public:
 	void SetBatteryPos(const DxVector3& _vPos);

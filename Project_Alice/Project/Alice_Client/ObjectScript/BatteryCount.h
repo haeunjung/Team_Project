@@ -15,6 +15,7 @@ public:
 	void MinusCount();
 public:
 	bool Init() override;
+	void Input(float _fTime) override;
 	void Update(float _fTime) override;
 	CBatteryCount* Clone() override;
 private:

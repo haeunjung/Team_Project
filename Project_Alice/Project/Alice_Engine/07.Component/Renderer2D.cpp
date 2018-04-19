@@ -352,7 +352,7 @@ CRenderer2D::CRenderer2D() :
 	m_pInputLayout(NULL)
 {
 	SetTag("Renderer2D");
-	SetTypeName("CRederer2D");
+	SetTypeName("CRenderer2D");
 	SetTypeID<CRenderer2D>();
 
 	for (int i = 0; i < RST_END; ++i)
