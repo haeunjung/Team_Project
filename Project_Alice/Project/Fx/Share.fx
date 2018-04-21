@@ -206,6 +206,8 @@ _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
         vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
         vLightDir = vLightPos - vViewPos;
         fDist = length(vLightDir);
+
+        vLightDir = normalize(vLightDir);
         
         if (fDist > g_fLightRange)
         {

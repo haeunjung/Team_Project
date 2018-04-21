@@ -11,9 +11,9 @@ CDirLight::CDirLight()
 	SetTypeID<CDirLight>();
 	m_tInfo.eType = LT_DIR;
 
-	m_tInfo.vDiffuse = { 0.3f, 0.3f, 0.3f, 1.f };
-	m_tInfo.vAmbient = { 0.f, 0.f, 0.f, 1.f };
-	m_tInfo.vSpecular = { 0.0f, 0.f, 0.f, 1.f };
+	m_tInfo.vDiffuse = { 0.1f, 0.1f, 0.1f, 1.f };
+	m_tInfo.vAmbient = { 0.1f, 0.1f, 0.1f, 1.f };
+	m_tInfo.vSpecular = { 0.1f, 0.1f, 0.1f, 1.f };
 	//m_tInfo.vAttenuation = DxVector3(0.0f, 1.0f, 0.0f);
 }
 

@@ -40,11 +40,11 @@ bool CUIMgr::Init(CScene* _pScene)
 {
 	CLayer*		pUILayer = _pScene->FindLayer("UILayer");
 
-	//CreateBattery2D(pUILayer);
+	CreateBattery2D(pUILayer);
 	CreateBatteryCount(pUILayer);
 	//CreateHpIcon(_pScene);
-	//CreateTimeBar(pUILayer);
-	//CreateSpring(pUILayer);
+	CreateTimeBar(pUILayer);
+	CreateSpring(pUILayer);
 
 	SAFE_RELEASE(pUILayer);
 

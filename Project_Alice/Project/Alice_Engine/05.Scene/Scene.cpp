@@ -337,17 +337,17 @@ bool CScene::Init()
 	pLightObject = CreateLight("PointLight1", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(10.f, 5.f, 10.f);
+	pTransform->SetWorldPos(10.f, 5.0f, 10.f);
 	SAFE_RELEASE(pTransform);
 	
 	CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
 
 	LIGHTINFO	tLightInfo = {};
 	tLightInfo.eType = LT_POINT;
-	tLightInfo.vDiffuse = { 0.8f, 0.8f, 0.8f, 1.f };
+	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
 	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vSpecular = { 1.0f, 1.0f, 1.0f, 1.f };
-	tLightInfo.vAttenuation = DxVector3(0.0f, 1.0f, 0.0f);
+	tLightInfo.vSpecular = { 0.8f, 0.8f, 0.8f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(0.0f, 0.25f, 0.0f);
 
 	pPointLight->SetLightInfo(tLightInfo);
 	SAFE_RELEASE(pPointLight);

@@ -15,13 +15,13 @@ bool CPointLight::Init()
 	pSphere->SetSphereInfo(Vec3Zero, 0.25f);
 	SAFE_RELEASE(pSphere);*/
 
-	/*CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("PointLight");
+	CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("PointLight");
 	pRenderer->SetMesh("ColorSphere");
 	pRenderer->SetShader("ColliderColorShader");
 	pRenderer->SetInputLayout("ColorInputLayout");
 	pRenderer->SetRenderState(WIRE_FRAME);
 
-	SAFE_RELEASE(pRenderer);*/
+	SAFE_RELEASE(pRenderer);
 
 	return true;
 }
@@ -69,7 +69,7 @@ void CPointLight::SetLight()
 	CLight::SetLight();
 
 	m_tCBuffer.vAttenuation = m_tInfo.vAttenuation;
-	m_tCBuffer.fRange = 10.f;
+	m_tCBuffer.fRange = 1000.f;
 
 	// Transform의 Z축 == 조명의 방향
 	// 역방향으로 조명으로의 방향
