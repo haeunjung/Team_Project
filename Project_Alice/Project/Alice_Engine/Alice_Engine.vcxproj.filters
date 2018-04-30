@@ -282,7 +282,6 @@
     <ClInclude Include="04.Rendering\DepthStencilState.h">
       <Filter>04. Rendering\02. RenderState\03. DepthStencilState</Filter>
     </ClInclude>
-    <ClInclude Include="07.Component\SpotLight.h" />
     <ClInclude Include="07.Component\Animation2D.h">
       <Filter>07. Component\09. Animation2D</Filter>
     </ClInclude>
@@ -384,6 +383,9 @@
     </ClInclude>
     <ClInclude Include="03.Resource\Sound.h">
       <Filter>03. Resource\03. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="07.Component\SpotLight.h">
+      <Filter>07. Component\07. Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -495,7 +497,6 @@
     <ClCompile Include="04.Rendering\DepthStencilState.cpp">
       <Filter>04. Rendering\02. RenderState\03. DepthStencilState</Filter>
     </ClCompile>
-    <ClCompile Include="07.Component\SpotLight.cpp" />
     <ClCompile Include="07.Component\Animation2D.cpp">
       <Filter>07. Component\09. Animation2D</Filter>
     </ClCompile>
@@ -591,6 +592,9 @@
     </ClCompile>
     <ClCompile Include="03.Resource\Sound.cpp">
       <Filter>03. Resource\03. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\SpotLight.cpp">
+      <Filter>07. Component\07. Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
