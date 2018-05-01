@@ -28,11 +28,15 @@
 #include "07.Component/ColliderSphere.h"
 #include "07.Component/ColliderAABB.h"
 #include "07.Component/SoundPlayer.h"
+#include "07.Component/PointLight.h"
+#include "07.Component/Light.h"
+#include "07.Component/SpotLight.h"
+#include "07.Component/SpotParent.h"
 
 void CMainScene::CreateProtoType()
 {
 	// Battery 프로토타입
-	CGameObject*	pBattery = CGameObject::Create("BatteryObject", true);	
+	CGameObject*	pBattery = CGameObject::Create("BatteryObject", true);
 	CBattery*	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
 
 	SAFE_RELEASE(pBattertScript);
@@ -90,32 +94,32 @@ void CMainScene::CreateObject()
 }
 
 void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, const DxVector3 & _vScale, const DxVector3 & _vRot)
- {
+{
 	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
-	
+
 	CGameObject* pGameObject = CGameObject::Create(_strKey);
-	
+
 	CTransform* pTransform = pGameObject->GetTransform();
 	pTransform->SetWorldPos(_vPos);
 	pTransform->SetWorldScale(_vScale);
 	pTransform->SetWorldRot(_vRot);
 	SAFE_RELEASE(pTransform);
-	
+
 	/*CToolObject* pToolObject = pGameObject->AddComponent<CToolObject>(_strKey + "Object");
 	SAFE_RELEASE(pToolObject);*/
-	
+
 	string	FileName = _strKey + ".FBX";
-	
+
 	CRenderer* pRenderer = pGameObject->AddComponent<CRenderer>(_strKey + "Renderer");
 	pRenderer->SetMesh(_strKey, FileName.c_str());
 	pRenderer->SetShader(STANDARD_BUMP_SHADER);
 	pRenderer->SetInputLayout("BumpInputLayout");
 	SAFE_RELEASE(pRenderer);
-	
+
 	//CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
 	//pColSphere->SetSphereInfo(_vPos, 1.0f);
 	//SAFE_RELEASE(pColSphere);
-	
+
 	CColliderAABB* pColAABB = pGameObject->AddComponent<CColliderAABB>(_strKey + "ColAABB");
 	pColAABB->SetColCheck(CC_OBJ);
 	SAFE_RELEASE(pColAABB);
@@ -137,7 +141,7 @@ void CMainScene::CreateRadioButton()
 		CTransform*	pTransform = pRadioButtonObject->GetTransform();
 		DxVector3	vScale = { 128.0f, 128.0f, 1.0f };
 		pTransform->SetWorldScale(vScale);
-		pTransform->SetWorldPos((150.0f * i) + 50.0f , 550.0f, 0.0f);
+		pTransform->SetWorldPos((150.0f * i) + 50.0f, 550.0f, 0.0f);
 		pTransform->SetPivot(0.0f, 0.0f, 0.0f);
 
 		CColliderRect*	pColRect = pRadioButtonObject->AddComponent<CColliderRect>("ButtonCol");
@@ -165,7 +169,7 @@ void CMainScene::CreateRadioButton()
 
 		pUILayer->AddObject(pRadioButtonObject);
 		SAFE_RELEASE(pRadioButtonObject);
-	}	
+	}
 
 	SAFE_RELEASE(pUILayer);
 }
@@ -185,49 +189,6 @@ void CMainScene::CreateTerrain()
 	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cliff05.dds");
 	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/BD_Terrain_Cliff05_NRM.bmp");
 	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/BD_Terrain_Cliff05_SPEC.bmp");
-	/*pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cave_01.dds");
-	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/BD_Terrain_Cave_01_NRM.bmp");
-	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/BD_Terrain_Cave_01_SPC.bmp");*/
-
-	vector<wstring>	vecMultiTex;
-
-	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01.dds");
-	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11.dds");
-	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13.dds");
-	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large.dds");
-
-	pTerrain->SetSplatTexture("TerrainSplat", vecMultiTex);
-
-	// Normal 세팅
-	vecMultiTex.clear();
-
-	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01_NRM.bmp");
-	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_NRM.bmp");
-	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_NRM.bmp");
-	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_NRM.bmp");
-
-	pTerrain->SetSplatNormalTexture("TerrainSplatNormal", vecMultiTex);
-
-	vecMultiTex.clear();
-
-	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01_SPC.bmp");
-	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_SPEC.bmp");
-	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_SPEC.bmp");
-	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_SPEC.bmp");
-
-	pTerrain->SetSplatSpecularTexture("TerrainSplatSpecular", vecMultiTex);
-
-	vecMultiTex.clear();
-
-	vecMultiTex.push_back(L"Terrain/RoadAlpha.bmp");
-	//vecMultiTex.push_back(L"Terrain/SandBaseAlpha.bmp");
-	//vecMultiTex.push_back(L"Terrain/StonAlpha.bmp");
-	//vecMultiTex.push_back(L"Terrain/WaterBaseAlpha.bmp");
-
-	pTerrain->SetSplatAlphaTexture("TerrainSplatAlpha", vecMultiTex);
-	pTerrain->SetSplatCount(vecMultiTex.size());
-	vecMultiTex.clear();
-
 	SAFE_RELEASE(pTerrain);
 
 	pMapLayer->AddObject(pTerrainObject);
@@ -274,18 +235,121 @@ void CMainScene::CreateInventory()
 	SAFE_RELEASE(pUILayer);
 }
 
+void CMainScene::CreateMainSceneLight()
+{
+	CGameObject* pLightObject = m_pScene->CreateLight("PointLight1", LT_POINT);
+
+	CTransform* pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(10.f, 5.0f, 10.f);
+	SAFE_RELEASE(pTransform);
+
+	CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+
+	LIGHTINFO	tLightInfo = {};
+	tLightInfo.eType = LT_POINT;
+	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
+	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(0.0f, 0.25f, 0.0f);
+
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+
+	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("PointLigh2", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(15.f, 5.0f, 30.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("PointLigh3", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(50.f, 10.0f, 30.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("PointLigh4", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(50.f, 5.0f, 45.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("PointLig5", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(40.f, 5.0f, 10.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	SAFE_RELEASE(pUILayer);
+}
+
 bool CMainScene::Init()
 {
 	CreateProtoType();
 	CreateObject();
-	CreateTerrain();	
+	CreateTerrain();
 	//CreateRadioButton();
 	//CreateInventory();	
+	CreateMainSceneLight();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
-	
+
+	CGameObject* pLightObject = m_pScene->CreateLight("SpotLight", LT_SPOT);
+
+	CTransform* pLightTransform = pLightObject->GetTransform();
+	pLightTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
+	SAFE_RELEASE(pLightTransform);
+
+	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
+
+	LIGHTINFO	tLightInfo = {};
+	tLightInfo.eType = LT_SPOTPARENT;
+	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
+	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(0.0f, 0.1f, 0.0f);
+
+	pSpotLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pSpotLight);
+
+	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+	SAFE_RELEASE(pUILayer);
+
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
-	
+
 	// 카메라 오브젝트 생성
 	CGameObject*	pCameraObject = m_pScene->GetMainCameraObject();
 
@@ -300,21 +364,21 @@ bool CMainScene::Init()
 
 	pLayer->AddObject(pBGM);
 	SAFE_RELEASE(pBGM);
-	
+
 	// 플레이어
-	CGameObject*		pPlayerObject = CGameObject::Create("PlayerObject");	
+	CGameObject*	pPlayerObject = CGameObject::Create("PlayerObject");
 	pLayer->AddObject(pPlayerObject);
 
 	CCamera*	pCamera = m_pScene->GetMainCamera();
-	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 0.0f, -2.5f));
+	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 3.5f, -5.0f));
 
 	m_pPlayerObject = pPlayerObject;
 	pPlayerObject->AddRef();
-	
-	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");	
+
+	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");
 	SAFE_RELEASE(pPlayerScript);
-	SAFE_RELEASE(pPlayerObject);			
-	
+	SAFE_RELEASE(pPlayerObject);
+
 	SAFE_RELEASE(pCamera);
 	SAFE_RELEASE(pCameraObject);
 
@@ -369,7 +433,7 @@ bool CMainScene::Init()
 	// Test Box Mesh 생성
 	//LoadObject("My_Box", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
-		
+
 	return true;
 }
 
@@ -400,7 +464,7 @@ void CMainScene::RadioButton(CGameObject * _pObj, float _fTime)
 	{
 		sprintf_s(strNum, "All Radio Button Off\n");
 	}
-	
+
 	CDebug::OutputConsole(strNum);
 }
 

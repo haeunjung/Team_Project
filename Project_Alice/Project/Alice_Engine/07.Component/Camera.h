@@ -19,6 +19,10 @@ private:
 	DxVector3		m_vAttachPos;
 	DxVector3		m_vMove;
 
+	bool			m_bAction;
+	float			m_fActionTime;
+	DxVector3		m_vRandPos;
+
 	DxVector3		m_vAxis[AXIS_MAX];
 public:
 	XMMATRIX GetViewMatrix() const;
@@ -31,11 +35,13 @@ public:
 	void Attach(CGameObject* _pGameObject, const DxVector3& _vDist);
 	void Detach();
 	CGameObject* GetAttachObject();
+	void ActionCameraOn();
 public:
 	void CreateProjection(float _fAngle, float _fWidth, float _fHeight, float _fNear = 0.1f, float _fFar = 1000.0f);
 	void CreateOrthoProjection(float _fWidth, float _fHeight, float _fNear = 0.1f, float _fFar = 1000.0f);
 private:
 	void ComputeViewMatrix();
+	void ActionCamera(float _fTime);
 public:
 	bool Init() override;
 	void Input(float _fTime) override;

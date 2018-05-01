@@ -9,7 +9,8 @@ class DLL CColliderRay :
 private:
 	friend class CGameObject;
 private:
-	RAY		m_tRay;
+	DxVector3 vColPos;
+	RAY m_tRay;
 public:
 	RAY GetRay() const;
 	void SetRay(const RAY& _Ray);

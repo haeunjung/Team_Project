@@ -73,7 +73,7 @@ bool CBatteryCount::Init()
 
 	DxVector3	vScale = { 49.2f, 57.0f, 1.0f };
 	m_pTransform->SetWorldScale(vScale);
-	m_pTransform->SetWorldPos(300.0f, 40.0f, 0.0f);
+	m_pTransform->SetWorldPos(130.0f, 50.0f, 0.0f);
 	m_pTransform->SetPivot(0.0f, 0.0f, 0.0f);
 
 	CUIBack*	pUI = m_pGameObject->AddComponent<CUIBack>("BatteryCountUI");

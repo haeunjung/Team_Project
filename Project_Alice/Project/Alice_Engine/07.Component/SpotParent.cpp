@@ -38,7 +38,7 @@ bool CSpotParent::Init()
 	m_pChild = CGameObject::Create("SpotChild");
 
 	m_pChildSpotLight = m_pChild->AddComponent<CSpotLight>("SpotLight");
-
+	
 	m_pGameObject->AddChild(m_pChild);
 
 	return true;
@@ -53,6 +53,8 @@ void CSpotParent::Update(float _fTime)
 	CTransform* pChildTransform = m_pChild->GetTransform();
 	pChildTransform->SetWorldPos(m_pTransform->GetWorldPos());
 	SAFE_RELEASE(pChildTransform);
+
+	m_pTransform->RotateY(0.8f, _fTime);
 }
 
 void CSpotParent::LateUpdate(float _fTime)
@@ -86,5 +88,6 @@ void CSpotParent::OnCollisionLeave(CCollider * _pSrc, CCollider * _pDest, float 
 
 void CSpotParent::SetLight()
 {
+	m_pChildSpotLight->SetLightInfo(m_tInfo);
 	m_pChildSpotLight->SetLight();
 }

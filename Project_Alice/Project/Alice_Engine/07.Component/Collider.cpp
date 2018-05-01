@@ -1,6 +1,6 @@
 #include "Collider.h"
 #include "Transform.h"
-#include "../Device.h"
+#include "../Device.h""
 #ifdef _DEBUG
 #include "../04.Rendering/Shader.h"
 #include "../04.Rendering/ShaderMgr.h"
@@ -303,6 +303,43 @@ bool CCollider::ColTerrainToPosition(const TERRAININFO & _tTerrainInfo, CTransfo
 
 	vPos.y = fY;
 	_pDestTransform->SetWorldPos(vPos);
+
+	return true;
+}
+
+bool CCollider::ColTerrainToRay(const TERRAININFO & _tTerrainInfo, DxVector3 & _vPos, const DxVector3 & _vTerrainScale)
+{
+	//DxVector3	vPos = _vPos;
+
+	// 지형 그리드의 인덱스를 구한다.
+	float	x = _vPos.x / _vTerrainScale.x;
+	float	z = _vPos.z / _vTerrainScale.z;
+
+	int	idx = (_tTerrainInfo.iNumH - 1 - ((int)z + 1)) * _tTerrainInfo.iNumW + (int)x;
+
+	// 사각형을 구성하는 4개의 정점 정보를 구한다.
+	DxVector3	vRectPos[4];
+	vRectPos[0] = _tTerrainInfo.vecPos[idx];
+	vRectPos[1] = _tTerrainInfo.vecPos[idx + 1];
+	vRectPos[2] = _tTerrainInfo.vecPos[idx + _tTerrainInfo.iNumW];
+	vRectPos[3] = _tTerrainInfo.vecPos[idx + _tTerrainInfo.iNumW + 1];
+
+	// 우상단, 좌하단 삼각형 체크
+	// x와 z중 x값이 크면 우상단, z값이 크면 좌하단
+	x -= (int)x;
+	z = 1.0f - (z - (int)z);
+
+	float fY = 0.0f;
+	if (x >= z)
+	{
+		fY = vRectPos[0].y + (vRectPos[1].y - vRectPos[0].y) * x + (vRectPos[3].y - vRectPos[1].y) * z;
+	}
+	else
+	{
+		fY = vRectPos[0].y + (vRectPos[3].y - vRectPos[2].y) * x + (vRectPos[2].y - vRectPos[0].y) * z;
+	}
+
+	_vPos.y = fY;
 
 	return true;
 }

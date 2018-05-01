@@ -93,4 +93,4 @@
 #define ACC_BLEND					"AccBlend"
 
 #define TERRAINSIZE		65
- 
+#define MAXHP	5

@@ -4,6 +4,8 @@
 #include "../06.GameObject/GameObject.h"
 #include "../07.Component/Renderer.h"
 #include "../04.Rendering/ShaderMgr.h"
+#include "../07.Component/ColliderSphere.h"
+#include "../07.Component/ColliderRay.h"
 
 WOOJUN_USING
 
@@ -21,10 +23,15 @@ bool CSpotLight::Init()
 	pRenderer->SetInputLayout("ColorInputLayout");
 	pRenderer->SetRenderState(WIRE_FRAME);
 
+	m_pColRay = m_pGameObject->AddComponent<CColliderRay>("SpotColRay");
+
+	m_pColSphere = m_pGameObject->AddComponent<CColliderSphere>("SpotColSphere");
+	m_pColSphere->SetSphereInfo(0.0f, 0.0f, 0.0f, 2.0f);
+
 	SAFE_RELEASE(pRenderer);
 
-	m_pTransform->SetWorldRotY(PI_HALF);
-	m_pTransform->SetWorldRotX(PI_HALF);
+	//m_pTransform->SetWorldRotY(PI_HALF);
+	m_pTransform->SetWorldRotX(1.3f);
 
 	return true;
 }
@@ -35,6 +42,8 @@ void CSpotLight::Input(float _fTime)
 
 void CSpotLight::Update(float _fTime)
 {
+	m_pColRay->SetRay(m_pTransform->GetWorldPos(), m_pTransform->GetWorldAxis(AXIS_Z));
+	m_pColSphere->SetSphereInfo(m_pColRay->GetRay().vPos, 2.5f);
 
 }
 
@@ -73,8 +82,8 @@ void CSpotLight::SetLight()
 	CLight::SetLight();
 
 	m_tCBuffer.vAttenuation = m_tInfo.vAttenuation;
-	m_tCBuffer.fRange = 1000.0f;
-	m_tCBuffer.fSpot = 4.0f;
+	m_tCBuffer.fRange = 10000.0f;
+	m_tCBuffer.fSpot = 8.0f;
 	m_tCBuffer.vDir = m_pTransform->GetWorldAxis(AXIS_Z);
 
 	// Transform의 Z축 == 조명의 방향
@@ -86,7 +95,9 @@ void CSpotLight::SetLight()
 	GET_SINGLE(CShaderMgr)->UpdateConstBuffer("Light", &m_tCBuffer, CUT_VERTEX | CUT_PIXEL);
 }
 
-CSpotLight::CSpotLight()
+CSpotLight::CSpotLight() :
+	m_pColSphere(NULL),
+	m_pColRay(NULL)
 {	
 	SetTag("SpotLight");
 	SetTypeName("CSpotLight");
@@ -101,4 +112,6 @@ CSpotLight::CSpotLight(const CSpotLight & _SpotLight) :
 
 CSpotLight::~CSpotLight()
 {
+	SAFE_RELEASE(m_pColSphere);
+	SAFE_RELEASE(m_pColRay);
 }

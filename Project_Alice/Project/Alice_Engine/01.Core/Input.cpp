@@ -18,7 +18,8 @@ CInput::CInput()	:
 	m_pCreateKey(NULL),
 	m_pMouseTr(NULL),
 	m_pRay(NULL),
-	m_pMousePoint(NULL)
+	m_pMousePoint(NULL),
+	m_bRenderTarget(true)
 {
 }
 
@@ -64,6 +65,11 @@ CColliderPoint * CInput::GetMousePoint()
 	return m_pMousePoint;
 }
 
+bool CInput::RenderTarget()
+{
+	return m_bRenderTarget;
+}
+
 bool CInput::Init()
 {
 	CreateKey("LButton", VK_LBUTTON);
@@ -76,6 +82,8 @@ bool CInput::Init()
 	CreateKey("CameraBack", 'S');
 	CreateKey("CameraLeft", 'A');
 	CreateKey("CameraRight", 'D');
+
+	CreateKey("RenderTarget", VK_F12);
 
 	m_sWheel = 0;
 
@@ -140,6 +148,11 @@ void CInput::Update(float fTime)
 	m_pMouseObj->Update(fTime);
 	m_pMouseObj->LateUpdate(fTime);
 	//GET_SINGLE(CCollisionManager)->AddObject(m_pMouseObj);
+
+	if (true == KEYPRESS("RenderTarget"))
+	{
+		m_bRenderTarget = !m_bRenderTarget;
+	}
 }
 
 void CInput::ComputeRay()

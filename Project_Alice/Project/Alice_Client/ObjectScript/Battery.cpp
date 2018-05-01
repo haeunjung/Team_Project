@@ -62,8 +62,8 @@ void CBattery::Update(float _fTime)
 		m_IsCreate = false;
 	}
 
-	m_pTransform->RotateX(3.14f, _fTime, true);
-	m_pTransform->RotateZ(3.14f, _fTime, true);
+	m_pTransform->RotateX(PI, _fTime, true);
+	m_pTransform->RotateZ(PI, _fTime, true);
 }
 
 CBattery * CBattery::Clone()

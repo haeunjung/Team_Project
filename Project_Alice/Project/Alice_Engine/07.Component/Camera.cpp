@@ -86,6 +86,16 @@ CGameObject * CCamera::GetAttachObject()
 	return m_pAttachObject;
 }
 
+void CCamera::ActionCameraOn()
+{
+	m_bAction = true;
+
+	DxVector3	vAttachPos = m_pAttachTransform->GetWorldPos();
+	m_vAttachPos = m_pTransform->GetWorldPos() - vAttachPos;
+
+	int a = 0;
+}
+
 void CCamera::CreateProjection(float _fAngle, float _fWidth, float _fHeight, float _fNear /*= 0.1f*/, float _fFar /*= 1000.0f*/)
 {
 	*m_matProj = XMMatrixPerspectiveFovLH(_fAngle, _fWidth / _fHeight, _fNear, _fFar);
@@ -134,6 +144,27 @@ void CCamera::ComputeViewMatrix()
 	}
 }
 
+void CCamera::ActionCamera(float _fTime)
+{
+	m_fActionTime += _fTime;
+
+	float RandX = (float)((rand() % 20 - 10) * 0.1f);
+	float RandY = (float)((rand() % 20 - 10) * 0.1f);
+	float RandZ = (float)((rand() % 20 - 10) * 0.1f);
+	m_vRandPos = DxVector3(RandX, RandY, RandZ);
+
+	DxVector3	vAttachPos = m_pAttachTransform->GetWorldPos();
+
+	if (0.5f <= m_fActionTime)
+	{
+		m_vRandPos = Vec3Zero;
+		m_bAction = false;
+		m_fActionTime = 0.0f;
+	}
+
+	m_pTransform->SetWorldPos(vAttachPos + m_vAttachPos + m_vRandPos);
+}
+
 bool CCamera::Init()
 {
 	m_matView = new MATRIX();
@@ -167,6 +198,11 @@ void CCamera::Update(float _fTime)
 
 		m_pTransform->SetWorldRot(m_pAttachTransform->GetWorldRot());
 	}
+
+	if (m_bAction)
+	{
+		ActionCamera(_fTime);
+	}
 }
 
 void CCamera::LateUpdate(float _fTime)
@@ -191,7 +227,9 @@ CCamera::CCamera() :
 	m_matView(NULL),
 	m_matProj(NULL),
 	m_pAttachObject(NULL),
-	m_pAttachTransform(NULL)
+	m_pAttachTransform(NULL),
+	m_bAction(false),
+	m_fActionTime(0.0f)
 {
 	SetTypeName("CCamera");
 	SetTypeID<CCamera>();

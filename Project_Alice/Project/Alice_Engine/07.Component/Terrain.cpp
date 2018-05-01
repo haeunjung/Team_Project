@@ -89,9 +89,9 @@ bool CTerrain::CreateTerrain(const string & _strKey, UINT _iVtxNumX, UINT _iVtxN
 			m_iVtxNumX = tih.biWidth;
 			m_iVtxNumZ = tih.biHeight;
 
-			for (int i = 0; i < m_iVtxNumZ; ++i)
+			for (UINT i = 0; i < m_iVtxNumZ; ++i)
 			{
-				for (int j = 0; j < m_iVtxNumX; ++j)
+				for (UINT j = 0; j < m_iVtxNumX; ++j)
 				{
 					float	fY = *(pData + (i * m_iVtxNumX + j) * iByte);
 
@@ -111,9 +111,9 @@ bool CTerrain::CreateTerrain(const string & _strKey, UINT _iVtxNumX, UINT _iVtxN
 	vecVtxBump.reserve(m_iVtxNumX * m_iVtxNumZ);
 		
 	// 버텍스 버퍼 생성
-	for (int i = 0; i < m_iVtxNumZ; ++i)
+	for (UINT i = 0; i < m_iVtxNumZ; ++i)
 	{
-		for (int j = 0; j < m_iVtxNumX; ++j)
+		for (UINT j = 0; j < m_iVtxNumX; ++j)
 		{			
 			VERTEXBUMP	tVtxBump = {};
 
@@ -140,11 +140,11 @@ bool CTerrain::CreateTerrain(const string & _strKey, UINT _iVtxNumX, UINT _iVtxN
 
 	m_vecFaceNormal.reserve((m_iVtxNumX - 1) * (m_iVtxNumZ - 1) * 2);
 
-	for (int i = 0; i < m_iVtxNumZ - 1; ++i)
+	for (UINT i = 0; i < m_iVtxNumZ - 1; ++i)
 	{
-		for (int j = 0; j < m_iVtxNumX - 1; ++j)
+		for (UINT j = 0; j < m_iVtxNumX - 1; ++j)
 		{
-			int	iAddr = i * m_iVtxNumX + j;
+			UINT	iAddr = i * m_iVtxNumX + j;
 
 			// 우상단 삼각형
 			vecIndex.push_back(iAddr);

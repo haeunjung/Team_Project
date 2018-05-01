@@ -3,9 +3,14 @@
 
 WOOJUN_BEGIN
 
+class CColliderRay;
+class CColliderSphere;
 class DLL CSpotLight :
 	public CLight
 {
+private:
+	CColliderRay* m_pColRay;
+	CColliderSphere* m_pColSphere;
 private:
 	friend class CGameObject;
 private:

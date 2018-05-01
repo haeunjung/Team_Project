@@ -20,7 +20,8 @@ enum PLAYER_STATE
 	PS_JUMP,
 	PS_MOVINGJUMP,
 	PS_CLIMB,
-	PS_FALL
+	PS_FALL,
+	PS_HEAT
 };
 
 class CPlayer : public CScript
@@ -29,11 +30,12 @@ private:
 	PLAYER_STATE	m_ePlayerState;
 	bool	m_bAttack;
 	bool	m_bJump;
+	bool	m_bHeat;
 
+	float	m_fHeatTime;
 	float	m_fSpeed;
 	int		m_iHp;
-	int		m_iHpMax;
-
+	
 	bool	m_bFrontCol;
 	bool	m_bBackCol;
 	bool	m_bLeftCol;
@@ -70,12 +72,12 @@ private:
 	void MoveBack(float _fTime);
 	void MoveUp(float _fTime);
 	void MoveDown(float _fTime);
-	void CreateHpBar();
 	void PlayerAttack();
 	void PlayerJump();
 	void PlayerMovingJump(float _fTime);
 	void PlayerClimb();
 	void PlayerFall(float _fTime);
+	void PlayerHeat(float _fTime);
 public:
 	CPlayer();
 	~CPlayer();

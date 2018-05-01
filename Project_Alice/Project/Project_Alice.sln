@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.Client", "01.Client", "{586C77A3-F4FF-478C-96C6-723919AAEA2C}"
 EndProject
@@ -15,12 +15,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Client", "Alice_Clien
 		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D} = {840AB2A0-DDF6-4BDD-A531-5D131029CA2D}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Engine", "Alice_Engine\Alice_Engine.vcxproj", "{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Tool", "Alice_Tool\Alice_Tool.vcxproj", "{FF3F4E06-53DA-4073-ACFE-54C103A592E4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D} = {840AB2A0-DDF6-4BDD-A531-5D131029CA2D}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Alice_Engine", "Alice_Engine\Alice_Engine.vcxproj", "{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,14 +38,6 @@ Global
 		{B0E90B52-6948-447B-B842-622F4D297675}.Release|x64.Build.0 = Release|x64
 		{B0E90B52-6948-447B-B842-622F4D297675}.Release|x86.ActiveCfg = Release|Win32
 		{B0E90B52-6948-447B-B842-622F4D297675}.Release|x86.Build.0 = Release|Win32
-		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x64.ActiveCfg = Debug|x64
-		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x64.Build.0 = Debug|x64
-		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x86.ActiveCfg = Debug|Win32
-		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x86.Build.0 = Debug|Win32
-		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x64.ActiveCfg = Release|x64
-		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x64.Build.0 = Release|x64
-		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x86.ActiveCfg = Release|Win32
-		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x86.Build.0 = Release|Win32
 		{FF3F4E06-53DA-4073-ACFE-54C103A592E4}.Debug|x64.ActiveCfg = Debug|x64
 		{FF3F4E06-53DA-4073-ACFE-54C103A592E4}.Debug|x64.Build.0 = Debug|x64
 		{FF3F4E06-53DA-4073-ACFE-54C103A592E4}.Debug|x86.ActiveCfg = Debug|Win32
@@ -54,13 +46,28 @@ Global
 		{FF3F4E06-53DA-4073-ACFE-54C103A592E4}.Release|x64.Build.0 = Release|x64
 		{FF3F4E06-53DA-4073-ACFE-54C103A592E4}.Release|x86.ActiveCfg = Release|Win32
 		{FF3F4E06-53DA-4073-ACFE-54C103A592E4}.Release|x86.Build.0 = Release|Win32
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x64.ActiveCfg = Debug|x64
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x64.Build.0 = Debug|x64
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x64.Deploy.0 = Debug|x64
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x86.ActiveCfg = Debug|Win32
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x86.Build.0 = Debug|Win32
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Debug|x86.Deploy.0 = Debug|Win32
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x64.ActiveCfg = Release|x64
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x64.Build.0 = Release|x64
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x64.Deploy.0 = Release|x64
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x86.ActiveCfg = Release|Win32
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x86.Build.0 = Release|Win32
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D}.Release|x86.Deploy.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B0E90B52-6948-447B-B842-622F4D297675} = {586C77A3-F4FF-478C-96C6-723919AAEA2C}
-		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D} = {0A614430-9777-43A8-BFE4-652D4599E26D}
 		{FF3F4E06-53DA-4073-ACFE-54C103A592E4} = {166EC589-D69C-4E39-A6F8-F8BE19CB2152}
+		{840AB2A0-DDF6-4BDD-A531-5D131029CA2D} = {0A614430-9777-43A8-BFE4-652D4599E26D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CD94B16D-C636-40E8-92B7-E40640C669AC}
 	EndGlobalSection
 EndGlobal

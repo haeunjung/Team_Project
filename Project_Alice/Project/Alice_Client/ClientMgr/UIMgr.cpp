@@ -1,7 +1,6 @@
 #include "UIMgr.h"
 #include "05.Scene/Scene.h"
 #include "06.GameObject/GameObject.h"
-#include "07.Component/Renderer2D.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/Material.h"
 #include "07.Component/UIBack.h"
@@ -15,12 +14,15 @@ DEFINITION_SINGLE(CUIMgr)
 CUIMgr::CUIMgr() :
 	m_pBatteryCount(NULL),
 	m_pTimeBar(NULL),
-	m_pSpringTransform(NULL)
+	m_pSpringTransform(NULL),
+	m_PlayerHp(MAXHP)
 {
 }
 
 CUIMgr::~CUIMgr()
 {	
+	Safe_Release_VecList(m_vecHpRenderer2D);
+
 	SAFE_RELEASE(m_pSpringTransform);
 	SAFE_RELEASE(m_pTimeBar);
 	SAFE_RELEASE(m_pBatteryCount);
@@ -36,13 +38,25 @@ void CUIMgr::UseBattery()
 	m_pTimeBar->GetTime();
 }
 
+void CUIMgr::SetHp(int _Hp)
+{
+	m_PlayerHp = _Hp;
+
+	if (0 > m_PlayerHp)
+	{
+		m_PlayerHp = 0;
+	}
+
+	m_vecHpRenderer2D[m_PlayerHp]->SetIsEnable(false);
+}
+
 bool CUIMgr::Init(CScene* _pScene)
 {
 	CLayer*		pUILayer = _pScene->FindLayer("UILayer");
 
 	CreateBattery2D(pUILayer);
 	CreateBatteryCount(pUILayer);
-	//CreateHpIcon(_pScene);
+	CreateHpIcon(pUILayer);
 	CreateTimeBar(pUILayer);
 	CreateSpring(pUILayer);
 
@@ -53,7 +67,7 @@ bool CUIMgr::Init(CScene* _pScene)
 
 void CUIMgr::Update(float _fTime)
 {
-	//m_pSpringTransform->RotateZ(-1.57f, _fTime);
+	m_pSpringTransform->RotateZ(-1.57f, _fTime);
 }
 
 void CUIMgr::CreateBattery2D(CLayer* _pLayer)
@@ -63,7 +77,7 @@ void CUIMgr::CreateBattery2D(CLayer* _pLayer)
 	CTransform*	pTransform = pBatteryObject->GetTransform();
 	DxVector3	vScale = { 100.0f, 100.0f, 1.0f };
 	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(200.0f, 20.0f, 0.0f);
+	pTransform->SetWorldPos(30.0f, 30.0f, 0.0f);
 	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
 	SAFE_RELEASE(pTransform);
 
@@ -75,6 +89,7 @@ void CUIMgr::CreateBattery2D(CLayer* _pLayer)
 
 	CMaterial*	pMaterial = pRenderer->GetMaterial();
 	pMaterial->SetDiffuseTexture("Linear", "Battery2D", L"Battery2D.png");
+	pMaterial->SetDiffuseColor(DxVector4(0.8f, 0.8f, 0.8f, 0.8f));
 	SAFE_RELEASE(pMaterial);
 	SAFE_RELEASE(pRenderer);
 
@@ -96,44 +111,45 @@ void CUIMgr::CreateBatteryCount(CLayer* _pLayer)
 
 void CUIMgr::CreateHpIcon(CLayer* _pLayer)
 {	
-	CGameObject*	pHpObject = CGameObject::Create("HpObject");
+	CGameObject*	pHpObject = NULL;
+	CTransform*		pTransform = NULL;
+	DxVector3		vScale = {};
+	CRenderer2D*	pRenderer = NULL;
+	CMaterial*		pMaterial = NULL;
+	CUIBack*		pUIBack = NULL;
 
-	CTransform*	pTransform = pHpObject->GetTransform();
-	DxVector3	vScale = { 128.0f, 128.0f, 1.0f };
-	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(500.0f, 30.0f, 0.0f);
-	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
-	SAFE_RELEASE(pTransform);
-		
-	CRenderer2D*	pRenderer = pHpObject->AddComponent<CRenderer2D>("MouseRenderer");
-	pRenderer->SetMesh("UIMesh");
-	pRenderer->SetShader(UI_SHADER);
-	pRenderer->SetInputLayout("TexInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-
-	vector<wstring>	vecMouse;
-	for (int i = 0; i <= 9; ++i)
+	for (int i = 0; i < m_PlayerHp; ++i)
 	{
-		TCHAR	strMouse[MAX_PATH] = {};
-		wsprintf(strMouse, L"%d.png", i);
+		pHpObject = CGameObject::Create("HpObject");
 
-		vecMouse.push_back(strMouse);
+		pTransform = pHpObject->GetTransform();
+		vScale = DxVector3(50.0f, 50.0f, 1.0f);
+		pTransform->SetWorldScale(vScale);
+		pTransform->SetWorldPos(1180.0f + i * -60.0f, 45.0f, 0.0f);
+		pTransform->SetPivot(0.0f, 0.0f, 0.0f);
+		SAFE_RELEASE(pTransform);
+
+		pRenderer = pHpObject->AddComponent<CRenderer2D>("MouseRenderer");
+		pRenderer->SetMesh("UIMesh");
+		pRenderer->SetShader(UI_SHADER);
+		pRenderer->SetInputLayout("TexInputLayout");
+		pRenderer->SetRenderState(ALPHABLEND);
+
+		pMaterial = pRenderer->GetMaterial();
+		pMaterial->SetDiffuseTexture("Linear", "Heart4", L"Heart4.png");
+		pMaterial->SetDiffuseColor(DxVector4(1.2f, 0.8f, 0.8f, 0.8f));
+		SAFE_RELEASE(pMaterial);
+
+		pRenderer->AddRef();
+		m_vecHpRenderer2D.push_back(pRenderer);
+		SAFE_RELEASE(pRenderer);
+
+		pUIBack = pHpObject->AddComponent<CUIBack>("Battery2DBack");
+		SAFE_RELEASE(pUIBack);
+
+		_pLayer->AddObject(pHpObject);
+		SAFE_RELEASE(pHpObject);
 	}
-
-	CAnimation2D*	pAnimation2D = pHpObject->AddComponent<CAnimation2D>("HeartAnimation2D");
-	pAnimation2D->AddAnimation2DClip("Mouse", A2D_FRAME, AO_LOOP, vecMouse.size(), 1, 1.0f, 0, 0.0f, "Mouse", 0, &vecMouse);
-	pAnimation2D->Start(true);
-
-	CMaterial*	pMaterial = pRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "Battery2D", L"Battery2D.png");	
-	SAFE_RELEASE(pMaterial);
-	SAFE_RELEASE(pRenderer);
-
-	CUIBack*	pUIBack = pHpObject->AddComponent<CUIBack>("Battery2DBack");
-	SAFE_RELEASE(pUIBack);
-
-	_pLayer->AddObject(pHpObject);
-	SAFE_RELEASE(pHpObject);
 }
 
 void CUIMgr::CreateTimeBar(CLayer* _pLayer)

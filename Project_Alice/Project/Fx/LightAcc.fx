@@ -2,9 +2,9 @@
 
 SamplerState g_GBufferSampler : register(s11);
 
-Texture2D g_GBufferAlbedo   : register(t11);
-Texture2D g_GBufferNormal   : register(t12);
-Texture2D g_GBufferDepth    : register(t13);
+Texture2D g_GBufferAlbedo : register(t11);
+Texture2D g_GBufferNormal : register(t12);
+Texture2D g_GBufferDepth : register(t13);
 Texture2D g_GBufferSpecular : register(t14);
 
 static const float2 vPos[4] =
@@ -65,8 +65,8 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
         if (fDist > g_fLightRange)
             return tMtrl;
         else
-        {            
-            fAtt = 1.0f / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist));           
+        {
+            fAtt = 1.0f / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist));
         }
     }
 
@@ -91,8 +91,13 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
         }
     }
 
+    if (g_iLightType == 3)
+    {
+        return tMtrl;
+    }
+
 	// Diffuse를 구한다.
-    tMtrl.vDiffuse = g_vLightDiffuse * vMtrlDif * max(0, dot(vNormal, vLightDir)) * fAtt;
+        tMtrl.vDiffuse = g_vLightDiffuse * vMtrlDif * max(0, dot(vNormal, vLightDir)) * fAtt;
     tMtrl.vAmbient = g_vLightAmbient * vMtrlAmb * fAtt;
 
 	// 정반사광을 구한다.

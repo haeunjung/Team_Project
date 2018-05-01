@@ -1,17 +1,17 @@
 // Color Vertex Input Structure
 struct VS_COLOR_INPUT
 {
-	float3 vPos		: POSITION;
-	float4 vColor	: COLOR;
+    float3 vPos : POSITION;
+    float4 vColor : COLOR;
 };
 
 // Color Vertex Output Structure
 struct VS_COLOR_OUTPUT
 {
-	float4 vPos		: SV_POSITION;		
+    float4 vPos : SV_POSITION;
 	// SV는 System Value의 약자로 
 	// System Value가 되면 건드리면 안된다.
-	float4 vColor	: COLOR;
+    float4 vColor : COLOR;
 };
 
 // Tex Vertex Input Structure
@@ -30,54 +30,54 @@ struct VS_TEX_OUTPUT
 // Texture Normal Vertex
 struct VS_TEXTURENORMAL_INPUT
 {
-    float3 vPos     : POSITION;
-    float3 vNormal  : NORMAL;
-    float2 vUV      : TEXCOORD;
+    float3 vPos : POSITION;
+    float3 vNormal : NORMAL;
+    float2 vUV : TEXCOORD;
 };
 
 struct VS_TEXTURENORMAL_OUTPUT
 {
-    float4 vPos     : SV_POSITION;
-    float3 vNormal  : NORMAL;
-    float2 vUV      : TEXCOORD;
+    float4 vPos : SV_POSITION;
+    float3 vNormal : NORMAL;
+    float2 vUV : TEXCOORD;
     float4 vProjPos : POSITION;
 };
 
 // Texture Bump Vertex
 struct VS_BUMP_INPUT
 {
-    float3 vPos      : POSITION;
-    float3 vNormal   : NORMAL;
-    float2 vUV       : TEXCOORD;
-    float3 vTangent  : TANGENT;
+    float3 vPos : POSITION;
+    float3 vNormal : NORMAL;
+    float2 vUV : TEXCOORD;
+    float3 vTangent : TANGENT;
     float3 vBinormal : BINORMAL;
 };
 
 struct VS_ANI_BUMP_INPUT
 {
-    float3 vPos      : POSITION;
-    float3 vNormal   : NORMAL;
-    float2 vUV       : TEXCOORD;
-    float3 vTangent  : TANGENT;
+    float3 vPos : POSITION;
+    float3 vNormal : NORMAL;
+    float2 vUV : TEXCOORD;
+    float3 vTangent : TANGENT;
     float3 vBinormal : BINORMAL;
-    float4 vWeights  : BLENDWEIGHTS;
-    float4 vIndices  : BLENDINDICES;
+    float4 vWeights : BLENDWEIGHTS;
+    float4 vIndices : BLENDINDICES;
 };
 
 struct VS_BUMP_OUTPUT
 {
-    float4 vPos      : SV_POSITION;
-    float3 vNormal   : NORMAL;
-    float2 vUV       : TEXCOORD;
-    float4 vProjPos  : POSITION;
-    float3 vTangent  : TANGENT;
+    float4 vPos : SV_POSITION;
+    float3 vNormal : NORMAL;
+    float2 vUV : TEXCOORD;
+    float4 vProjPos : POSITION;
+    float3 vTangent : TANGENT;
     float3 vBinormal : BINORMAL;
 };
 
 // Single Target Output Structure
 struct PS_OUTPUT
 {
-	float4 vTarget0	: SV_Target;
+    float4 vTarget0 : SV_Target;
     float4 vTarget1 : SV_Target1;
     float4 vTarget2 : SV_Target2;
     float4 vTarget3 : SV_Target3;
@@ -87,24 +87,24 @@ struct PS_OUTPUT
 // 쉐이더 외부에서 값을 넘겨줄때 사용
 cbuffer Transform : register(b0)
 {
-    matrix  g_matWorld;
-    matrix  g_matView;
-    matrix  g_matProj;
-    matrix  g_matWV;
-    matrix  g_matWVP;
-    matrix  g_matVP;
-    matrix  g_matInvProj;
-    matrix  g_matInvView;
-    matrix  g_matInvVP;
+    matrix g_matWorld;
+    matrix g_matView;
+    matrix g_matProj;
+    matrix g_matWV;
+    matrix g_matWVP;
+    matrix g_matVP;
+    matrix g_matInvProj;
+    matrix g_matInvView;
+    matrix g_matInvVP;
 
-    float3  g_vPivot;
-    float   g_Empty1;
-    float3  g_vMeshSize;
-    float   g_Empty2;
-    float3  g_vMeshMin;
-    float   g_Empty3;
-    float3  g_vMeshMax;
-    float   g_Empty4;
+    float3 g_vPivot;
+    float g_Empty1;
+    float3 g_vMeshSize;
+    float g_Empty2;
+    float3 g_vMeshMin;
+    float g_Empty3;
+    float3 g_vMeshMax;
+    float g_Empty4;
 }
 
 cbuffer Material : register(b1)
@@ -112,48 +112,48 @@ cbuffer Material : register(b1)
     float4 g_vMaterialDiffuse;
     float4 g_vMaterialAmbient;
     float4 g_vMaterialSpecular;
-    float4 g_vMaterialEmissive; 
+    float4 g_vMaterialEmissive;
 
-    int    g_iBump;
-    int    g_iSpecular;
-    float  g_fSpecularPower;
-    int    g_iMaterialEmpty;
+    int g_iBump;
+    int g_iSpecular;
+    float g_fSpecularPower;
+    int g_iMaterialEmpty;
 }
 
 cbuffer Light : register(b2)
 {
-    float4  g_vLightDiffuse;
-    float4  g_vLightAmbient;
-    float4  g_vLightSpecular;
-    int     g_iLightType;
-    float3  g_vLightDir;
-    float3  g_vLightPos;
-    float   g_fLightRange;
-    float3  g_vAttenuation;
-    float   g_fSpot;
+    float4 g_vLightDiffuse;
+    float4 g_vLightAmbient;
+    float4 g_vLightSpecular;
+    int g_iLightType;
+    float3 g_vLightDir;
+    float3 g_vLightPos;
+    float g_fLightRange;
+    float3 g_vAttenuation;
+    float g_fSpot;
 }
 
 // Diffuse Texture
-Texture2D    g_DiffuseTexture : register(t0);
+Texture2D g_DiffuseTexture : register(t0);
 SamplerState g_DiffuseSampler : register(s0);
 
 // Normal Texture
-Texture2D    g_NormalTexture : register(t1);
+Texture2D g_NormalTexture : register(t1);
 SamplerState g_NormalSampler : register(s1);
 
 // Specular Texture
-Texture2D    g_SpecularTexture : register(t2);
+Texture2D g_SpecularTexture : register(t2);
 SamplerState g_SpecularSampler : register(s2);
 
 // Bone Texture
-Texture2D    g_BoneTexture  : register(t3);
-SamplerState g_BoneSampler  : register(s3);
+Texture2D g_BoneTexture : register(t3);
+SamplerState g_BoneSampler : register(s3);
 
 struct _tagMaterial
 {
-    float4  vDiffuse;
-    float4  vAmbient;
-    float4  vSpecular;
+    float4 vDiffuse;
+    float4 vAmbient;
+    float4 vSpecular;
 };
 
 float3 ComputeNormal(float3 vTangent, float3 vBinormal, float3 vVtxNormal, float2 vUV)
@@ -233,7 +233,7 @@ _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
             vLightDir = float4(0.0f, 0.0f, 0.0f, 0.0f);
         }
 
-        vLightDir /= fDist;        
+        vLightDir /= fDist;
         float3 vLight = -mul(float4(g_vLightDir, 0.0f), g_matView);
 
         fSpot = pow(max(dot(vLightDir, vLight), 0.0f), g_fSpot);
@@ -297,7 +297,7 @@ _tagSkinning Skinning(float3 vPos, float3 vNormal, float3 vTangent, float3 vBino
 
     for (int i = 0; i < 4; ++i)
     {
-        matrix matBone = GetBoneMatrix((int)vIndices[i]);
+        matrix matBone = GetBoneMatrix((int) vIndices[i]);
 
         tSkinning.vPos += fWeights[i] * mul(float4(vPos, 1.0f), matBone).xyz;
         tSkinning.vNormal += fWeights[i] * mul(float4(vNormal, 0.0f), matBone).xyz;

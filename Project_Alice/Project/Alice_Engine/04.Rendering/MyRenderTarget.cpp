@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "RenderState.h"
 #include "../Device.h"
+#include "../01.Core/Input.h"
 #include "../03.Resource/Texture.h"
 #include "../03.Resource/Mesh.h"
 #include "../03.Resource/ResMgr.h"
@@ -11,7 +12,6 @@
 #include "../05.Scene/SceneMgr.h"
 #include "../05.Scene/Scene.h"
 #include "../07.Component/Camera.h"
-
 WOOJUN_USING
 
 CMyRenderTarget::CMyRenderTarget() :
@@ -131,6 +131,8 @@ void CMyRenderTarget::SetTexture(int _iRegister)
 void CMyRenderTarget::Render()
 {
 #ifdef _DEBUG
+	m_bRender = GET_SINGLE(CInput)->RenderTarget();
+
 	if (m_bRender)
 	{
 		TRANSFORMCBUFFER	tTransform = {};

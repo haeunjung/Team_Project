@@ -16,6 +16,7 @@
 
 #include "RotBullet.h"
 #include "PlayerBullet.h"
+#include "../ClientMgr/UIMgr.h"
 
 void CPlayer::AniCallback(float _fTime)
 {
@@ -26,7 +27,7 @@ bool CPlayer::Init()
 {		
 	//CreateHpBar();
 
-	m_pTransform->SetWorldPos(30.0f, 0.0f, 20.0f);
+	m_pTransform->SetWorldPos(30.0f, 0.0f, 15.0f);
 	m_pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
 	m_pTransform->SetLocalRotY(-PI * 0.5f);
 
@@ -81,7 +82,7 @@ bool CPlayer::Init()
 
 void CPlayer::Input(float _fTime)
 {
-	if (m_bAttack || m_bJump)
+	if (m_bAttack || m_bJump || m_bHeat)
 	{
 		return;
 	}
@@ -167,6 +168,9 @@ void CPlayer::Update(float _fTime)
 	case PS_FALL:
 		PlayerFall(_fTime);
 		break;
+	case PS_HEAT:
+		PlayerHeat(_fTime);
+		break;
 	}
 }
 
@@ -174,13 +178,20 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 {
 	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck())
 	{
-		/*if ("MonsterAttCol" == _pDest->GetTagStr() &&
+		if ("MonsterAttCol" == _pDest->GetTagStr() &&
 			true == _pDest->GetIsEnable())
 		{
-			m_iHp -= 10;
-			m_pHpBar->SetCurValue(m_iHp);
+			m_iHp -= 1;
+			GET_SINGLE(CUIMgr)->SetHp(m_iHp);
+
+			CCamera* pCamera = m_pScene->GetMainCamera();
+			pCamera->ActionCameraOn();
+			SAFE_RELEASE(pCamera);
+
+			m_ePlayerState = PS_HEAT;
+
 			_pDest->SetIsEnable(false);
-		}*/
+		}
 	}
 	
 	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
@@ -430,40 +441,6 @@ void CPlayer::MoveDown(float _fTime)
 	m_pAniController->ReturnToDefaultClip();
 }
 
-void CPlayer::CreateHpBar()
-{
-	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
-
-	CGameObject*	pHpBarObejct = CGameObject::Create("HpBarObejct");
-
-	CTransform*	pTransform = pHpBarObejct->GetTransform();
-	DxVector3	vScale = { 400.0f, 50.0f, 1.0f };
-	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(850.0f, 25.0f, 0.0f);
-	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
-	SAFE_RELEASE(pTransform);
-
-	CRenderer2D*	pRenderer = pHpBarObejct->AddComponent<CRenderer2D>("HpBarRenderer2D");
-	pRenderer->SetMesh("UIMesh");
-	pRenderer->SetShader(UI_SHADER);
-	pRenderer->SetInputLayout("TexInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-
-	CMaterial*	pMaterial = pRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "HpBar", L"SmallHpBar.png");
-	SAFE_RELEASE(pMaterial);
-	SAFE_RELEASE(pRenderer);
-
-	m_pHpBar = pHpBarObejct->AddComponent<CUIBar>("HpBar");
-	m_pHpBar->SetMinMax(0.0f, m_iHp);
-	m_pHpBar->SetBarDir(BD_LEFT);
-
-	pUILayer->AddObject(pHpBarObejct);
-	SAFE_RELEASE(pHpBarObejct);
-
-	SAFE_RELEASE(pUILayer);
-}
-
 void CPlayer::PlayerAttack()
 {
 	if (true == m_pAniController->CheckClipName("Attack01"))
@@ -548,13 +525,27 @@ void CPlayer::PlayerFall(float _fTime)
 	}
 }
 
+void CPlayer::PlayerHeat(float _fTime)
+{
+	m_bHeat = true;
+	m_fHeatTime += _fTime;
+
+	if (0.5f <= m_fHeatTime)
+	{
+		m_bHeat = false;
+		m_fHeatTime = 0.0f;
+		m_ePlayerState = PS_DEFAULT;
+	}
+}
+
 CPlayer::CPlayer() :
 	m_fSpeed(5.0f),
-	m_iHp(100),
-	m_iHpMax(100),
+	m_fHeatTime(0.0f),
+	m_iHp(MAXHP),
 	m_ePlayerState(PS_DEFAULT),
 	m_bAttack(false),
 	m_bJump(false),
+	m_bHeat(false),
 	m_bChange(false),
 	m_bFrontCol(false),
 	m_bBackCol(false),
@@ -567,7 +558,7 @@ CPlayer::CPlayer() :
 	m_pFootCol(NULL),
 	m_pHpBar(NULL),
 	m_pCameraArm(NULL),
-	/*m_pOtherCol(NULL),*/
+	m_pOtherCol(NULL),
 	m_bClimb(false)
 {
 	SetTypeID<CPlayer>();

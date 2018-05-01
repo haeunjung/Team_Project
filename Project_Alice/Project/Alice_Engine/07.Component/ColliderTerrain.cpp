@@ -1,5 +1,6 @@
 #include "ColliderTerrain.h"
 #include "Transform.h"
+#include "ColliderRay.h"
 
 WOOJUN_USING
 
@@ -75,6 +76,12 @@ bool CColliderTerrain::Collision(CCollider * _pCollider)
 		SAFE_RELEASE(pTransform);
 		return bReturn;
 	}
+	/*case COL_RAY:
+	{
+		DxVector3 vPos = ((CColliderRay*)_pCollider)->GetRay().vPos;
+		bool bReturn = ColTerrainToRay(m_tTerrainInfo, vPos, m_pTransform->GetWorldScale());
+		return bReturn;
+	}*/
 	}
 
 	return false;
