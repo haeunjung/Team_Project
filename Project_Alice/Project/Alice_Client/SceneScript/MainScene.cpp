@@ -28,9 +28,6 @@
 #include "07.Component/ColliderSphere.h"
 #include "07.Component/ColliderAABB.h"
 #include "07.Component/SoundPlayer.h"
-#include "07.Component/PointLight.h"
-#include "07.Component/Light.h"
-#include "07.Component/SpotLight.h"
 
 void CMainScene::CreateProtoType()
 {
@@ -188,6 +185,49 @@ void CMainScene::CreateTerrain()
 	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cliff05.dds");
 	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/BD_Terrain_Cliff05_NRM.bmp");
 	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/BD_Terrain_Cliff05_SPEC.bmp");
+	/*pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cave_01.dds");
+	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/BD_Terrain_Cave_01_NRM.bmp");
+	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/BD_Terrain_Cave_01_SPC.bmp");*/
+
+	vector<wstring>	vecMultiTex;
+
+	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01.dds");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11.dds");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13.dds");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large.dds");
+
+	pTerrain->SetSplatTexture("TerrainSplat", vecMultiTex);
+
+	// Normal 세팅
+	vecMultiTex.clear();
+
+	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01_NRM.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_NRM.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_NRM.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_NRM.bmp");
+
+	pTerrain->SetSplatNormalTexture("TerrainSplatNormal", vecMultiTex);
+
+	vecMultiTex.clear();
+
+	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01_SPC.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_SPEC.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_SPEC.bmp");
+	//vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_SPEC.bmp");
+
+	pTerrain->SetSplatSpecularTexture("TerrainSplatSpecular", vecMultiTex);
+
+	vecMultiTex.clear();
+
+	vecMultiTex.push_back(L"Terrain/RoadAlpha.bmp");
+	//vecMultiTex.push_back(L"Terrain/SandBaseAlpha.bmp");
+	//vecMultiTex.push_back(L"Terrain/StonAlpha.bmp");
+	//vecMultiTex.push_back(L"Terrain/WaterBaseAlpha.bmp");
+
+	pTerrain->SetSplatAlphaTexture("TerrainSplatAlpha", vecMultiTex);
+	pTerrain->SetSplatCount(vecMultiTex.size());
+	vecMultiTex.clear();
+
 	SAFE_RELEASE(pTerrain);
 
 	pMapLayer->AddObject(pTerrainObject);
@@ -234,89 +274,6 @@ void CMainScene::CreateInventory()
 	SAFE_RELEASE(pUILayer);
 }
 
-void CMainScene::CreateMainSceneLight()
-{
-	CGameObject* pLightObject = m_pScene->CreateLight("PointLight1", LT_POINT);
-
-	CTransform* pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(10.f, 5.0f, 10.f);
-	SAFE_RELEASE(pTransform);
-
-	CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-
-	LIGHTINFO	tLightInfo = {};
-	tLightInfo.eType = LT_POINT;
-	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
-	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vAttenuation = DxVector3(0.0f, 0.25f, 0.0f);
-
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-
-	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
-	pUILayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-
-	pLightObject = m_pScene->CreateLight("PointLigh2", LT_POINT);
-
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(15.f, 5.0f, 30.f);
-	SAFE_RELEASE(pTransform);
-
-	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-
-	pUILayer = m_pScene->FindLayer("UILayer");
-	pUILayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-
-	pLightObject = m_pScene->CreateLight("PointLigh3", LT_POINT);
-
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(50.f, 10.0f, 30.f);
-	SAFE_RELEASE(pTransform);
-
-	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-
-	pUILayer = m_pScene->FindLayer("UILayer");
-	pUILayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-
-	pLightObject = m_pScene->CreateLight("PointLigh4", LT_POINT);
-
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(50.f, 5.0f, 45.f);
-	SAFE_RELEASE(pTransform);
-
-	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-
-	pUILayer = m_pScene->FindLayer("UILayer");
-	pUILayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-
-	pLightObject = m_pScene->CreateLight("PointLig5", LT_POINT);
-
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(40.f, 5.0f, 10.f);
-	SAFE_RELEASE(pTransform);
-
-	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-
-	pUILayer = m_pScene->FindLayer("UILayer");
-	pUILayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-
-	SAFE_RELEASE(pUILayer);
-}
-
 bool CMainScene::Init()
 {
 	CreateProtoType();
@@ -324,31 +281,8 @@ bool CMainScene::Init()
 	CreateTerrain();	
 	//CreateRadioButton();
 	//CreateInventory();	
-	CreateMainSceneLight();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
-
-	CGameObject* pLightObject = m_pScene->CreateLight("SpotLight", LT_SPOT);
-
-	CTransform* pLightTransform = pLightObject->GetTransform();
-	pLightTransform->SetWorldPos(10.f, 5.0f, 10.f);
-	SAFE_RELEASE(pLightTransform);
-
-	CSpotLight* pSpotLight = (CSpotLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-
-	LIGHTINFO	tLightInfo = {};
-	tLightInfo.eType = LT_SPOT;
-	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
-	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vAttenuation = DxVector3(0.0f, 0.25f, 0.0f);
-
-	pSpotLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pSpotLight);
-
-	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
-	pUILayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
 	
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 	
@@ -368,11 +302,11 @@ bool CMainScene::Init()
 	SAFE_RELEASE(pBGM);
 	
 	// 플레이어
-	CGameObject*	pPlayerObject = CGameObject::Create("PlayerObject");	
+	CGameObject*		pPlayerObject = CGameObject::Create("PlayerObject");	
 	pLayer->AddObject(pPlayerObject);
 
 	CCamera*	pCamera = m_pScene->GetMainCamera();
-	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 3.5f, -5.0f));
+	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 0.0f, -2.5f));
 
 	m_pPlayerObject = pPlayerObject;
 	pPlayerObject->AddRef();

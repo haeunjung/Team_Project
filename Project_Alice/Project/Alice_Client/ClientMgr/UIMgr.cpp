@@ -53,7 +53,7 @@ bool CUIMgr::Init(CScene* _pScene)
 
 void CUIMgr::Update(float _fTime)
 {
-	m_pSpringTransform->RotateZ(-1.57f, _fTime);
+	//m_pSpringTransform->RotateZ(-1.57f, _fTime);
 }
 
 void CUIMgr::CreateBattery2D(CLayer* _pLayer)

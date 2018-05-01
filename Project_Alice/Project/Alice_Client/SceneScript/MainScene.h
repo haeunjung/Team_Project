@@ -19,7 +19,6 @@ private:
 	void CreateRadioButton();	
 	void CreateTerrain();
 	void CreateInventory();	
-	void CreateMainSceneLight();
 public:
 	virtual bool Init();
 	virtual void Update(float _fTime);

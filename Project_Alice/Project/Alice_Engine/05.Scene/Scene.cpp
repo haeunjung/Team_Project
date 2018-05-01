@@ -334,15 +334,35 @@ bool CScene::Init()
 	SAFE_RELEASE(pTransform);
 	SAFE_RELEASE(pLightObject);
 
-	//pLightObject = CreateLight("PointLight2", LT_POINT);
+	pLightObject = CreateLight("PointLight1", LT_POINT);
 
-	//pTransform = pLightObject->GetTransform();
-	//pTransform->SetWorldPos(10.f, 5.f, 20.f);
-	//SAFE_RELEASE(pTransform);
-
-	/*CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(10.f, 5.0f, 10.f);
+	SAFE_RELEASE(pTransform);
+	
+	CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
 
 	LIGHTINFO	tLightInfo = {};
+	tLightInfo.eType = LT_POINT;
+	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
+	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vSpecular = { 0.8f, 0.8f, 0.8f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(0.0f, 0.25f, 0.0f);
+
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+		
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	/*pLightObject = CreateLight("PointLight2", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(10.f, 5.f, 20.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+
 	tLightInfo.eType = LT_POINT;
 	tLightInfo.vDiffuse = { 0.f, 1.f, 0.f, 1.0f };
 	tLightInfo.vAmbient = { 0.f, 0.2f, 0.f, 1.0f };
