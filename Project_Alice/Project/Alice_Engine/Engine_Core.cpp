@@ -260,7 +260,7 @@ CEngine_Core::CEngine_Core() : m_hInst(NULL), m_fMainDeltaTime(0.0f)
 {
 	srand(GetCurrentTime());
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(156782);
+	//_CrtSetBreakAlloc(510);
 
 	new int();
 

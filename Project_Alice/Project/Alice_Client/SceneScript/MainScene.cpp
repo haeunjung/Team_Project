@@ -30,6 +30,7 @@
 #include "07.Component/SoundPlayer.h"
 #include "07.Component/PointLight.h"
 #include "07.Component/Light.h"
+#include "07.Component/SpotLight.h"
 
 void CMainScene::CreateProtoType()
 {
@@ -326,6 +327,28 @@ bool CMainScene::Init()
 	CreateMainSceneLight();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
+
+	CGameObject* pLightObject = m_pScene->CreateLight("SpotLight", LT_SPOT);
+
+	CTransform* pLightTransform = pLightObject->GetTransform();
+	pLightTransform->SetWorldPos(10.f, 5.0f, 10.f);
+	SAFE_RELEASE(pLightTransform);
+
+	CSpotLight* pSpotLight = (CSpotLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+
+	LIGHTINFO	tLightInfo = {};
+	tLightInfo.eType = LT_SPOT;
+	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
+	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(0.0f, 0.25f, 0.0f);
+
+	pSpotLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pSpotLight);
+
+	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
+	pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
 	
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 	

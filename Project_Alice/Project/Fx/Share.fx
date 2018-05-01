@@ -187,10 +187,12 @@ float3 ComputeNormal(float3 vTangent, float3 vBinormal, float3 vVtxNormal, float
 
 _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
 {
+    _tagMaterial tMtrl = (_tagMaterial) 0;
+
 	// 조명 타입에 따라 조명의 방향을 구하고 뷰공간으로 변환한다.
     float3 vLightDir = (float3) 0;
     float3 vLightPos = (float3) 0;
-    float fIntensity = (float) 1.0f;    
+    float fAtt = (float) 1.0f;
     float fDist = (float) 0;
     float fSpot = (float) 1.0f;
 	// 방향성 조명일 경우
@@ -203,20 +205,20 @@ _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
 	// 점 조명일 경우
     if (g_iLightType == 1)
     {
+        // 조명의 위치를 뷰공간으로 바꾼다.
         vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
         vLightDir = vLightPos - vViewPos;
+
         fDist = length(vLightDir);
 
         vLightDir = normalize(vLightDir);
-        
+
         if (fDist > g_fLightRange)
+            return tMtrl;
+        else
         {
-            vLightDir = float4(0.0f, 0.0f, 0.0f, 0.0f);
+            fAtt = 1.0f / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist));
         }
-
-        vLightDir /= fDist;
-
-        fIntensity = 1.0f / dot(g_vAttenuation, float3(1.0f, fDist, fDist * fDist));
     }
 
 	// Spot
@@ -235,13 +237,11 @@ _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
         float3 vLight = -mul(float4(g_vLightDir, 0.0f), g_matView);
 
         fSpot = pow(max(dot(vLightDir, vLight), 0.0f), g_fSpot);
-        fIntensity = fSpot / dot(g_vAttenuation, float3(1.0f, fDist, fDist * fDist));
+        fAtt = fSpot / dot(g_vAttenuation, float3(1.0f, fDist, fDist * fDist));
     }
 
-    _tagMaterial tMtrl = (_tagMaterial) 0;
-
 	// Diffuse를 구한다.
-    tMtrl.vDiffuse = g_vLightDiffuse * g_vMaterialDiffuse * max(0, dot(vNormal, vLightDir)) * fIntensity;
+    tMtrl.vDiffuse = g_vLightDiffuse * g_vMaterialDiffuse * max(0, dot(vNormal, vLightDir)) * fAtt;
     tMtrl.vAmbient = g_vLightAmbient * g_vMaterialAmbient * fSpot;
 
 	// 정반사광을 구한다.
@@ -259,7 +259,7 @@ _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
         vSpecular.rgb = g_SpecularTexture.Sample(g_SpecularSampler, vUV).rgb;
     }
 
-    tMtrl.vSpecular = g_vLightSpecular * vSpecular * pow(max(0, dot(vReflect, vView)), g_fSpecularPower) * fIntensity;
+    tMtrl.vSpecular = g_vLightSpecular * vSpecular * pow(max(0, dot(vReflect, vView)), g_fSpecularPower) * fAtt;
 
     return tMtrl;
 }

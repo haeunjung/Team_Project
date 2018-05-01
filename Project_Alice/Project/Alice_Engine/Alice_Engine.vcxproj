@@ -203,6 +203,7 @@
     <ClInclude Include="07.Component\Script.h" />
     <ClInclude Include="07.Component\SoundPlayer.h" />
     <ClInclude Include="07.Component\SpotLight.h" />
+    <ClInclude Include="07.Component\SpotParent.h" />
     <ClInclude Include="07.Component\Terrain.h" />
     <ClInclude Include="07.Component\Transform.h" />
     <ClInclude Include="07.Component\UI.h" />
@@ -279,6 +280,7 @@
     <ClCompile Include="07.Component\Script.cpp" />
     <ClCompile Include="07.Component\SoundPlayer.cpp" />
     <ClCompile Include="07.Component\SpotLight.cpp" />
+    <ClCompile Include="07.Component\SpotParent.cpp" />
     <ClCompile Include="07.Component\Terrain.cpp" />
     <ClCompile Include="07.Component\Transform.cpp" />
     <ClCompile Include="07.Component\UI.cpp" />

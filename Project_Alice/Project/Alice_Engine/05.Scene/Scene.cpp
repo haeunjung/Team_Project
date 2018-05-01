@@ -334,11 +334,11 @@ bool CScene::Init()
 	SAFE_RELEASE(pTransform);
 	SAFE_RELEASE(pLightObject);
 
-	pLightObject = CreateLight("PointLight2", LT_POINT);
+	//pLightObject = CreateLight("PointLight2", LT_POINT);
 
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(10.f, 5.f, 20.f);
-	SAFE_RELEASE(pTransform);
+	//pTransform = pLightObject->GetTransform();
+	//pTransform->SetWorldPos(10.f, 5.f, 20.f);
+	//SAFE_RELEASE(pTransform);
 
 	/*CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
 

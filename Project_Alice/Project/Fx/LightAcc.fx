@@ -54,19 +54,6 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
 	// 점 조명일 경우
     if (g_iLightType == 1)
     {
-        //vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
-        //vLightDir = vLightPos - vViewPos;
-        //fDist = length(vLightDir);
-        
-        //if (fDist > g_fLightRange)
-        //{
-        //    vLightDir = float4(0.0f, 0.0f, 0.0f, 0.0f);
-        //}
-
-        //vLightDir /= fDist;
-
-        //fIntensity = 1.0f / dot(g_vAttenuation, float3(1.0f, fDist, fDist));
-
        // 조명의 위치를 뷰공간으로 바꾼다.
         float3 vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
         vLightDir = vLightPos - vViewPos;
@@ -86,20 +73,22 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
 	// Spot
     if (g_iLightType == 2)
     {
-        vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
+       // 조명의 위치를 뷰공간으로 바꾼다.
+        float3 vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
         vLightDir = vLightPos - vViewPos;
+
         fDist = length(vLightDir);
-        
+
+        vLightDir = normalize(vLightDir);
+
         if (fDist > g_fLightRange)
+            return tMtrl;
+        else
         {
-            vLightDir = float4(0.0f, 0.0f, 0.0f, 0.0f);
+            fSpot = pow(max(dot(-vLightDir, g_vLightDir), 0.0f), g_fSpot);
+
+            fAtt = fSpot / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist));
         }
-
-        vLightDir /= fDist;
-        float3 vLight = -mul(float4(g_vLightDir, 0.0f), g_matView);
-
-        fSpot = pow(max(dot(vLightDir, vLight), 0.0f), g_fSpot);
-        fAtt = fSpot / dot(g_vAttenuation, float3(1.0f, fDist, fDist * fDist));
     }
 
 	// Diffuse를 구한다.

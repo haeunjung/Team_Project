@@ -387,6 +387,9 @@
     <ClInclude Include="07.Component\SpotLight.h">
       <Filter>07. Component\07. Light</Filter>
     </ClInclude>
+    <ClInclude Include="07.Component\SpotParent.h">
+      <Filter>07. Component\07. Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -594,6 +597,9 @@
       <Filter>03. Resource\03. Sound</Filter>
     </ClCompile>
     <ClCompile Include="07.Component\SpotLight.cpp">
+      <Filter>07. Component\07. Light</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\SpotParent.cpp">
       <Filter>07. Component\07. Light</Filter>
     </ClCompile>
   </ItemGroup>

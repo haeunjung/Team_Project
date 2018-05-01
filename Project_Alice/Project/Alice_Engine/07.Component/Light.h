@@ -7,7 +7,7 @@ class DLL CLight :
 	public CComponent
 {
 protected:
-	LIGHTINFO	m_tInfo;
+	LIGHTINFO		m_tInfo;
 	LIGHTCBUFFER	m_tCBuffer;
 public:
 	inline LIGHTINFO GetLightInfo() const {

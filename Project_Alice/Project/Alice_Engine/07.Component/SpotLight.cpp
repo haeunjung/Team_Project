@@ -9,8 +9,7 @@ WOOJUN_USING
 
 bool CSpotLight::Init()
 {
-	
-	m_pTransform->Move(DxVector3(-5.0f, 0.0f, 0.0f));
+	//m_pTransform->Move(DxVector3(-5.0f, 0.0f, 0.0f));
 
 	/*CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("PointLight");
 	pSphere->SetSphereInfo(Vec3Zero, 0.25f);
@@ -24,6 +23,9 @@ bool CSpotLight::Init()
 
 	SAFE_RELEASE(pRenderer);
 
+	m_pTransform->SetWorldRotY(PI_HALF);
+	m_pTransform->SetWorldRotX(PI_HALF);
+
 	return true;
 }
 
@@ -33,6 +35,7 @@ void CSpotLight::Input(float _fTime)
 
 void CSpotLight::Update(float _fTime)
 {
+
 }
 
 void CSpotLight::LateUpdate(float _fTime)
@@ -70,8 +73,9 @@ void CSpotLight::SetLight()
 	CLight::SetLight();
 
 	m_tCBuffer.vAttenuation = m_tInfo.vAttenuation;
-	m_tCBuffer.fRange = 10000.0f;
-	m_tCBuffer.fSpot = 96.0f;
+	m_tCBuffer.fRange = 1000.0f;
+	m_tCBuffer.fSpot = 4.0f;
+	m_tCBuffer.vDir = m_pTransform->GetWorldAxis(AXIS_Z);
 
 	// Transform의 Z축 == 조명의 방향
 	// 역방향으로 조명으로의 방향
@@ -83,9 +87,7 @@ void CSpotLight::SetLight()
 }
 
 CSpotLight::CSpotLight()
-{
-	m_tInfo.vAttenuation = DxVector3(1.0f, 0.0f, 0.0f);
-	
+{	
 	SetTag("SpotLight");
 	SetTypeName("CSpotLight");
 	SetTypeID<CSpotLight>();
