@@ -321,7 +321,7 @@ bool CMainScene::Init()
 	CreateTerrain();
 	//CreateRadioButton();
 	//CreateInventory();	
-	CreateMainSceneLight();
+	//CreateMainSceneLight();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
 
@@ -338,7 +338,7 @@ bool CMainScene::Init()
 	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
 	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
 	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vAttenuation = DxVector3(0.0f, 0.1f, 0.0f);
+	tLightInfo.vAttenuation = DxVector3(0.5f, 0.0f, 0.0f);
 
 	pSpotLight->SetLightInfo(tLightInfo);
 	SAFE_RELEASE(pSpotLight);

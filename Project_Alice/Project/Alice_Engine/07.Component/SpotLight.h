@@ -11,6 +11,10 @@ class DLL CSpotLight :
 private:
 	CColliderRay* m_pColRay;
 	CColliderSphere* m_pColSphere;
+	
+	DxVector3 m_ColPos;
+	float m_ColDist;
+	DxVector3 m_Dir;
 private:
 	friend class CGameObject;
 private:

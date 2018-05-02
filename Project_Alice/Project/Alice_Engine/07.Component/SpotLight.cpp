@@ -30,8 +30,27 @@ bool CSpotLight::Init()
 
 	SAFE_RELEASE(pRenderer);
 
-	//m_pTransform->SetWorldRotY(PI_HALF);
-	m_pTransform->SetWorldRotX(1.3f);
+	m_pTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
+	m_pTransform->SetWorldRotX(1.2f);
+
+	DxVector3 StartPos = m_pTransform->GetWorldPos();
+	DxVector3 Dir = m_pTransform->GetWorldAxis(AXIS_Z);
+
+	bool b = true;
+	while (b)
+	{
+		StartPos += Dir;
+
+		if (0 >= StartPos.y)
+		{
+			float v = 0 - StartPos.y;
+			StartPos += v;
+			b = false;
+		}
+	}
+
+	m_ColPos = StartPos;	
+	m_ColDist = m_pTransform->GetWorldPos().Distance(m_ColPos);
 
 	return true;
 }
@@ -42,9 +61,24 @@ void CSpotLight::Input(float _fTime)
 
 void CSpotLight::Update(float _fTime)
 {
-	m_pColRay->SetRay(m_pTransform->GetWorldPos(), m_pTransform->GetWorldAxis(AXIS_Z));
-	m_pColSphere->SetSphereInfo(m_pColRay->GetRay().vPos, 2.5f);
+	//if (1.2f >= m_fRad)
+	//{
+	//	m_fScal = 0.1f;
+	//}
+	//if (PI_HALF <= m_fRad)
+	//{
+	//	m_fScal = -0.1f;
+	//}
+	//m_fRad += (_fTime * m_fScal);
 
+	//m_pTransform->SetWorldRotX(m_fRad);
+
+	//m_pColRay->SetRay(m_pTransform->GetWorldPos(), m_pTransform->GetWorldAxis(AXIS_Z));
+	
+	m_Dir = m_pTransform->GetWorldAxis(AXIS_Z);
+	m_ColPos = m_pTransform->GetWorldPos() + (m_Dir * m_ColDist);
+	//m_ColPos.z -= 3.0f;
+	m_pColSphere->SetSphereInfo(m_ColPos, 2.0f);
 }
 
 void CSpotLight::LateUpdate(float _fTime)
@@ -82,9 +116,9 @@ void CSpotLight::SetLight()
 	CLight::SetLight();
 
 	m_tCBuffer.vAttenuation = m_tInfo.vAttenuation;
-	m_tCBuffer.fRange = 10000.0f;
-	m_tCBuffer.fSpot = 8.0f;
-	m_tCBuffer.vDir = m_pTransform->GetWorldAxis(AXIS_Z);
+	m_tCBuffer.fRange = 100.0f;
+	m_tCBuffer.fSpot = 10.0f;
+	m_tCBuffer.vDir = m_Dir;
 
 	// Transform의 Z축 == 조명의 방향
 	// 역방향으로 조명으로의 방향

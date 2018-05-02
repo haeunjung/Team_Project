@@ -1,6 +1,7 @@
 #include "Collider.h"
 #include "Transform.h"
 #include "../Device.h""
+#include "DirectXCollision.h"
 #ifdef _DEBUG
 #include "../04.Rendering/Shader.h"
 #include "../04.Rendering/ShaderMgr.h"
@@ -307,13 +308,11 @@ bool CCollider::ColTerrainToPosition(const TERRAININFO & _tTerrainInfo, CTransfo
 	return true;
 }
 
-bool CCollider::ColTerrainToRay(const TERRAININFO & _tTerrainInfo, DxVector3 & _vPos, const DxVector3 & _vTerrainScale)
+bool CCollider::ColTerrainToRay(const TERRAININFO & _tTerrainInfo, _tagRay& _tRay, const DxVector3 & _vTerrainScale)
 {
-	//DxVector3	vPos = _vPos;
-
 	// 지형 그리드의 인덱스를 구한다.
-	float	x = _vPos.x / _vTerrainScale.x;
-	float	z = _vPos.z / _vTerrainScale.z;
+	float	x = _tRay.vPos.x / _vTerrainScale.x;
+	float	z = _tRay.vPos.z / _vTerrainScale.z;
 
 	int	idx = (_tTerrainInfo.iNumH - 1 - ((int)z + 1)) * _tTerrainInfo.iNumW + (int)x;
 
@@ -323,6 +322,15 @@ bool CCollider::ColTerrainToRay(const TERRAININFO & _tTerrainInfo, DxVector3 & _
 	vRectPos[1] = _tTerrainInfo.vecPos[idx + 1];
 	vRectPos[2] = _tTerrainInfo.vecPos[idx + _tTerrainInfo.iNumW];
 	vRectPos[3] = _tTerrainInfo.vecPos[idx + _tTerrainInfo.iNumW + 1];
+
+	float fDist = 0.0f;
+	if (true == DirectX::TriangleTests::Intersects(_tRay.vPos.Convert(), _tRay.vDir.Convert(),
+		vRectPos[0].Convert(), vRectPos[1].Convert(), vRectPos[2].Convert(), fDist))
+	{
+		int a = 0;
+	}
+
+
 
 	// 우상단, 좌하단 삼각형 체크
 	// x와 z중 x값이 크면 우상단, z값이 크면 좌하단
@@ -339,7 +347,7 @@ bool CCollider::ColTerrainToRay(const TERRAININFO & _tTerrainInfo, DxVector3 & _
 		fY = vRectPos[0].y + (vRectPos[3].y - vRectPos[2].y) * x + (vRectPos[2].y - vRectPos[0].y) * z;
 	}
 
-	_vPos.y = fY;
+	_tRay.vPos.y = fY;
 
 	return true;
 }

@@ -64,7 +64,7 @@ bool CColliderRay::Collision(CCollider * pCollider)
 	case COL_TERRAIN:
 	{
 		/*CTransform*	pTransform = pCollider->GetTransform();
-		bool bReturn = ColTerrainToRay(((CColliderTerrain*)pCollider)->GetTerrainInfo(), m_tRay.vPos, pTransform->GetWorldScale());
+		bool bReturn = ColTerrainToRay(((CColliderTerrain*)pCollider)->GetTerrainInfo(), m_tRay, pTransform->GetWorldScale());
 		SAFE_RELEASE(pTransform);
 		return bReturn;*/
 	}

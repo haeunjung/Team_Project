@@ -97,7 +97,7 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
     }
 
 	// Diffuse를 구한다.
-        tMtrl.vDiffuse = g_vLightDiffuse * vMtrlDif * max(0, dot(vNormal, vLightDir)) * fAtt;
+    tMtrl.vDiffuse = g_vLightDiffuse * vMtrlDif * max(0, dot(vNormal, vLightDir)) * fAtt;
     tMtrl.vAmbient = g_vLightAmbient * vMtrlAmb * fAtt;
 
 	// 정반사광을 구한다.

@@ -67,7 +67,7 @@ protected:
 	bool ColRectToPoint(const RECTINFO& _tSrc, const DxVector3& _vPos);
 	bool ColRayToSphere(RAY& _tRay, const SPHEREINFO& _tSphere);
 	bool ColTerrainToPosition(const TERRAININFO& _tTerrainInfo, CTransform* _pDestTransform, const DxVector3& _vTerrainScale);
-	bool ColTerrainToRay(const TERRAININFO& _tTerrainInfo, DxVector3& _vPos, const DxVector3& _vTerrainScale);
+	bool ColTerrainToRay(const TERRAININFO& _tTerrainInfo, _tagRay& _tRay, const DxVector3& _vTerrainScale);
 	bool ColSphereToAABB(const SPHEREINFO& _tSrc, AABBINFO& _tDest);
 protected:
 	CCollider();

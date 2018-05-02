@@ -2,6 +2,7 @@
 #include "../06.GameObject/GameObject.h"
 #include "../07.Component/Transform.h"
 #include "../07.Component/SpotLight.h"
+#include "../07.Component/Renderer.h"
 
 WOOJUN_USING
 
@@ -35,6 +36,12 @@ CSpotParent::~CSpotParent()
 
 bool CSpotParent::Init()
 {
+	//CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("SpotLight");
+	//pRenderer->SetMesh("ColorSphere");
+	//pRenderer->SetShader("ColliderColorShader");
+	//pRenderer->SetInputLayout("ColorInputLayout");
+	//pRenderer->SetRenderState(WIRE_FRAME);
+
 	m_pChild = CGameObject::Create("SpotChild");
 
 	m_pChildSpotLight = m_pChild->AddComponent<CSpotLight>("SpotLight");
