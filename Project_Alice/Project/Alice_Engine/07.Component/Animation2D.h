@@ -27,7 +27,7 @@ public:
 	void ChangeAnimation(int _iAnimation);
 	void SetDefaultAnimation(int _iAnimation);
 	void SetShader();
-	void Start(bool _b2D);
+	void Start();
 public:
 	virtual bool Init();
 	virtual void Input(float _fTime);

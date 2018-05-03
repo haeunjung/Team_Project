@@ -110,9 +110,9 @@ void CAnimation2D::SetShader()
 		CUT_VERTEX | CUT_PIXEL | CUT_GEOMETRY);
 }
 
-void CAnimation2D::Start(bool _b2D)
+void CAnimation2D::Start()
 {
-	CRenderer2D*	pRenderer = m_pGameObject->FindComponentFromTypeID<CRenderer2D>();
+	CRenderer*	pRenderer = m_pGameObject->FindComponentFromTypeID<CRenderer>();
 
 	CMaterial*	pMaterial = pRenderer->GetMaterial(0, 0);
 

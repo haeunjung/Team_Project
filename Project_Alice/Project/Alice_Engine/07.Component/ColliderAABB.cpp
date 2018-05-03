@@ -51,6 +51,11 @@ float CColliderAABB::GetRight() const
 	return m_tAABBInfo.vCenter.x + (m_tAABBInfo.vScale.x * 0.5f);
 }
 
+void CColliderAABB::SetScale(const DxVector3& _vMeshSize)
+{
+	m_tAABBInfo.vScale = _vMeshSize * m_pTransform->GetWorldScale();
+}
+
 bool CColliderAABB::Init()
 {
 	SetMesh("ColorBox");
@@ -67,7 +72,8 @@ void CColliderAABB::Input(float _fTime)
 void CColliderAABB::Update(float _fTime)
 {
 	m_tAABBInfo.vCenter = m_pTransform->GetWorldPos();
-	m_tAABBInfo.vScale = m_pTransform->GetWorldScale()/* * 0.95f*/;	
+	//m_tAABBInfo.vCenter.y -= 2.0f;
+	//m_tAABBInfo.vScale = m_pTransform->GetWorldScale()/* * 0.95f*/;	
 }
 
 void CColliderAABB::LateUpdate(float _fTime)

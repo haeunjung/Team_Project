@@ -5,6 +5,7 @@
 #include "../ObjectScript/Minion.h"
 #include "../ObjectScript/Battery.h"
 #include "../ObjectScript/Mouse.h"
+#include "../ObjectScript/HitEffect.h"
 #include "01.Core/Debug.h"
 #include "01.Core/Input.h"
 #include "01.Core/PathMgr.h"
@@ -47,6 +48,12 @@ void CMainScene::CreateProtoType()
 	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	SAFE_RELEASE(pMinion);
 	SAFE_RELEASE(pMinionObj);
+
+	// Effect
+	CGameObject*	pEffectObj = CGameObject::Create("HitEffect", true);
+	CHitEffect*	pEffect = pEffectObj->AddComponent<CHitEffect>("HitEffectScript");
+	SAFE_RELEASE(pEffect);
+	SAFE_RELEASE(pEffectObj);
 }
 
 // TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
@@ -114,6 +121,8 @@ void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, con
 	pRenderer->SetMesh(_strKey, FileName.c_str());
 	pRenderer->SetShader(STANDARD_BUMP_SHADER);
 	pRenderer->SetInputLayout("BumpInputLayout");
+
+	DxVector3 vMeshSize = pRenderer->GetMeshSize();
 	SAFE_RELEASE(pRenderer);
 
 	//CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
@@ -122,6 +131,7 @@ void CMainScene::LoadObject(const string & _strKey, const DxVector3 & _vPos, con
 
 	CColliderAABB* pColAABB = pGameObject->AddComponent<CColliderAABB>(_strKey + "ColAABB");
 	pColAABB->SetColCheck(CC_OBJ);
+	pColAABB->SetScale(vMeshSize);
 	SAFE_RELEASE(pColAABB);
 
 	pLayer->AddObject(pGameObject);
@@ -185,10 +195,10 @@ void CMainScene::CreateTerrain()
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
-	pTerrain->CreateTerrain("Terrain", TERRAINSIZE + 20, TERRAINSIZE, 1, 1/*, "Terrain/Height1.bmp"*/);
-	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/BD_Terrain_Cliff05.dds");
-	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/BD_Terrain_Cliff05_NRM.bmp");
-	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/BD_Terrain_Cliff05_SPEC.bmp");
+	pTerrain->CreateTerrain("Terrain", TERRAINSIZE + 20, TERRAINSIZE, 4, 4/*, "Terrain/Height1.bmp"*/);
+	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_COLOR.png");
+	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_NRM.png");
+	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_SPEC.png");
 	SAFE_RELEASE(pTerrain);
 
 	pMapLayer->AddObject(pTerrainObject);
@@ -321,14 +331,14 @@ bool CMainScene::Init()
 	CreateTerrain();
 	//CreateRadioButton();
 	//CreateInventory();	
-	//CreateMainSceneLight();
+	CreateMainSceneLight();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
 
 	CGameObject* pLightObject = m_pScene->CreateLight("SpotLight", LT_SPOT);
 
 	CTransform* pLightTransform = pLightObject->GetTransform();
-	pLightTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
+	pLightTransform->SetWorldPos(30.0f, 10.0f, 25.0f);
 	SAFE_RELEASE(pLightTransform);
 
 	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
@@ -336,9 +346,9 @@ bool CMainScene::Init()
 	LIGHTINFO	tLightInfo = {};
 	tLightInfo.eType = LT_SPOTPARENT;
 	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
-	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vAttenuation = DxVector3(0.5f, 0.0f, 0.0f);
+	tLightInfo.vAmbient = { 1.0f, 1.0f, 1.0f, 1.f };
+	tLightInfo.vSpecular = { 1.0f, 1.0f, 1.0f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(1.0f, 0.0f, 0.0f);
 
 	pSpotLight->SetLightInfo(tLightInfo);
 	SAFE_RELEASE(pSpotLight);
@@ -433,6 +443,7 @@ bool CMainScene::Init()
 	// Test Box Mesh 생성
 	//LoadObject("My_Box", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
+	LoadObject("Table", DxVector3(22.5f, 3.0f, 10.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 
 	return true;
 }

@@ -433,6 +433,26 @@ CTexture * CResMgr::LoadTextureFromFullPath(const string & _strKey, const char *
 	}
 
 	pTexture = new CTexture();
+	//if (_strKey == "old_table_diffuse")
+	//{
+	//	string FullPath = "C:\\Users\\wooju\\Desktop\\Team_Project\\Project_Alice\\Res\\Mesh\\Table.fbm\\owt_diffuse.png";
+	//	if (false == pTexture->LoadTextureFromFullPath(_strKey, FullPath.c_str()))
+	//	{
+	//		SAFE_RELEASE(pTexture);
+	//		assert(false);
+	//		return NULL;
+	//	}
+	//}
+	//else if (_strKey == "old_table_bump")
+	//{
+	//	string FullPath = "C:\\Users\\wooju\\Desktop\\Team_Project\\Project_Alice\\Res\\Mesh\\Table.fbm\\owt_bump.png";
+	//	if (false == pTexture->LoadTextureFromFullPath(_strKey, FullPath.c_str()))
+	//	{
+	//		SAFE_RELEASE(pTexture);
+	//		assert(false);
+	//		return NULL;
+	//	}
+	//}
 	if (false == pTexture->LoadTextureFromFullPath(_strKey, _pFullPath))
 	{
 		SAFE_RELEASE(pTexture);

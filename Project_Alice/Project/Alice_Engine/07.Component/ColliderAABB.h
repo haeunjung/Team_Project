@@ -16,6 +16,8 @@ public:
 	float GetBottom() const;
 	float GetLeft() const;
 	float GetRight() const;
+
+	void SetScale(const DxVector3& _vMeshSize);
 public:
 	bool Init() override;
 	void Input(float _fTime) override;

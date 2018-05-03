@@ -117,7 +117,7 @@ void CSpotLight::SetLight()
 
 	m_tCBuffer.vAttenuation = m_tInfo.vAttenuation;
 	m_tCBuffer.fRange = 100.0f;
-	m_tCBuffer.fSpot = 10.0f;
+	m_tCBuffer.fSpot = 96.0f;
 	m_tCBuffer.vDir = m_Dir;
 
 	// Transform의 Z축 == 조명의 방향

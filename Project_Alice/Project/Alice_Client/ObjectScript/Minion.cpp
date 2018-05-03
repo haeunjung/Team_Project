@@ -8,6 +8,7 @@
 #include "PlayerBullet.h"
 #include "07.Component/ColliderSphere.h"
 #include "07.Component/Collider.h"
+#include "HitEffect.h"
 
 void CMinion::SetPlayer(CGameObject * _pPlayer)
 {
@@ -120,6 +121,17 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 		{
 			if (true == BackAttackCheck(_pSrc->GetTransformWorldAxis(AXIS_Z), _pDest->GetTransformWorldAxis(AXIS_Z)))
 			{
+				CGameObject* pEffect = CGameObject::CreateClone("HitEffect");
+
+				CTransform* pTransform = pEffect->GetTransform();				
+				pTransform->SetWorldPos(((CColliderSphere*)_pDest)->GetSphereInfo().vCenter);
+				pTransform->Up(1.5f);
+				pTransform->SetWorldScale(2.5f, 2.5f, 2.5f);
+				SAFE_RELEASE(pTransform);
+
+				m_pLayer->AddObject(pEffect);
+				SAFE_RELEASE(pEffect);
+
 				m_fTime = 0.0f;
 				_pDest->SetIsEnable(false);
 				m_eMonsterState = MS_DEATH;
