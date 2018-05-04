@@ -1,6 +1,7 @@
 #pragma once
 #include "05.Scene/SceneScript.h"
 #include "06.GameObject/GameObject.h"
+#include "07.Component/SpotParent.h"
 
 WOOJUN_USING
 
@@ -12,6 +13,7 @@ private:
 	float m_fRespawnLimitTime;
 
 	bool	m_bCheck;
+	CSpotParent* m_pPlayerSpot;
 private:
 	void CreateProtoType();
 	void CreateObject();

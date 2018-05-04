@@ -32,7 +32,7 @@
 #include "07.Component/PointLight.h"
 #include "07.Component/Light.h"
 #include "07.Component/SpotLight.h"
-#include "07.Component/SpotParent.h"
+
 
 void CMainScene::CreateProtoType()
 {
@@ -331,26 +331,28 @@ bool CMainScene::Init()
 	CreateTerrain();
 	//CreateRadioButton();
 	//CreateInventory();	
-	CreateMainSceneLight();
+	//CreateMainSceneLight();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
 
 	CGameObject* pLightObject = m_pScene->CreateLight("SpotLight", LT_SPOT);
 
 	CTransform* pLightTransform = pLightObject->GetTransform();
-	pLightTransform->SetWorldPos(30.0f, 10.0f, 25.0f);
+	pLightTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
 	SAFE_RELEASE(pLightTransform);
 
 	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
 
 	LIGHTINFO	tLightInfo = {};
 	tLightInfo.eType = LT_SPOTPARENT;
-	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
-	tLightInfo.vAmbient = { 1.0f, 1.0f, 1.0f, 1.f };
-	tLightInfo.vSpecular = { 1.0f, 1.0f, 1.0f, 1.f };
+	tLightInfo.vDiffuse = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vAmbient = { 0.8f, 0.8f, 0.8f, 1.f };
+	tLightInfo.vSpecular = { 0.8f, 0.8f, 0.8f, 1.f };
 	tLightInfo.vAttenuation = DxVector3(1.0f, 0.0f, 0.0f);
 
 	pSpotLight->SetLightInfo(tLightInfo);
+	m_pPlayerSpot = pSpotLight;
+	m_pPlayerSpot->AddRef();
 	SAFE_RELEASE(pSpotLight);
 
 	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
@@ -440,10 +442,11 @@ bool CMainScene::Init()
 
 	SAFE_RELEASE(pLayer);
 
+	//m_pPlayerSpot->AttachObject(m_pPlayerObject);
 	// Test Box Mesh »ý¼º
 	//LoadObject("My_Box", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
-	LoadObject("Table", DxVector3(22.5f, 3.0f, 10.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
+	//LoadObject("Table", DxVector3(22.5f, 3.0f, 10.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 
 	return true;
 }
@@ -455,6 +458,10 @@ void CMainScene::Update(float _fTime)
 	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 	pLayer->SetIsEnable(m_bCheck);
 	SAFE_RELEASE(pLayer);
+
+	CTransform* pTransform = m_pPlayerObject->GetTransform();
+	m_pPlayerSpot->SetLightPos(pTransform->GetWorldPos());
+	SAFE_RELEASE(pTransform);
 }
 
 void CMainScene::CheckButton(CGameObject * _pObj, float _fTime)
@@ -490,6 +497,6 @@ CMainScene::CMainScene() :
 CMainScene::~CMainScene()
 {
 	DESTROY_SINGLE(CUIMgr);
+	SAFE_RELEASE(m_pPlayerSpot);
 	SAFE_RELEASE(m_pPlayerObject);
-
 }

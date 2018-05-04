@@ -6,7 +6,10 @@
 
 WOOJUN_USING
 
-CCameraArm::CCameraArm()
+CCameraArm::CCameraArm() :
+	m_pColSphere(NULL),
+	m_bLCol(false),
+	m_bRCol(false)
 {
 	SetTag("CameraArm");
 	SetTypeName("CCameraArm");
@@ -22,6 +25,7 @@ CCameraArm::CCameraArm(const CCameraArm & _CameraArm) :
 
 CCameraArm::~CCameraArm()
 {
+	SAFE_RELEASE(m_pColSphere);
 }
 
 void CCameraArm::Zoom(float _fTime)
@@ -166,6 +170,32 @@ void CCameraArm::RotationDrag(float _fTime)
 	SAFE_RELEASE(pCamera);
 }
 
+void CCameraArm::ColPosCheck(const DxVector3 _vPos)
+{
+	if (m_pTransform->GetWorldPos().z < _vPos.z)
+	{
+		if (0.0f < m_pTransform->GetWorldAxis(AXIS_X).z)
+		{
+			m_bRCol = true;
+		}
+		else
+		{
+			m_bLCol = true;
+		}
+	}
+	else
+	{
+		if (0.0f > m_pTransform->GetWorldAxis(AXIS_X).z)
+		{
+			m_bRCol = true;
+		}
+		else
+		{
+			m_bLCol = true;
+		}
+	}	
+}
+
 void CCameraArm::SetZoomDistance(float _fMin, float _fMax)
 {
 	m_fMinDist = _fMin;
@@ -177,7 +207,68 @@ void CCameraArm::SetZoomSpeed(float _fSpeed)
 	m_fZoomSpeed = _fSpeed;
 }
 
-void CCameraArm::RotateY(float _fAngle, float _fTime)
+bool CCameraArm::RotateY(float _fAngle, float _fTime)
+{
+	if (0.0f > _fAngle && m_bRCol)
+	{
+		return false;
+	}
+	else if (0.0f < _fAngle && m_bLCol)
+	{
+		return false;
+	}
+
+	CCamera*	pCamera = m_pGameObject->FindComponentFromTypeID<CCamera>();
+	CGameObject*	pAttachObject = pCamera->GetAttachObject();
+
+	if (NULL != pAttachObject)
+	{
+		CTransform* pTransform = pAttachObject->GetTransform();
+		DxVector3 vAttachPos = pTransform->GetWorldPos();
+
+		DxVector3	vAxis[AXIS_MAX];
+		DxVector3	vPos = m_pTransform->GetWorldPos();
+		DxVector3	vPrePos = vPos;
+
+		for (int i = 0; i < AXIS_MAX; ++i)
+		{
+			vAxis[i] = pCamera->GetAxis((AXIS)i);
+		}
+
+		// 회전 각도
+		float fAngle = _fAngle * _fTime;
+
+		MATRIX matRot = XMMatrixRotationY(fAngle);
+
+		// 축을 다시 구한다
+		for (int i = 0; i < AXIS_MAX; ++i)
+		{
+			vAxis[i] = vAxis[i].TransformNormal(matRot).Normalize();
+
+
+			pCamera->SetAxis(vAxis);
+		}
+
+		// 행렬의 회전 중점을 AttachObject의 위치로 설정
+		// 이동에 관련있는 4행에 값을 세팅
+		matRot._41 = vAttachPos.x;
+		matRot._42 = vAttachPos.y;
+		matRot._43 = vAttachPos.z;	
+	
+		// AttachObject로 부터 상대적인 위치를 구한다
+		DxVector3	vDist = vPos - vAttachPos;
+		vPos = vDist.TransformCoord(matRot);
+		m_pTransform->SetWorldPos(vPos);
+	
+		SAFE_RELEASE(pTransform);
+		SAFE_RELEASE(pAttachObject);
+	}
+	SAFE_RELEASE(pCamera);
+
+	return true;
+}
+
+bool CCameraArm::RotateY(MATRIX _matRot)
 {
 	CCamera*	pCamera = m_pGameObject->FindComponentFromTypeID<CCamera>();
 	CGameObject*	pAttachObject = pCamera->GetAttachObject();
@@ -189,23 +280,20 @@ void CCameraArm::RotateY(float _fAngle, float _fTime)
 
 		DxVector3	vAxis[AXIS_MAX];
 		DxVector3	vPos = m_pTransform->GetWorldPos();
-
+		
 		for (int i = 0; i < AXIS_MAX; ++i)
 		{
 			vAxis[i] = pCamera->GetAxis((AXIS)i);
 		}
 
 		// 회전 각도
-		float fAngle = _fAngle * _fTime;
 
-		MATRIX	matRot = XMMatrixRotationY(fAngle);
+		MATRIX matRot = _matRot;
 
 		// 축을 다시 구한다
 		for (int i = 0; i < AXIS_MAX; ++i)
 		{
 			vAxis[i] = vAxis[i].TransformNormal(matRot).Normalize();
-
-
 			pCamera->SetAxis(vAxis);
 		}
 
@@ -223,8 +311,9 @@ void CCameraArm::RotateY(float _fAngle, float _fTime)
 		SAFE_RELEASE(pTransform);
 		SAFE_RELEASE(pAttachObject);
 	}
-
 	SAFE_RELEASE(pCamera);
+
+	return true;
 }
 
 bool CCameraArm::Init()
@@ -232,6 +321,9 @@ bool CCameraArm::Init()
 	m_fMinDist = 1.0f;
 	m_fMaxDist = 5.0f;
 	m_fZoomSpeed = 100.0f;
+
+	m_pColSphere = m_pGameObject->AddComponent<CColliderSphere>("CameraColSphere");
+	m_pColSphere->SetSphereInfo(0.0f, 0.0f, 0.0f, 1.0f);
 
 	return true;
 }
@@ -262,4 +354,24 @@ void CCameraArm::Render(float _fTime)
 CCameraArm * CCameraArm::Clone()
 {
 	return new CCameraArm(*this);
+}
+
+void CCameraArm::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTime)
+{
+	if (CC_OBJ == _pDest->GetColliderCheck())
+	{
+		CTransform* pTransform = _pDest->GetTransform();
+		ColPosCheck(pTransform->GetWorldPos());
+		SAFE_RELEASE(pTransform);
+		
+	}
+}
+
+void CCameraArm::OnCollisionLeave(CCollider * _pSrc, CCollider * _pDest, float _fTime)
+{
+	if (CC_OBJ == _pDest->GetColliderCheck())
+	{
+		m_bRCol = false;
+		m_bLCol = false;
+	}
 }
