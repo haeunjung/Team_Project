@@ -78,6 +78,7 @@ private:
 	void PlayerClimb();
 	void PlayerFall(float _fTime);
 	void PlayerHeat(float _fTime);
+	void CreatePlayerLight();
 public:
 	CPlayer();
 	~CPlayer();

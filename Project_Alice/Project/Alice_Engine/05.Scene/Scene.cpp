@@ -9,6 +9,7 @@
 #include "../07.Component/PointLight.h"
 #include "../07.Component/SpotLight.h"
 #include "../07.Component/SpotParent.h"
+#include "../07.Component/PlayerLight.h"
 #include "../07.Component/Renderer.h"
 #include "../07.Component/Material.h"
 #include "../07.Component/Frustum.h"
@@ -264,6 +265,8 @@ CGameObject * CScene::CreateLight(const string & _strKey, LIGHT_TYPE _eType)
 		//pLight = pLightObject->AddComponent<CSpotLight>(_strKey);
 		pLight = pLightObject->AddComponent<CSpotParent>(_strKey);
 		break;
+	case LT_PLAYERLIGHT:
+		pLight = pLightObject->AddComponent<CPlayerLight>(_strKey);
 	case LT_END:
 		break;
 	default:

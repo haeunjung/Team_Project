@@ -52,7 +52,7 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
     }
 
 	// 점 조명일 경우
-    if (g_iLightType == 1)
+    else if (g_iLightType == 1)
     {
        // 조명의 위치를 뷰공간으로 바꾼다.
         float3 vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
@@ -71,9 +71,59 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
     }
 
 	// Spot
-    if (g_iLightType == 2)
+    else if (g_iLightType == 2)
     {
-       // 조명의 위치를 뷰공간으로 바꾼다.
+        // 조명의 위치를 뷰공간으로 바꾼다.
+        float3 vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView).xyz;
+        vLightDir = vLightPos - vViewPos;
+        vLightDir = normalize(vLightDir);
+
+        float3 vLightCalDir; //환경광처럼 방향을 주고
+        vLightCalDir = mul(float4(g_vLightDir, 0.0f), g_matView).xyz; //LigthDir ->nor
+        vLightCalDir = -normalize(vLightCalDir);
+
+        float fDots;
+        fDots = max(0, dot(vLightDir, vLightCalDir));
+        fDots = acos(fDots);
+        fDots = degrees(fDots);
+
+        float fDist = length(vLightDir);
+        if (10.0f > fDots)
+        {
+            //거리에 따른 조명 감쇠
+            //float fDist = length(vLightPos - vViewPos);
+            fAtt = 1.0f / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist)); 
+        }
+        else if (10.0f > fDots)
+        {
+            //거리에 따른 조명 감쇠
+            //float fDist = length(vLightPos - vViewPos);
+            fAtt = 1.0f / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist));
+        }
+        else
+        {
+            //fIntensity = 0.0f;
+            fAtt = 0.0f;
+        }
+
+        //fDist = length(vLightDir);
+        //if (fDist > g_fLightRange)
+        //    return tMtrl;
+        //else
+        //{
+        //    fSpot = pow(max(dot(-vLightDir, g_vLightDir), 0.0f), g_fSpot);1025613w
+
+        //    fAtt = fSpot / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist));
+        //}
+    }
+
+    else if (g_iLightType == 3)
+    {
+        return tMtrl;
+    }
+    else if (g_iLightType == 4)
+    {
+        // 조명의 위치를 뷰공간으로 바꾼다.
         float3 vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
         vLightDir = vLightPos - vViewPos;
 
@@ -89,11 +139,6 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
 
             fAtt = fSpot / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist));
         }
-    }
-
-    if (g_iLightType == 3)
-    {
-        return tMtrl;
     }
 
 	// Diffuse를 구한다.

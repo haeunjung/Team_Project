@@ -18,6 +18,9 @@ private:
 	ID3D11GeometryShader*	m_pGS;
 
 	string				m_strKey;
+
+	D3D11_SO_DECLARATION_ENTRY*		m_pStreamDecl;
+	UINT							m_iDeclCount;
 public:
 	inline void* GetVSCode() const {
 		return m_pVSBlob->GetBufferPointer();
@@ -25,17 +28,22 @@ public:
 	inline void* GetPSCode() const {
 		return m_pPSBlob->GetBufferPointer();
 	}
-	int GetVSCodeSize() const {
+	inline int GetVSCodeSize() const {
 		return m_pVSBlob->GetBufferSize();
 	}
-	int GetPSCodeSize() const {
+	inline int GetPSCodeSize() const {
 		return m_pPSBlob->GetBufferSize();
 	}
+	inline string GetKey() const {
+		return m_strKey;
+	}
+private:
+	void SetStreamDecl(D3D11_SO_DECLARATION_ENTRY* pStreamDecl, UINT iCount);
 public:
-	bool LoadShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint[ST_END], const string& _strPathKey);
+	bool LoadShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint[ST_END], bool _bStreamOut = false, const string& _strPathKey = SHADERPATH);
 	bool LoadVertexShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint, const string& _strPathKey);
 	bool LoadPixelShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint, const string& _strPathKey);
-	bool LoadGeometryShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint, const string& _strPathKey);
+	bool LoadGeometryShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint, bool _bStreamOut, const string& _strPathKey);
 	void SetShader();
 private:
 	CShader();

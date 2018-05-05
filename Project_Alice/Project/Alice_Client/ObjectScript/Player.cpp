@@ -13,6 +13,7 @@
 #include "07.Component/Effect.h"
 #include "07.Component/Animation2D.h"
 #include "07.Component/Renderer2D.h"
+#include "07.Component/PlayerLight.h"
 
 #include "RotBullet.h"
 #include "PlayerBullet.h"
@@ -25,8 +26,6 @@ void CPlayer::AniCallback(float _fTime)
 
 bool CPlayer::Init()
 {		
-	//CreateHpBar();
-
 	m_pTransform->SetWorldPos(30.0f, 0.0f, 15.0f);
 	m_pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
 	m_pTransform->SetLocalRotY(-PI * 0.5f);
@@ -62,9 +61,10 @@ bool CPlayer::Init()
 
 	CGameObject* pCameraObject = m_pScene->GetMainCameraObject();
 	
-	m_pCameraArm = (CCameraArm*)pCameraObject->FindComponentFromType(CT_CAMERAARM);
-	
+	m_pCameraArm = (CCameraArm*)pCameraObject->FindComponentFromType(CT_CAMERAARM);	
 	SAFE_RELEASE(pCameraObject);
+
+	CreatePlayerLight();
 
 	GET_SINGLE(CInput)->CreateKey("MoveForward", VK_UP);
 	GET_SINGLE(CInput)->CreateKey("MoveBack", VK_DOWN);
@@ -540,6 +540,33 @@ void CPlayer::PlayerHeat(float _fTime)
 		m_fHeatTime = 0.0f;
 		m_ePlayerState = PS_DEFAULT;
 	}
+}
+
+void CPlayer::CreatePlayerLight()
+{
+	CGameObject* pLightObject = m_pScene->CreateLight("SpotLight", LT_PLAYERLIGHT);
+
+	CTransform* pLightTransform = pLightObject->GetTransform();
+	pLightTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
+	SAFE_RELEASE(pLightTransform);
+
+	CPlayerLight* pPlayerLight = (CPlayerLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+
+	LIGHTINFO	tLightInfo = {};
+	tLightInfo.eType = LT_PLAYERLIGHT;
+	tLightInfo.vDiffuse = { 0.7f, 0.7f, 0.7f, 1.f };
+	tLightInfo.vAmbient = { 0.7f, 0.7f, 0.7f, 1.f };
+	tLightInfo.vSpecular = { 0.7f, 0.7f, 0.7f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(1.2f, 0.0f, 0.0f);
+
+	pPlayerLight->SetLightInfo(tLightInfo);
+	pPlayerLight->SetAttachObject(m_pTransform);
+	SAFE_RELEASE(pPlayerLight);
+
+	//CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
+	//pUILayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+	//SAFE_RELEASE(pUILayer);
 }
 
 CPlayer::CPlayer() :

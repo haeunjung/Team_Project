@@ -76,7 +76,7 @@ typedef struct DLL _tagMeshContainer
 }MESHCONTAINER, *pMESHCONTAINER;
 
 // Transform 행렬 정보 구조체
-typedef struct DLL _tagTransformCBuffer
+typedef struct DLL __declspec(align(16)) _tagTransformCBuffer
 {
 	XMMATRIX	matWorld;
 	XMMATRIX	matView;
@@ -363,6 +363,18 @@ typedef struct DLL _tagVertexAni
 	}
 }VERTEXANI, *pVERTEXANI;
 
+// Particle Vertex
+typedef	struct _tagVertexParticle
+{
+	DxVector3 vPos;
+	DxVector3 vVelocity;
+	DxVector2 vSize;
+	float	fLifeTime;
+	float	fCreateTime;
+	unsigned int iType;
+	float	fLightRange;
+}VERTEXPARTICLE, *pVERTEXPARTICLE;
+
 // 상수버퍼
 typedef struct DLL _tagConstBuffer
 {
@@ -599,5 +611,17 @@ typedef struct DLL _tagObjectData
 	DxVector3	vScale;
 	DxVector3	vRot;
 }OBJECTDATA, *pOBJECTDATA;
+
+typedef struct DLL _tagParticleCBuffer
+{
+	DxVector3	vPos;
+	float		fDeltaTime;
+	DxVector3	vCamAxisX;
+	float		fCreateTime;
+	DxVector3	vCamAxisY;
+	float		fSpeed;
+	float		fGameTime;
+	DxVector3	vCreateDir;
+}PARTICLECBUFFER, *PPARTICLECBUFFER;
 
 WOOJUN_END

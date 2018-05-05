@@ -198,7 +198,7 @@ _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
 	// 방향성 조명일 경우
     if (g_iLightType == 0)
     {
-        vLightDir = mul(float4(g_vLightDir, 0.f), g_matView);
+        vLightDir = mul(float4(g_vLightDir, 0.f), g_matView).xyz;
         vLightDir = normalize(vLightDir);
     }
 
@@ -206,7 +206,7 @@ _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
     if (g_iLightType == 1)
     {
         // 조명의 위치를 뷰공간으로 바꾼다.
-        vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
+        vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView).xyz;
         vLightDir = vLightPos - vViewPos;
 
         fDist = length(vLightDir);
@@ -224,17 +224,17 @@ _tagMaterial ComputeLight(float3 vNormal, float3 vViewPos, float2 vUV)
 	// Spot
     if (g_iLightType == 2)
     {
-        vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView);
+        vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView).xyz;
         vLightDir = vLightPos - vViewPos;
         fDist = length(vLightDir);
         
         if (fDist > g_fLightRange)
         {
-            vLightDir = float4(0.0f, 0.0f, 0.0f, 0.0f);
+            vLightDir = float4(0.0f, 0.0f, 0.0f, 0.0f).xyz;
         }
 
         vLightDir /= fDist;
-        float3 vLight = -mul(float4(g_vLightDir, 0.0f), g_matView);
+        float3 vLight = -mul(float4(g_vLightDir, 0.0f), g_matView).xyz;
 
         fSpot = pow(max(dot(vLightDir, vLight), 0.0f), g_fSpot);
         fAtt = fSpot / dot(g_vAttenuation, float3(1.0f, fDist, fDist * fDist));

@@ -4,7 +4,13 @@
 
 WOOJUN_USING
 
-bool CShader::LoadShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint[ST_END], const string& _strPathKey)
+void CShader::SetStreamDecl(D3D11_SO_DECLARATION_ENTRY * pStreamDecl, UINT iCount)
+{
+	m_pStreamDecl = pStreamDecl;
+	m_iDeclCount = iCount;
+}
+
+bool CShader::LoadShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint[ST_END], bool _bStreamOut, const string& _strPathKey)
 {
 	if (false == LoadVertexShader(_strKey, _pFileName, _pEntryPoint[ST_VERTEX], _strPathKey))
 	{
@@ -16,9 +22,9 @@ bool CShader::LoadShader(const string& _strKey, WCHAR* _pFileName, char* _pEntry
 		return false;
 	}
 
-	if (NULL != _pEntryPoint[ST_GEOMETRY])
+	if (_pEntryPoint[ST_GEOMETRY])
 	{
-		if (false == LoadGeometryShader(_strKey, _pFileName, _pEntryPoint[ST_GEOMETRY], _strPathKey))
+		if (false == LoadGeometryShader(_strKey, _pFileName, _pEntryPoint[ST_GEOMETRY], _bStreamOut, _strPathKey))
 		{
 			return false;
 		}
@@ -29,6 +35,9 @@ bool CShader::LoadShader(const string& _strKey, WCHAR* _pFileName, char* _pEntry
 
 bool CShader::LoadVertexShader(const string & _strKey, WCHAR * _pFileName, char * _pEntryPoint, const string & _strPathKey)
 {
+	if (!_pEntryPoint)
+		return true;
+
 	m_strKey = _strKey;
 	unsigned int iFlag = 0;
 
@@ -63,6 +72,9 @@ bool CShader::LoadVertexShader(const string & _strKey, WCHAR * _pFileName, char 
 
 bool CShader::LoadPixelShader(const string & _strKey, WCHAR * _pFileName, char * _pEntryPoint, const string & _strPathKey)
 {
+	if (!_pEntryPoint)
+		return true;
+
 	m_strKey = _strKey;
 	unsigned int iFlag = 0;	
 
@@ -94,19 +106,22 @@ bool CShader::LoadPixelShader(const string & _strKey, WCHAR * _pFileName, char *
 	return true;
 }
 
-bool CShader::LoadGeometryShader(const string & _strKey, WCHAR * _pFileName, char * _pEntryPoint, const string & _strPathKey)
+bool CShader::LoadGeometryShader(const string & _strKey, WCHAR * _pFileName, char * _pEntryPoint, bool _bStreamOut, const string & _strPathKey)
 {
+	if (!_pEntryPoint)
+		return true;
+
 	m_strKey = _strKey;
 	unsigned int iFlag = 0;
 
 #ifdef _DEBUG
 	iFlag |= D3D10_SHADER_DEBUG;
 #endif
-
+	// 전체경로를 만들어준다.
 	const WCHAR* pPath = GET_SINGLE(CPathMgr)->FindPath(_strPathKey);
 	wstring strPath;
 
-	if (NULL != pPath)
+	if (pPath)
 	{
 		strPath = pPath;
 	}
@@ -119,9 +134,20 @@ bool CShader::LoadGeometryShader(const string & _strKey, WCHAR * _pFileName, cha
 		return false;
 	}
 
-	if (FAILED(DEVICE->CreateGeometryShader(m_pGSBlob->GetBufferPointer(), m_pGSBlob->GetBufferSize(), NULL, &m_pGS)))
+	if (!_bStreamOut)
 	{
-		return false;
+		if (FAILED(DEVICE->CreateGeometryShader(m_pGSBlob->GetBufferPointer(), m_pGSBlob->GetBufferSize(),
+			NULL, &m_pGS)))
+		{
+			return false;
+		}
+	}
+	else
+	{
+		if (FAILED(DEVICE->CreateGeometryShaderWithStreamOutput(m_pGSBlob->GetBufferPointer(),
+			m_pGSBlob->GetBufferSize(), m_pStreamDecl, m_iDeclCount, NULL, 0,
+			D3D11_SO_NO_RASTERIZED_STREAM, NULL, &m_pGS)))
+			return false;
 	}
 
 	return true;

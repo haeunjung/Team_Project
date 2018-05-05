@@ -69,7 +69,7 @@ void CPointLight::SetLight()
 	CLight::SetLight();
 
 	m_tCBuffer.vAttenuation = m_tInfo.vAttenuation;
-	m_tCBuffer.fRange = 1000.f;
+	m_tCBuffer.fRange = 100.f;
 
 	// Transform의 Z축 == 조명의 방향
 	// 역방향으로 조명으로의 방향

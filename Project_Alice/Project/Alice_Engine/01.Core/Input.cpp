@@ -84,6 +84,7 @@ bool CInput::Init()
 	CreateKey("CameraRight", 'D');
 
 	CreateKey("RenderTarget", VK_F12);
+	CreateKey("PlayerLight", 'L');
 
 	m_sWheel = 0;
 

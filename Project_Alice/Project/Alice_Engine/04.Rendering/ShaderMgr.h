@@ -12,12 +12,13 @@ private:
 	unordered_map<string, pCONSTBUFFER> m_mapCBuffer;
 
 	vector<D3D11_INPUT_ELEMENT_DESC> m_vecElement;
+	vector<D3D11_SO_DECLARATION_ENTRY>	m_vecStreamDecl;
 	
 	unsigned int m_iOffsetSize;
 public:
 	bool Init();
 	// Shader
-	CShader* LoadShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint[ST_END], const string& _strPathKey = SHADERPATH);
+	CShader* LoadShader(const string& _strKey, WCHAR* _pFileName, char* _pEntryPoint[ST_END], bool _bStreamOut = false, const string& _strPathKey = SHADERPATH);
 	CShader* FindShader(const string& _strKey);
 		void AddElement(char* _pSemanticName, int _iSemanticIndex, int _iSize, DXGI_FORMAT _eFromat, int _iInputSlot,
 		D3D11_INPUT_CLASSIFICATION _eSlotClass, int _iInstanceStep);
@@ -29,6 +30,8 @@ public:
 	bool CreateConstBuffer(const string& _strKey, int _iSize, int _iRegister);
 	pCONSTBUFFER FindConstBuffer(const string _strKey);
 	void UpdateConstBuffer(const string& _strKey, void* _pData, int _iCut);
+	void AddStreamDecl(UINT iStream, const char* pSemanticName, UINT iSemanticIdx,
+		BYTE byStartCom, BYTE byComCount, BYTE byOutSlot);
 
 	DECLARE_SINGLE(CShaderMgr)
 };

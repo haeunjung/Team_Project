@@ -12,16 +12,13 @@ private:
 	CGameObject* m_pChild;
 	CSpotLight* m_pChildSpotLight;
 
-	CGameObject* m_pAttachObj;
 private:
 	friend class CGameObject;
 private:
 	CSpotParent();
 	CSpotParent(const CSpotParent& _SpotParent);
 	~CSpotParent();
-public:
-	void SetLightPos(const DxVector3& _vPos);
-	void AttachObject(CGameObject* _pGameObject);
+
 public:
 	virtual bool Init();
 	virtual void Input(float _fTime);

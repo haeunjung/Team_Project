@@ -54,6 +54,36 @@ bool CShaderMgr::Init()
 	pShader = LoadShader(EFFECT_SHADER, L"Effect.fx", pEntryPoint);
 	SAFE_RELEASE(pShader);
 
+	// Particle StreamOut Shader
+	pEntryPoint[ST_VERTEX] = "ParticleStreamOutVS";
+	pEntryPoint[ST_GEOMETRY] = "ParticleStreamOutGS";
+	pEntryPoint[ST_PIXEL] = NULL;
+
+	AddStreamDecl(0, "POSITION", 0, 0, 3, 0);
+	AddStreamDecl(0, "VELOCITY", 0, 0, 3, 0);
+	AddStreamDecl(0, "SIZE", 0, 0, 2, 0);
+	AddStreamDecl(0, "LIFETIME", 0, 0, 1, 0);
+	AddStreamDecl(0, "CREATETIME", 0, 0, 1, 0);
+	AddStreamDecl(0, "TYPE", 0, 0, 1, 0);
+	AddStreamDecl(0, "LIGHTRANGE", 0, 0, 1, 0);
+
+	pShader = LoadShader(PARTICLE_STREAMOUT_SHADER, L"Particle.fx", pEntryPoint, true);
+	SAFE_RELEASE(pShader);
+
+	// Particle Shader
+	pEntryPoint[ST_VERTEX] = "ParticleVS";
+	pEntryPoint[ST_GEOMETRY] = "ParticleGS";
+	pEntryPoint[ST_PIXEL] = "ParticlePS";
+	pShader = LoadShader(PARTICLE_SHADER, L"Particle.fx", pEntryPoint);
+	SAFE_RELEASE(pShader);
+
+	// Particle Ligth Shader
+	pEntryPoint[ST_VERTEX] = "ParticleVS";
+	pEntryPoint[ST_GEOMETRY] = "ParticleLightGS";
+	pEntryPoint[ST_PIXEL] = "ParticleLightAccPS";
+	pShader = LoadShader(PARTICLE_LIGHT_SHADER, L"Particle.fx", pEntryPoint);
+	SAFE_RELEASE(pShader);
+
 	// UI Shader
 	pEntryPoint[ST_VERTEX] = "UIVS";
 	pEntryPoint[ST_GEOMETRY] = NULL;
@@ -119,6 +149,15 @@ bool CShaderMgr::Init()
 	CreateInputLayout("AniBumpInputLayout", STANDARD_ANI_BUMP_SHADER);
 
 	AddElement("POSITION", 0, 12, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
+	AddElement("VELOCITY", 0, 12, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
+	AddElement("SIZE", 0, 8, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
+	AddElement("LIFETIME", 0, 4, DXGI_FORMAT_R32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
+	AddElement("CREATETIME", 0, 4, DXGI_FORMAT_R32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
+	AddElement("TYPE", 0, 4, DXGI_FORMAT_R32_UINT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
+	AddElement("LIGHTRANGE", 0, 4, DXGI_FORMAT_R32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
+	CreateInputLayout("Particle", PARTICLE_STREAMOUT_SHADER);
+
+	AddElement("POSITION", 0, 12, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_INPUT_PER_VERTEX_DATA, 0);
 	CreateInputLayout("PosInputLayout", "SkyShader");
 
 	// 상수버퍼 생성
@@ -142,15 +181,18 @@ bool CShaderMgr::Init()
 	// Terrain Const Buffer
 	CreateConstBuffer("Terrain", sizeof(TERRAINCBUFFER), 10);
 
+	// Particle Buffer
+	CreateConstBuffer("ParticleCBuffer", sizeof(PARTICLECBUFFER), 13);
+
 	return true;
 }
 
-CShader * CShaderMgr::LoadShader(const string & _strKey, WCHAR * _pFileName, char* _pEntryPoint[ST_END], const string & _strPathKey)
+CShader * CShaderMgr::LoadShader(const string & _strKey, WCHAR * _pFileName, char* _pEntryPoint[ST_END], bool _bStreamOut /*= false*/, const string & _strPathKey /*= SHADERPATH)*/)
 {
 	CShader* pShader = FindShader(_strKey);
 
 	// 쉐이더 있으면
-	if (NULL != pShader)
+	if (pShader)
 	{
 		// 바로 리턴
 		return pShader;
@@ -159,12 +201,21 @@ CShader * CShaderMgr::LoadShader(const string & _strKey, WCHAR * _pFileName, cha
 	// 없으면 만들어서
 	pShader = new CShader();
 
-	if (false == pShader->LoadShader(_strKey, _pFileName, _pEntryPoint, _strPathKey))
+	if (_bStreamOut)
 	{
+		pShader->SetStreamDecl(&m_vecStreamDecl[0], m_vecStreamDecl.size());
+	}
+
+	if (!pShader->LoadShader(_strKey, _pFileName, _pEntryPoint, _bStreamOut, _strPathKey))
+	{
+		if (_bStreamOut)
+			m_vecStreamDecl.clear();
 		SAFE_RELEASE(pShader);
 		return NULL;
 	}
 
+	if (_bStreamOut)
+		m_vecStreamDecl.clear();
 	pShader->AddRef();
 
 	// 맵에 인서트 하고
@@ -342,7 +393,22 @@ void CShaderMgr::UpdateConstBuffer(const string & _strKey, void * _pData, int _i
 	}
 }
 
-CShaderMgr::CShaderMgr()
+void CShaderMgr::AddStreamDecl(UINT iStream, const char * pSemanticName, UINT iSemanticIdx, BYTE byStartCom, BYTE byComCount, BYTE byOutSlot)
+{
+	D3D11_SO_DECLARATION_ENTRY	tDecl = {};
+
+	tDecl.Stream = iStream;
+	tDecl.SemanticName = pSemanticName;
+	tDecl.SemanticIndex = iSemanticIdx;
+	tDecl.StartComponent = byStartCom;
+	tDecl.ComponentCount = byComCount;
+	tDecl.OutputSlot = byOutSlot;
+
+	m_vecStreamDecl.push_back(tDecl);
+}
+
+CShaderMgr::CShaderMgr() :
+	m_iOffsetSize(0)
 {
 }
 

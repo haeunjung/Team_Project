@@ -13,7 +13,6 @@ private:
 	float m_fRespawnLimitTime;
 
 	bool	m_bCheck;
-	CSpotParent* m_pPlayerSpot;
 private:
 	void CreateProtoType();
 	void CreateObject();
@@ -22,6 +21,7 @@ private:
 	void CreateTerrain();
 	void CreateInventory();	
 	void CreateMainSceneLight();
+	void CreateParticle();
 public:
 	virtual bool Init();
 	virtual void Update(float _fTime);

@@ -30,6 +30,7 @@ private:
 	CColliderSphere*	m_pViewCol;
 	CColliderSphere*	m_pAttCol;
 
+	CGameObject* m_pParticleObj;
 	// Test¿ë
 private:
 	bool	m_bTest;

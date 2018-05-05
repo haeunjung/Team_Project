@@ -34,12 +34,15 @@ struct VS_OUTPUT_POS
 
 struct GS_OUTPUT
 {
-    float4  vPos    : SV_Position;
-    float2  vUV     : TEXCOORD;
-    uint    iPrimID : SV_PrimitiveID;
+    float4 vPos : SV_Position;
+    float2 vUV : TEXCOORD;
+    float4 vProjPos : POSITION;
+    uint iPrimID : SV_PrimitiveID;
 };
 
-Texture2DArray g_EffectTexArray : register(t11);
+Texture2DArray g_EffectTexArray : register(t7);
+texture2D g_GBufferDepth : register(t13);
+SamplerState g_GBufferDepthSmp : register(s11);
 
 float2 ComputeAtlasUV(float2 vCurUV)
 {
@@ -103,12 +106,13 @@ void EffectGS(point VS_OUTPUT_POS input[1],
 
     GS_OUTPUT output;
 
-    [unroll]
+   [unroll]
     for (int i = 0; i < 4; ++i)
     {
-        output.vPos = mul(vPos[i], g_matVP);
+        output.vProjPos = mul(vPos[i], g_matVP);
         output.vUV = vUV[i];
         output.iPrimID = iPrimID;
+        output.vPos = output.vProjPos;
 
         TriStream.Append(output);
     }
@@ -127,6 +131,29 @@ PS_OUTPUT EffectPS(GS_OUTPUT input)
     {
         output.vTarget0 = g_DiffuseTexture.Sample(g_DiffuseSampler, input.vUV);
     }        
+
+    if (output.vTarget0.a == 0.0f)
+        clip(-1);
+
+    // 깊이값을 얻어온다.
+	// GBufferDepth에서 깊이를 얻어오기 위한 투영좌표를 이용한 UV 좌표를 구해준다.
+    float2 vDepthUV;
+    vDepthUV.x = input.vProjPos.x / input.vProjPos.w * 0.5f + 0.5f;
+    vDepthUV.y = input.vProjPos.y / input.vProjPos.w * -0.5f + 0.5f;
+    float fDepth = g_GBufferDepth.Sample(g_GBufferDepthSmp, vDepthUV).w;
+    float fSrcDepth = input.vProjPos.w;
+
+    float fAlpha = (fDepth - fSrcDepth) / 0.5f;
+
+    if (fAlpha > 1.f)
+        fAlpha = 1.f;
+    else if (fAlpha < 0.f)
+        fAlpha = 0.f;
+
+    if (fDepth == 0.f)
+        fAlpha = 1.f;
+
+    output.vTarget0.a *= fAlpha;
 
     return output;
 }

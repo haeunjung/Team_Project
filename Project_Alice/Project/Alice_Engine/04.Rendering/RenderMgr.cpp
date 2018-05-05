@@ -17,6 +17,7 @@
 #include "../07.Component/Transform.h"
 #include "../07.Component/Camera.h"
 #include "../07.Component/Light.h"
+#include "../07.Component/ParticleSystem.h"
 
 WOOJUN_USING
 
@@ -76,6 +77,37 @@ void CRenderMgr::RenderLightAcc(float _fTime)
 		m_pBlendOne->ResetState();
 		m_pZDisable->ResetState();
 	}
+
+	// 파티클 조명을 처리한다.
+	list<CParticleSystem*>::iterator	iter1;
+	list<CParticleSystem*>::iterator	iter1End = m_ParticleLightList.end();
+
+	for (iter1 = m_ParticleLightList.begin(); iter1 != iter1End; ++iter1)
+	{
+		m_pBlendOne->SetState();
+
+		m_pPointSampler->SetSampler(11, CUT_PIXEL);
+		pGBuffer->vecTarget[1]->SetTexture(12);
+		pGBuffer->vecTarget[2]->SetTexture(13);
+		pGBuffer->vecTarget[3]->SetTexture(14);
+		/*pShadowMap->vecTarget[0]->SetTexture(6);
+		pShadowMap->vecTarget[1]->SetTexture(7);
+		pShadowMap->vecTarget[2]->SetTexture(8);*/
+
+		(*iter1)->RenderLight(_fTime);
+
+		m_pBlendOne->ResetState();
+
+		ID3D11ShaderResourceView*	pSRV[1] = { NULL };
+		CONTEXT->PSSetShaderResources(12, 1, pSRV);
+		CONTEXT->PSSetShaderResources(13, 1, pSRV);
+		CONTEXT->PSSetShaderResources(14, 1, pSRV);
+		/*CONTEXT->PSSetShaderResources(6, 1, pSRV);
+		CONTEXT->PSSetShaderResources(7, 1, pSRV);
+		CONTEXT->PSSetShaderResources(8, 1, pSRV);*/
+	}
+
+	m_ParticleLightList.clear();
 
 	ResetMRT("LightAcc");
 }
@@ -179,6 +211,17 @@ void CRenderMgr::AddRenderObject(CGameObject * _pGameObject)
 	if (_pGameObject->CheckComponentFromType(CT_UI))
 	{
 		m_vecRender[RG_UI].push_back(_pGameObject);
+	}
+	else if (_pGameObject->CheckComponentFromType(CT_PARTICLE))
+	{
+		m_vecRender[RG_ALPHA3].push_back(_pGameObject);
+
+		CParticleSystem*	pParticle = (CParticleSystem*)_pGameObject->FindComponentFromType(CT_PARTICLE);
+
+		if (pParticle->GetParticleLight())
+			m_ParticleLightList.push_back(pParticle);
+
+		SAFE_RELEASE(pParticle);
 	}
 	else
 	{
@@ -674,6 +717,9 @@ bool CRenderMgr::Init()
 	SAFE_RELEASE(pRenderState);
 
 	m_pZDisable = CreateDepthStencilState(DEPTH_DISABLE, false);	
+
+	pRenderState = CreateDepthStencilState(DEPTH_WRITE_DISABLE, true, D3D11_DEPTH_WRITE_MASK_ZERO);
+	SAFE_RELEASE(pRenderState);
 
 	// Albedo Target
 	CMyRenderTarget*	pTarget = CreateTarget("Albedo", _RESOLUTION.m_iWidth, _RESOLUTION.m_iHeight, DXGI_FORMAT_R8G8B8A8_UNORM);

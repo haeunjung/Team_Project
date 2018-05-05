@@ -390,6 +390,12 @@
     <ClInclude Include="07.Component\SpotParent.h">
       <Filter>07. Component\07. Light</Filter>
     </ClInclude>
+    <ClInclude Include="07.Component\PlayerLight.h">
+      <Filter>07. Component\07. Light</Filter>
+    </ClInclude>
+    <ClInclude Include="07.Component\ParticleSystem.h">
+      <Filter>07. Component\08. Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine_Core.cpp">
@@ -602,6 +608,12 @@
     <ClCompile Include="07.Component\SpotParent.cpp">
       <Filter>07. Component\07. Light</Filter>
     </ClCompile>
+    <ClCompile Include="07.Component\PlayerLight.cpp">
+      <Filter>07. Component\07. Light</Filter>
+    </ClCompile>
+    <ClCompile Include="07.Component\ParticleSystem.cpp">
+      <Filter>07. Component\08. Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="03.Resource\DirectXTex.inl">
@@ -634,6 +646,9 @@
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
     <FxCompile Include="..\Fx\UI.fx">
+      <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Fx\Particle.fx">
       <Filter>04. Rendering\01. Shader\01. HLSL</Filter>
     </FxCompile>
   </ItemGroup>

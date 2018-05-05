@@ -12,6 +12,7 @@ typedef struct DLL _tagMRT
 	ID3D11DepthStencilView*		pOldDepth;
 }MRT, *pMRT;
 
+class CParticleSystem;
 class CRenderState;
 class CRasterizerState;
 class CBlendState;
@@ -29,6 +30,7 @@ private:
 	unordered_map<string, CMyRenderTarget*> m_mapRenderTarget;
 	unordered_map<string, CMyDepthTarget*>	m_mapDepthTarget;
 	vector<CGameObject*>			m_vecRender[RG_END];
+	list<CParticleSystem*>			m_ParticleLightList;
 	unordered_map<string, pMRT>		m_mapMRT;
 	CSampler*		m_pPointSampler;
 	CRenderState*	m_pBlendOne;

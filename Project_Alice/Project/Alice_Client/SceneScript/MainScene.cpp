@@ -32,7 +32,7 @@
 #include "07.Component/PointLight.h"
 #include "07.Component/Light.h"
 #include "07.Component/SpotLight.h"
-
+#include "07.Component/ParticleSystem.h"
 
 void CMainScene::CreateProtoType()
 {
@@ -250,7 +250,7 @@ void CMainScene::CreateMainSceneLight()
 	CGameObject* pLightObject = m_pScene->CreateLight("PointLight1", LT_POINT);
 
 	CTransform* pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(10.f, 5.0f, 10.f);
+	pTransform->SetWorldPos(15.f, 7.0f, 15.f);
 	SAFE_RELEASE(pTransform);
 
 	CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
@@ -260,105 +260,121 @@ void CMainScene::CreateMainSceneLight()
 	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
 	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
 	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vAttenuation = DxVector3(0.0f, 0.25f, 0.0f);
+	tLightInfo.vAttenuation = DxVector3(0.0f, 0.2f, 0.0f);
 
 	pPointLight->SetLightInfo(tLightInfo);
 	SAFE_RELEASE(pPointLight);
-
-	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
-	pUILayer->AddObject(pLightObject);
 	SAFE_RELEASE(pLightObject);
 
 	pLightObject = m_pScene->CreateLight("PointLigh2", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(15.f, 5.0f, 30.f);
+	pTransform->SetWorldPos(15.f, 7.0f, 50.f);
 	SAFE_RELEASE(pTransform);
 
 	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
 	pPointLight->SetLightInfo(tLightInfo);
 	SAFE_RELEASE(pPointLight);
-
-	pUILayer->AddObject(pLightObject);
 	SAFE_RELEASE(pLightObject);
 
 	pLightObject = m_pScene->CreateLight("PointLigh3", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(50.f, 10.0f, 30.f);
+	pTransform->SetWorldPos(45.f, 10.0f, 27.f);
 	SAFE_RELEASE(pTransform);
 
 	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
 	pPointLight->SetLightInfo(tLightInfo);
 	SAFE_RELEASE(pPointLight);
-
-	pUILayer->AddObject(pLightObject);
 	SAFE_RELEASE(pLightObject);
 
 	pLightObject = m_pScene->CreateLight("PointLigh4", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(50.f, 5.0f, 45.f);
+	pTransform->SetWorldPos(75.0f, 7.0f, 50.f);
 	SAFE_RELEASE(pTransform);
 
 	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
 	pPointLight->SetLightInfo(tLightInfo);
 	SAFE_RELEASE(pPointLight);
-
-	pUILayer->AddObject(pLightObject);
 	SAFE_RELEASE(pLightObject);
 
 	pLightObject = m_pScene->CreateLight("PointLig5", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(40.f, 5.0f, 10.f);
+	pTransform->SetWorldPos(70.0f, 7.0f, 15.f);
 	SAFE_RELEASE(pTransform);
 
 	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
 	pPointLight->SetLightInfo(tLightInfo);
 	SAFE_RELEASE(pPointLight);
-
-	pUILayer->AddObject(pLightObject);
 	SAFE_RELEASE(pLightObject);
 
-	SAFE_RELEASE(pUILayer);
+	pLightObject = m_pScene->CreateLight("SpotLight", LT_SPOT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
+	SAFE_RELEASE(pTransform);
+
+	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
+
+	tLightInfo.eType = LT_SPOTPARENT;
+	tLightInfo.vDiffuse = { 0.0f, 0.0f, 0.0f, 1.f };
+	tLightInfo.vAmbient = { 1.0f, 0.5f, 0.0f, 1.f };
+	tLightInfo.vSpecular = { 1.0f, 0.5f, 0.0f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(1.0f, 0.0f, 0.0f);
+
+	pSpotLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pSpotLight);
+	SAFE_RELEASE(pLightObject);
+}
+
+void CMainScene::CreateParticle()
+{
+	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+	// 파티클 프로토타입
+	CGameObject*	pParticleObj = CGameObject::Create("Particle", true);
+
+	CTransform*	pParticleTr = pParticleObj->GetTransform();
+	pParticleTr->SetWorldPos(0.f, 0.f, 3.f);
+	SAFE_RELEASE(pParticleTr);
+
+	CParticleSystem*	pParticle = pParticleObj->AddComponent<CParticleSystem>("Particle");
+	pParticle->SetParticleInfo();
+	pParticle->SetParticleTexture("ParticleSample",	L"Effect/Light1.png");
+	pParticle->SetParticleLight(false);
+	SAFE_RELEASE(pParticle);
+
+	SAFE_RELEASE(pParticleObj);
+
+	//// 파티클 생성
+	//for (int i = 0; i < 1; ++i)
+	//{
+	//	pParticleObj = CGameObject::CreateClone("Particle");
+
+	//	CTransform*	pParticleTr = pParticleObj->GetTransform();
+	//	pParticleTr->SetWorldPos(3.f + i * 3.f, 0.f, 5.f);
+	//	SAFE_RELEASE(pParticleTr);
+
+	//	pLayer->AddObject(pParticleObj);
+
+	//	SAFE_RELEASE(pParticleObj);
+	//}
+
+	SAFE_RELEASE(pLayer);
 }
 
 bool CMainScene::Init()
 {
 	CreateProtoType();
-	CreateObject();
+	//CreateObject();
 	CreateTerrain();
 	//CreateRadioButton();
 	//CreateInventory();	
-	//CreateMainSceneLight();
+	CreateMainSceneLight();
+	CreateParticle();
 
-	GET_SINGLE(CUIMgr)->Init(m_pScene);
-
-	CGameObject* pLightObject = m_pScene->CreateLight("SpotLight", LT_SPOT);
-
-	CTransform* pLightTransform = pLightObject->GetTransform();
-	pLightTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
-	SAFE_RELEASE(pLightTransform);
-
-	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
-
-	LIGHTINFO	tLightInfo = {};
-	tLightInfo.eType = LT_SPOTPARENT;
-	tLightInfo.vDiffuse = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vAmbient = { 0.8f, 0.8f, 0.8f, 1.f };
-	tLightInfo.vSpecular = { 0.8f, 0.8f, 0.8f, 1.f };
-	tLightInfo.vAttenuation = DxVector3(1.0f, 0.0f, 0.0f);
-
-	pSpotLight->SetLightInfo(tLightInfo);
-	m_pPlayerSpot = pSpotLight;
-	m_pPlayerSpot->AddRef();
-	SAFE_RELEASE(pSpotLight);
-
-	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
-	pUILayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-	SAFE_RELEASE(pUILayer);
+	GET_SINGLE(CUIMgr)->Init(m_pScene);	
 
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 
@@ -442,7 +458,6 @@ bool CMainScene::Init()
 
 	SAFE_RELEASE(pLayer);
 
-	//m_pPlayerSpot->AttachObject(m_pPlayerObject);
 	// Test Box Mesh 생성
 	//LoadObject("My_Box", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
@@ -458,10 +473,6 @@ void CMainScene::Update(float _fTime)
 	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 	pLayer->SetIsEnable(m_bCheck);
 	SAFE_RELEASE(pLayer);
-
-	CTransform* pTransform = m_pPlayerObject->GetTransform();
-	m_pPlayerSpot->SetLightPos(pTransform->GetWorldPos());
-	SAFE_RELEASE(pTransform);
 }
 
 void CMainScene::CheckButton(CGameObject * _pObj, float _fTime)
@@ -497,6 +508,5 @@ CMainScene::CMainScene() :
 CMainScene::~CMainScene()
 {
 	DESTROY_SINGLE(CUIMgr);
-	SAFE_RELEASE(m_pPlayerSpot);
 	SAFE_RELEASE(m_pPlayerObject);
 }

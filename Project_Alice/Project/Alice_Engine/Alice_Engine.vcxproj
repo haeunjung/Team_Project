@@ -195,6 +195,8 @@
     <ClInclude Include="07.Component\Frustum.h" />
     <ClInclude Include="07.Component\Light.h" />
     <ClInclude Include="07.Component\Material.h" />
+    <ClInclude Include="07.Component\ParticleSystem.h" />
+    <ClInclude Include="07.Component\PlayerLight.h" />
     <ClInclude Include="07.Component\PointLight.h" />
     <ClInclude Include="07.Component\RadioButton.h" />
     <ClInclude Include="07.Component\RadioButtonMgr.h" />
@@ -272,6 +274,8 @@
     <ClCompile Include="07.Component\Frustum.cpp" />
     <ClCompile Include="07.Component\Light.cpp" />
     <ClCompile Include="07.Component\Material.cpp" />
+    <ClCompile Include="07.Component\ParticleSystem.cpp" />
+    <ClCompile Include="07.Component\PlayerLight.cpp" />
     <ClCompile Include="07.Component\PointLight.cpp" />
     <ClCompile Include="07.Component\RadioButton.cpp" />
     <ClCompile Include="07.Component\RadioButtonMgr.cpp" />
@@ -324,6 +328,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LightBlendVS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Fx\Particle.fx">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ParticleStreamOutVS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ParticleStreamOutVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>

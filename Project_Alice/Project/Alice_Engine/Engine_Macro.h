@@ -77,6 +77,8 @@
 #define ALPHABLEND			"AlphaBlend"
 #define DEPTH_LESS_EQUAL	"DepthLessEqual"
 #define DEPTH_DISABLE		"DepthDisable"
+#define	DEPTH_WRITE_DISABLE	"DepthWriteDisable"
+#define	ACC_BLEND			"AccBlend"
 
 // Shader Key
 #define	STANDARD_TEXNORMAL_SHADER	"StandardTextureNormalShader"
@@ -90,7 +92,12 @@
 #define LIGHT_BLEND_SHADER			"LightBlendShader"
 #define LIGHT_BLEND_OUTPUT_SHADER	"LightBlendOutputShader"
 
+#define	PARTICLE_STREAMOUT_SHADER	"ParticleStreamOutShader"
+#define	PARTICLE_SHADER				"ParticleShader"
+#define	PARTICLE_LIGHT_SHADER		"ParticleLightShader"
+
 #define ACC_BLEND					"AccBlend"
 
 #define TERRAINSIZE		65
 #define MAXHP	5
+#define	MAX_PARTICLES	10000

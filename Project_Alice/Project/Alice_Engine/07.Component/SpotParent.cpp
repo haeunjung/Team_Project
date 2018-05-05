@@ -8,8 +8,7 @@ WOOJUN_USING
 
 CSpotParent::CSpotParent() :
 	m_pChild(NULL),
-	m_pChildSpotLight(NULL),
-	m_pAttachObj(NULL)
+	m_pChildSpotLight(NULL)
 {
 	SetTag("SpotParent");
 	SetTypeName("CSpotParent");
@@ -27,48 +26,16 @@ CSpotParent::CSpotParent(const CSpotParent & _SpotParent) :
 	SAFE_RELEASE(m_pChildSpotLight);
 	m_pChildSpotLight = _SpotParent.m_pChildSpotLight;
 	m_pChildSpotLight->AddRef();
-
-	if (m_pAttachObj)
-	{
-		SAFE_RELEASE(m_pAttachObj);
-		m_pAttachObj = _SpotParent.m_pAttachObj;
-		m_pAttachObj->AddRef();
-	}
 }
 
 CSpotParent::~CSpotParent()
 {
-	SAFE_RELEASE(m_pAttachObj);
 	SAFE_RELEASE(m_pChildSpotLight);
 	SAFE_RELEASE(m_pChild);
 }
 
-void CSpotParent::SetLightPos(const DxVector3 & _vPos)
-{
-	m_pTransform->SetWorldPos(_vPos);
-	m_pTransform->Move(DxVector3(0.0f, 10.0f, 0.0f));
-
-	CTransform* pChildTransform = m_pChild->GetTransform();
-	pChildTransform->SetWorldPos(_vPos);
-	pChildTransform->Move(DxVector3(0.0f, 10.0f, 0.0f));
-	SAFE_RELEASE(pChildTransform);
-}
-
-void CSpotParent::AttachObject(CGameObject * _pGameObject)
-{
-	SAFE_RELEASE(m_pAttachObj);
-	m_pAttachObj = _pGameObject;
-	m_pAttachObj->AddRef();
-}
-
 bool CSpotParent::Init()
 {
-	//CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("SpotLight");
-	//pRenderer->SetMesh("ColorSphere");
-	//pRenderer->SetShader("ColliderColorShader");
-	//pRenderer->SetInputLayout("ColorInputLayout");
-	//pRenderer->SetRenderState(WIRE_FRAME);
-
 	m_pChild = CGameObject::Create("SpotChild");
 
 	m_pChildSpotLight = m_pChild->AddComponent<CSpotLight>("SpotLight");
@@ -84,17 +51,7 @@ void CSpotParent::Input(float _fTime)
 
 void CSpotParent::Update(float _fTime)
 {
-	/*CTransform* pAttachTransform = m_pAttachObj->GetTransform();
-	m_pTransform->SetWorldPos(pAttachTransform->GetWorldPos());
-	m_pTransform->Move(DxVector3(0.0f, 10.0f, 10.0f));
-	SAFE_RELEASE(pAttachTransform);*/
-
-	CTransform* pChildTransform = m_pChild->GetTransform();
-	pChildTransform->SetWorldPos(m_pTransform->GetWorldPos());
-	//pChildTransform->LookAt(m_pAttachObj);
-	SAFE_RELEASE(pChildTransform);
-
-	//m_pTransform->RotateY(0.8f, _fTime);
+	m_pTransform->RotateY(PI_HALF, _fTime);
 }
 
 void CSpotParent::LateUpdate(float _fTime)
