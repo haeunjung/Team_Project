@@ -82,7 +82,14 @@ bool CPlayer::Init()
 
 void CPlayer::Input(float _fTime)
 {
-	if (m_bAttack || m_bJump || m_bHeat)
+	if (m_bAttack || m_bHeat)
+	{
+		return;
+	}
+
+	PlayerMove(_fTime);
+	
+	if (m_bJump)
 	{
 		return;
 	}
@@ -91,9 +98,7 @@ void CPlayer::Input(float _fTime)
 	{
 		m_ePlayerState = PS_ATTACK;
 		return;
-	}
-
-	PlayerMove(_fTime);
+	}	
 
 	if (KEYPRESS("Jump")
 		&& KEYPUSH("MoveForward"))
@@ -157,10 +162,11 @@ void CPlayer::Update(float _fTime)
 		PlayerAttack();
 		break;
 	case PS_JUMP:
-		PlayerJump();
+		PlayerJump(_fTime);
 		break;
 	case PS_MOVINGJUMP:
-		PlayerMovingJump(_fTime);
+		PlayerJump(_fTime);
+		//PlayerMovingJump(_fTime);
 		break;
 	case PS_CLIMB:
 		PlayerClimb();
@@ -242,7 +248,31 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 	if (CC_PLAYER_FOOT == _pSrc->GetColliderCheck() &&
 		CC_OBJ == _pDest->GetColliderCheck())
 	{
-		m_bUpCol = true;
+		if (m_bFall)
+		{	
+			float DestY = ((CColliderAABB*)_pDest)->GetTop();
+			if (m_pHitCol->GetSphereInfo().vCenter.y > DestY)
+			{
+  				SAFE_RELEASE(m_pOtherCol);
+				m_pOtherCol = _pDest;
+				m_pOtherCol->AddRef();
+
+				m_pTransform->SetWorldPosY(DestY);
+				m_ePlayerState = PS_DEFAULT;
+
+				m_bFall = false;
+				m_fJumpTime = 0.0f;
+			}
+		}
+		
+		/*if (CAP_UP == ((CColliderAABB*)_pDest)->GetAABBInfo().eColAABB)
+		{
+			
+
+			float DestY = ((CColliderAABB*)_pDest)->GetTop();
+			m_pTransform->SetWorldPosY(DestY);
+			m_ePlayerState = PS_DEFAULT;
+		}		*/
 	}
 }
 
@@ -262,8 +292,12 @@ void CPlayer::OnCollisionLeave(CCollider * _pSrc, CCollider * _pDest, float _fTi
 	if (CC_PLAYER_FOOT == _pSrc->GetColliderCheck() &&
 		CC_OBJ == _pDest->GetColliderCheck())
 	{
-		m_bUpCol = false;
-		m_ePlayerState = PS_FALL;
+		if (m_ePlayerState != PS_JUMP && m_ePlayerState != PS_MOVINGJUMP)
+		{
+			m_bFall = true;
+			m_ePlayerState = PS_FALL;
+			m_fJumpTime = 0.5f;
+		}		
 	}
 }
 
@@ -469,22 +503,56 @@ void CPlayer::PlayerAttack()
 	}
 }
 
-void CPlayer::PlayerJump()
+void CPlayer::PlayerJump(float _fTime)
 {
-	if (true == m_pAniController->CheckClipName("Jump"))
-	{		
-		if (true == m_pAniController->GetAnimationEnd())
-		{
-			m_pAniController->ReturnToDefaultClip();
-			m_bJump = false;
-			m_ePlayerState = PS_DEFAULT;
-		}
-	}
-	else
+	//if (true == m_pAniController->CheckClipName("Jump"))
+	//{		
+	//	if (true == m_pAniController->GetAnimationEnd())
+	//	{
+	//		m_pAniController->ReturnToDefaultClip();
+	//		m_bJump = false;
+	//		m_ePlayerState = PS_DEFAULT;
+	//	}
+	//}
+	//else
+	//{
+	//	m_pAniController->ChangeClip("Jump");
+	//	m_bJump = true;
+	//}
+
+	//y=-a*x+b에서 (a: 중력가속도, b: 초기 점프속도)
+	//적분하여 y = (-a/2)*x*x + (b*x) 공식을 얻는다.(x: 점프시간, y: 오브젝트의 높이)
+	//변화된 높이 height를 기존 높이 _posY에 더한다.
+	float height = (m_fJumpTime * m_fJumpTime * (-m_fGravity) / 2) + (m_fJumpTime * m_fJumpPower);
+	if (0.0f > height)
 	{
-		m_pAniController->ChangeClip("Jump");
-		m_bJump = true;
+ 		m_bFall = true;
 	}
+	//_transform.position = new Vector3(_transform.position.x, _posY + height, _transform.position.z);
+	m_pTransform->Up(height);
+	//점프시간을 증가시킨다.
+	m_fJumpTime += _fTime;
+
+	//처음의 높이 보다 더 내려 갔을때 => 점프전 상태로 복귀한다.
+	if (0.0f > m_pTransform->GetWorldPos().y)
+	{
+		m_ePlayerState = PS_DEFAULT;
+		m_fJumpTime = 0.0f;
+		m_pTransform->SetWorldPosY(0.0f);
+
+		m_bFall = false;
+	}
+
+	m_pFootCol->SetSphereInfo(m_pTransform->GetWorldPos(), 0.5f);
+
+	//if (0.0f < m_pTransform->GetWorldPos().y)
+	//{
+	//	m_pTransform->Up(m_fSpeed, _fTime);
+	//}
+	//else
+	//{
+	//	m_pTransform->SetWorldPosY(0.0f);
+	//}
 }
 
 void CPlayer::PlayerMovingJump(float _fTime)
@@ -514,19 +582,40 @@ void CPlayer::PlayerClimb()
 
 void CPlayer::PlayerFall(float _fTime)
 {
-	if (true == m_bUpCol)
+	if (!m_bFall)
 	{
 		return;
 	}
 
 	if (0.0f < m_pTransform->GetWorldPos().y)
 	{
-		m_pTransform->Up(-m_fSpeed, _fTime);
+		float height = (m_fJumpTime * m_fJumpTime * (-m_fGravity) / 2) + (m_fJumpTime * m_fJumpPower);
+		//_transform.position = new Vector3(_transform.position.x, _posY + height, _transform.position.z);
+		m_pTransform->Up(height);
+		//점프시간을 증가시킨다.
+		m_fJumpTime += _fTime;
 	}
 	else
 	{
+		m_ePlayerState = PS_DEFAULT;
+		m_fJumpTime = 0.0f;
 		m_pTransform->SetWorldPosY(0.0f);
+		m_bFall = false;
 	}
+
+	//float height = (m_fJumpTime * m_fJumpTime * (-m_fGravity) / 2) + (m_fJumpTime * m_fJumpPower);
+	////_transform.position = new Vector3(_transform.position.x, _posY + height, _transform.position.z);
+	//m_pTransform->Up(height);
+	////점프시간을 증가시킨다.
+	//m_fJumpTime += _fTime;
+
+
+	//if (0.0f > m_pTransform->GetWorldPos().y)
+	//{
+	//	m_ePlayerState = PS_DEFAULT;
+	//	m_fJumpTime = 0.0f;
+	//	m_pTransform->SetWorldPosY(0.0f);
+	//}
 }
 
 void CPlayer::PlayerHeat(float _fTime)
@@ -582,7 +671,7 @@ CPlayer::CPlayer() :
 	m_bBackCol(false),
 	m_bLeftCol(false),
 	m_bRightCol(false),
-	m_bUpCol(false),
+	m_bFall(false),
 	m_pAniController(NULL),
 	m_pAttCol(NULL),
 	m_pHitCol(NULL),
@@ -594,6 +683,11 @@ CPlayer::CPlayer() :
 {
 	SetTypeID<CPlayer>();
 	SetTypeName("CPlayer");
+
+	// Jump
+	m_fJumpTime = 0.0f;
+	m_fJumpPower = 2.0f;
+	m_fGravity = 9.8f;
 }
 
 CPlayer::~CPlayer()

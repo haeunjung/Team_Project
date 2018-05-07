@@ -36,24 +36,26 @@
 
 void CMainScene::CreateProtoType()
 {
-	// Battery 프로토타입
+	// Battery 
 	CGameObject*	pBattery = CGameObject::Create("BatteryObject", true);
 	CBattery*	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
-
 	SAFE_RELEASE(pBattertScript);
 	SAFE_RELEASE(pBattery);
-
-	// Monster
-	CGameObject*	pMinionObj = CGameObject::Create("MinionObject", true);
-	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	SAFE_RELEASE(pMinion);
-	SAFE_RELEASE(pMinionObj);
 
 	// Effect
 	CGameObject*	pEffectObj = CGameObject::Create("HitEffect", true);
 	CHitEffect*	pEffect = pEffectObj->AddComponent<CHitEffect>("HitEffectScript");
 	SAFE_RELEASE(pEffect);
 	SAFE_RELEASE(pEffectObj);
+
+	// Particle
+	CGameObject*	pParticleObj = CGameObject::Create("Particle", true);	
+	CParticleSystem*	pParticle = pParticleObj->AddComponent<CParticleSystem>("Particle");
+	pParticle->SetParticleInfo();
+	pParticle->SetParticleTexture("ParticleSample", L"Effect/Light1.png");
+	pParticle->SetParticleLight(false);
+	SAFE_RELEASE(pParticle);
+	SAFE_RELEASE(pParticleObj);
 }
 
 // TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
@@ -195,7 +197,7 @@ void CMainScene::CreateTerrain()
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
-	pTerrain->CreateTerrain("Terrain", TERRAINSIZE + 20, TERRAINSIZE, 4, 4/*, "Terrain/Height1.bmp"*/);
+	pTerrain->CreateTerrain("Terrain", TERRAINSIZE + 5, TERRAINSIZE, 4, 4/*, "Terrain/Height1.bmp"*/);
 	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_COLOR.png");
 	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_NRM.png");
 	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_SPEC.png");
@@ -329,37 +331,42 @@ void CMainScene::CreateMainSceneLight()
 	SAFE_RELEASE(pLightObject);
 }
 
-void CMainScene::CreateParticle()
+void CMainScene::CreateMonster()
 {
-	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
-	// 파티클 프로토타입
-	CGameObject*	pParticleObj = CGameObject::Create("Particle", true);
+	CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 
-	CTransform*	pParticleTr = pParticleObj->GetTransform();
-	pParticleTr->SetWorldPos(0.f, 0.f, 3.f);
-	SAFE_RELEASE(pParticleTr);
+	CGameObject*	pMinionObj = CGameObject::Create("Minion");
+	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 10.0f));
+	SAFE_RELEASE(pMinion);
 
-	CParticleSystem*	pParticle = pParticleObj->AddComponent<CParticleSystem>("Particle");
-	pParticle->SetParticleInfo();
-	pParticle->SetParticleTexture("ParticleSample",	L"Effect/Light1.png");
-	pParticle->SetParticleLight(false);
-	SAFE_RELEASE(pParticle);
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
 
-	SAFE_RELEASE(pParticleObj);
+	pMinionObj = CGameObject::Create("Minion");
+	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 40.0f));	
+	SAFE_RELEASE(pMinion);
 
-	//// 파티클 생성
-	//for (int i = 0; i < 1; ++i)
-	//{
-	//	pParticleObj = CGameObject::CreateClone("Particle");
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
 
-	//	CTransform*	pParticleTr = pParticleObj->GetTransform();
-	//	pParticleTr->SetWorldPos(3.f + i * 3.f, 0.f, 5.f);
-	//	SAFE_RELEASE(pParticleTr);
+	pMinionObj = CGameObject::Create("Minion");
+	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(85.0f, 0.0f, 30.0f));
+	SAFE_RELEASE(pMinion);
 
-	//	pLayer->AddObject(pParticleObj);
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
 
-	//	SAFE_RELEASE(pParticleObj);
-	//}
+	pMinionObj = CGameObject::Create("Minion");
+	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 10.0f));
+	pMinion->SetIsTest(true);
+	SAFE_RELEASE(pMinion);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
 
 	SAFE_RELEASE(pLayer);
 }
@@ -367,12 +374,12 @@ void CMainScene::CreateParticle()
 bool CMainScene::Init()
 {
 	CreateProtoType();
-	//CreateObject();
+	CreateObject();
 	CreateTerrain();
 	//CreateRadioButton();
 	//CreateInventory();	
 	CreateMainSceneLight();
-	CreateParticle();
+	CreateMonster();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);	
 
@@ -385,13 +392,13 @@ bool CMainScene::Init()
 	SAFE_RELEASE(pCameraArm);
 
 	// BGM
-	CGameObject* pBGM = CGameObject::Create("BGM");
-	CSoundPlayer* pSoundPlayer = pBGM->AddComponent<CSoundPlayer>("BGMPlayer");
-	pSoundPlayer->MyPlaySound("Title.mp3");
-	SAFE_RELEASE(pSoundPlayer);
+	//CGameObject* pBGM = CGameObject::Create("BGM");
+	//CSoundPlayer* pSoundPlayer = pBGM->AddComponent<CSoundPlayer>("BGMPlayer");
+	//pSoundPlayer->MyPlaySound("Title.mp3");
+	//SAFE_RELEASE(pSoundPlayer);
 
-	pLayer->AddObject(pBGM);
-	SAFE_RELEASE(pBGM);
+	//pLayer->AddObject(pBGM);
+	//SAFE_RELEASE(pBGM);
 
 	// 플레이어
 	CGameObject*	pPlayerObject = CGameObject::Create("PlayerObject");
@@ -412,33 +419,6 @@ bool CMainScene::Init()
 
 	pCameraObject = m_pScene->CreateCamera("SubCamera"/*, DxVector3(0.0f, 0.0f, -5.0f)*/);
 	SAFE_RELEASE(pCameraObject);
-
-	/*CGameObject*	pMinionObj = CGameObject::CreateClone("MinionObject");
-
-	CTransform*	pTransform = pMinionObj->GetTransform();
-	pTransform->SetWorldPos(40.0f, 0.0f, 20.0f);
-	SAFE_RELEASE(pTransform);
-
-	CMinion*	pMinion = pMinionObj->FindComponentFromTypeID<CMinion>();
-	pMinion->SetPlayer(m_pPlayerObject);
-	SAFE_RELEASE(pMinion);*/
-
-	CGameObject*	pMinionObj = CGameObject::Create("Minion");
-	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 10.0f));
-	SAFE_RELEASE(pMinion);
-
-	pLayer->AddObject(pMinionObj);
-	SAFE_RELEASE(pMinionObj);
-
-	CGameObject*	pMonsterObj = CGameObject::Create("Monster");
-	CMinion*	pMonster = pMonsterObj->AddComponent<CMinion>("MinionScript");
-	pMonster->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 30.0f));
-	pMonster->SetIsTest(true);
-	SAFE_RELEASE(pMonster);
-
-	pLayer->AddObject(pMonsterObj);
-	SAFE_RELEASE(pMonsterObj);
 
 	CGameObject* pBattery = CGameObject::CreateClone("BatteryObject");
 	CTransform* pTransform = pBattery->GetTransform();
@@ -462,7 +442,7 @@ bool CMainScene::Init()
 	//LoadObject("My_Box", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
 	//LoadObject("Table", DxVector3(22.5f, 3.0f, 10.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
-
+	//LoadObject("Box2", DxVector3(10.0f, 0.5f, 10.0f), DxVector3(5.0f, 1.0f, 5.0f), Vec3Zero);
 	return true;
 }
 

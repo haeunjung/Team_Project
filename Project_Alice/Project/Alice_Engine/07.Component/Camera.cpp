@@ -92,8 +92,6 @@ void CCamera::ActionCameraOn()
 
 	DxVector3	vAttachPos = m_pAttachTransform->GetWorldPos();
 	m_vAttachPos = m_pTransform->GetWorldPos() - vAttachPos;
-
-	int a = 0;
 }
 
 void CCamera::CreateProjection(float _fAngle, float _fWidth, float _fHeight, float _fNear /*= 0.1f*/, float _fFar /*= 1000.0f*/)

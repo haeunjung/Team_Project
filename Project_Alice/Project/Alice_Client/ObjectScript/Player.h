@@ -40,7 +40,7 @@ private:
 	bool	m_bBackCol;
 	bool	m_bLeftCol;
 	bool	m_bRightCol;
-	bool	m_bUpCol;
+	bool	m_bFall;
 
 	CAnimation3D*		m_pAniController;
 	CColliderSphere*	m_pAttCol;
@@ -57,6 +57,10 @@ private:
 	//////////
 	bool m_bChange;
 	
+	// Jump
+	float m_fJumpTime;
+	float m_fJumpPower;
+	float m_fGravity;
 public:
 	void AniCallback(float _fTime);
 public:
@@ -73,7 +77,7 @@ private:
 	void MoveUp(float _fTime);
 	void MoveDown(float _fTime);
 	void PlayerAttack();
-	void PlayerJump();
+	void PlayerJump(float _fTime);
 	void PlayerMovingJump(float _fTime);
 	void PlayerClimb();
 	void PlayerFall(float _fTime);

@@ -21,7 +21,7 @@ private:
 	void CreateTerrain();
 	void CreateInventory();	
 	void CreateMainSceneLight();
-	void CreateParticle();
+	void CreateMonster();	
 public:
 	virtual bool Init();
 	virtual void Update(float _fTime);

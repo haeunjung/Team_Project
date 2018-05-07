@@ -3,6 +3,7 @@
 #include "01.Core/Debug.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/Transform.h"
+#include "05.Scene/Scene.h"
 #include "05.Scene/Layer.h"
 #include "MonsterBullet.h"
 #include "PlayerBullet.h"
@@ -109,6 +110,15 @@ void CMinion::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 			m_fTime = 0.0f;
 			m_eMonsterState = MS_TRACE;
 		}
+				
+		if (CC_OBJ == _pDest->GetColliderCheck())
+		{
+			m_pTransform->SetWorldRotY(PI);
+			m_pViewCol->SetSphereInfo(m_pTransform->GetWorldPos() + m_pTransform->GetWorldAxis(AXIS_Z) * 2.5f, 2.5f);
+
+			m_fTime = 0.0f;
+		}
+		
 	}	
 }
 
@@ -139,7 +149,9 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 				pParticleTr->Move(DxVector3(0.0f, 1.0f, 0.0f));
 				SAFE_RELEASE(pParticleTr);
 
+				CLayer* pLayer = m_pScene->FindLayer("UILayer");
 				m_pLayer->AddObject(m_pParticleObj);
+				SAFE_RELEASE(pLayer);
 				//m_pParticleObj->AddRef();
 
 				/*CGameObject* pEffect = CGameObject::CreateClone("HitEffect");
@@ -177,6 +189,8 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 			}
 		}
 	}
+
+
 }
 
 bool CMinion::BackAttackCheck(const DxVector3 & _SrcForward, const DxVector3 & _DestForward)
@@ -201,7 +215,9 @@ void CMinion::MonsterIdle(float _fTime)
 	if (3.0f <= m_fTime)
 	{
 		m_fTime = 0.0f;
-		m_pTransform->RotateY(PI);
+		// - PI ~ PI
+		float Rand = (rand() % 629 * 0.01f) - PI;
+		m_pTransform->RotateY(Rand);
 
 		// ViewCol 위치 갱신
 		m_pViewCol->SetSphereInfo(m_pTransform->GetWorldPos() + m_pTransform->GetWorldAxis(AXIS_Z) * 2.5f, 2.5f);

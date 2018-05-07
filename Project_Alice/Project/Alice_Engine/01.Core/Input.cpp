@@ -256,8 +256,8 @@ void CInput::ComputeMouse(bool bStart)
 	GetCursorPos(&tMousePos);
 	ScreenToClient(WINDOWHANDLE, &tMousePos);
 
-	tMousePos.x = tMousePos.x * x;
-	tMousePos.y = tMousePos.y * y;
+	tMousePos.x = (LONG)(tMousePos.x * x);
+	tMousePos.y = (LONG)(tMousePos.y * y);
 
 	if (!bStart)
 	{

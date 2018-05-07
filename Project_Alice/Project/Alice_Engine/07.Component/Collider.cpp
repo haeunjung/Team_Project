@@ -1,6 +1,6 @@
 #include "Collider.h"
 #include "Transform.h"
-#include "../Device.h""
+#include "../Device.h"
 #include "DirectXCollision.h"
 #ifdef _DEBUG
 #include "../04.Rendering/Shader.h"
@@ -421,6 +421,10 @@ bool CCollider::ColSphereToAABB(const SPHEREINFO & _tSrc, AABBINFO & _tDest)
 		{
 			_tDest.eColAABB = CAP_BACK;
 		}
+		//else
+		//{
+		//	_tDest.eColAABB = CAP_UP;
+		//}
 
 		return true;
 	}

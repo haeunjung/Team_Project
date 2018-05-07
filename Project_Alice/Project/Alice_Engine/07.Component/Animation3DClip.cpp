@@ -43,7 +43,7 @@ void CAnimation3DClip::AddCallback(float _fProgress, void(*_pFunc)(float))
 {
 	pANIMATIONCALLBACK	pCallback = new ANIMATIONCALLBACK();
 
-	pCallback->iAnimationProgress = (_fProgress * m_tInfo.fTimeLength + m_tInfo.fStartTime) * m_iAnimationLimitFrame;
+	pCallback->iAnimationProgress = (int)(_fProgress * m_tInfo.fTimeLength + m_tInfo.fStartTime) * m_iAnimationLimitFrame;
 	pCallback->fAnimationProgress = _fProgress;
 	pCallback->func = bind(_pFunc, placeholders::_1);
 	pCallback->bCall = false;
@@ -68,12 +68,12 @@ void CAnimation3DClip::SetClipInfo(ANIMATION_OPTION _eOption, pFBXANIMATIONCLIP 
 {
 	m_tInfo.eOption = _eOption;
 	m_tInfo.strName = _pClip->strName;
-	m_tInfo.iStartFrame = _pClip->tStart.GetFrameCount(_pClip->eTimeMode);
-	m_tInfo.iEndFrame = _pClip->tEnd.GetFrameCount(_pClip->eTimeMode);
+	m_tInfo.iStartFrame = (int)(_pClip->tStart.GetFrameCount(_pClip->eTimeMode));
+	m_tInfo.iEndFrame = (int)(_pClip->tEnd.GetFrameCount(_pClip->eTimeMode));
 	m_tInfo.iFrameLength = m_tInfo.iEndFrame - m_tInfo.iStartFrame;
 
-	m_tInfo.fStartTime = _pClip->tStart.GetSecondDouble();
-	m_tInfo.fEndTime = _pClip->tEnd.GetSecondDouble();
+	m_tInfo.fStartTime = (float)(_pClip->tStart.GetSecondDouble());
+	m_tInfo.fEndTime = (float)(_pClip->tEnd.GetSecondDouble());
 	m_tInfo.fTimeLength = m_tInfo.fEndTime - m_tInfo.fStartTime;
 }
 
