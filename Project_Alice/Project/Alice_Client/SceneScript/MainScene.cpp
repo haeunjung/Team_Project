@@ -378,8 +378,8 @@ bool CMainScene::Init()
 	CreateTerrain();
 	//CreateRadioButton();
 	//CreateInventory();	
-	CreateMainSceneLight();
-	CreateMonster();
+	//CreateMainSceneLight();
+	//CreateMonster();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);	
 
@@ -403,15 +403,16 @@ bool CMainScene::Init()
 	// 플레이어
 	CGameObject*	pPlayerObject = CGameObject::Create("PlayerObject");
 	pLayer->AddObject(pPlayerObject);
-
-	CCamera*	pCamera = m_pScene->GetMainCamera();
-	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 3.5f, -5.0f));
-
+	
 	m_pPlayerObject = pPlayerObject;
 	pPlayerObject->AddRef();
 
 	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");
 	SAFE_RELEASE(pPlayerScript);
+
+	CCamera*	pCamera = m_pScene->GetMainCamera();
+	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 3.5f, -5.0f));
+
 	SAFE_RELEASE(pPlayerObject);
 
 	SAFE_RELEASE(pCamera);
