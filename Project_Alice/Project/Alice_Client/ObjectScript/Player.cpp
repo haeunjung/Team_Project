@@ -26,6 +26,15 @@ void CPlayer::AniCallback(float _fTime)
 
 bool CPlayer::Init()
 {	
+	CGameObject* pChild = CGameObject::Create("Child");
+	m_pGameObject->AddChild(pChild);
+	m_pChildTransform = pChild->GetTransform();
+
+	CCamera*	pCamera = m_pScene->GetMainCamera();
+	pCamera->Attach(pChild, DxVector3(0.0f, 1.5f, -3.0f));
+	SAFE_RELEASE(pCamera);
+	SAFE_RELEASE(pChild);
+
 	CRenderer* pPlayerRenderer = m_pGameObject->AddComponent<CRenderer>("Renderer");
 	//pPlayerRenderer->SetMesh("PlayerMesh", L"Elin.msh");
 	pPlayerRenderer->SetMesh("PlayerMesh", L"Player3.msh");	
@@ -147,6 +156,8 @@ void CPlayer::Input(float _fTime)
 
 void CPlayer::Update(float _fTime)
 {	
+	m_pChildTransform->SetWorldPos(m_pHitCol->GetSphereInfo().vCenter);
+
 	m_pTransform->SetLocalPos(0.0f, m_fy * 0.5f, 0.0f);
 	switch (m_ePlayerState)
 	{
@@ -169,7 +180,7 @@ void CPlayer::Update(float _fTime)
 		PlayerFall(_fTime);
 		break;
 	case PS_HEAT:
-		PlayerHeat(_fTime);
+		PlayerHit(_fTime);
 		break;
 	case PS_CLIMBTOUP:
 		PlayerClimbToTop(_fTime);
@@ -197,6 +208,12 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 		}
 	}
 	
+	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
+		CC_SPOTLIGHT == _pDest->GetColliderCheck())
+	{
+		int a = 0;
+	}
+
 	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
 		CC_OBJ == _pDest->GetColliderCheck())
 	{		
@@ -351,6 +368,11 @@ void CPlayer::PlayerMove(float _fTime)
 
 	if (true == KEYPUSH("MoveLeft"))
 	{
+		if (PS_CLIMB == m_ePlayerState || PS_CLIMBIDLE == m_ePlayerState)
+		{
+			return;
+		}
+
 		if (m_pCameraArm->RotateY(-PI_HALF, _fTime))
 		{
 			m_pTransform->RotateY(-PI_HALF, _fTime);
@@ -358,6 +380,11 @@ void CPlayer::PlayerMove(float _fTime)
 	}
 	if (true == KEYPUSH("MoveRight"))
 	{
+		if (PS_CLIMB == m_ePlayerState || PS_CLIMBIDLE == m_ePlayerState)
+		{
+			return;
+		}
+
 		if (m_pCameraArm->RotateY(PI_HALF, _fTime))
 		{
 			m_pTransform->RotateY(PI_HALF, _fTime);
@@ -456,7 +483,7 @@ void CPlayer::MoveUp(float _fTime)
 	//float DestY = m_pOtherCol.vCenter.y + m_pOtherCol.vScale.y;
 	float DestY = ((CColliderAABB*)m_pOtherCol)->GetTop();
 
-	if (SrcY + 0.5f> DestY)
+	if (SrcY + 0.3f> DestY)
 	{
 		// 여기서부터
 		// 마지막 올라가는 상태로 바꿔주고
@@ -597,10 +624,6 @@ void CPlayer::PlayerFall(float _fTime)
 	if (0.0f < m_pTransform->GetWorldPos().y)
 	{
 		float height = (m_fJumpTime * m_fJumpTime * (-m_fGravity * 0.5f) / 2) + (m_fJumpTime * m_fJumpPower);
-		if (0.0f > height)
-		{
-			int a = 0;
-		}
 		//_transform.position = new Vector3(_transform.position.x, _posY + height, _transform.position.z);
 		m_pTransform->Up(height);
 		//점프시간을 증가시킨다.
@@ -630,7 +653,7 @@ void CPlayer::PlayerFall(float _fTime)
 	//}
 }
 
-void CPlayer::PlayerHeat(float _fTime)
+void CPlayer::PlayerHit(float _fTime)
 {
 	m_bHeat = true;
 	m_fHeatTime += _fTime;
@@ -653,7 +676,9 @@ void CPlayer::PlayerClimbToTop(float _fTime)
 	if (m_pAniController->GetAnimationEnd())
 	{
 		float DestY = ((CColliderAABB*)m_pOtherCol)->GetTop();
-		m_pTransform->SetWorldPosY(DestY);
+		m_pTransform->SetWorldPos(m_pHitCol->GetSphereInfo().vCenter.x,	DestY,
+			m_pHitCol->GetSphereInfo().vCenter.z);
+		m_pTransform->Forward(1.5f);
 		m_bClimbToTop = false;
 		m_ePlayerState = PS_DEFAULT;
 	}
@@ -687,6 +712,7 @@ void CPlayer::CreatePlayerLight()
 }
 
 CPlayer::CPlayer() :
+	m_pChildTransform(NULL),
 	m_fSpeed(5.0f),
 	m_fHeatTime(0.0f),
 	m_iHp(MAXHP),
@@ -721,6 +747,7 @@ CPlayer::CPlayer() :
 
 CPlayer::~CPlayer()
 {		
+	SAFE_RELEASE(m_pChildTransform);
 	SAFE_RELEASE(m_pOtherCol);
 
 	SAFE_RELEASE(m_pCameraArm);

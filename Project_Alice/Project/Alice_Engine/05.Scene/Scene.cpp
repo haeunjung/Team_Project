@@ -267,6 +267,7 @@ CGameObject * CScene::CreateLight(const string & _strKey, LIGHT_TYPE _eType)
 		break;
 	case LT_PLAYERLIGHT:
 		pLight = pLightObject->AddComponent<CPlayerLight>(_strKey);
+		break;
 	case LT_END:
 		break;
 	default:
@@ -355,7 +356,8 @@ void CScene::Input(float _fTime)
 	list<CGameObject*>::iterator	iterObjEnd = m_LightList.end();
 	for (iterObj = m_LightList.begin(); iterObj != iterObjEnd;)
 	{
-		if (false == (*iterObj)->GetIsEnable())
+		if (false == (*iterObj)->GetIsEnable() ||
+			true == (*iterObj)->CheckComponentFromTypeID<CSpotParent>())
 		{
 			++iterObj;
 			continue;
@@ -413,7 +415,8 @@ void CScene::Update(float _fTime)
 	list<CGameObject*>::iterator	iterObjEnd = m_LightList.end();
 	for (iterObj = m_LightList.begin(); iterObj != iterObjEnd;)
 	{
-		if (false == (*iterObj)->GetIsEnable())
+		if (false == (*iterObj)->GetIsEnable() || 
+			true == (*iterObj)->CheckComponentFromTypeID<CSpotParent>())
 		{
 			++iterObj;
 			continue;
@@ -471,7 +474,8 @@ void CScene::LateUpdate(float _fTime)
 	list<CGameObject*>::iterator	iterObjEnd = m_LightList.end();
 	for (iterObj = m_LightList.begin(); iterObj != iterObjEnd;)
 	{
-		if (false == (*iterObj)->GetIsEnable())
+		if (false == (*iterObj)->GetIsEnable() ||
+			true == (*iterObj)->CheckComponentFromTypeID<CSpotParent>())
 		{
 			++iterObj;
 			continue;

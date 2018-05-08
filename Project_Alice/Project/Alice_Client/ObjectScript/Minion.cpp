@@ -113,12 +113,12 @@ void CMinion::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 				
 		if (CC_OBJ == _pDest->GetColliderCheck())
 		{
-			m_pTransform->SetWorldRotY(PI);
+			/*m_pTransform->SetWorldRotY(PI);
 			m_pViewCol->SetSphereInfo(m_pTransform->GetWorldPos() + m_pTransform->GetWorldAxis(AXIS_Z) * 2.5f, 2.5f);
 
-			m_fTime = 0.0f;
-		}
-		
+			m_fTime = 0.0f;*/
+			m_eMonsterState = MS_DEFAULT;
+		}		
 	}	
 }
 
@@ -149,7 +149,7 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 				pParticleTr->Move(DxVector3(0.0f, 1.0f, 0.0f));
 				SAFE_RELEASE(pParticleTr);
 
-				CLayer* pLayer = m_pScene->FindLayer("UILayer");
+				CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 				m_pLayer->AddObject(m_pParticleObj);
 				SAFE_RELEASE(pLayer);
 				//m_pParticleObj->AddRef();

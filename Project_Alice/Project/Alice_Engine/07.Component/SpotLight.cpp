@@ -9,29 +9,10 @@
 
 WOOJUN_USING
 
-bool CSpotLight::Init()
+void CSpotLight::InitSpotLightInfo()
 {
-	//m_pTransform->Move(DxVector3(-5.0f, 0.0f, 0.0f));
-
-	/*CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("PointLight");
-	pSphere->SetSphereInfo(Vec3Zero, 0.25f);
-	SAFE_RELEASE(pSphere);*/
-
-	CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("SpotLight");
-	pRenderer->SetMesh("ColorSphere");
-	pRenderer->SetShader("ColliderColorShader");
-	pRenderer->SetInputLayout("ColorInputLayout");
-	pRenderer->SetRenderState(WIRE_FRAME);
-
-	/*m_pColRay = m_pGameObject->AddComponent<CColliderRay>("SpotColRay");*/
-
-	m_pColSphere = m_pGameObject->AddComponent<CColliderSphere>("SpotColSphere");
-	m_pColSphere->SetSphereInfo(0.0f, 0.0f, 0.0f, 2.0f);
-
-	SAFE_RELEASE(pRenderer);
-
-	m_pTransform->SetWorldRotX(1.0f);
-	m_pTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
+	CTransform* pParentTransform = m_pGameObject->GetParentTransform();
+	m_pTransform->SetWorldPos(pParentTransform->GetWorldPos());
 	m_pTransform->SetWorldRotX(1.3f);
 
 	DxVector3 StartPos = m_pTransform->GetWorldPos();
@@ -50,8 +31,23 @@ bool CSpotLight::Init()
 		}
 	}
 
-	m_ColPos = StartPos;	
+	m_ColPos = StartPos;
 	m_ColDist = m_pTransform->GetWorldPos().Distance(m_ColPos);
+}
+
+bool CSpotLight::Init()
+{
+	CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("SpotLight");
+	pRenderer->SetMesh("ColorSphere");
+	pRenderer->SetShader("ColliderColorShader");
+	pRenderer->SetInputLayout("ColorInputLayout");
+	pRenderer->SetRenderState(WIRE_FRAME);
+
+	m_pColSphere = m_pGameObject->AddComponent<CColliderSphere>("SpotColSphere");
+	m_pColSphere->SetSphereInfo(0.0f, 0.0f, 0.0f, 2.0f);
+	m_pColSphere->SetColCheck(CC_SPOTLIGHT);
+
+	SAFE_RELEASE(pRenderer);
 
 	return true;
 }
@@ -87,6 +83,7 @@ void CSpotLight::LateUpdate(float _fTime)
 
 void CSpotLight::Collision(float _fTime)
 {
+	//m_pColSphere->AddColList()
 }
 
 void CSpotLight::Render(float _fTime)
@@ -104,6 +101,7 @@ void CSpotLight::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _
 
 void CSpotLight::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
+	int a = 0;
 }
 
 void CSpotLight::OnCollisionLeave(CCollider * _pSrc, CCollider * _pDest, float _fTime)

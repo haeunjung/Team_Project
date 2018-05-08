@@ -11,6 +11,8 @@ class DLL CSpotParent :
 private:
 	CGameObject* m_pChild;
 	CSpotLight* m_pChildSpotLight;
+public:
+	void InitChildSpotLight();
 
 private:
 	friend class CGameObject;

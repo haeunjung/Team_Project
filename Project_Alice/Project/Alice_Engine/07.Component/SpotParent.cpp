@@ -34,6 +34,11 @@ CSpotParent::~CSpotParent()
 	SAFE_RELEASE(m_pChild);
 }
 
+void CSpotParent::InitChildSpotLight()
+{
+	m_pChildSpotLight->InitSpotLightInfo();
+}
+
 bool CSpotParent::Init()
 {
 	m_pChild = CGameObject::Create("SpotChild");

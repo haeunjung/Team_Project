@@ -312,23 +312,43 @@ void CMainScene::CreateMainSceneLight()
 	SAFE_RELEASE(pPointLight);
 	SAFE_RELEASE(pLightObject);
 
-	pLightObject = m_pScene->CreateLight("SpotLight", LT_SPOT);
-
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
-	SAFE_RELEASE(pTransform);
-
-	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
-
 	tLightInfo.eType = LT_SPOTPARENT;
 	tLightInfo.vDiffuse = { 0.0f, 0.0f, 0.0f, 1.f };
 	tLightInfo.vAmbient = { 1.0f, 0.5f, 0.0f, 1.f };
 	tLightInfo.vSpecular = { 1.0f, 0.5f, 0.0f, 1.f };
 	tLightInfo.vAttenuation = DxVector3(1.0f, 0.0f, 0.0f);
 
+	CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+
+	pLightObject = m_pScene->CreateLight("SpotLight1", LT_SPOT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
+	SAFE_RELEASE(pTransform);
+
+	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
 	pSpotLight->SetLightInfo(tLightInfo);
+	pSpotLight->InitChildSpotLight();
 	SAFE_RELEASE(pSpotLight);
+
+	pLayer->AddObject(pLightObject);
 	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("SpotLight2", LT_SPOT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(50.0f, 10.0f, 40.0f);
+	SAFE_RELEASE(pTransform);
+
+	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pSpotLight->SetLightInfo(tLightInfo);
+	pSpotLight->InitChildSpotLight();
+	SAFE_RELEASE(pSpotLight);
+
+	pLayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	SAFE_RELEASE(pLayer);
 }
 
 void CMainScene::CreateMonster()
@@ -378,8 +398,8 @@ bool CMainScene::Init()
 	CreateTerrain();
 	//CreateRadioButton();
 	//CreateInventory();	
-	//CreateMainSceneLight();
-	//CreateMonster();
+	CreateMainSceneLight();
+	CreateMonster();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);	
 
@@ -410,12 +430,12 @@ bool CMainScene::Init()
 	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");
 	SAFE_RELEASE(pPlayerScript);
 
-	CCamera*	pCamera = m_pScene->GetMainCamera();
-	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 3.5f, -5.0f));
+	/*CCamera*	pCamera = m_pScene->GetMainCamera();
+	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 3.5f, -5.0f));*/
 
 	SAFE_RELEASE(pPlayerObject);
 
-	SAFE_RELEASE(pCamera);
+	//SAFE_RELEASE(pCamera);
 	SAFE_RELEASE(pCameraObject);
 
 	pCameraObject = m_pScene->CreateCamera("SubCamera"/*, DxVector3(0.0f, 0.0f, -5.0f)*/);

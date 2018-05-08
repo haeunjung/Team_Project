@@ -15,6 +15,8 @@ private:
 	DxVector3 m_ColPos;
 	float m_ColDist;
 	DxVector3 m_Dir;
+public:
+	void InitSpotLightInfo();
 private:
 	friend class CGameObject;
 private:

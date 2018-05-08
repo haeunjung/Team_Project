@@ -228,8 +228,7 @@ bool CCameraArm::RotateY(float _fAngle, float _fTime)
 
 		DxVector3	vAxis[AXIS_MAX];
 		DxVector3	vPos = m_pTransform->GetWorldPos();
-		DxVector3	vPrePos = vPos;
-
+		
 		for (int i = 0; i < AXIS_MAX; ++i)
 		{
 			vAxis[i] = pCamera->GetAxis((AXIS)i);
@@ -244,8 +243,6 @@ bool CCameraArm::RotateY(float _fAngle, float _fTime)
 		for (int i = 0; i < AXIS_MAX; ++i)
 		{
 			vAxis[i] = vAxis[i].TransformNormal(matRot).Normalize();
-
-
 			pCamera->SetAxis(vAxis);
 		}
 

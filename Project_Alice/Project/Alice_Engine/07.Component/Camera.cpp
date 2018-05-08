@@ -66,6 +66,8 @@ void CCamera::Attach(CGameObject * _pGameObject, const DxVector3& _vDist)
 	{
 		m_vAxis[i] = m_pTransform->GetWorldAxis((AXIS)i);
 	}
+
+	m_vAttachPos = _vDist;
 }
 
 void CCamera::Detach()
@@ -192,6 +194,7 @@ void CCamera::Update(float _fTime)
 		DxVector3	vMove = vAttachPos - m_vPrevPos;
 
 		m_pTransform->Move(vMove);
+		//m_pTransform->SetWorldPos(vAttachPos + m_vAttachPos);
 		m_vPrevPos = vAttachPos;
 
 		m_pTransform->SetWorldRot(m_pAttachTransform->GetWorldRot());

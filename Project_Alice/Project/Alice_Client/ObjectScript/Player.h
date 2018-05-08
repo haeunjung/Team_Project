@@ -45,6 +45,7 @@ private:
 	bool	m_bRightCol;
 	bool	m_bFall;
 
+	CTransform*			m_pChildTransform;
 	CAnimation3D*		m_pAniController;
 	CColliderSphere*	m_pAttCol;
 	CColliderSphere*	m_pHitCol;
@@ -86,7 +87,7 @@ private:
 	void PlayerMovingJump(float _fTime);
 	void PlayerClimbIdle();
 	void PlayerFall(float _fTime);
-	void PlayerHeat(float _fTime);
+	void PlayerHit(float _fTime);
 	void PlayerClimbToTop(float _fTime);
 	void CreatePlayerLight();
 public:
