@@ -7,6 +7,7 @@
 #include "MyDepthTarget.h"
 #include "../Engine_Core.h"
 #include "../Device.h"
+#include "../01.Core/Input.h"
 #include "../03.Resource/Sampler.h"
 #include "../03.Resource/ResMgr.h"
 #include "../04.Rendering/Shader.h"
@@ -836,15 +837,18 @@ void CRenderMgr::Render(float _fTime)
 	{
 		m_vecRender[i].clear();
 	}
-	
-	// 렌더타겟을 출력해준다.
-	unordered_map<string, CMyRenderTarget*>::iterator	iter;
-	unordered_map<string, CMyRenderTarget*>::iterator	iterEnd = m_mapRenderTarget.end();
 
-	for (iter = m_mapRenderTarget.begin(); iter != iterEnd; ++iter)
+	if (GET_SINGLE(CInput)->GetIsRenderTarget())
 	{
-		iter->second->Render();
-	}
+		// 렌더타겟을 출력해준다.
+		unordered_map<string, CMyRenderTarget*>::iterator	iter;
+		unordered_map<string, CMyRenderTarget*>::iterator	iterEnd = m_mapRenderTarget.end();
+
+		for (iter = m_mapRenderTarget.begin(); iter != iterEnd; ++iter)
+		{
+			iter->second->Render();
+		}
+	}	
 }
 
 bool CRenderMgr::ObjectZSort(CGameObject * _p1, CGameObject * _p2)

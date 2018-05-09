@@ -33,6 +33,8 @@ void CSpotLight::InitSpotLightInfo()
 
 	m_ColPos = StartPos;
 	m_ColDist = m_pTransform->GetWorldPos().Distance(m_ColPos);
+
+	SAFE_RELEASE(pParentTransform);
 }
 
 bool CSpotLight::Init()

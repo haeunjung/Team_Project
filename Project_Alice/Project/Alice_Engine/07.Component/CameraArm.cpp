@@ -209,14 +209,14 @@ void CCameraArm::SetZoomSpeed(float _fSpeed)
 
 bool CCameraArm::RotateY(float _fAngle, float _fTime)
 {
-	if (0.0f > _fAngle && m_bRCol)
-	{
-		return false;
-	}
-	else if (0.0f < _fAngle && m_bLCol)
-	{
-		return false;
-	}
+	//if (0.0f > _fAngle && m_bRCol)
+	//{
+	//	return false;
+	//}
+	//else if (0.0f < _fAngle && m_bLCol)
+	//{
+	//	return false;
+	//}
 
 	CCamera*	pCamera = m_pGameObject->FindComponentFromTypeID<CCamera>();
 	CGameObject*	pAttachObject = pCamera->GetAttachObject();

@@ -2,14 +2,14 @@
 #include "Transform.h"
 #include "../Device.h"
 #include "DirectXCollision.h"
-#ifdef _DEBUG
+//#ifdef _DEBUG
 #include "../04.Rendering/Shader.h"
 #include "../04.Rendering/ShaderMgr.h"
 #include "../03.Resource/Mesh.h"
 #include "../03.Resource/ResMgr.h"
 #include "../04.Rendering/RenderMgr.h"
 #include "../04.Rendering/RenderState.h"
-#endif // _DEBUG
+//#endif // _DEBUG
 
 WOOJUN_USING
 
@@ -68,58 +68,58 @@ void CCollider::CollisionEnable()
 
 void CCollider::SetMesh(const string & _strKey)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_pMesh = GET_SINGLE(CResMgr)->FindMesh(_strKey);
 	m_pWireFrame = GET_SINGLE(CRenderMgr)->FindRenderState(WIRE_FRAME);
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
 void CCollider::SetShader(const string & _strKey)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_pShader = GET_SINGLE(CShaderMgr)->FindShader(_strKey);
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
 void CCollider::SetInputLayout(const string & _strKey)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_pInputLayout = GET_SINGLE(CShaderMgr)->FindInputLayout(_strKey);
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
 void CCollider::SetColor(float r, float g, float b, float a)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_vColor = DxVector4(r, g, b, a);
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
 void CCollider::Setcolor(const DxVector4 & _vColor)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_vColor = _vColor;
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
 void CCollider::SetColColor(float r, float g, float b, float a)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_vColColor = DxVector4(r, g, b, a);
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
 void CCollider::SetColcolor(const DxVector4 & _vColColor)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_vColColor = _vColColor;
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
@@ -149,7 +149,7 @@ void CCollider::Collision(float _fTime)
 
 void CCollider::Render(float _fTime)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	if (NULL != m_pMesh)
 	{		
 		COLCOLORCBUFFER		tCBuffer = {};
@@ -176,7 +176,7 @@ void CCollider::Render(float _fTime)
 
 		m_pWireFrame->ResetState();
 	}
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
@@ -439,12 +439,12 @@ CCollider::CCollider()
 	SetColor(0.0f, 1.0f, 0.0f, 1.0f);
 	SetColColor(1.0f, 0.0f, 0.0f, 1.0f);
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_pMesh = NULL;
 	m_pShader = NULL;
 	m_pWireFrame = NULL;
 	m_pInputLayout = NULL;
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
@@ -455,7 +455,7 @@ CCollider::CCollider(const CCollider & _Collider) :
 	m_eColCheck = _Collider.m_eColCheck;
 	m_vPrevPos = _Collider.m_vPrevPos;
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_pMesh = _Collider.m_pMesh;
 	m_pShader = _Collider.m_pShader;
 	m_pWireFrame = _Collider.m_pWireFrame;
@@ -478,16 +478,16 @@ CCollider::CCollider(const CCollider & _Collider) :
 	{
 		m_pWireFrame->AddRef();
 	}
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }
 
 CCollider::~CCollider()
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	SAFE_RELEASE(m_pWireFrame);
 	SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_pShader);
-#endif // _DEBUG
+//#endif // _DEBUG
 
 }

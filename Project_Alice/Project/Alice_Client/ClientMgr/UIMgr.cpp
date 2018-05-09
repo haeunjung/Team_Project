@@ -168,7 +168,7 @@ void CUIMgr::CreateSpring(CLayer * _pLayer)
 	m_pSpringTransform = pSpringObject->GetTransform();
 	DxVector3	vScale = { 100.0f, 100.0f, 0.0f };
 	m_pSpringTransform->SetWorldScale(vScale);
-	m_pSpringTransform->SetWorldPos(100.0f, 625.0f, 0.0f);	
+	m_pSpringTransform->SetWorldPos(120.0f, 635.0f, 0.0f);	
 
 	CUIBack*	pUI = pSpringObject->AddComponent<CUIBack>("SpringRendererUI");
 	SAFE_RELEASE(pUI);
@@ -205,7 +205,7 @@ void CUIMgr::CreateSpring(CLayer * _pLayer)
 	pTimeBarRenderer->SetRenderState(ALPHABLEND);
 
 	pMaterial = pTimeBarRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "TimeBar1", L"TimeBar1.png");
+	pMaterial->SetDiffuseTexture("Linear", "TimeBar1", L"TimeBar1_1.png");
 	//pMaterial->SetDiffuseColor(DxVector4(0.5f, 0.5f, 0.5f, 1.0f));
 	SAFE_RELEASE(pMaterial);
 	SAFE_RELEASE(pTimeBarRenderer);

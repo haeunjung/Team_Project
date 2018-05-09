@@ -38,7 +38,7 @@ void CPlayerLight::SetAttachObject(CTransform* _pAttachTransform)
 
 bool CPlayerLight::Init()
 {
-	m_pTransform->SetWorldRotX(1.1f);
+	m_pTransform->SetWorldRotX(1.15f);
 	m_vDir = m_pTransform->GetWorldAxis(AXIS_Z);
 
 	return true;

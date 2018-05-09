@@ -26,6 +26,7 @@ private:
 	class CColliderPoint*	m_pMousePoint;
 
 	bool		m_bRenderTarget;
+	bool		m_bCollider;
 public:
 	void SetWheel(short sWheel);
 	short GetWheelDir()	const;
@@ -33,7 +34,8 @@ public:
 	class CGameObject* GetMouseObj();
 	class CColliderRay* GetMouseRay();
 	class CColliderPoint* GetMousePoint();
-	bool RenderTarget();
+	bool GetIsRenderTarget();
+	bool GetIsCollider();
 public:
 	bool Init();
 	void Update(float fTime);

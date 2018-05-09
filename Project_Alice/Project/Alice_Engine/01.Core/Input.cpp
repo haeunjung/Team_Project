@@ -18,9 +18,15 @@ CInput::CInput()	:
 	m_pCreateKey(NULL),
 	m_pMouseTr(NULL),
 	m_pRay(NULL),
-	m_pMousePoint(NULL),
-	m_bRenderTarget(true)
+	m_pMousePoint(NULL)	
 {
+#ifdef _DEBUG
+	m_bRenderTarget = true;
+	m_bCollider = true;
+#else // !_DEBUG
+	m_bRenderTarget = false;	
+	m_bCollider = false;
+#endif
 }
 
 CInput::~CInput()
@@ -65,9 +71,14 @@ CColliderPoint * CInput::GetMousePoint()
 	return m_pMousePoint;
 }
 
-bool CInput::RenderTarget()
+bool CInput::GetIsRenderTarget()
 {
 	return m_bRenderTarget;
+}
+
+bool CInput::GetIsCollider()
+{
+	return m_bCollider;
 }
 
 bool CInput::Init()
@@ -84,6 +95,7 @@ bool CInput::Init()
 	CreateKey("CameraRight", 'D');
 
 	CreateKey("RenderTarget", VK_F12);
+	CreateKey("Collider", VK_F11);
 	CreateKey("PlayerLight", 'L');
 
 	m_sWheel = 0;
@@ -153,6 +165,11 @@ void CInput::Update(float fTime)
 	if (true == KEYPRESS("RenderTarget"))
 	{
 		m_bRenderTarget = !m_bRenderTarget;
+	}
+
+	if (true == KEYPRESS("Collider"))
+	{
+		m_bCollider = !m_bCollider;
 	}
 }
 

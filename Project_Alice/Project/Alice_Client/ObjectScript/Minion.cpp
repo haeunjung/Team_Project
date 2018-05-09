@@ -113,10 +113,12 @@ void CMinion::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 				
 		if (CC_OBJ == _pDest->GetColliderCheck())
 		{
-			/*m_pTransform->SetWorldRotY(PI);
+			/*m_pTransform->RotateY(PI);
 			m_pViewCol->SetSphereInfo(m_pTransform->GetWorldPos() + m_pTransform->GetWorldAxis(AXIS_Z) * 2.5f, 2.5f);
 
 			m_fTime = 0.0f;*/
+			m_pTransform->RotateY(PI);
+			m_pViewCol->SetSphereInfo(m_pTransform->GetWorldPos() + m_pTransform->GetWorldAxis(AXIS_Z) * 2.5f, 2.5f);
 			m_eMonsterState = MS_DEFAULT;
 		}		
 	}	
@@ -142,7 +144,7 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 
 				DxVector3 vColPos = ((CColliderSphere*)_pDest)->GetSphereInfo().vCenter;
 
-				m_pParticleObj = CGameObject::CreateClone("Particle");
+				/*m_pParticleObj = CGameObject::CreateClone("Particle");
 
 				CTransform*	pParticleTr = m_pParticleObj->GetTransform();
 				pParticleTr->SetWorldPos(vColPos);
@@ -151,10 +153,12 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 
 				CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 				m_pLayer->AddObject(m_pParticleObj);
-				SAFE_RELEASE(pLayer);
+				SAFE_RELEASE(pLayer);*/
 				//m_pParticleObj->AddRef();
 
-				/*CGameObject* pEffect = CGameObject::CreateClone("HitEffect");
+				CLayer* pLayer = m_pScene->FindLayer("UILayer");
+				
+				CGameObject* pEffect = CGameObject::CreateClone("HitEffect");
 
 				CTransform* pTransform = pEffect->GetTransform();				
 				pTransform->SetWorldPos(vColPos);
@@ -162,7 +166,7 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 				pTransform->SetWorldScale(2.0f, 2.0f, 2.0f);
 				SAFE_RELEASE(pTransform);
 
-				m_pLayer->AddObject(pEffect);
+				pLayer->AddObject(pEffect);
 				SAFE_RELEASE(pEffect);
 
 				pEffect = CGameObject::CreateClone("HitEffect");
@@ -173,7 +177,7 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 				pTransform->SetWorldScale(2.0f, 2.0f, 2.0f);
 				SAFE_RELEASE(pTransform);
 
-				m_pLayer->AddObject(pEffect);
+				pLayer->AddObject(pEffect);
 				SAFE_RELEASE(pEffect);
 
 				pEffect = CGameObject::CreateClone("HitEffect");
@@ -184,8 +188,10 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 				pTransform->SetWorldScale(2.0f, 2.0f, 2.0f);
 				SAFE_RELEASE(pTransform);
 
-				m_pLayer->AddObject(pEffect);
-				SAFE_RELEASE(pEffect);*/
+				pLayer->AddObject(pEffect);
+				SAFE_RELEASE(pEffect);
+
+				SAFE_RELEASE(pLayer);
 			}
 		}
 	}
@@ -314,7 +320,7 @@ void CMinion::MonsterDeath()
 			m_pLayer->AddObject(pBattery);
 			SAFE_RELEASE(pBattery);
 
-			m_pParticleObj->Death();
+			//m_pParticleObj->Death();
 			m_pGameObject->Death();
 		}
 	}

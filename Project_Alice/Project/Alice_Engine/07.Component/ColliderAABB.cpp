@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Transform.h"
 #include "ColliderSphere.h"
+#include "../01.Core/Input.h"
 #include "../03.Resource/Mesh.h"
 #include "../05.Scene/Scene.h"
 //#include "../06.GameObject/GameObject.h"
@@ -86,7 +87,10 @@ void CColliderAABB::Collision(float _fTime)
 
 void CColliderAABB::Render(float _fTime)
 {
-#ifdef _DEBUG
+//#ifdef _DEBUG	
+	if (false == GET_SINGLE(CInput)->GetIsCollider())
+		return;
+
 	CCamera*	pCamera = m_pScene->GetMainCamera();
 
 	XMMATRIX	matScale, matRot, matPos;
@@ -118,7 +122,7 @@ void CColliderAABB::Render(float _fTime)
 	m_tTransform.matProj = XMMatrixTranspose(m_tTransform.matProj);
 	m_tTransform.matWV = XMMatrixTranspose(m_tTransform.matWV);
 	m_tTransform.matWVP = XMMatrixTranspose(m_tTransform.matWVP);
-#endif // _DEBUG
+//#endif // _DEBUG
 
 	CCollider::Render(_fTime);
 }

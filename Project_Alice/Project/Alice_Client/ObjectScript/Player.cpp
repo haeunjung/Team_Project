@@ -373,10 +373,13 @@ void CPlayer::PlayerMove(float _fTime)
 			return;
 		}
 
-		if (m_pCameraArm->RotateY(-PI_HALF, _fTime))
+		/*if (m_pCameraArm->RotateY(-PI_HALF, _fTime))
 		{
 			m_pTransform->RotateY(-PI_HALF, _fTime);
-		}		
+		}*/		
+		m_pCameraArm->RotateY(-PI_HALF, _fTime);		
+		m_pTransform->RotateY(-PI_HALF, _fTime);
+		
 	}
 	if (true == KEYPUSH("MoveRight"))
 	{
@@ -385,10 +388,12 @@ void CPlayer::PlayerMove(float _fTime)
 			return;
 		}
 
-		if (m_pCameraArm->RotateY(PI_HALF, _fTime))
+		/*if (m_pCameraArm->RotateY(PI_HALF, _fTime))
 		{
 			m_pTransform->RotateY(PI_HALF, _fTime);
-		}
+		}*/
+		m_pCameraArm->RotateY(PI_HALF, _fTime);
+		m_pTransform->RotateY(PI_HALF, _fTime);
 	}
 }
 

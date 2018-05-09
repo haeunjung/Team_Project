@@ -24,7 +24,7 @@ protected:
 
 	DxVector3		m_Point;
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	// 디버그모드일때만 충돌체 렌더
 	CMesh*				m_pMesh;
 	CShader*			m_pShader;
@@ -33,7 +33,7 @@ protected:
 	TRANSFORMCBUFFER	m_tTransform;
 	DxVector4			m_vColor;
 	DxVector4			m_vColColor;	
-#endif // _DEBUG
+//#endif // _DEBUG
 
 public:
 	COLLIDER_TYPE GetColliderType() const;

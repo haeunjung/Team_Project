@@ -18,54 +18,15 @@ void CToolScene::CreateTerrain()
 
 	CGameObject*	pTerrainObject = CGameObject::Create("TerrainObject");
 
-	CTransform*		pTransform = pTerrainObject->GetTransform();	
+	CTransform*		pTransform = pTerrainObject->GetTransform();
+	//pTransform->SetWorldPos(-32.0f, -1.0f, -32.0f);
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
-	pTerrain->CreateTerrain("Terrain", TERRAINSIZE, TERRAINSIZE, 1, 1/*, "Terrain/Height1.bmp"*/);
-	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/Terrain_Pebbles_01.dds");
-	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/Terrain_Pebbles_01_NRM.bmp");
-	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/Terrain_Pebbles_01_SPEC.bmp");	
-
-	vector<wstring>	vecMultiTex;
-
-	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01.dds");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11.dds");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13.dds");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large.dds");
-
-	pTerrain->SetSplatTexture("TerrainSplat", vecMultiTex);
-
-	// Normal ¼¼ÆÃ
-	vecMultiTex.clear();
-
-	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01_NRM.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_NRM.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_NRM.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_NRM.bmp");
-
-	pTerrain->SetSplatNormalTexture("TerrainSplatNormal", vecMultiTex);
-
-	vecMultiTex.clear();
-
-	vecMultiTex.push_back(L"Terrain/BD_Terrain_Cave_01_SPC.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_11_SPEC.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_13_SPEC.bmp");
-	vecMultiTex.push_back(L"Terrain/Terrain_Cliff_15_Large_SPEC.bmp");
-
-	pTerrain->SetSplatSpecularTexture("TerrainSplatSpecular", vecMultiTex);
-
-	vecMultiTex.clear();
-
-	vecMultiTex.push_back(L"Terrain/RoadAlpha.bmp");
-	vecMultiTex.push_back(L"Terrain/SandBaseAlpha.bmp");
-	vecMultiTex.push_back(L"Terrain/StonAlpha.bmp");
-	vecMultiTex.push_back(L"Terrain/WaterBaseAlpha.bmp");
-
-	pTerrain->SetSplatAlphaTexture("TerrainSplatAlpha", vecMultiTex);
-	pTerrain->SetSplatCount(vecMultiTex.size());
-	vecMultiTex.clear();
-
+	pTerrain->CreateTerrain("Terrain", TERRAINSIZE + 5, TERRAINSIZE, 4, 4/*, "Terrain/Height1.bmp"*/);
+	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_COLOR.png");
+	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_NRM.png");
+	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_SPEC.png");
 	SAFE_RELEASE(pTerrain);
 
 	pMapLayer->AddObject(pTerrainObject);

@@ -58,7 +58,6 @@ void CUIBar::SetMinMax(float _fMin, float _fMax)
 void CUIBar::SetCurValue(float _fValue)
 {
 	float fPreValue = m_fCurValue;
-
 	m_fCurValue = _fValue;
 
 	if (m_fCurValue <= m_fMin)

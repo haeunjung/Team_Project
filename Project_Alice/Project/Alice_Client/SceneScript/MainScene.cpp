@@ -49,13 +49,13 @@ void CMainScene::CreateProtoType()
 	SAFE_RELEASE(pEffectObj);
 
 	// Particle
-	CGameObject*	pParticleObj = CGameObject::Create("Particle", true);	
+	/*CGameObject*	pParticleObj = CGameObject::Create("Particle", true);	
 	CParticleSystem*	pParticle = pParticleObj->AddComponent<CParticleSystem>("Particle");
 	pParticle->SetParticleInfo();
-	pParticle->SetParticleTexture("ParticleSample", L"Effect/Light1.png");
-	pParticle->SetParticleLight(false);
+	pParticle->SetParticleTexture("ParticleSample", L"Effect/PlayerHit2.png");
+	pParticle->SetParticleLight(true);
 	SAFE_RELEASE(pParticle);
-	SAFE_RELEASE(pParticleObj);
+	SAFE_RELEASE(pParticleObj);*/
 }
 
 // TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
@@ -304,7 +304,7 @@ void CMainScene::CreateMainSceneLight()
 	pLightObject = m_pScene->CreateLight("PointLig5", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(70.0f, 7.0f, 15.f);
+	pTransform->SetWorldPos(70.0f, 7.0f, 5.f);
 	SAFE_RELEASE(pTransform);
 
 	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
@@ -323,7 +323,7 @@ void CMainScene::CreateMainSceneLight()
 	pLightObject = m_pScene->CreateLight("SpotLight1", LT_SPOT);
 
 	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(30.0f, 10.0f, 15.0f);
+	pTransform->SetWorldPos(40.0f, 10.0f, 15.0f);
 	SAFE_RELEASE(pTransform);
 
 	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
@@ -338,6 +338,31 @@ void CMainScene::CreateMainSceneLight()
 
 	pTransform = pLightObject->GetTransform();
 	pTransform->SetWorldPos(50.0f, 10.0f, 40.0f);
+	SAFE_RELEASE(pTransform);
+
+	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pSpotLight->SetLightInfo(tLightInfo);
+	pSpotLight->InitChildSpotLight();
+	SAFE_RELEASE(pSpotLight);
+
+	pLayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("SpotLight3", LT_SPOT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(10.0f, 10.0f, 20.0f);
+	SAFE_RELEASE(pTransform);
+
+	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pSpotLight->SetLightInfo(tLightInfo);
+	pSpotLight->InitChildSpotLight();
+	SAFE_RELEASE(pSpotLight);
+
+	pLightObject = m_pScene->CreateLight("SpotLight4", LT_SPOT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(77.0f, 10.0f, 20.0f);
 	SAFE_RELEASE(pTransform);
 
 	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
@@ -373,7 +398,23 @@ void CMainScene::CreateMonster()
 
 	pMinionObj = CGameObject::Create("Minion");
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(85.0f, 0.0f, 30.0f));
+	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 35.0f));
+	SAFE_RELEASE(pMinion);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	pMinionObj = CGameObject::Create("Minion");
+	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 15.0f));
+	SAFE_RELEASE(pMinion);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	pMinionObj = CGameObject::Create("Minion");
+	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -464,6 +505,8 @@ bool CMainScene::Init()
 	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
 	//LoadObject("Table", DxVector3(22.5f, 3.0f, 10.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(10.0f, 0.5f, 10.0f), DxVector3(5.0f, 1.0f, 5.0f), Vec3Zero);
+	//LoadObject("Table_2", DxVector3(5.0f, 0.0f, 5.0f), DxVector3(0.1f, 0.1f, 0.1f), Vec3Zero);
+
 	return true;
 }
 

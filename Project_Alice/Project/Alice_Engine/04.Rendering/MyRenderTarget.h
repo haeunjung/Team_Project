@@ -19,7 +19,7 @@ private:
 	ID3D11RenderTargetView*	m_pOldView;
 	ID3D11DepthStencilView*	m_pOldDepth;
 	float		m_fClearColor[4];
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	bool			m_bRender;
 	CMesh*			m_pMesh;
 	CShader*		m_pShader;
@@ -28,7 +28,7 @@ private:
 	DxVector3		m_vPos;
 	CSampler*		m_pSampler;
 	CRenderState*	m_pZDisable;
-#endif
+//#endif
 public:
 	ID3D11RenderTargetView* GetTargetView() const;
 public:
