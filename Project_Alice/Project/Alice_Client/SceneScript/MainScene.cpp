@@ -6,6 +6,7 @@
 #include "../ObjectScript/Battery.h"
 #include "../ObjectScript/Mouse.h"
 #include "../ObjectScript/HitEffect.h"
+#include "../ObjectScript/MessageBox.h"
 #include "01.Core/Debug.h"
 #include "01.Core/Input.h"
 #include "01.Core/PathMgr.h"
@@ -38,15 +39,22 @@ void CMainScene::CreateProtoType()
 {
 	// Battery 
 	CGameObject*	pBattery = CGameObject::Create("BatteryObject", true);
-	CBattery*	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
-	SAFE_RELEASE(pBattertScript);
-	SAFE_RELEASE(pBattery);
+	if (pBattery)
+	{
+		CBattery*	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
+		SAFE_RELEASE(pBattertScript);
+		SAFE_RELEASE(pBattery);
+	}
+	
 
 	// Effect
 	CGameObject*	pEffectObj = CGameObject::Create("HitEffect", true);
-	CHitEffect*	pEffect = pEffectObj->AddComponent<CHitEffect>("HitEffectScript");
-	SAFE_RELEASE(pEffect);
-	SAFE_RELEASE(pEffectObj);
+	if (pEffectObj)
+	{
+		CHitEffect*	pEffect = pEffectObj->AddComponent<CHitEffect>("HitEffectScript");
+		SAFE_RELEASE(pEffect);
+		SAFE_RELEASE(pEffectObj);
+	}
 
 	// Particle
 	/*CGameObject*	pParticleObj = CGameObject::Create("Particle", true);	
@@ -210,41 +218,7 @@ void CMainScene::CreateTerrain()
 
 void CMainScene::CreateInventory()
 {
-	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
-
-	CGameObject*	pCheckButtonObject = CGameObject::Create("CheckButtonObject");
-
-	CTransform*	pTransform = pCheckButtonObject->GetTransform();
-	DxVector3	vScale = { 400.0f, 250.0f, 1.0f };
-	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(400.0f, 100.0f, 0.0f);
-	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
-
-	CColliderRect*	pColRect = pCheckButtonObject->AddComponent<CColliderRect>("ButtonCol");
-	DxVector3	vPos = pTransform->GetWorldPos();
-	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
-
-	SAFE_RELEASE(pColRect);
-	SAFE_RELEASE(pTransform);
-
-	CRenderer2D*	pRenderer = pCheckButtonObject->AddComponent<CRenderer2D>("CheckButtonRenderer2D");
-	pRenderer->SetMesh("UIMesh");
-	pRenderer->SetShader(UI_SHADER);
-	pRenderer->SetInputLayout("TexInputLayout");
-	pRenderer->SetRenderState(ALPHABLEND);
-
-	CMaterial*	pMaterial = pRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "InvenBox", L"mjh.jpg");
-	SAFE_RELEASE(pMaterial);
-	SAFE_RELEASE(pRenderer);
-
-	CUIBack*	pUIBack = pCheckButtonObject->AddComponent<CUIBack>("InvenBox");
-	SAFE_RELEASE(pUIBack);
-
-	pUILayer->AddObject(pCheckButtonObject);
-	SAFE_RELEASE(pCheckButtonObject);
-
-	SAFE_RELEASE(pUILayer);
+	
 }
 
 void CMainScene::CreateMainSceneLight()
@@ -359,6 +333,9 @@ void CMainScene::CreateMainSceneLight()
 	pSpotLight->InitChildSpotLight();
 	SAFE_RELEASE(pSpotLight);
 
+	pLayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
 	pLightObject = m_pScene->CreateLight("SpotLight4", LT_SPOT);
 
 	pTransform = pLightObject->GetTransform();
@@ -376,13 +353,14 @@ void CMainScene::CreateMainSceneLight()
 	SAFE_RELEASE(pLayer);
 }
 
-void CMainScene::CreateMonster()
+void CMainScene::CreateMonster(CPlayer* _pPlayer)
 {
 	CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 
 	CGameObject*	pMinionObj = CGameObject::Create("Minion");
 	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 10.0f));
+	pMinion->SetPlayer(_pPlayer);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -391,6 +369,7 @@ void CMainScene::CreateMonster()
 	pMinionObj = CGameObject::Create("Minion");
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 40.0f));	
+	pMinion->SetPlayer(_pPlayer);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -399,6 +378,7 @@ void CMainScene::CreateMonster()
 	pMinionObj = CGameObject::Create("Minion");
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 35.0f));
+	pMinion->SetPlayer(_pPlayer);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -407,6 +387,7 @@ void CMainScene::CreateMonster()
 	pMinionObj = CGameObject::Create("Minion");
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 15.0f));
+	pMinion->SetPlayer(_pPlayer);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -415,6 +396,7 @@ void CMainScene::CreateMonster()
 	pMinionObj = CGameObject::Create("Minion");
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
+	pMinion->SetPlayer(_pPlayer);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -423,6 +405,7 @@ void CMainScene::CreateMonster()
 	pMinionObj = CGameObject::Create("Minion");
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 10.0f));
+
 	pMinion->SetIsTest(true);
 	SAFE_RELEASE(pMinion);
 
@@ -438,9 +421,7 @@ bool CMainScene::Init()
 	CreateObject();
 	CreateTerrain();
 	//CreateRadioButton();
-	//CreateInventory();	
 	CreateMainSceneLight();
-	CreateMonster();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);	
 
@@ -469,6 +450,9 @@ bool CMainScene::Init()
 	pPlayerObject->AddRef();
 
 	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");
+
+	// 몬스터 생성 시 플레이어 정보 넘겨줌
+	CreateMonster(pPlayerScript);
 	SAFE_RELEASE(pPlayerScript);
 
 	/*CCamera*	pCamera = m_pScene->GetMainCamera();

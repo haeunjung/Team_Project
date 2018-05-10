@@ -24,6 +24,7 @@
     <ClInclude Include="ObjectScript\Battery.h" />
     <ClInclude Include="ObjectScript\BatteryCount.h" />
     <ClInclude Include="ObjectScript\HitEffect.h" />
+    <ClInclude Include="ObjectScript\MessageBox.h" />
     <ClInclude Include="ObjectScript\MonsterBullet.h" />
     <ClInclude Include="ObjectScript\Minion.h" />
     <ClInclude Include="ObjectScript\Mouse.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="ObjectScript\Battery.cpp" />
     <ClCompile Include="ObjectScript\BatteryCount.cpp" />
     <ClCompile Include="ObjectScript\HitEffect.cpp" />
+    <ClCompile Include="ObjectScript\MessageBox.cpp" />
     <ClCompile Include="ObjectScript\MonsterBullet.cpp" />
     <ClCompile Include="ObjectScript\Minion.cpp" />
     <ClCompile Include="ObjectScript\Mouse.cpp" />

@@ -3,6 +3,7 @@
 #include "../06.GameObject/GameObject.h"
 #include "Renderer2D.h"
 #include "Material.h"
+#include "Collider.h"
 
 WOOJUN_USING
 
@@ -84,13 +85,16 @@ void CUIButton::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _f
 
 void CUIButton::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
-	if (true == KEYPUSH("LButton"))
+	if (COL_POINT == _pDest->GetColliderType())
 	{
-		m_eButtonState = BS_CLICK;
-	}
-	else
-	{
-		m_eButtonState = BS_MOUSEON;
+		if (true == KEYPRESS("LButton"))
+		{
+			m_eButtonState = BS_CLICK;
+		}
+		else
+		{
+			m_eButtonState = BS_MOUSEON;
+		}
 	}
 }
 

@@ -23,7 +23,8 @@ enum PLAYER_STATE
 	PS_CLIMBIDLE,
 	PS_FALL,
 	PS_HEAT,
-	PS_CLIMBTOUP
+	PS_CLIMBTOUP,
+	PS_DEATH
 };
 
 class CPlayer : public CScript
@@ -34,6 +35,7 @@ private:
 	bool	m_bJump;
 	bool	m_bHeat;
 	bool	m_bClimbToTop;
+	bool	m_bDeath;
 
 	float	m_fHeatTime;
 	float	m_fSpeed;
@@ -67,8 +69,11 @@ private:
 	float m_fGravity;
 
 	float m_fy;
+	float m_fz;
 public:
 	void AniCallback(float _fTime);
+	bool PlayerStateIsDeath();
+	const PLAYER_STATE& GetPlayerState() const;
 public:
 	bool Init() override;
 	void Input(float _fTime) override;
@@ -88,7 +93,8 @@ private:
 	void PlayerClimbIdle();
 	void PlayerFall(float _fTime);
 	void PlayerHit(float _fTime);
-	void PlayerClimbToTop(float _fTime);
+	void PlayerClimbToTop();
+	void PlayerDeath();
 	void CreatePlayerLight();
 public:
 	CPlayer();

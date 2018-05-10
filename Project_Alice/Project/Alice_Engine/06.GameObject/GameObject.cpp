@@ -24,7 +24,8 @@ CGameObject * CGameObject::Create(const string & _strTag, bool _IsPrototype /*= 
 		// 프로토타입 중복검사
 		if (false == CheckProtoType(_strTag))
 		{
-			assert(false);
+			//assert(false);
+			SAFE_RELEASE(pGameObject);
 			return NULL;
 		}				
 		// 맵에 인서트 할꺼니까 참조카운트++
@@ -700,4 +701,8 @@ CGameObject::~CGameObject()
 	SAFE_RELEASE(m_pTransform);
 
 	Safe_Release_VecList(m_listComponent);	
+
+	// 프로토타입 지우기??
+	/*m_mapPrototype;
+	Safe_Release_Map(m_mapPrototype);*/
 }

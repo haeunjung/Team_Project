@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "MessageBox.h"
 #include "01.Core/Input.h"
 #include "01.Core/Debug.h"
 #include "05.Scene/Layer.h"
@@ -14,14 +15,21 @@
 #include "07.Component/Animation2D.h"
 #include "07.Component/Renderer2D.h"
 #include "07.Component/PlayerLight.h"
-
-#include "RotBullet.h"
-#include "PlayerBullet.h"
 #include "../ClientMgr/UIMgr.h"
 
 void CPlayer::AniCallback(float _fTime)
 {
 	int a = 0;
+}
+
+bool CPlayer::PlayerStateIsDeath()
+{
+	return m_bDeath;
+}
+
+const PLAYER_STATE & CPlayer::GetPlayerState() const
+{
+	return m_ePlayerState;
 }
 
 bool CPlayer::Init()
@@ -41,6 +49,7 @@ bool CPlayer::Init()
 	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");	
 	m_fy = pPlayerRenderer->GetMeshSize().y;
+	m_fz = pPlayerRenderer->GetMeshSize().z;
 	SAFE_RELEASE(pPlayerRenderer);
 
 	m_pTransform->SetLocalPos(0.0f, m_fy * 0.5f, 0.0f);
@@ -52,13 +61,13 @@ bool CPlayer::Init()
 	//m_pAniController->AddClipCallback<CPlayer>("Run", 0.5f, this, &CPlayer::AniCallback);
 
 	m_pAttCol = m_pGameObject->AddComponent<CColliderSphere>("PlayerAtt");
-	m_pAttCol->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.5f);
+	m_pAttCol->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.3f);
 	m_pAttCol->SetBoneIndex(m_pAniController->FindBoneIndex("mixamorig:RightHand"));
 	m_pAttCol->SetColCheck(CC_PLAYER_ATT);
 	m_pAttCol->SetIsEnable(false);
 	
 	m_pHitCol = m_pGameObject->AddComponent<CColliderSphere>("PlayerHit");
-	m_pHitCol->SetSphereInfo(0.0f, 0.0f, 0.0f, 0.5f);
+	m_pHitCol->SetSphereInfo(0.0f, 0.0f, 0.0f, 0.7f);
 	m_pHitCol->SetBoneIndex(m_pAniController->FindBoneIndex("mixamorig:Spine"));
 	m_pHitCol->SetColCheck(CC_PLAYER_HIT);
 
@@ -89,7 +98,7 @@ bool CPlayer::Init()
 
 void CPlayer::Input(float _fTime)
 {
-	if (m_bAttack || m_bHeat || m_bClimbToTop)
+	if (m_bAttack || m_bHeat || m_bClimbToTop || m_bDeath)
 	{
 		return;
 	}
@@ -183,7 +192,10 @@ void CPlayer::Update(float _fTime)
 		PlayerHit(_fTime);
 		break;
 	case PS_CLIMBTOUP:
-		PlayerClimbToTop(_fTime);
+		PlayerClimbToTop();
+		break;
+	case PS_DEATH:
+		PlayerDeath();
 		break;
 	}
 }
@@ -202,9 +214,17 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 			pCamera->ActionCameraOn();
 			SAFE_RELEASE(pCamera);
 
-			m_ePlayerState = PS_HEAT;
-
 			_pDest->SetIsEnable(false);
+
+			if (0 >= m_iHp)
+			{
+				m_ePlayerState = PS_DEATH;
+				m_pAniController->ChangeClip("Death");
+			}
+			else
+			{
+				m_ePlayerState = PS_HEAT;
+			}
 		}
 	}
 	
@@ -301,7 +321,10 @@ void CPlayer::OnCollisionLeave(CCollider * _pSrc, CCollider * _pDest, float _fTi
 		m_bLeftCol = false;
 		m_bRightCol = false;
 
-		m_pFootCol->SetIsEnable(true);
+		if (PS_CLIMBTOUP != m_ePlayerState)
+		{
+			m_pFootCol->SetIsEnable(true);
+		}		
 	}
 
 	if (CC_PLAYER_FOOT == _pSrc->GetColliderCheck() &&
@@ -671,21 +694,53 @@ void CPlayer::PlayerHit(float _fTime)
 	}
 }
 
-void CPlayer::PlayerClimbToTop(float _fTime)
+void CPlayer::PlayerClimbToTop()
 {
-	CCamera* pCamera = m_pScene->GetMainCamera();
-	//pCamera->attac;
-
+	char Buf[256]{};
+	DxVector3 vPos = m_pHitCol->GetSphereInfo().vCenter;
+	sprintf_s(Buf, "X : %.2f, Y : %.2f, Z : %.2f\n", vPos.x, vPos.y, vPos.z);
+	CDebug::OutputConsole(Buf);
 	m_pTransform->SetLocalPosZ(-0.5f);
 	m_bClimbToTop = true;
+
 	if (m_pAniController->GetAnimationEnd())
 	{
+		/*vPos = m_pHitCol->GetSphereInfo().vCenter;
+		sprintf_s(Buf, "X : %.2f, Y : %.2f, Z : %.2f\n", vPos.x, vPos.y, vPos.z);
+		CDebug::OutputConsole(Buf);*/
+
 		float DestY = ((CColliderAABB*)m_pOtherCol)->GetTop();
 		m_pTransform->SetWorldPos(m_pHitCol->GetSphereInfo().vCenter.x,	DestY,
 			m_pHitCol->GetSphereInfo().vCenter.z);
 		m_pTransform->Forward(1.5f);
 		m_bClimbToTop = false;
 		m_ePlayerState = PS_DEFAULT;
+	}
+}
+
+void CPlayer::PlayerDeath()
+{
+	m_bDeath = true;
+	if (m_pAniController->CheckClipName("DeathLoop"))
+	{		
+		return;
+	}
+
+	if (0.9f <= m_pAniController->GetAnimationProgress())
+	{
+		// Message Box
+		CGameObject* pMsgObj = CGameObject::Create("MsgObj");
+
+		CLayer* pUILayer = m_pScene->FindLayer("UILayer");
+		pUILayer->AddObject(pMsgObj);
+
+		CMessageBox* pMsgScript = pMsgObj->AddComponent<CMessageBox>("MsgScript");
+		SAFE_RELEASE(pMsgScript);
+
+		SAFE_RELEASE(pUILayer);
+		SAFE_RELEASE(pMsgObj);
+
+		m_pAniController->ChangeClip("DeathLoop");		
 	}
 }
 
@@ -722,6 +777,7 @@ CPlayer::CPlayer() :
 	m_fHeatTime(0.0f),
 	m_iHp(MAXHP),
 	m_ePlayerState(PS_DEFAULT),
+	m_bDeath(false),
 	m_bAttack(false),
 	m_bJump(false),
 	m_bHeat(false),

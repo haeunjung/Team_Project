@@ -53,6 +53,9 @@
     <Filter Include="03. ObjectScript\07. HitEffect">
       <UniqueIdentifier>{e122a0a2-f305-4d67-838b-e7974ef170da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. ObjectScript\08. MessageBox">
+      <UniqueIdentifier>{515fec08-bcc3-41d3-85a0-9b6352de53cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneScript\MainScene.h">
@@ -106,6 +109,9 @@
     <ClInclude Include="ObjectScript\HitEffect.h">
       <Filter>03. ObjectScript\07. HitEffect</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectScript\MessageBox.h">
+      <Filter>03. ObjectScript\08. MessageBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -155,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="ObjectScript\HitEffect.cpp">
       <Filter>03. ObjectScript\07. HitEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\MessageBox.cpp">
+      <Filter>03. ObjectScript\08. MessageBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -260,12 +260,12 @@ CEngine_Core::CEngine_Core() : m_hInst(NULL), m_fMainDeltaTime(0.0f)
 {
 	srand(GetCurrentTime());
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(110644);
+	//_CrtSetBreakAlloc(859535);
 
 	new int();
 
 #ifdef _DEBUG
-	//AllocConsole();
+	AllocConsole();
 #endif
 }
 
@@ -284,7 +284,7 @@ CEngine_Core::~CEngine_Core()
 
 	SAFE_RELEASE(m_pMainTimer);
 #ifdef _DEBUG
-	//FreeConsole();
+	FreeConsole();
 #endif
 }
 

@@ -15,13 +15,14 @@ enum MONSTER_STATE
 	MS_DEATH
 };
 
+class CPlayer;
 class CMinion : public CScript
 {
 private:
 	MONSTER_STATE	m_eMonsterState;
 	CAnimation3D*	m_pAniController;
-	CGameObject*	m_pPlayer;
 	CTransform*		m_pPlayerTransform;
+	CPlayer*		m_pPlayerScript;
 
 	float	m_fSpeed;
 	float	m_fTime;
@@ -39,7 +40,7 @@ public:
 		m_bTest = _bTest;
 	}
 public:
-	void SetPlayer(CGameObject* _pPlayer);
+	void SetPlayer(CPlayer* _pPlayer);
 	void SetMonsterWorldPos(const DxVector3 _Pos);
 public:
 	bool Init() override;	

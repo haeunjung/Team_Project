@@ -1,21 +1,21 @@
 #include "Minion.h"
 #include "Battery.h"
+#include "Player.h"
 #include "01.Core/Debug.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/Transform.h"
 #include "05.Scene/Scene.h"
 #include "05.Scene/Layer.h"
-#include "MonsterBullet.h"
-#include "PlayerBullet.h"
 #include "07.Component/ColliderSphere.h"
 #include "07.Component/Collider.h"
 #include "HitEffect.h"
 
-void CMinion::SetPlayer(CGameObject * _pPlayer)
+void CMinion::SetPlayer(CPlayer * _pPlayer)
 {
-	SAFE_RELEASE(m_pPlayer);
+	SAFE_RELEASE(m_pPlayerScript);
 	_pPlayer->AddRef();
-	m_pPlayer = _pPlayer;
+	m_pPlayerScript = _pPlayer;
+	//m_pPlayerScript->AddRef();
 }
 
 void CMinion::SetMonsterWorldPos(const DxVector3 _Pos)
@@ -41,7 +41,7 @@ bool CMinion::Init()
 	//m_pAniController->AddClipCallback<CPlayer>("Run", 0.5f, this, &CPlayer::AniCallback);
 
 	CColliderSphere*	pSphere = m_pGameObject->AddComponent<CColliderSphere>("MinionColSphere");
-	pSphere->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.5f);
+	pSphere->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.7f);
 	pSphere->SetBoneIndex(m_pAniController->FindBoneIndex("Bone09"));
 	pSphere->SetColCheck(CC_HIT);
 	SAFE_RELEASE(pSphere);
@@ -57,7 +57,7 @@ bool CMinion::Init()
 	m_pViewCol->SetColCheck(CC_VIEW);
 
 	m_pAttCol = m_pGameObject->AddComponent<CColliderSphere>("MonsterAttCol");
-	m_pAttCol->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.5f);
+	m_pAttCol->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 1.5f);
 	m_pAttCol->SetBoneIndex(m_pAniController->FindBoneIndex("Bone16"));
 	m_pAttCol->SetColCheck(CC_ATT);
 	m_pAttCol->SetIsEnable(false);
@@ -101,6 +101,11 @@ void CMinion::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 		return;
 	}
 
+	if (MS_TRACE == m_eMonsterState)
+	{
+		return;
+	}
+
 	if (CC_VIEW == _pSrc->GetColliderCheck())
 	{
 		if (CC_PLAYER_HIT == _pDest->GetColliderCheck())
@@ -115,7 +120,6 @@ void CMinion::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 		{
 			/*m_pTransform->RotateY(PI);
 			m_pViewCol->SetSphereInfo(m_pTransform->GetWorldPos() + m_pTransform->GetWorldAxis(AXIS_Z) * 2.5f, 2.5f);
-
 			m_fTime = 0.0f;*/
 			m_pTransform->RotateY(PI);
 			m_pViewCol->SetSphereInfo(m_pTransform->GetWorldPos() + m_pTransform->GetWorldAxis(AXIS_Z) * 2.5f, 2.5f);
@@ -255,6 +259,12 @@ void CMinion::MonsterWalk(float _fTime)
 
 void CMinion::MonsterTrace(float _fTime)
 {
+	PLAYER_STATE PlayerState = m_pPlayerScript->GetPlayerState();
+	if (PS_DEATH == PlayerState || PS_CLIMB == PlayerState || PS_CLIMBIDLE == PlayerState)
+	{
+		m_eMonsterState = MS_DEFAULT;
+	}
+
 	m_pTransform->LookAt(m_pPlayerTransform);
 	m_pViewCol->SetSphereInfo(m_pTransform->GetWorldPos() + m_pTransform->GetWorldAxis(AXIS_Z) * 2.5f, 2.5f);
 
@@ -280,6 +290,12 @@ void CMinion::MonsterTrace(float _fTime)
 
 void CMinion::MonsterAttack()
 {
+	PLAYER_STATE PlayerState = m_pPlayerScript->GetPlayerState();
+	if (PS_DEATH == PlayerState || PS_CLIMB == PlayerState || PS_CLIMBIDLE == PlayerState)
+	{
+		m_eMonsterState = MS_DEFAULT;
+	}
+
 	if (true == m_pAniController->CheckClipName("Attack"))
 	{		
 		if (40 == m_pAniController->GetAnimationProgressFrame())
@@ -331,7 +347,7 @@ void CMinion::MonsterDeath()
 }
 
 CMinion::CMinion() :
-	m_pPlayer(NULL),
+	m_pPlayerScript(NULL),
 	m_pPlayerTransform(NULL),
 	m_pAniController(NULL),
 	m_fSpeed(2.0f),
@@ -351,7 +367,7 @@ CMinion::CMinion(const CMinion & _Minion) :
 	CScript(_Minion)
 {
 	//m_pAniController
-	m_pPlayer = NULL;
+	m_pPlayerScript = NULL;
 	m_fTime = _Minion.m_fTime;
 }
 
@@ -359,7 +375,7 @@ CMinion::~CMinion()
 {		
 	SAFE_RELEASE(m_pParticleObj);
 	SAFE_RELEASE(m_pPlayerTransform);
-	SAFE_RELEASE(m_pPlayer);
+	SAFE_RELEASE(m_pPlayerScript);
 	SAFE_RELEASE(m_pAniController);
 	SAFE_RELEASE(m_pViewCol);
 	SAFE_RELEASE(m_pAttCol);

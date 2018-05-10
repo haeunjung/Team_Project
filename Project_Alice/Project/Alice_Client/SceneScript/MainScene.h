@@ -5,6 +5,7 @@
 
 WOOJUN_USING
 
+class CPlayer;
 class CMainScene : public CSceneScript
 {
 private:
@@ -21,7 +22,7 @@ private:
 	void CreateTerrain();
 	void CreateInventory();	
 	void CreateMainSceneLight();
-	void CreateMonster();	
+	void CreateMonster(CPlayer* _pPlayer);
 public:
 	virtual bool Init();
 	virtual void Update(float _fTime);
