@@ -50,11 +50,11 @@
     <Filter Include="03. ObjectScript\06. TimeBar">
       <UniqueIdentifier>{89ed31d8-9f57-4b0a-a168-03f0aefe62c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. ObjectScript\07. HitEffect">
-      <UniqueIdentifier>{e122a0a2-f305-4d67-838b-e7974ef170da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. ObjectScript\08. MessageBox">
       <UniqueIdentifier>{515fec08-bcc3-41d3-85a0-9b6352de53cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\07. Effect">
+      <UniqueIdentifier>{e122a0a2-f305-4d67-838b-e7974ef170da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -107,10 +107,16 @@
       <Filter>03. ObjectScript\06. TimeBar</Filter>
     </ClInclude>
     <ClInclude Include="ObjectScript\HitEffect.h">
-      <Filter>03. ObjectScript\07. HitEffect</Filter>
+      <Filter>03. ObjectScript\07. Effect</Filter>
     </ClInclude>
     <ClInclude Include="ObjectScript\MessageBox.h">
       <Filter>03. ObjectScript\08. MessageBox</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientMgr\MinionMgr.h">
+      <Filter>05. ClientMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\PlayerHitEffect.h">
+      <Filter>03. ObjectScript\07. Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,10 +166,16 @@
       <Filter>03. ObjectScript\06. TimeBar</Filter>
     </ClCompile>
     <ClCompile Include="ObjectScript\HitEffect.cpp">
-      <Filter>03. ObjectScript\07. HitEffect</Filter>
+      <Filter>03. ObjectScript\07. Effect</Filter>
     </ClCompile>
     <ClCompile Include="ObjectScript\MessageBox.cpp">
       <Filter>03. ObjectScript\08. MessageBox</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientMgr\MinionMgr.cpp">
+      <Filter>05. ClientMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\PlayerHitEffect.cpp">
+      <Filter>03. ObjectScript\07. Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,10 +5,12 @@
 #include "07.Component/Transform.h"
 #include "07.Component/Material.h"
 #include "07.Component/UIBack.h"
+#include "../ObjectScript/Player.h"
 
 CTimeBar::CTimeBar() :
 	m_pUIBar(NULL),
-	m_fTime(120.0f)
+	m_fTime(180.0f),
+	m_pPlayer(NULL)
 {
 	SetTag("Spring");
 	SetTypeName("CSpring");
@@ -22,6 +24,7 @@ CTimeBar::CTimeBar(const CTimeBar & _Spring) :
 
 CTimeBar::~CTimeBar()
 {
+	SAFE_RELEASE(m_pPlayer);
 	SAFE_RELEASE(m_pUIBar);
 }
 
@@ -30,9 +33,20 @@ void CTimeBar::GetTime()
 	m_fTime += 10;
 }
 
+void CTimeBar::SetPlayer(CPlayer * _pPlayer)
+{
+	if (_pPlayer)
+	{
+		SAFE_RELEASE(m_pPlayer);
+		_pPlayer->AddRef();
+		m_pPlayer = _pPlayer;
+	}
+	
+}
+
 bool CTimeBar::Init()
 {	
-	DxVector3 vScale = { 1000.0f, 50.0f, 1.0f };
+	DxVector3 vScale = { 1020.0f, 50.0f, 1.0f };
 	DxVector3 vPos = { 135.0f, 610.0f, 500.0f };		
 	
 	m_pTransform->SetWorldScale(vScale);
@@ -60,13 +74,20 @@ bool CTimeBar::Init()
 
 void CTimeBar::Update(float _fTime)
 {
-	m_fTime -= _fTime;
-	if (m_fTime <= 0.0f)
+	if (PS_DEATH == m_pPlayer->GetPlayerState())
 	{
-		//int a = 0;
+		return;
+	}
+
+	// 5.0f
+	m_fTime -= _fTime;
+	if (m_fTime <= 5.0f)
+	{
+		m_pPlayer->SetPlayerDeath();
 	}
 
 	m_pUIBar->SetCurValue(m_fTime);
+
 	if (true == KEYPRESS("F1"))
 	{
 		if (0 < m_fTime)
@@ -77,7 +98,7 @@ void CTimeBar::Update(float _fTime)
 	}
 	else if (true == KEYPRESS("F2"))
 	{
-		if (120.0f > m_fTime)
+		if (170.0f > m_fTime)
 		{
 			m_fTime += 10;
 			m_pUIBar->SetCurValue(m_fTime);

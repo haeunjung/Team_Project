@@ -1,11 +1,14 @@
 #pragma once
 #include "07.Component/Script.h"
+#include "07.Component/SoundPlayer.h"
 
 WOOJUN_USING
 
 class CBattery : public CScript
 {
 private:
+	CSoundPlayer * m_pGetBatterySound;
+
 	float m_fSpeed;
 	bool m_IsCreate;
 public:

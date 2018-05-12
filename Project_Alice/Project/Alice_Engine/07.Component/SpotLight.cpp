@@ -46,7 +46,7 @@ bool CSpotLight::Init()
 	pRenderer->SetRenderState(WIRE_FRAME);
 
 	m_pColSphere = m_pGameObject->AddComponent<CColliderSphere>("SpotColSphere");
-	m_pColSphere->SetSphereInfo(0.0f, 0.0f, 0.0f, 2.0f);
+	m_pColSphere->SetSphereInfo(100.0f, 100.0f, 100.0f, 2.0f);
 	m_pColSphere->SetColCheck(CC_SPOTLIGHT);
 
 	SAFE_RELEASE(pRenderer);

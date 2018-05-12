@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "PlayerHitEffect.h"
 #include "MessageBox.h"
 #include "01.Core/Input.h"
 #include "01.Core/Debug.h"
@@ -16,10 +17,23 @@
 #include "07.Component/Renderer2D.h"
 #include "07.Component/PlayerLight.h"
 #include "../ClientMgr/UIMgr.h"
+#include "../ClientMgr/MinionMgr.h"
 
-void CPlayer::AniCallback(float _fTime)
+bool CPlayer::m_bCheat = false;
+
+void CPlayer::CheatKey()
 {
-	int a = 0;
+	m_bCheat = !m_bCheat;
+}
+
+void CPlayer::FirstStepSound(float _fTime)
+{
+	m_pHitSound->MyPlaySound("Step.wav");
+}
+
+void CPlayer::SecondStepSound(float _fTime)
+{
+	m_pAttackSound->MyPlaySound("Step.wav");
 }
 
 bool CPlayer::PlayerStateIsDeath()
@@ -30,6 +44,20 @@ bool CPlayer::PlayerStateIsDeath()
 const PLAYER_STATE & CPlayer::GetPlayerState() const
 {
 	return m_ePlayerState;
+}
+
+void CPlayer::SetPlayerDeath()
+{
+	if (!m_bCheat)
+	{
+		m_ePlayerState = PS_DEATH;
+		m_pAniController->ChangeClip("Death");
+	}	
+}
+
+void CPlayer::PlayAttackSound()
+{
+	m_pAttackSound->MyPlaySound("PlayerAttack.wav");
 }
 
 bool CPlayer::Init()
@@ -53,12 +81,13 @@ bool CPlayer::Init()
 	SAFE_RELEASE(pPlayerRenderer);
 
 	m_pTransform->SetLocalPos(0.0f, m_fy * 0.5f, 0.0f);
-	m_pTransform->SetWorldPos(30.0f, 0.0f, 15.0f);
+	m_pTransform->SetWorldPos(5.0f, 0.0f, 5.0f);
 	m_pTransform->SetWorldScale(1.0f, 1.0f, 1.0f);
 	m_pTransform->SetLocalRot(-PI_HALF, PI, 0.0f);
 
 	m_pAniController = (CAnimation3D*)m_pGameObject->FindComponentFromType(CT_ANIMATION3D);
-	//m_pAniController->AddClipCallback<CPlayer>("Run", 0.5f, this, &CPlayer::AniCallback);
+	//m_pAniController->AddClipCallback<CPlayer>("Run", 0.2f, this, &CPlayer::FirstStepSound);
+	//m_pAniController->AddClipCallback<CPlayer>("Run", 0.8f, this, &CPlayer::SecondStepSound);
 
 	m_pAttCol = m_pGameObject->AddComponent<CColliderSphere>("PlayerAtt");
 	m_pAttCol->SetSphereInfo(Vector3(0.0f, 0.0f, 0.0f), 0.3f);
@@ -80,6 +109,10 @@ bool CPlayer::Init()
 	m_pCameraArm = (CCameraArm*)pCameraObject->FindComponentFromType(CT_CAMERAARM);	
 	SAFE_RELEASE(pCameraObject);
 
+	m_pHitSound = m_pGameObject->AddComponent<CSoundPlayer>("HitSound");
+	m_pAttackSound = m_pGameObject->AddComponent<CSoundPlayer>("AttackSound");
+	m_pWarningSound = m_pGameObject->AddComponent<CSoundPlayer>("WarningSound");
+
 	CreatePlayerLight();
 
 	GET_SINGLE(CInput)->CreateKey("MoveForward", VK_UP);
@@ -91,7 +124,6 @@ bool CPlayer::Init()
 	GET_SINGLE(CInput)->CreateKey("Attack", VK_CONTROL);
 	GET_SINGLE(CInput)->CreateKey("Jump", VK_SPACE);
 	GET_SINGLE(CInput)->CreateKey("ChangeCamera", 'C');
-	GET_SINGLE(CInput)->CreateKey("HitPlayer", VK_F5);
 
 	return true;
 }
@@ -200,6 +232,22 @@ void CPlayer::Update(float _fTime)
 	}
 }
  
+void CPlayer::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTime)
+{
+	if (PS_DEATH == m_ePlayerState)
+	{
+		return;
+	}
+
+	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
+		CC_SPOTLIGHT == _pDest->GetColliderCheck())
+	{
+		GET_SINGLE(CMinionMgr)->MinionListDistCheck();
+		m_pWarningSound->MyPlaySound("Warning.wav");
+	}
+	
+}
+
 void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
 	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck())
@@ -207,6 +255,10 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 		if ("MonsterAttCol" == _pDest->GetTagStr() &&
 			true == _pDest->GetIsEnable())
 		{
+			m_pHitSound->MyPlaySound("PlayerHit.mp3");
+
+			PlayerHitEffect();
+
 			m_iHp -= 1;
 			GET_SINGLE(CUIMgr)->SetHp(m_iHp);
 
@@ -216,22 +268,15 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 
 			_pDest->SetIsEnable(false);
 
-			if (0 >= m_iHp)
+			if (0 >= m_iHp && !m_bCheat)
 			{
-				m_ePlayerState = PS_DEATH;
-				m_pAniController->ChangeClip("Death");
+				SetPlayerDeath();
 			}
 			else
 			{
 				m_ePlayerState = PS_HEAT;
 			}
 		}
-	}
-	
-	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
-		CC_SPOTLIGHT == _pDest->GetColliderCheck())
-	{
-		int a = 0;
 	}
 
 	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
@@ -602,18 +647,11 @@ void CPlayer::PlayerJump(float _fTime)
 		m_bJump = false;
 		m_bFall = false;
 		m_pAniController->ReturnToDefaultClip();
+
+		//m_pLandingSound->MyPlaySound("Landing.aiff");
 	}
 
 	m_pFootCol->SetSphereInfo(m_pTransform->GetWorldPos(), 0.5f);
-
-	//if (0.0f < m_pTransform->GetWorldPos().y)
-	//{
-	//	m_pTransform->Up(m_fSpeed, _fTime);
-	//}
-	//else
-	//{
-	//	m_pTransform->SetWorldPosY(0.0f);
-	//}
 }
 
 void CPlayer::PlayerMovingJump(float _fTime)
@@ -696,25 +734,19 @@ void CPlayer::PlayerHit(float _fTime)
 
 void CPlayer::PlayerClimbToTop()
 {
-	char Buf[256]{};
-	DxVector3 vPos = m_pHitCol->GetSphereInfo().vCenter;
-	sprintf_s(Buf, "X : %.2f, Y : %.2f, Z : %.2f\n", vPos.x, vPos.y, vPos.z);
-	CDebug::OutputConsole(Buf);
 	m_pTransform->SetLocalPosZ(-0.5f);
 	m_bClimbToTop = true;
 
 	if (m_pAniController->GetAnimationEnd())
 	{
-		/*vPos = m_pHitCol->GetSphereInfo().vCenter;
-		sprintf_s(Buf, "X : %.2f, Y : %.2f, Z : %.2f\n", vPos.x, vPos.y, vPos.z);
-		CDebug::OutputConsole(Buf);*/
-
 		float DestY = ((CColliderAABB*)m_pOtherCol)->GetTop();
 		m_pTransform->SetWorldPos(m_pHitCol->GetSphereInfo().vCenter.x,	DestY,
 			m_pHitCol->GetSphereInfo().vCenter.z);
 		m_pTransform->Forward(1.5f);
 		m_bClimbToTop = false;
 		m_ePlayerState = PS_DEFAULT;
+
+		m_pFootCol->SetIsEnable(true);
 	}
 }
 
@@ -771,6 +803,22 @@ void CPlayer::CreatePlayerLight()
 	//SAFE_RELEASE(pUILayer);
 }
 
+void CPlayer::PlayerHitEffect()
+{
+	CLayer* pLayer = m_pScene->FindLayer("UILayer");
+
+	CGameObject* pEffect = CGameObject::CreateClone("PlayerHitEffect");
+
+	CTransform* pTransform = pEffect->GetTransform();
+	pTransform->SetWorldPos(m_pTransform->GetWorldPos());
+	pTransform->Move(DxVector3(0.0f, 1.5f, 0.0f));
+	SAFE_RELEASE(pTransform);
+
+	pLayer->AddObject(pEffect);
+	SAFE_RELEASE(pEffect);
+	SAFE_RELEASE(pLayer);
+}
+
 CPlayer::CPlayer() :
 	m_pChildTransform(NULL),
 	m_fSpeed(5.0f),
@@ -794,6 +842,9 @@ CPlayer::CPlayer() :
 	m_pHpBar(NULL),
 	m_pCameraArm(NULL),
 	m_pOtherCol(NULL),
+	m_pHitSound(NULL),
+	m_pAttackSound(NULL),
+	m_pWarningSound(NULL),
 	m_bClimb(false),
 	m_bClimbToTop(false)
 {
@@ -808,6 +859,10 @@ CPlayer::CPlayer() :
 
 CPlayer::~CPlayer()
 {		
+	SAFE_RELEASE(m_pWarningSound);
+	SAFE_RELEASE(m_pAttackSound);
+	SAFE_RELEASE(m_pHitSound);
+
 	SAFE_RELEASE(m_pChildTransform);
 	SAFE_RELEASE(m_pOtherCol);
 

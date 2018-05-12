@@ -17,10 +17,12 @@ bool CStartScene::Init()
 {
 	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
 
-	/*CGameObject* pBGM = CGameObject::Create("BGM");
+	// BGM
+	CGameObject* pBGM = CGameObject::Create("BGM");
 	m_pSoundPlayer = pBGM->AddComponent<CSoundPlayer>("BGMPlayer");
-	m_pSoundPlayer->MyPlaySound("Title.mp3");
-	SAFE_RELEASE(pBGM);*/
+	m_pSoundPlayer->MyPlaySound("Title.mp3", FMOD_LOOP_NORMAL);
+
+	SAFE_RELEASE(pBGM);
 
 	CGameObject*	pBGObject = CGameObject::Create("BGObject");
 

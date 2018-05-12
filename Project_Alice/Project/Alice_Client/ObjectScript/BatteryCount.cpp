@@ -98,7 +98,7 @@ bool CBatteryCount::Init()
 
 void CBatteryCount::Input(float _fTime)
 {
-	if (true == KEYPRESS("F1"))
+	if (true == KEYPRESS("UseBattery"))
 	{
 		if (0 < m_iCount)
 		{

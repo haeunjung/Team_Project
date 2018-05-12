@@ -317,7 +317,7 @@ bool CCameraArm::Init()
 {
 	m_fMinDist = 1.0f;
 	m_fMaxDist = 5.0f;
-	m_fZoomSpeed = 100.0f;
+	m_fZoomSpeed = 10.0f;
 
 	m_pColSphere = m_pGameObject->AddComponent<CColliderSphere>("CameraColSphere");
 	m_pColSphere->SetSphereInfo(0.0f, 0.0f, 0.0f, 1.0f);
@@ -333,7 +333,7 @@ void CCameraArm::Input(float _fTime)
 void CCameraArm::Update(float _fTime)
 {
 	Zoom(_fTime);
-	RotationDrag(_fTime);
+	//RotationDrag(_fTime);
 }
 
 void CCameraArm::LateUpdate(float _fTime)

@@ -38,6 +38,8 @@ bool CHitEffect::Init()
 	pAnimation2D->Start();
 	SAFE_RELEASE(pAnimation2D);
 
+	m_pTransform->SetWorldScale(2.0f, 2.0f, 2.0f);
+
 	return true;
 }
 

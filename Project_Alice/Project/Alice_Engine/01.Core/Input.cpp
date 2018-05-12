@@ -89,13 +89,11 @@ bool CInput::Init()
 	CreateKey("F1", VK_F1);
 	CreateKey("F2", VK_F2);
 
-	CreateKey("CameraForward", 'W');
-	CreateKey("CameraBack", 'S');
-	CreateKey("CameraLeft", 'A');
-	CreateKey("CameraRight", 'D');
+	CreateKey("UseBattery", 'X');
 
-	CreateKey("RenderTarget", VK_F12);
-	CreateKey("Collider", VK_F11);
+	CreateKey("RenderTarget", '1');
+	CreateKey("Collider", '2');
+	CreateKey("Cheat", '3');
 	CreateKey("PlayerLight", 'L');
 
 	m_sWheel = 0;

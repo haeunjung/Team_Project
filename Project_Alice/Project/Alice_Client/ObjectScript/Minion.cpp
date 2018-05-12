@@ -1,6 +1,7 @@
 #include "Minion.h"
 #include "Battery.h"
 #include "Player.h"
+#include "HitEffect.h"
 #include "01.Core/Debug.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/Transform.h"
@@ -8,7 +9,12 @@
 #include "05.Scene/Layer.h"
 #include "07.Component/ColliderSphere.h"
 #include "07.Component/Collider.h"
-#include "HitEffect.h"
+#include "../ClientMgr/MinionMgr.h"
+
+void CMinion::SetRespawnPos(RESPAWN_POS _eRespawnPos)
+{
+	m_eRespawnPos = _eRespawnPos;
+}
 
 void CMinion::SetPlayer(CPlayer * _pPlayer)
 {
@@ -16,11 +22,73 @@ void CMinion::SetPlayer(CPlayer * _pPlayer)
 	_pPlayer->AddRef();
 	m_pPlayerScript = _pPlayer;
 	//m_pPlayerScript->AddRef();
+
+	SAFE_RELEASE(m_pPlayerTransform);
+	m_pPlayerTransform = _pPlayer->GetTransform();
 }
 
 void CMinion::SetMonsterWorldPos(const DxVector3 _Pos)
 {
 	m_pTransform->SetWorldPos(_Pos);
+}
+
+float CMinion::DistCheckFromPlayer()
+{
+	return m_pTransform->GetWorldPos().Distance(m_pPlayerTransform->GetWorldPos());
+	//return DxVector3();
+}
+
+void CMinion::TracePlayer()
+{
+	PLAYER_STATE PlayerState = m_pPlayerScript->GetPlayerState();
+	if (PS_DEATH == PlayerState || PS_CLIMB == PlayerState || PS_CLIMBIDLE == PlayerState)
+	{
+		return;
+	}
+
+	m_fTime = 0.0f;
+	m_eMonsterState = MS_SPOTTRACE;
+}
+
+MONSTER_STATE CMinion::GetState()
+{
+	return m_eMonsterState;
+}
+
+bool CMinion::RespawnUpdate(float _fTime)
+{
+	m_fRespawnTime += _fTime;
+
+	if (10.0f <= m_fRespawnTime)
+	{
+		m_fTime = 0.0f;
+		m_fRespawnTime = 0.0f;
+
+		// 리스폰 위치 세팅
+		SetRespawnPos();
+
+		// 오브젝트 켜고
+		m_pGameObject->SetIsEnable(true);
+
+		// 리스폰 리스트에서 빼고
+		GET_SINGLE(CMinionMgr)->EraseRespawnList(this);
+
+		// 테스트용은 매니저에 추가할 필요 없고
+		if (!m_bTest)
+		{
+			// 매니저에 추가하고
+			GET_SINGLE(CMinionMgr)->PushMinion(this);
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+void CMinion::MinionAttackSound()
+{
+	m_pAttackSound->MyPlaySound("MinionAttack.wav");
 }
 
 bool CMinion::Init()
@@ -62,6 +130,9 @@ bool CMinion::Init()
 	m_pAttCol->SetColCheck(CC_ATT);
 	m_pAttCol->SetIsEnable(false);
 
+	m_pHitSound = m_pGameObject->AddComponent<CSoundPlayer>("HitSound");
+	m_pAttackSound = m_pGameObject->AddComponent<CSoundPlayer>("AttackSound");
+
 	return true;
 }
 
@@ -83,6 +154,9 @@ void CMinion::Update(float _fTime)
 		break;
 	case MS_DEATH:
 		MonsterDeath();
+		break;
+	case MS_SPOTTRACE:
+		MonsterSpotTrace(_fTime);
 		break;
 	}
 
@@ -110,8 +184,8 @@ void CMinion::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 	{
 		if (CC_PLAYER_HIT == _pDest->GetColliderCheck())
 		{
-			SAFE_RELEASE(m_pPlayerTransform);
-			m_pPlayerTransform = _pDest->GetTransform();
+			//SAFE_RELEASE(m_pPlayerTransform);
+			//m_pPlayerTransform = _pDest->GetTransform();
 			m_fTime = 0.0f;
 			m_eMonsterState = MS_TRACE;
 		}
@@ -142,6 +216,8 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 		{
 			if (true == BackAttackCheck(_pSrc->GetTransformWorldAxis(AXIS_Z), _pDest->GetTransformWorldAxis(AXIS_Z)))
 			{
+				m_pPlayerScript->PlayAttackSound();
+
 				m_fTime = 0.0f;
 				_pDest->SetIsEnable(false);
 				m_eMonsterState = MS_DEATH;
@@ -167,7 +243,6 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 				CTransform* pTransform = pEffect->GetTransform();				
 				pTransform->SetWorldPos(vColPos);
 				pTransform->Move(DxVector3(-1.0f, 1.0f, 0.0f));
-				pTransform->SetWorldScale(2.0f, 2.0f, 2.0f);
 				SAFE_RELEASE(pTransform);
 
 				pLayer->AddObject(pEffect);
@@ -178,7 +253,6 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 				pTransform = pEffect->GetTransform();
 				pTransform->SetWorldPos(vColPos);
 				pTransform->Move(DxVector3(1.0f, 0.0f, 0.0f));
-				pTransform->SetWorldScale(2.0f, 2.0f, 2.0f);
 				SAFE_RELEASE(pTransform);
 
 				pLayer->AddObject(pEffect);
@@ -189,7 +263,6 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 				pTransform = pEffect->GetTransform();
 				pTransform->SetWorldPos(vColPos);
 				pTransform->Move(DxVector3(0.0f, 2.0f, 0.0f));
-				pTransform->SetWorldScale(2.0f, 2.0f, 2.0f);
 				SAFE_RELEASE(pTransform);
 
 				pLayer->AddObject(pEffect);
@@ -199,8 +272,6 @@ void CMinion::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 			}
 		}
 	}
-
-
 }
 
 bool CMinion::BackAttackCheck(const DxVector3 & _SrcForward, const DxVector3 & _DestForward)
@@ -288,6 +359,33 @@ void CMinion::MonsterTrace(float _fTime)
 	}
 }
 
+void CMinion::MonsterSpotTrace(float _fTime)
+{
+	PLAYER_STATE PlayerState = m_pPlayerScript->GetPlayerState();
+	if (PS_DEATH == PlayerState || PS_CLIMB == PlayerState || PS_CLIMBIDLE == PlayerState)
+	{
+		m_eMonsterState = MS_DEFAULT;
+	}
+
+	m_pTransform->LookAt(m_pPlayerTransform);
+	m_pViewCol->SetSphereInfo(m_pTransform->GetWorldPos() + m_pTransform->GetWorldAxis(AXIS_Z) * 2.5f, 2.5f);
+
+	if (true == m_pAniController->CheckClipName("Run"))
+	{
+		m_pTransform->Forward(m_fSpeed * 1.5f, _fTime);
+	}
+	else
+	{
+		m_pAniController->ChangeClip("Run");
+	}
+
+	m_fDist = m_pPlayerTransform->GetWorldPos().Distance(m_pTransform->GetWorldPos());
+	if (1.0f >= m_fDist)
+	{
+		m_eMonsterState = MS_ATTACK;
+	}
+}
+
 void CMinion::MonsterAttack()
 {
 	PLAYER_STATE PlayerState = m_pPlayerScript->GetPlayerState();
@@ -337,12 +435,43 @@ void CMinion::MonsterDeath()
 			SAFE_RELEASE(pBattery);
 
 			//m_pParticleObj->Death();
-			m_pGameObject->Death();
+			//SetIsEnable(false);
+			m_pGameObject->SetIsEnable(false);
+			m_eMonsterState = MS_DEFAULT;
+
+			GET_SINGLE(CMinionMgr)->PushRespawnList(this);
+			GET_SINGLE(CMinionMgr)->EraseMinion(this);
 		}
 	}
 	else
 	{
+		m_pHitSound->MyPlaySound("MinionDeath.wav");
 		m_pAniController->ChangeClip("Death");		
+	}
+}
+
+void CMinion::SetRespawnPos()
+{
+	switch (m_eRespawnPos)
+	{
+	case POS_ONE:
+		m_pTransform->SetWorldPos(40.0f, 0.0f, 10.0f);
+		break;
+	case POS_TWO:
+		m_pTransform->SetWorldPos(40.0f, 0.0f, 40.0f);
+		break;
+	case POS_THREE:
+		m_pTransform->SetWorldPos(80.0f, 0.0f, 35.0f);
+		break;
+	case POS_FOUR:
+		m_pTransform->SetWorldPos(80.0f, 0.0f, 15.0f);
+		break;
+	case POS_FIVE:
+		m_pTransform->SetWorldPos(10.0f, 0.0f, 20.0f);
+		break;
+	case POS_TEST:
+		m_pTransform->SetWorldPos(10.0f, 0.0f, 10.0f);
+		break;
 	}
 }
 
@@ -353,8 +482,11 @@ CMinion::CMinion() :
 	m_fSpeed(2.0f),
 	m_fTime(0.0f),
 	m_fDist(0.0f),
+	m_fRespawnTime(0.0f),
 	m_pViewCol(NULL),
-	m_pAttCol(NULL)
+	m_pAttCol(NULL),
+	m_pHitSound(NULL),
+	m_pAttackSound(NULL)
 {
 	SetTypeID<CMinion>();
 	SetTypeName("CMinion");
@@ -373,6 +505,9 @@ CMinion::CMinion(const CMinion & _Minion) :
 
 CMinion::~CMinion()
 {		
+	SAFE_RELEASE(m_pHitSound);
+	SAFE_RELEASE(m_pAttackSound);
+
 	SAFE_RELEASE(m_pParticleObj);
 	SAFE_RELEASE(m_pPlayerTransform);
 	SAFE_RELEASE(m_pPlayerScript);

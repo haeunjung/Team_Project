@@ -17,10 +17,15 @@ CBattery::CBattery(const CBattery & _Battery) :
 {
 	m_fSpeed = _Battery.m_fSpeed;
 	m_IsCreate = _Battery.m_IsCreate;
+
+	SAFE_RELEASE(m_pGetBatterySound);
+	m_pGetBatterySound = _Battery.m_pGetBatterySound;
+	m_pGetBatterySound->AddRef();
 }
 
 CBattery::~CBattery()
 {
+	SAFE_RELEASE(m_pGetBatterySound);
 }
 
 void CBattery::SetBatteryPos(const DxVector3 & _vPos)
@@ -44,6 +49,8 @@ bool CBattery::Init()
 	CColliderSphere* pColSphere = m_pGameObject->AddComponent<CColliderSphere>("BatteryColSphere");
 	pColSphere->SetSphereInfo(0.0f, 0.0f, 0.0f, 0.5f);
 	SAFE_RELEASE(pColSphere);
+
+	m_pGetBatterySound = m_pGameObject->AddComponent<CSoundPlayer>("GetBatterySound");
 
 	return true;
 }
@@ -81,6 +88,7 @@ void CBattery::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fT
 
 	if (CC_PLAYER_HIT == _pDest->GetColliderCheck())
 	{
+		m_pGetBatterySound->MyPlaySound("GetBattery.mp3");
 		GET_SINGLE(CUIMgr)->GetBattery();
 		m_pGameObject->Death();
 	}

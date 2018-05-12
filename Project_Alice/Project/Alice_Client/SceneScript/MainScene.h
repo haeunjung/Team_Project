@@ -9,18 +9,18 @@ class CPlayer;
 class CMainScene : public CSceneScript
 {
 private:
-	CGameObject* m_pPlayerObject;
+	CGameObject* m_pCheckBoxObject;
 	float m_fRespawnTime;
 	float m_fRespawnLimitTime;
 
-	bool	m_bCheck;
+	bool m_bEnable;
 private:
 	void CreateProtoType();
 	void CreateObject();
 	void LoadObject(const string& _strKey, const DxVector3& _vPos, const DxVector3& _vScale, const DxVector3& _vRot);	
 	void CreateRadioButton();	
+	void CreateCheckBox();
 	void CreateTerrain();
-	void CreateInventory();	
 	void CreateMainSceneLight();
 	void CreateMonster(CPlayer* _pPlayer);
 public:

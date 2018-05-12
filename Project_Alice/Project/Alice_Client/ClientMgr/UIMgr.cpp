@@ -2,7 +2,6 @@
 #include "05.Scene/Scene.h"
 #include "06.GameObject/GameObject.h"
 #include "07.Component/Renderer.h"
-#include "07.Component/Material.h"
 #include "07.Component/UIBack.h"
 #include "07.Component/Animation2D.h"
 #include "07.Component/Effect.h"
@@ -12,6 +11,10 @@
 DEFINITION_SINGLE(CUIMgr)
 
 CUIMgr::CUIMgr() :
+	m_pBattery2DMaterial(NULL),
+	m_bGetBattery(false),
+	m_fColor(0.8f),
+	m_bColor(false),
 	m_pBatteryCount(NULL),
 	m_pTimeBar(NULL),
 	m_pSpringTransform(NULL),
@@ -26,11 +29,14 @@ CUIMgr::~CUIMgr()
 	SAFE_RELEASE(m_pSpringTransform);
 	SAFE_RELEASE(m_pTimeBar);
 	SAFE_RELEASE(m_pBatteryCount);
+	SAFE_RELEASE(m_pBattery2DMaterial);
 }
 
 void CUIMgr::GetBattery()
 {
 	m_pBatteryCount->PlusCount();
+
+	m_bGetBattery = true;
 }
 
 void CUIMgr::UseBattery()
@@ -48,6 +54,11 @@ void CUIMgr::SetHp(int _Hp)
 	}
 
 	m_vecHpRenderer2D[m_PlayerHp]->SetIsEnable(false);
+}
+
+void CUIMgr::SetPlayer(CPlayer* _pPlayer)
+{
+	m_pTimeBar->SetPlayer(_pPlayer);
 }
 
 bool CUIMgr::Init(CScene* _pScene)
@@ -68,6 +79,32 @@ bool CUIMgr::Init(CScene* _pScene)
 void CUIMgr::Update(float _fTime)
 {
 	m_pSpringTransform->RotateZ(-1.57f, _fTime);
+
+	if (m_bGetBattery)
+	{
+		if (!m_bColor)
+		{
+			m_fColor += _fTime;
+
+			if (1.5f < m_fColor)
+			{
+				m_bColor = true;
+			}
+		}
+		else
+		{
+			m_fColor -= _fTime;
+
+			if (0.8f >= m_fColor)
+			{
+				m_fColor = 0.8f;
+				m_bColor = false;
+				m_bGetBattery = false;
+			}
+		}
+
+		m_pBattery2DMaterial->SetDiffuseColor(DxVector4(m_fColor, m_fColor, m_fColor, m_fColor));
+	}
 }
 
 void CUIMgr::CreateBattery2D(CLayer* _pLayer)
@@ -87,10 +124,9 @@ void CUIMgr::CreateBattery2D(CLayer* _pLayer)
 	pRenderer->SetInputLayout("TexInputLayout");
 	pRenderer->SetRenderState(ALPHABLEND);
 
-	CMaterial*	pMaterial = pRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "Battery2D", L"Battery2D.png");
-	pMaterial->SetDiffuseColor(DxVector4(0.8f, 0.8f, 0.8f, 0.8f));
-	SAFE_RELEASE(pMaterial);
+	m_pBattery2DMaterial = pRenderer->GetMaterial();
+	m_pBattery2DMaterial->SetDiffuseTexture("Linear", "Battery2D", L"Battery2D.png");
+	m_pBattery2DMaterial->SetDiffuseColor(DxVector4(0.8f, 0.8f, 0.8f, 0.8f));
 	SAFE_RELEASE(pRenderer);
 
 	CUIBack*	pUIBack = pBatteryObject->AddComponent<CUIBack>("Battery2DBack");
@@ -187,6 +223,7 @@ void CUIMgr::CreateSpring(CLayer * _pLayer)
 	_pLayer->AddObject(pSpringObject);
 	SAFE_RELEASE(pSpringObject);
 
+	// TimeBar
 	CGameObject* pTimeBar = CGameObject::Create("HpBar");
 
 	vScale = DxVector3(1000.0f, 50.0f, 1.0f);

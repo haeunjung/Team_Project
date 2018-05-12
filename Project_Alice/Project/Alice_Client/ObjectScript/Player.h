@@ -5,6 +5,7 @@
 #include "07.Component/UIBar.h"
 #include "07.Component/CameraArm.h"
 #include "07.Component/ColliderAABB.h"
+#include "07.Component/SoundPlayer.h"
 
 WOOJUN_USING
 
@@ -60,6 +61,9 @@ private:
 	CCollider*			m_pOtherCol;
 	bool	m_bClimb;
 
+	CSoundPlayer*		m_pHitSound;
+	CSoundPlayer*		m_pAttackSound;
+	CSoundPlayer*		m_pWarningSound;
 	//////////
 	bool m_bChange;
 	
@@ -70,15 +74,27 @@ private:
 
 	float m_fy;
 	float m_fz;
+
+	// Cheat Key
+private:
+	static bool m_bCheat;
 public:
-	void AniCallback(float _fTime);
+	static void CheatKey();
+private:
+	// Sound Callback
+	void FirstStepSound(float _fTime);
+	void SecondStepSound(float _fTime);
+public:
 	bool PlayerStateIsDeath();
 	const PLAYER_STATE& GetPlayerState() const;
+	void SetPlayerDeath();
+	void PlayAttackSound();
 public:
 	bool Init() override;
 	void Input(float _fTime) override;
 	void Update(float _fTime) override;	
 public:
+	void OnCollisionEnter(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
 	void OnCollisionStay(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
 	void OnCollisionLeave(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
 private:
@@ -96,6 +112,7 @@ private:
 	void PlayerClimbToTop();
 	void PlayerDeath();
 	void CreatePlayerLight();
+	void PlayerHitEffect();
 public:
 	CPlayer();
 	~CPlayer();

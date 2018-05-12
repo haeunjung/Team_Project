@@ -1,13 +1,13 @@
 #include "MainScene.h"
+#include "../ClientMgr/MinionMgr.h"
 #include "../ClientMgr/UIMgr.h"
 #include "../ObjectScript/Player.h"
-#include "../ObjectScript/MonsterBullet.h"
 #include "../ObjectScript/Minion.h"
 #include "../ObjectScript/Battery.h"
 #include "../ObjectScript/Mouse.h"
 #include "../ObjectScript/HitEffect.h"
+#include "../ObjectScript/PlayerHitEffect.h"
 #include "../ObjectScript/MessageBox.h"
-#include "01.Core/Debug.h"
 #include "01.Core/Input.h"
 #include "01.Core/PathMgr.h"
 #include "05.Scene/Scene.h"
@@ -52,6 +52,14 @@ void CMainScene::CreateProtoType()
 	if (pEffectObj)
 	{
 		CHitEffect*	pEffect = pEffectObj->AddComponent<CHitEffect>("HitEffectScript");
+		SAFE_RELEASE(pEffect);
+		SAFE_RELEASE(pEffectObj);
+	}
+
+	pEffectObj = CGameObject::Create("PlayerHitEffect", true);
+	if (pEffectObj)
+	{
+		CPlayerHitEffect*	pEffect = pEffectObj->AddComponent<CPlayerHitEffect>("PlayerHitEffectScript");
 		SAFE_RELEASE(pEffect);
 		SAFE_RELEASE(pEffectObj);
 	}
@@ -194,6 +202,51 @@ void CMainScene::CreateRadioButton()
 	SAFE_RELEASE(pUILayer);
 }
 
+void CMainScene::CreateCheckBox()
+{
+	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
+
+	CGameObject*	pCheckButtonObject = CGameObject::Create("CheckButtonObject");
+
+	CTransform*	pTransform = pCheckButtonObject->GetTransform();
+	DxVector3	vScale = { 100.0f, 100.0f, 1.0f };
+	pTransform->SetWorldScale(vScale);
+	pTransform->SetWorldPos(1150.0f, 600.0f, 0.0f);
+	pTransform->SetPivot(0.0f, 0.0f, 0.0f);
+
+	CColliderRect*	pColRect = pCheckButtonObject->AddComponent<CColliderRect>("ButtonCol");
+	DxVector3	vPos = pTransform->GetWorldPos();
+	pColRect->SetRectInfo(0.0f, 0.0f, vScale.x, vScale.y);
+
+	SAFE_RELEASE(pColRect);
+	SAFE_RELEASE(pTransform);
+
+	CRenderer2D*	pRenderer = pCheckButtonObject->AddComponent<CRenderer2D>("CheckButtonRenderer2D");
+	pRenderer->SetMesh("UIMesh");
+	pRenderer->SetShader(UI_SHADER);
+	pRenderer->SetInputLayout("TexInputLayout");
+	pRenderer->SetRenderState(ALPHABLEND);
+
+	CMaterial*	pMaterial = pRenderer->GetMaterial();
+	pMaterial->SetDiffuseTexture("Linear", "CheckBox", L"free2you2.png");
+	SAFE_RELEASE(pMaterial);
+	SAFE_RELEASE(pRenderer);
+
+	CCheckBox*	pCheckBox = pCheckButtonObject->AddComponent<CCheckBox>("CheckBox");
+	pCheckBox->SetButtonFunc(this, &CMainScene::CheckButton);
+	SAFE_RELEASE(pCheckBox);
+
+	pUILayer->AddObject(pCheckButtonObject);
+
+	pCheckButtonObject->AddRef();
+	m_pCheckBoxObject = pCheckButtonObject;
+	m_pCheckBoxObject->SetIsEnable(false);
+	
+	SAFE_RELEASE(pCheckButtonObject);
+
+	SAFE_RELEASE(pUILayer);
+}
+
 void CMainScene::CreateTerrain()
 {
 	CLayer*	pMapLayer = m_pScene->FindLayer(MAPLAYER);
@@ -216,10 +269,6 @@ void CMainScene::CreateTerrain()
 	SAFE_RELEASE(pMapLayer);
 }
 
-void CMainScene::CreateInventory()
-{
-	
-}
 
 void CMainScene::CreateMainSceneLight()
 {
@@ -361,6 +410,8 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 10.0f));
 	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_ONE);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -370,6 +421,8 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 40.0f));	
 	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_TWO);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -379,6 +432,8 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 35.0f));
 	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_THREE);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -388,6 +443,8 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 15.0f));
 	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_FOUR);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -397,6 +454,8 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
 	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_FIVE);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -405,8 +464,9 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinionObj = CGameObject::Create("Minion");
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 10.0f));
-
+	pMinion->SetPlayer(_pPlayer);
 	pMinion->SetIsTest(true);
+	pMinion->SetRespawnPos(POS_TEST);
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -421,9 +481,10 @@ bool CMainScene::Init()
 	CreateObject();
 	CreateTerrain();
 	//CreateRadioButton();
+	CreateCheckBox();
 	CreateMainSceneLight();
 
-	GET_SINGLE(CUIMgr)->Init(m_pScene);	
+	GET_SINGLE(CUIMgr)->Init(m_pScene);
 
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 
@@ -434,37 +495,32 @@ bool CMainScene::Init()
 	SAFE_RELEASE(pCameraArm);
 
 	// BGM
-	//CGameObject* pBGM = CGameObject::Create("BGM");
-	//CSoundPlayer* pSoundPlayer = pBGM->AddComponent<CSoundPlayer>("BGMPlayer");
-	//pSoundPlayer->MyPlaySound("Title.mp3");
-	//SAFE_RELEASE(pSoundPlayer);
+	CGameObject* pBGM = CGameObject::Create("BGM");
+	CSoundPlayer* pSoundPlayer = pBGM->AddComponent<CSoundPlayer>("BGMPlayer");
+	pSoundPlayer->MyPlaySound("Bgm.mp3", FMOD_LOOP_NORMAL);
+	SAFE_RELEASE(pSoundPlayer);
 
-	//pLayer->AddObject(pBGM);
-	//SAFE_RELEASE(pBGM);
+	pLayer->AddObject(pBGM);
+	SAFE_RELEASE(pBGM);
 
 	// 플레이어
 	CGameObject*	pPlayerObject = CGameObject::Create("PlayerObject");
 	pLayer->AddObject(pPlayerObject);
-	
-	m_pPlayerObject = pPlayerObject;
-	pPlayerObject->AddRef();
 
 	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");
 
 	// 몬스터 생성 시 플레이어 정보 넘겨줌
 	CreateMonster(pPlayerScript);
+
+	// TimeBardp 플레이어 정보 넘겨줌
+	GET_SINGLE(CUIMgr)->SetPlayer(pPlayerScript);
+
 	SAFE_RELEASE(pPlayerScript);
-
-	/*CCamera*	pCamera = m_pScene->GetMainCamera();
-	pCamera->Attach(pPlayerObject, DxVector3(0.0f, 3.5f, -5.0f));*/
-
 	SAFE_RELEASE(pPlayerObject);
-
-	//SAFE_RELEASE(pCamera);
 	SAFE_RELEASE(pCameraObject);
 
-	pCameraObject = m_pScene->CreateCamera("SubCamera"/*, DxVector3(0.0f, 0.0f, -5.0f)*/);
-	SAFE_RELEASE(pCameraObject);
+	//pCameraObject = m_pScene->CreateCamera("SubCamera"/*, DxVector3(0.0f, 0.0f, -5.0f)*/);
+	//SAFE_RELEASE(pCameraObject);
 
 	CGameObject* pBattery = CGameObject::CreateClone("BatteryObject");
 	CTransform* pTransform = pBattery->GetTransform();
@@ -496,16 +552,19 @@ bool CMainScene::Init()
 
 void CMainScene::Update(float _fTime)
 {
+	GET_SINGLE(CMinionMgr)->Update(_fTime);
 	GET_SINGLE(CUIMgr)->Update(_fTime);
 
-	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
-	pLayer->SetIsEnable(m_bCheck);
-	SAFE_RELEASE(pLayer);
+	if (KEYPRESS("Cheat"))
+	{
+		m_bEnable = !m_bEnable;
+		m_pCheckBoxObject->SetIsEnable(m_bEnable);
+	}
 }
 
 void CMainScene::CheckButton(CGameObject * _pObj, float _fTime)
 {
-	m_bCheck = !m_bCheck;
+	CPlayer::CheatKey();
 }
 
 void CMainScene::RadioButton(CGameObject * _pObj, float _fTime)
@@ -522,19 +581,20 @@ void CMainScene::RadioButton(CGameObject * _pObj, float _fTime)
 		sprintf_s(strNum, "All Radio Button Off\n");
 	}
 
-	CDebug::OutputConsole(strNum);
+	//CDebug::OutputConsole(strNum);
 }
 
 CMainScene::CMainScene() :
-	m_pPlayerObject(NULL),
+	m_pCheckBoxObject(NULL),
 	m_fRespawnTime(0.0f),
-	m_fRespawnLimitTime(5.0f)
+	m_fRespawnLimitTime(10.0f),
+	m_bEnable(false)
 {
-	m_bCheck = true;
 }
 
 CMainScene::~CMainScene()
 {
+	DESTROY_SINGLE(CMinionMgr);
 	DESTROY_SINGLE(CUIMgr);
-	SAFE_RELEASE(m_pPlayerObject);
+	SAFE_RELEASE(m_pCheckBoxObject);
 }
