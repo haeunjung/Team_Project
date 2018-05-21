@@ -24,9 +24,9 @@ void CUIButton::SetClickColor(float _r, float _g, float _b, float _a)
 
 bool CUIButton::Init()
 {
-	SetNormalColor(0.8f, 0.8f, 0.8f, 0.8f);
-	SetMouseOnColor(1.2f, 1.2f, 1.2f, 1.2f);
-	SetClickColor(0.4f, 0.4f, 0.4f, 0.4f);
+	SetNormalColor(1.0f, 1.0f, 1.0f, 1.0f);
+	SetMouseOnColor(1.5f, 1.5f, 1.5f, 1.5f);
+	SetClickColor(0.5f, 0.5f, 0.5f, 0.5f);
 
 	return true;
 }

@@ -15,12 +15,13 @@ CBattery::CBattery() :
 CBattery::CBattery(const CBattery & _Battery) :
 	CScript(_Battery)
 {
-	m_fSpeed = _Battery.m_fSpeed;
-	m_IsCreate = _Battery.m_IsCreate;
+	//m_fSpeed = _Battery.m_fSpeed;
+	//m_IsCreate = _Battery.m_IsCreate;
 
-	SAFE_RELEASE(m_pGetBatterySound);
-	m_pGetBatterySound = _Battery.m_pGetBatterySound;
-	m_pGetBatterySound->AddRef();
+	*this = _Battery;
+
+	if (m_pGetBatterySound)
+		m_pGetBatterySound->AddRef();
 }
 
 CBattery::~CBattery()

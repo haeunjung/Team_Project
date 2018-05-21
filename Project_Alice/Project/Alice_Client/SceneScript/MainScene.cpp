@@ -44,8 +44,7 @@ void CMainScene::CreateProtoType()
 		CBattery*	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
 		SAFE_RELEASE(pBattertScript);
 		SAFE_RELEASE(pBattery);
-	}
-	
+	}	
 
 	// Effect
 	CGameObject*	pEffectObj = CGameObject::Create("HitEffect", true);
@@ -522,7 +521,9 @@ bool CMainScene::Init()
 	//pCameraObject = m_pScene->CreateCamera("SubCamera"/*, DxVector3(0.0f, 0.0f, -5.0f)*/);
 	//SAFE_RELEASE(pCameraObject);
 
-	CGameObject* pBattery = CGameObject::CreateClone("BatteryObject");
+	/*CGameObject* pBattery = CGameObject::Create("BatteryObject");
+	CBattery*	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
+	SAFE_RELEASE(pBattertScript);
 	CTransform* pTransform = pBattery->GetTransform();
 	pTransform->SetWorldPos(35.0f, 1.0f, 15.0f);
 	SAFE_RELEASE(pTransform);
@@ -530,13 +531,15 @@ bool CMainScene::Init()
 	pLayer->AddObject(pBattery);
 	SAFE_RELEASE(pBattery);
 
-	pBattery = CGameObject::CreateClone("BatteryObject");
+	pBattery = CGameObject::Create("BatteryObject");
+	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
+	SAFE_RELEASE(pBattertScript);
 	pTransform = pBattery->GetTransform();
 	pTransform->SetWorldPos(15.0f, 1.0f, 30.0f);
 	SAFE_RELEASE(pTransform);
 
 	pLayer->AddObject(pBattery);
-	SAFE_RELEASE(pBattery);
+	SAFE_RELEASE(pBattery);*/
 
 	SAFE_RELEASE(pLayer);
 

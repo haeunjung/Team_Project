@@ -1,4 +1,5 @@
 #include "UIMgr.h"
+#include "01.Core/Input.h"
 #include "05.Scene/Scene.h"
 #include "06.GameObject/GameObject.h"
 #include "07.Component/Renderer.h"
@@ -78,6 +79,27 @@ bool CUIMgr::Init(CScene* _pScene)
 
 void CUIMgr::Update(float _fTime)
 {
+	//if (KEYPRESS("F3"))
+	//{
+	//	--m_PlayerHp;
+	//	if (0 > m_PlayerHp)
+	//	{
+	//		m_PlayerHp = 0;
+	//	}
+
+	//	m_vecHpRenderer2D[m_PlayerHp]->SetIsEnable(false);
+	//}
+	//else if (KEYPRESS("F4"))
+	//{
+	//	++m_PlayerHp;
+	//	if (MAXHP < m_PlayerHp)
+	//	{
+	//		m_PlayerHp = MAXHP;
+	//	}
+
+	//	m_vecHpRenderer2D[m_PlayerHp - 1]->SetIsEnable(true);
+	//}
+
 	m_pSpringTransform->RotateZ(-1.57f, _fTime);
 
 	if (m_bGetBattery)

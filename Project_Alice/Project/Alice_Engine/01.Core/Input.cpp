@@ -88,6 +88,8 @@ bool CInput::Init()
 
 	CreateKey("F1", VK_F1);
 	CreateKey("F2", VK_F2);
+	CreateKey("F3", VK_F3);
+	CreateKey("F4", VK_F4);
 
 	CreateKey("UseBattery", 'X');
 

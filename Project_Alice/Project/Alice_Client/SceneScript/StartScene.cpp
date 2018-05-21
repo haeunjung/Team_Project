@@ -5,7 +5,6 @@
 #include "05.Scene/Scene.h"
 #include "05.Scene/Layer.h"
 #include "07.Component/Transform.h"
-#include "07.Component/Material.h"
 #include "07.Component/Renderer2D.h"
 #include "07.Component/UIButton.h"
 #include "07.Component/ColliderRect.h"
@@ -37,9 +36,9 @@ bool CStartScene::Init()
 	pRenderer->SetInputLayout("TexInputLayout");
 	pRenderer->SetRenderState(ALPHABLEND);
 
-	CMaterial*	pMaterial = pRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "StartScene", L"StartScene/Lineage1.bmp");
-	SAFE_RELEASE(pMaterial);
+	m_pMaterial = pRenderer->GetMaterial();
+	//m_pMaterial->SetDiffuseTexture("Linear", "StartScene", L"StartScene/Title2.png");
+	//SAFE_RELEASE(pMaterial);
 	SAFE_RELEASE(pRenderer);
 
 	pUILayer->AddObject(pBGObject);
@@ -63,6 +62,30 @@ bool CStartScene::Init()
 
 void CStartScene::Update(float _fTime)
 {
+	fTime += _fTime;
+	if (1.0f <= fTime)
+	{
+		++Idx;
+		fTime = 0.0f;
+	}
+
+	if (3 <= Idx)
+	{
+		Idx = 0;
+	}
+
+	switch (Idx)
+	{
+	case 0:
+		m_pMaterial->SetDiffuseTexture("Linear", "Title1", L"StartScene/Title1-1.png");
+		break;
+	case 1:
+		m_pMaterial->SetDiffuseTexture("Linear", "Title2", L"StartScene/Title1-2.png");
+		break;
+	case 2:
+		m_pMaterial->SetDiffuseTexture("Linear", "Title3", L"StartScene/Title1-3.png");
+		break;
+	}
 }
 
 void CStartScene::CreateStartButton()
@@ -74,7 +97,7 @@ void CStartScene::CreateStartButton()
 	CTransform*	pTransform = pStartButtonObject->GetTransform();
 	DxVector3	vScale = { 200.0f, 100.0f, 1.0f };
 	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(440.0f, 500.0f, 0.0f);
+	pTransform->SetWorldPos(440.0f, 550.0f, 0.0f);
 
 	CColliderRect*	pColRect = pStartButtonObject->AddComponent<CColliderRect>("ButtonCol");
 	DxVector3	vPos = pTransform->GetWorldPos();
@@ -126,7 +149,7 @@ void CStartScene::CreateEndButton()
 	CTransform*	pTransform = pStartButtonObject->GetTransform();
 	DxVector3	vScale = { 200.0f, 100.0f, 1.0f };
 	pTransform->SetWorldScale(vScale);
-	pTransform->SetWorldPos(840.0f, 500.0f, 0.0f);
+	pTransform->SetWorldPos(840.0f, 550.0f, 0.0f);
 
 	CColliderRect*	pColRect = pStartButtonObject->AddComponent<CColliderRect>("ButtonCol");
 	DxVector3	vPos = pTransform->GetWorldPos();
@@ -163,12 +186,16 @@ void CStartScene::StartButton(CGameObject * _pObj, float _fTime)
 }
 
 CStartScene::CStartScene() :
-	m_pSoundPlayer(NULL)
+	m_pSoundPlayer(NULL),
+	m_pMaterial(NULL)
 {
+	fTime = 0.0f;
+	Idx = 0;
 }
 
 
 CStartScene::~CStartScene()
 {
+	SAFE_RELEASE(m_pMaterial);
 	SAFE_RELEASE(m_pSoundPlayer);
 }

@@ -11,7 +11,8 @@
 #include <functional>
 #include <process.h>
 
-#include <fmod.hpp>
+// Fmod
+#include "Fmod_Inc/fmod.hpp"
 
 #ifdef _WIN32
 #pragma comment(lib, "fmod_vc.lib")
