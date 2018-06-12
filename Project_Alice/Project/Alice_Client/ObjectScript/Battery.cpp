@@ -10,6 +10,9 @@
 CBattery::CBattery() :
 	m_fSpeed(10.0f)
 {
+	SetTag("Battery");
+	SetTypeName("CBattery");
+	SetTypeID<CBattery>();
 }
 
 CBattery::CBattery(const CBattery & _Battery) :

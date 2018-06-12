@@ -8,6 +8,7 @@
 #include "../ObjectScript/HitEffect.h"
 #include "../ObjectScript/PlayerHitEffect.h"
 #include "../ObjectScript/MessageBox.h"
+#include "../ObjectScript/Portal.h"
 #include "01.Core/Input.h"
 #include "01.Core/PathMgr.h"
 #include "05.Scene/Scene.h"
@@ -477,7 +478,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 bool CMainScene::Init()
 {
 	CreateProtoType();
-	CreateObject();
+	//CreateObject();
 	CreateTerrain();
 	//CreateRadioButton();
 	CreateCheckBox();
@@ -509,9 +510,9 @@ bool CMainScene::Init()
 	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");
 
 	// 몬스터 생성 시 플레이어 정보 넘겨줌
-	CreateMonster(pPlayerScript);
+	//CreateMonster(pPlayerScript);
 
-	// TimeBardp 플레이어 정보 넘겨줌
+	// TimeBar에 플레이어 정보 넘겨줌
 	GET_SINGLE(CUIMgr)->SetPlayer(pPlayerScript);
 
 	SAFE_RELEASE(pPlayerScript);
@@ -540,6 +541,14 @@ bool CMainScene::Init()
 
 	pLayer->AddObject(pBattery);
 	SAFE_RELEASE(pBattery);*/
+
+	// Portal
+	CGameObject*	pPortalObject = CGameObject::Create("Portal");
+	pLayer->AddObject(pPortalObject);
+
+	CPortal*	pPortalScript = pPortalObject->AddComponent<CPortal>("PortalComponent");
+	SAFE_RELEASE(pPortalScript);
+	SAFE_RELEASE(pPortalObject);
 
 	SAFE_RELEASE(pLayer);
 

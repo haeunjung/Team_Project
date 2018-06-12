@@ -56,6 +56,9 @@
     <Filter Include="03. ObjectScript\07. Effect">
       <UniqueIdentifier>{e122a0a2-f305-4d67-838b-e7974ef170da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. ObjectScript\09. Portal">
+      <UniqueIdentifier>{b9bd1eb8-29e4-4947-9fac-d40d3be6a4e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneScript\MainScene.h">
@@ -118,6 +121,9 @@
     <ClInclude Include="ObjectScript\PlayerHitEffect.h">
       <Filter>03. ObjectScript\07. Effect</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectScript\Portal.h">
+      <Filter>03. ObjectScript\09. Portal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -176,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="ObjectScript\PlayerHitEffect.cpp">
       <Filter>03. ObjectScript\07. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Portal.cpp">
+      <Filter>03. ObjectScript\09. Portal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

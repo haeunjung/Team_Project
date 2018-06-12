@@ -32,6 +32,7 @@
     <ClInclude Include="ObjectScript\Player.h" />
     <ClInclude Include="ObjectScript\PlayerBullet.h" />
     <ClInclude Include="ObjectScript\PlayerHitEffect.h" />
+    <ClInclude Include="ObjectScript\Portal.h" />
     <ClInclude Include="ObjectScript\RotBullet.h" />
     <ClInclude Include="ObjectScript\TimeBar.h" />
     <ClInclude Include="resource.h" />
@@ -54,6 +55,7 @@
     <ClCompile Include="ObjectScript\Player.cpp" />
     <ClCompile Include="ObjectScript\PlayerBullet.cpp" />
     <ClCompile Include="ObjectScript\PlayerHitEffect.cpp" />
+    <ClCompile Include="ObjectScript\Portal.cpp" />
     <ClCompile Include="ObjectScript\RotBullet.cpp" />
     <ClCompile Include="ObjectScript\TimeBar.cpp" />
     <ClCompile Include="SceneScript\LoadingScene.cpp" />
