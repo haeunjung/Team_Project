@@ -124,6 +124,9 @@
     <ClInclude Include="ObjectScript\Portal.h">
       <Filter>03. ObjectScript\09. Portal</Filter>
     </ClInclude>
+    <ClInclude Include="SceneScript\MainScene2.h">
+      <Filter>02. SceneScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -185,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="ObjectScript\Portal.cpp">
       <Filter>03. ObjectScript\09. Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneScript\MainScene2.cpp">
+      <Filter>02. SceneScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

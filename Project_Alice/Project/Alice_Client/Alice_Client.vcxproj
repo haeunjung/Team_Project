@@ -38,6 +38,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneScript\LoadingScene.h" />
     <ClInclude Include="SceneScript\MainScene.h" />
+    <ClInclude Include="SceneScript\MainScene2.h" />
     <ClInclude Include="SceneScript\StartScene.h" />
     <ClInclude Include="Thread\LoadingThread.h" />
   </ItemGroup>
@@ -60,6 +61,7 @@
     <ClCompile Include="ObjectScript\TimeBar.cpp" />
     <ClCompile Include="SceneScript\LoadingScene.cpp" />
     <ClCompile Include="SceneScript\MainScene.cpp" />
+    <ClCompile Include="SceneScript\MainScene2.cpp" />
     <ClCompile Include="SceneScript\StartScene.cpp" />
     <ClCompile Include="Thread\LoadingThread.cpp" />
   </ItemGroup>

@@ -1,7 +1,11 @@
 #include "Portal.h"
+#include "05.Scene/SceneMgr.h"
+#include "05.Scene/Scene.h"
 #include "06.GameObject/GameObject.h"
 #include "07.Component/Transform.h"
 #include "07.Component/Renderer.h"
+#include "07.Component/ColliderAABB.h"
+#include "../SceneScript/MainScene2.h"
 
 CPortal::CPortal()
 {
@@ -16,8 +20,9 @@ CPortal::~CPortal()
 
 bool CPortal::Init()
 {
-	m_pTransform->SetWorldPos(10.0f, 0.0f, 10.0f);
 	m_pTransform->SetWorldScale(0.02f, 0.02f, 0.02f);
+	m_pTransform->SetWorldPos(10.0f, 2.0f, 10.0f);
+	//m_pTransform->SetLocalPos(0.0f, -50.0f, 0.0f);
 	//m_pTransform->SetWorldRot(_vRot);
 
 	CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("PortalRenderer");
@@ -28,14 +33,10 @@ bool CPortal::Init()
 	DxVector3 vMeshSize = pRenderer->GetMeshSize();
 	SAFE_RELEASE(pRenderer);
 
-	//CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
-	//pColSphere->SetSphereInfo(_vPos, 1.0f);
-	//SAFE_RELEASE(pColSphere);
-
-	/*CColliderAABB* pColAABB = pGameObject->AddComponent<CColliderAABB>(_strKey + "ColAABB");
-	pColAABB->SetColCheck(CC_OBJ);
-	pColAABB->SetScale(vMeshSize);
-	SAFE_RELEASE(pColAABB);*/
+	CColliderAABB* pColAABB = m_pGameObject->AddComponent<CColliderAABB>("PortalColBox");
+	pColAABB->SetColCheck(CC_PORTAL);
+	pColAABB->SetScale(vMeshSize * 0.5f);
+	SAFE_RELEASE(pColAABB);
 
 	return true;
 }
@@ -44,4 +45,27 @@ void CPortal::Update(float _fTime)
 {
 }
 
+void CPortal::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTime)
+{
+	if (CC_PLAYER_HIT == _pDest->GetColliderCheck()
+		&& Vec3Zero != ((CColliderAABB*)_pSrc)->GetAABBInfo().vCenter)
+	{
+		StageChange();
+	}
+}
 
+void CPortal::StageChange()
+{
+	CScene* pScene = GET_SINGLE(CSceneMgr)->CreateScene("MainScene2");
+
+	//CLoadingScene* pLoad = pScene->CreateScript<CLoadingScene>();
+	CMainScene2* pMain2 = pScene->CreateScript<CMainScene2>();
+
+	GET_SINGLE(CSceneMgr)->ReplaceScene(pScene);
+}
+
+/*
+스테이지 이동 시
+유아이가 완전 초기화 되어야 하나??
+UIMgr를 생각해 볼 필요가 있다.
+*/

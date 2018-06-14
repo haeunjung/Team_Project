@@ -98,6 +98,11 @@ bool CInput::Init()
 	CreateKey("Cheat", '3');
 	CreateKey("PlayerLight", 'L');
 
+	CreateKey("CameraForward", 'W');
+	CreateKey("CameraBack", 'S');
+	CreateKey("CameraLeft", 'A');
+	CreateKey("CameraRight", 'D');
+
 	m_sWheel = 0;
 
 	m_pMouseObj = CGameObject::Create("MouseObj", false);

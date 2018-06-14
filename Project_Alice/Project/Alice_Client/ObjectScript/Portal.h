@@ -9,6 +9,10 @@ public:
 	bool Init() override;
 	void Update(float _fTime) override;
 public:
+	void OnCollisionEnter(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
+private:
+	void StageChange();
+public:
 	CPortal();
 	~CPortal();
 };
