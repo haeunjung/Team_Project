@@ -10,9 +10,14 @@ private:
 	CScene*		m_pCurScene;
 	CScene*		m_pNextScene;
 	CScene*		m_pPrevScene;	
+
+	bool		m_bChange;
 public:
 	inline CScene* GetCurScene() {
 		return m_pCurScene;
+	}
+	inline bool GetIsChange() {
+		return m_bChange;
 	}
 public:
 	CScene* CreateScene(const string& _strTag);

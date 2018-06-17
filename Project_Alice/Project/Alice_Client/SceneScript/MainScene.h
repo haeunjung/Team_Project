@@ -24,9 +24,9 @@ private:
 	void CreateMainSceneLight();
 	void CreateMonster(CPlayer* _pPlayer);
 public:
-	virtual bool Init();
-	virtual void Update(float _fTime);
-public:
+	bool Init() override;
+	void Update(float _fTime) override;
+private:
 	void CheckButton(CGameObject* _pObj, float _fTime);
 	void RadioButton(CGameObject* _pObj, float _fTime);
 public:

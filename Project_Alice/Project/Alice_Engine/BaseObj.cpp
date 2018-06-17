@@ -38,6 +38,12 @@ int CBaseObj::AddRef()
 	return m_iRefCount;
 }
 
+int CBaseObj::RemoveRef()
+{
+	--m_iRefCount;
+	return m_iRefCount;
+}
+
 int CBaseObj::Release()
 {
 	--m_iRefCount;

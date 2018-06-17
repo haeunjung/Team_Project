@@ -58,7 +58,7 @@ public:
 
 		m_vecSceneScript.push_back(pScript);
 
-		return pScript;
+		return pScript; 
 	}
 	CLayer* FindLayer(const string& _strTag);
 public:

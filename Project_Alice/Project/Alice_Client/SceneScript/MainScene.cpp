@@ -13,6 +13,7 @@
 #include "01.Core/PathMgr.h"
 #include "05.Scene/Scene.h"
 #include "05.Scene/Layer.h"
+#include "05.Scene/SceneMgr.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/Renderer2D.h"
 #include "07.Component/Transform.h"
@@ -606,7 +607,11 @@ CMainScene::CMainScene() :
 
 CMainScene::~CMainScene()
 {
-	DESTROY_SINGLE(CMinionMgr);
-	DESTROY_SINGLE(CUIMgr);
+	if (false == GET_SINGLE(CSceneMgr)->GetIsChange())
+	{
+		DESTROY_SINGLE(CMinionMgr);
+		DESTROY_SINGLE(CUIMgr);
+	}
+	
 	SAFE_RELEASE(m_pCheckBoxObject);
 }

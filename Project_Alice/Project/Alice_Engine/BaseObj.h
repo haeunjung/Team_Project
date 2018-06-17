@@ -52,6 +52,7 @@ public:
 	void Death();
 public:
 	int AddRef();
+	int RemoveRef();
 	int Release();
 	int Remove();
 protected:

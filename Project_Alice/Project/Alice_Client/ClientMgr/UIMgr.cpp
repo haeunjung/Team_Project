@@ -1,6 +1,7 @@
 #include "UIMgr.h"
 #include "01.Core/Input.h"
 #include "05.Scene/Scene.h"
+#include "05.Scene/SceneMgr.h"
 #include "06.GameObject/GameObject.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/UIBack.h"
@@ -25,12 +26,12 @@ CUIMgr::CUIMgr() :
 
 CUIMgr::~CUIMgr()
 {	
-	Safe_Release_VecList(m_vecHpRenderer2D);
+	//Safe_Release_VecList(m_vecHpRenderer2D);
 
-	SAFE_RELEASE(m_pSpringTransform);
-	SAFE_RELEASE(m_pTimeBar);
-	SAFE_RELEASE(m_pBatteryCount);
-	SAFE_RELEASE(m_pBattery2DMaterial);
+	//SAFE_RELEASE(m_pSpringTransform);
+	//SAFE_RELEASE(m_pTimeBar);
+	//SAFE_RELEASE(m_pBatteryCount);
+	//SAFE_RELEASE(m_pBattery2DMaterial);
 }
 
 void CUIMgr::GetBattery()
@@ -100,6 +101,9 @@ void CUIMgr::Update(float _fTime)
 	//	m_vecHpRenderer2D[m_PlayerHp - 1]->SetIsEnable(true);
 	//}
 
+	m_pTimeBar;
+	m_pBattery2DMaterial;
+	m_pBatteryCount;
 	m_pSpringTransform->RotateZ(-1.57f, _fTime);
 
 	if (m_bGetBattery)
@@ -149,6 +153,7 @@ void CUIMgr::CreateBattery2D(CLayer* _pLayer)
 	m_pBattery2DMaterial = pRenderer->GetMaterial();
 	m_pBattery2DMaterial->SetDiffuseTexture("Linear", "Battery2D", L"Battery2D.png");
 	m_pBattery2DMaterial->SetDiffuseColor(DxVector4(0.8f, 0.8f, 0.8f, 0.8f));
+	m_pBattery2DMaterial->RemoveRef();
 	SAFE_RELEASE(pRenderer);
 
 	CUIBack*	pUIBack = pBatteryObject->AddComponent<CUIBack>("Battery2DBack");
@@ -162,6 +167,7 @@ void CUIMgr::CreateBatteryCount(CLayer* _pLayer)
 {
 	CGameObject*	pBatteryCountObject = CGameObject::Create("BatteryCountObject");
 	m_pBatteryCount = pBatteryCountObject->AddComponent<CBatteryCount>("BatteryCount");
+	m_pBatteryCount->RemoveRef();
 	
 	_pLayer->AddObject(pBatteryCountObject);
 	SAFE_RELEASE(pBatteryCountObject);
@@ -198,7 +204,7 @@ void CUIMgr::CreateHpIcon(CLayer* _pLayer)
 		pMaterial->SetDiffuseColor(DxVector4(1.2f, 0.8f, 0.8f, 0.8f));
 		SAFE_RELEASE(pMaterial);
 
-		pRenderer->AddRef();
+		//pRenderer->AddRef();
 		m_vecHpRenderer2D.push_back(pRenderer);
 		SAFE_RELEASE(pRenderer);
 
@@ -214,6 +220,7 @@ void CUIMgr::CreateTimeBar(CLayer* _pLayer)
 {
 	CGameObject*	pTimeBarObject = CGameObject::Create("TimeBarObject");
 	m_pTimeBar = pTimeBarObject->AddComponent<CTimeBar>("TimeBar");
+	m_pTimeBar->RemoveRef();
 
 	_pLayer->AddObject(pTimeBarObject);
 	SAFE_RELEASE(pTimeBarObject);
@@ -227,6 +234,7 @@ void CUIMgr::CreateSpring(CLayer * _pLayer)
 	DxVector3	vScale = { 100.0f, 100.0f, 0.0f };
 	m_pSpringTransform->SetWorldScale(vScale);
 	m_pSpringTransform->SetWorldPos(120.0f, 635.0f, 0.0f);	
+	m_pSpringTransform->RemoveRef();
 
 	CUIBack*	pUI = pSpringObject->AddComponent<CUIBack>("SpringRendererUI");
 	SAFE_RELEASE(pUI);

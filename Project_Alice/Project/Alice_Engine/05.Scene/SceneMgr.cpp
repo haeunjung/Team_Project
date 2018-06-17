@@ -36,6 +36,7 @@ int CSceneMgr::ChangeScene()
 		}
 
 		m_pNextScene = NULL;
+		m_bChange = false;
 
 		return SC_NEXT;
 	}
@@ -47,6 +48,7 @@ void CSceneMgr::ReplaceScene(CScene * _pScene)
 {
 	// 기존 Scene 지우고 NextScene만 설정
 	m_pNextScene = _pScene;
+	m_bChange = true;
 }
 
 void CSceneMgr::PushScene(CScene * _pScene)
@@ -163,7 +165,8 @@ bool CSceneMgr::ChangeScene(const string & _strKey)
 CSceneMgr::CSceneMgr() : 
 	m_pCurScene(NULL),
 	m_pNextScene(NULL),
-	m_pPrevScene(NULL)
+	m_pPrevScene(NULL),
+	m_bChange(false)
 {
 }
 

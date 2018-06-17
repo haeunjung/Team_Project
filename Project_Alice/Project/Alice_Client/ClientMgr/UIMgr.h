@@ -12,10 +12,13 @@ class CTimeBar;
 class CUIMgr
 {
 private:
+	bool m_bInit;
+
 	CMaterial * m_pBattery2DMaterial;
 	bool m_bGetBattery;
 	float m_fColor;
 	bool m_bColor;
+
 
 	CBatteryCount * m_pBatteryCount;
 
