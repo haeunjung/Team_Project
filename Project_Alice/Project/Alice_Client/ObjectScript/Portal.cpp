@@ -5,6 +5,7 @@
 #include "07.Component/Transform.h"
 #include "07.Component/Renderer.h"
 #include "07.Component/ColliderAABB.h"
+#include "07.Component/ColliderSphere.h"
 #include "../SceneScript/MainScene2.h"
 
 CPortal::CPortal()
@@ -21,7 +22,7 @@ CPortal::~CPortal()
 bool CPortal::Init()
 {
 	m_pTransform->SetWorldScale(0.02f, 0.02f, 0.02f);
-	m_pTransform->SetWorldPos(10.0f, 2.0f, 10.0f);
+	m_pTransform->SetWorldPos(65.0f, 7.0f, 55.0f);
 	//m_pTransform->SetLocalPos(0.0f, -50.0f, 0.0f);
 	//m_pTransform->SetWorldRot(_vRot);
 
@@ -33,10 +34,15 @@ bool CPortal::Init()
 	DxVector3 vMeshSize = pRenderer->GetMeshSize();
 	SAFE_RELEASE(pRenderer);
 
-	CColliderAABB* pColAABB = m_pGameObject->AddComponent<CColliderAABB>("PortalColBox");
+	/*CColliderAABB* pColAABB = m_pGameObject->AddComponent<CColliderAABB>("PortalColBox");
 	pColAABB->SetColCheck(CC_PORTAL);
 	pColAABB->SetScale(vMeshSize * 0.5f);
-	SAFE_RELEASE(pColAABB);
+	SAFE_RELEASE(pColAABB);*/
+
+	CColliderSphere* pColSphere = m_pGameObject->AddComponent<CColliderSphere>("PortalColSphere");
+	pColSphere->SetColCheck(CC_PORTAL);
+	pColSphere->SetSphereInfo(65.0f, 7.0f, 55.0f, 0.5f);
+	SAFE_RELEASE(pColSphere);
 
 	return true;
 }

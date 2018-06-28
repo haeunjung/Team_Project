@@ -479,7 +479,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 bool CMainScene::Init()
 {
 	CreateProtoType();
-	//CreateObject();
+	CreateObject();
 	CreateTerrain();
 	//CreateRadioButton();
 	CreateCheckBox();
@@ -511,7 +511,7 @@ bool CMainScene::Init()
 	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");
 
 	// 몬스터 생성 시 플레이어 정보 넘겨줌
-	//CreateMonster(pPlayerScript);
+	CreateMonster(pPlayerScript);
 
 	// TimeBar에 플레이어 정보 넘겨줌
 	GET_SINGLE(CUIMgr)->SetPlayer(pPlayerScript);

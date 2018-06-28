@@ -356,7 +356,64 @@ void CMainScene2::CreateMainSceneLight()
 
 void CMainScene2::CreateMonster(CPlayer* _pPlayer)
 {
-	
+	CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+
+	CGameObject*	pMinionObj = CGameObject::Create("Minion");
+	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 10.0f));
+	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_ONE);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
+	SAFE_RELEASE(pMinion);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	pMinionObj = CGameObject::Create("Minion");
+	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 40.0f));
+	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_TWO);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
+	SAFE_RELEASE(pMinion);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	pMinionObj = CGameObject::Create("Minion");
+	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 35.0f));
+	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_THREE);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
+	SAFE_RELEASE(pMinion);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	pMinionObj = CGameObject::Create("Minion");
+	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 15.0f));
+	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_FOUR);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
+	SAFE_RELEASE(pMinion);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	pMinionObj = CGameObject::Create("Minion");
+	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
+	pMinion->SetPlayer(_pPlayer);
+	pMinion->SetRespawnPos(POS_FIVE);
+	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
+	SAFE_RELEASE(pMinion);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	SAFE_RELEASE(pLayer);
 }
 
 bool CMainScene2::Init()
@@ -365,7 +422,7 @@ bool CMainScene2::Init()
 	CreateObject();
 	CreateTerrain();
 	CreateCheckBox();
-	//CreateMainSceneLight();
+	CreateMainSceneLight();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
 
@@ -393,7 +450,7 @@ bool CMainScene2::Init()
 	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");
 
 	// 몬스터 생성 시 플레이어 정보 넘겨줌
-	//CreateMonster(pPlayerScript);
+	CreateMonster(pPlayerScript);
 
 	// TimeBar에 플레이어 정보 넘겨줌
 	GET_SINGLE(CUIMgr)->SetPlayer(pPlayerScript);
@@ -449,3 +506,5 @@ CMainScene2::~CMainScene2()
 	}
 	SAFE_RELEASE(m_pCheckBoxObject);
 }
+
+// 06.28 - 메모리 릭 확인
