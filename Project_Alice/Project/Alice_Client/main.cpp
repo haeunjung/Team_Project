@@ -5,6 +5,7 @@
 #include "05.Scene/Scene.h"
 #include "SceneScript/MainScene.h"
 #include "SceneScript/StartScene.h"
+#include "ClientMgr\StageMgr.h"
 
 WOOJUN_USING
 
@@ -28,6 +29,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	int iReturnValue = GET_SINGLE(CEngine_Core)->Run();
 
 	DESTROY_SINGLE(CEngine_Core);
+
+	/*FILE* fp = NULL;
+	fopen_s(&fp, "..\\..\\Res\\Data\\Save.Data", "wb");
+
+	int One = 1;
+	fwrite(&One, sizeof(int), 1, fp);
+
+	fclose(fp);*/
+	DESTROY_SINGLE(CStageMgr);
 
 	return iReturnValue;
 }

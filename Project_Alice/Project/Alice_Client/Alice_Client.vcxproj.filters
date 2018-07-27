@@ -127,6 +127,9 @@
     <ClInclude Include="SceneScript\MainScene2.h">
       <Filter>02. SceneScript</Filter>
     </ClInclude>
+    <ClInclude Include="ClientMgr\StageMgr.h">
+      <Filter>05. ClientMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="SceneScript\MainScene2.cpp">
       <Filter>02. SceneScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientMgr\StageMgr.cpp">
+      <Filter>05. ClientMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

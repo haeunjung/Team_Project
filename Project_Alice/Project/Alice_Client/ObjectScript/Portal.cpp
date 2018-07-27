@@ -7,6 +7,7 @@
 #include "07.Component/ColliderAABB.h"
 #include "07.Component/ColliderSphere.h"
 #include "../SceneScript/MainScene2.h"
+#include "../ClientMgr/StageMgr.h"
 
 CPortal::CPortal()
 {
@@ -62,12 +63,7 @@ void CPortal::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 
 void CPortal::StageChange()
 {
-	CScene* pScene = GET_SINGLE(CSceneMgr)->CreateScene("MainScene2");
-
-	//CLoadingScene* pLoad = pScene->CreateScript<CLoadingScene>();
-	CMainScene2* pMain2 = pScene->CreateScript<CMainScene2>();
-
-	GET_SINGLE(CSceneMgr)->ReplaceScene(pScene);
+	GET_SINGLE(CStageMgr)->NextStage();
 }
 
 /*

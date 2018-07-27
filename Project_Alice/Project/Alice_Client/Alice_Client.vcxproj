@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientMgr\MinionMgr.h" />
+    <ClInclude Include="ClientMgr\StageMgr.h" />
     <ClInclude Include="ClientMgr\UIMgr.h" />
     <ClInclude Include="Client_Header.h" />
     <ClInclude Include="ObjectScript\Battery.h" />
@@ -44,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientMgr\MinionMgr.cpp" />
+    <ClCompile Include="ClientMgr\StageMgr.cpp" />
     <ClCompile Include="ClientMgr\UIMgr.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectScript\Battery.cpp" />

@@ -9,6 +9,7 @@
 #include "07.Component/UIButton.h"
 #include "07.Component/ColliderRect.h"
 #include "../ObjectScript/Mouse.h"
+#include "../ClientMgr/StageMgr.h"
 #include "MainScene.h"
 #include "LoadingScene.h"
 
@@ -177,12 +178,7 @@ void CStartScene::ExitButton(CGameObject* _pObj, float _fTime)
 
 void CStartScene::StartButton(CGameObject * _pObj, float _fTime)
 {
-	CScene* pScene = GET_SINGLE(CSceneMgr)->CreateScene("MainScene");
-
-	//CLoadingScene* pLoad = pScene->CreateScript<CLoadingScene>();
-	CMainScene* pMain = pScene->CreateScript<CMainScene>();
-
-	GET_SINGLE(CSceneMgr)->ReplaceScene(pScene);
+	GET_SINGLE(CStageMgr)->StartStage();
 }
 
 CStartScene::CStartScene() :
