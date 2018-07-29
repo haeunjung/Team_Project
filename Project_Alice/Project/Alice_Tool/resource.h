@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++에서 생성한 포함 파일입니다.
-// WOOJUN_TOOL.rc에서 사용되고 있습니다.
+// Alice_Tool.rc에서 사용되고 있습니다.
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
@@ -11,13 +11,21 @@
 #define IDD_DIALOG_OBJECT               314
 #define IDD_DIALOG1                     316
 #define IDD_DIALOG_ANIMATION            318
+#define IDD_DIALOG2                     325
+#define IDD_DIALOG_MONSTER              325
 #define IDC_TAB1                        1000
 #define IDC_BUTTON1                     1001
+#define IDC_BUTTON_CREATELIGHT          1001
+#define IDC_BUTTON_SAVELIGHT            1002
 #define IDC_STATIC_POSX                 1003
+#define IDC_BUTTON_LOAD                 1003
 #define IDC_EDIT1_POSX                  1004
+#define IDC_BUTTON_CREATELIGHT2         1004
 #define IDC_LIST1                       1005
 #define IDC_LOAD_BUTTON                 1006
+#define IDC_STATIC_POSX2                1006
 #define IDC_CREATE_BUTTON               1007
+#define IDC_EDIT1_POSX2                 1007
 #define IDC_EDIT_CLIPNAME               1008
 #define IDC_SAVEOBJECT                  1008
 #define IDC_STATIC_POSY                 1009
@@ -30,8 +38,10 @@
 #define IDC_BUTTON_ADDCLIP              1012
 #define IDC_STATIC_ROTATIONX            1013
 #define IDC_BUTTON_SAVEANI              1013
+#define IDC_EDIT1_POSY2                 1013
 #define IDC_EDIT1_ROTATIONX             1014
 #define IDC_BUTTON_MODIFYCLIP           1014
+#define IDC_EDIT1_POSZ2                 1014
 #define IDC_STATIC_ROTATIONY            1015
 #define IDC_EDIT_DEFAULTCLIP            1015
 #define IDC_EDIT1_ROTATIONY             1016
@@ -57,9 +67,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        321
+#define _APS_NEXT_RESOURCE_VALUE        327
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1013
+#define _APS_NEXT_CONTROL_VALUE         1015
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

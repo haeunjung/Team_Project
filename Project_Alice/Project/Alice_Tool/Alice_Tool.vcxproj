@@ -206,6 +206,7 @@
     <ClInclude Include="EditForm.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MenuDialog.h" />
+    <ClInclude Include="MonsterDialog.h" />
     <ClInclude Include="ObjectDialog.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -225,6 +226,7 @@
     <ClCompile Include="EditForm.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MenuDialog.cpp" />
+    <ClCompile Include="MonsterDialog.cpp" />
     <ClCompile Include="ObjectDialog.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

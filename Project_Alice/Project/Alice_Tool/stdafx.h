@@ -52,3 +52,5 @@
 
 #include "Tool_Header.h"
 #include <afxcontrolbars.h>
+#include <afxcontrolbars.h>
+#include <afxcontrolbars.h>

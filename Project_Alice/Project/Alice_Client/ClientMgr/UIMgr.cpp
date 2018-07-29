@@ -101,9 +101,9 @@ void CUIMgr::Update(float _fTime)
 	//	m_vecHpRenderer2D[m_PlayerHp - 1]->SetIsEnable(true);
 	//}
 
-	m_pTimeBar;
-	m_pBattery2DMaterial;
-	m_pBatteryCount;
+	//m_pTimeBar;
+	//m_pBattery2DMaterial;
+	//m_pBatteryCount;
 	m_pSpringTransform->RotateZ(-1.57f, _fTime);
 
 	if (m_bGetBattery)
@@ -175,6 +175,11 @@ void CUIMgr::CreateBatteryCount(CLayer* _pLayer)
 
 void CUIMgr::CreateHpIcon(CLayer* _pLayer)
 {	
+	if (0 < m_vecHpRenderer2D.size())
+	{
+		m_vecHpRenderer2D.clear();
+	}
+
 	CGameObject*	pHpObject = NULL;
 	CTransform*		pTransform = NULL;
 	DxVector3		vScale = {};
@@ -182,7 +187,7 @@ void CUIMgr::CreateHpIcon(CLayer* _pLayer)
 	CMaterial*		pMaterial = NULL;
 	CUIBack*		pUIBack = NULL;
 
-	for (int i = 0; i < m_PlayerHp; ++i)
+	for (int i = 0; i < MAXHP; ++i)
 	{
 		pHpObject = CGameObject::Create("HpObject");
 

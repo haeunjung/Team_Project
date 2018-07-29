@@ -11,6 +11,8 @@
 #include "07.Component/Terrain.h"
 #include "07.Component/CameraFree.h"
 #include "07.Component/ColliderSphere.h"
+#include "07.Component/PointLight.h"
+#include "07.Component/SpotParent.h"
 
 void CToolScene::CreateTerrain()
 {
@@ -34,9 +36,142 @@ void CToolScene::CreateTerrain()
 	SAFE_RELEASE(pMapLayer);
 }
 
+void CToolScene::CreateLignt()
+{
+	CGameObject* pLightObject = m_pScene->CreateLight("PointLight1", LT_POINT);
+
+	CTransform* pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(15.f, 7.0f, 15.f);
+	SAFE_RELEASE(pTransform);
+
+	CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+
+	LIGHTINFO	tLightInfo = {};
+	tLightInfo.eType = LT_POINT;
+	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
+	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(0.0f, 0.2f, 0.0f);
+
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("PointLigh2", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(15.f, 7.0f, 50.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("PointLigh3", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(45.f, 10.0f, 27.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("PointLigh4", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(75.0f, 7.0f, 50.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("PointLig5", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(70.0f, 7.0f, 5.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+	SAFE_RELEASE(pLightObject);
+
+	tLightInfo.eType = LT_SPOTPARENT;
+	tLightInfo.vDiffuse = { 0.0f, 0.0f, 0.0f, 1.f };
+	tLightInfo.vAmbient = { 1.0f, 0.5f, 0.0f, 1.f };
+	tLightInfo.vSpecular = { 1.0f, 0.5f, 0.0f, 1.f };
+	tLightInfo.vAttenuation = DxVector3(1.0f, 0.0f, 0.0f);
+
+	CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+
+	pLightObject = m_pScene->CreateLight("SpotLight1", LT_SPOT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(40.0f, 10.0f, 15.0f);
+	SAFE_RELEASE(pTransform);
+
+	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pSpotLight->SetLightInfo(tLightInfo);
+	pSpotLight->InitChildSpotLight();
+	SAFE_RELEASE(pSpotLight);
+
+	pLayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("SpotLight2", LT_SPOT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(50.0f, 10.0f, 40.0f);
+	SAFE_RELEASE(pTransform);
+
+	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pSpotLight->SetLightInfo(tLightInfo);
+	pSpotLight->InitChildSpotLight();
+	SAFE_RELEASE(pSpotLight);
+
+	pLayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("SpotLight3", LT_SPOT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(10.0f, 10.0f, 20.0f);
+	SAFE_RELEASE(pTransform);
+
+	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pSpotLight->SetLightInfo(tLightInfo);
+	pSpotLight->InitChildSpotLight();
+	SAFE_RELEASE(pSpotLight);
+
+	pLayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("SpotLight4", LT_SPOT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(77.0f, 10.0f, 20.0f);
+	SAFE_RELEASE(pTransform);
+
+	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pSpotLight->SetLightInfo(tLightInfo);
+	pSpotLight->InitChildSpotLight();
+	SAFE_RELEASE(pSpotLight);
+
+	pLayer->AddObject(pLightObject);
+	SAFE_RELEASE(pLightObject);
+
+	SAFE_RELEASE(pLayer);
+}
+
 bool CToolScene::Init()
 {
 	CreateTerrain();
+	//CreateLignt();
 
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 
@@ -48,36 +183,10 @@ bool CToolScene::Init()
 
 	CCameraFree*	pCameraFree = pCameraObject->AddComponent<CCameraFree>("CameraFree");
 	SAFE_RELEASE(pCameraFree);
-	
-	//// 플레이어
-	//CGameObject*		pPlayerObject = CGameObject::Create("PlayerObject");
-	//pLayer->AddObject(pPlayerObject);
+
 	SAFE_RELEASE(pLayer);
 
-	////CCamera*	pCamera = m_pScene->GetMainCamera();	
-	////pCamera->Attach(pPlayerObject, DxVector3(0.0f, 0.0f, -5.0f));	
-	////SAFE_RELEASE(pCamera);
 	SAFE_RELEASE(pCameraObject);
-
-	//CTransform*		pTransform = pPlayerObject->GetTransform();	
-	//pTransform->SetWorldPos(1.0f, 1.0f, 0.0f);
-	//pTransform->SetWorldScale(0.01f, 0.01f, 0.01f);
-	//SAFE_RELEASE(pTransform);
-
-	//CRenderer* pPlayerRenderer = pPlayerObject->AddComponent<CRenderer>("Renderer");
-	//pPlayerRenderer->SetMesh("PlayerMesh", L"Warehouse01.FBX");
-	//pPlayerRenderer->SetShader(STANDARD_BUMP_SHADER);
-	//pPlayerRenderer->SetInputLayout("BumpInputLayout");
-	//pPlayerRenderer->SetRenderState(ALPHABLEND);
-	//SAFE_RELEASE(pPlayerRenderer);	
-
-	//CColliderSphere*	pSphere = pPlayerObject->AddComponent<CColliderSphere>("Collider");
-	//pSphere->SetSphereInfo(Vec3Zero, 1.0f);
-	//SAFE_RELEASE(pSphere);
-
-	//pPlayerObject->AddRef();
-	//GET_SINGLE(CToolValue)->pPlayerObj = pPlayerObject;
-	//SAFE_RELEASE(pPlayerObject);
 
 	return true;
 }

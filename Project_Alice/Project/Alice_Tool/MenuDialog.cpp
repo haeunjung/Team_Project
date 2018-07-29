@@ -9,6 +9,7 @@
 #include "ObjectDialog.h"
 #include "AniDialog.h"
 #include "TestDialog.h"
+#include "MonsterDialog.h"
 #include "ToolValue.h"
 
 // CMenuDialog 대화 상자입니다.
@@ -82,14 +83,15 @@ BOOL CMenuDialog::OnInitDialog()
 		GET_SINGLE(CToolValue)->m_pObjectDialog = pObjectDialog;
 	}
 
+	CreateTab<CTestDialog>(IDD_DIALOG1, L"Light");
+	CreateTab<CMonsterDialog>(IDD_DIALOG_MONSTER, L"Monster");
+
 	CAniDialog*	pAniDialog = CreateTab<CAniDialog>(IDD_DIALOG_ANIMATION, L"Animation");
 	if (NULL != pAniDialog)
 	{
 		GET_SINGLE(CToolValue)->m_pAnimationDialog = pAniDialog;
 	}
-
-	CreateTab<CTestDialog>(IDD_DIALOG1, L"Test");
-
+	
 	ShowDialog(TI_OBJECT);
 
 	return TRUE;  // return TRUE unless you set the focus to a control

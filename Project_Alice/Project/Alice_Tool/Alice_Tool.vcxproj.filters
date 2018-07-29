@@ -80,6 +80,9 @@
     <ClInclude Include="AniDialog.h">
       <Filter>03. Dialog</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterDialog.h">
+      <Filter>03. Dialog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -120,6 +123,9 @@
       <Filter>04. SceneScript</Filter>
     </ClCompile>
     <ClCompile Include="AniDialog.cpp">
+      <Filter>03. Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterDialog.cpp">
       <Filter>03. Dialog</Filter>
     </ClCompile>
   </ItemGroup>

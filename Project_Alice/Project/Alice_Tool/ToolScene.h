@@ -8,6 +8,7 @@ class CToolScene :
 {
 private:
 	void CreateTerrain();
+	void CreateLignt();
 public:
 	bool Init() override;
 	void Update(float _fTime) override;
