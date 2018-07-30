@@ -35,6 +35,15 @@ struct VS_TEXTURENORMAL_INPUT
     float2 vUV : TEXCOORD;
 };
 
+struct VS_TEXTURENORMAL_ANIM_INPUT
+{
+    float3 vPos : POSITION;
+    float3 vNormal : NORMAL;
+    float2 vUV : TEXCOORD;
+    float4 vWeights : BLENDWEIGHTS;
+    float4 vIndices : BLENDINDICES;
+};
+
 struct VS_TEXTURENORMAL_OUTPUT
 {
     float4 vPos : SV_POSITION;
@@ -308,6 +317,29 @@ _tagSkinning Skinning(float3 vPos, float3 vNormal, float3 vTangent, float3 vBino
     tSkinning.vNormal = normalize(tSkinning.vNormal);
     tSkinning.vTangent = normalize(tSkinning.vTangent);
     tSkinning.vBinormal = normalize(tSkinning.vBinormal);
+
+    return tSkinning;
+}
+
+_tagSkinning Skinning(float3 vPos, float3 vNormal, float4 vWeights, float4 vIndices)
+{
+    _tagSkinning tSkinning = (_tagSkinning) 0;
+
+    float fWeights[4];
+    fWeights[0] = vWeights.x;
+    fWeights[1] = vWeights.y;
+    fWeights[2] = vWeights.z;
+    fWeights[3] = 1.0f - vWeights.x - vWeights.y - vWeights.z;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        matrix matBone = GetBoneMatrix((int) vIndices[i]);
+
+        tSkinning.vPos += fWeights[i] * mul(float4(vPos, 1.0f), matBone).xyz;
+        tSkinning.vNormal += fWeights[i] * mul(float4(vNormal, 0.0f), matBone).xyz;
+    }
+
+    tSkinning.vNormal = normalize(tSkinning.vNormal);
 
     return tSkinning;
 }

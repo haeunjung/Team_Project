@@ -81,22 +81,23 @@
 #define	ACC_BLEND			"AccBlend"
 
 // Shader Key
-#define	STANDARD_TEXNORMAL_SHADER	"StandardTextureNormalShader"
-#define EFFECT_SHADER				"EffectShader"
-#define COLLIDER_COLOR_SHADER		"ColliderColorShader"
-#define STANDARD_BUMP_SHADER		"StandardBumpShader"
-#define UI_SHADER					"UIShader"
-#define TERRAIN_SHADER				"TerrainShader"
-#define STANDARD_ANI_BUMP_SHADER	"StandardAniBumpShader"
-#define LIGHT_ACC_SHADER			"LightAccShader"
-#define LIGHT_BLEND_SHADER			"LightBlendShader"
-#define LIGHT_BLEND_OUTPUT_SHADER	"LightBlendOutputShader"
+#define	STANDARD_TEXNORMAL_SHADER		"StandardTextureNormalShader"
+#define STANDARD_TEXNORMAL_ANIM_SHADER	"StandardTexNormalAnimShader" 
+#define EFFECT_SHADER					"EffectShader"
+#define COLLIDER_COLOR_SHADER			"ColliderColorShader"
+#define STANDARD_BUMP_SHADER			"StandardBumpShader"
+#define UI_SHADER						"UIShader"
+#define TERRAIN_SHADER					"TerrainShader"
+#define STANDARD_ANI_BUMP_SHADER		"StandardAniBumpShader"
+#define LIGHT_ACC_SHADER				"LightAccShader"
+#define LIGHT_BLEND_SHADER				"LightBlendShader"
+#define LIGHT_BLEND_OUTPUT_SHADER		"LightBlendOutputShader"
 
-#define	PARTICLE_STREAMOUT_SHADER	"ParticleStreamOutShader"
-#define	PARTICLE_SHADER				"ParticleShader"
-#define	PARTICLE_LIGHT_SHADER		"ParticleLightShader"
+#define	PARTICLE_STREAMOUT_SHADER		"ParticleStreamOutShader"
+#define	PARTICLE_SHADER					"ParticleShader"
+#define	PARTICLE_LIGHT_SHADER			"ParticleLightShader"
 
-#define ACC_BLEND					"AccBlend"
+#define ACC_BLEND						"AccBlend"
 
 #define TERRAINSIZE		20
 #define MAXHP	5

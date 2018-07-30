@@ -23,6 +23,7 @@ private:
 	void CreateTerrain();
 	void CreateMainSceneLight();
 	void CreateMonster(CPlayer* _pPlayer);
+	void CreatePortal();
 public:
 	bool Init() override;
 	void Update(float _fTime) override;

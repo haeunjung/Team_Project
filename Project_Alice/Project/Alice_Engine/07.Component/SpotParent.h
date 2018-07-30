@@ -13,6 +13,7 @@ private:
 	CSpotLight* m_pChildSpotLight;
 public:
 	void InitChildSpotLight();
+	CSpotLight* GetChildSpotLight();
 
 private:
 	friend class CGameObject;

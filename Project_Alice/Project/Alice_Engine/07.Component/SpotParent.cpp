@@ -39,6 +39,11 @@ void CSpotParent::InitChildSpotLight()
 	m_pChildSpotLight->InitSpotLightInfo();
 }
 
+CSpotLight* CSpotParent::GetChildSpotLight()
+ {
+	return m_pChildSpotLight;
+}
+
 bool CSpotParent::Init()
 {
 	m_pChild = CGameObject::Create("SpotChild");

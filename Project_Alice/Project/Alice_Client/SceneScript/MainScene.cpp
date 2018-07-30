@@ -272,7 +272,7 @@ void CMainScene::CreateTerrain()
 
 
 void CMainScene::CreateMainSceneLight()
-{
+{	
 	CGameObject* pLightObject = m_pScene->CreateLight("PointLight1", LT_POINT);
 
 	CTransform* pTransform = pLightObject->GetTransform();
@@ -292,7 +292,7 @@ void CMainScene::CreateMainSceneLight()
 	SAFE_RELEASE(pPointLight);
 	SAFE_RELEASE(pLightObject);
 
-	pLightObject = m_pScene->CreateLight("PointLigh2", LT_POINT);
+	pLightObject = m_pScene->CreateLight("PointLight2", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
 	pTransform->SetWorldPos(15.f, 7.0f, 50.f);
@@ -303,7 +303,7 @@ void CMainScene::CreateMainSceneLight()
 	SAFE_RELEASE(pPointLight);
 	SAFE_RELEASE(pLightObject);
 
-	pLightObject = m_pScene->CreateLight("PointLigh3", LT_POINT);
+	pLightObject = m_pScene->CreateLight("PointLight3", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
 	pTransform->SetWorldPos(45.f, 10.0f, 27.f);
@@ -314,7 +314,7 @@ void CMainScene::CreateMainSceneLight()
 	SAFE_RELEASE(pPointLight);
 	SAFE_RELEASE(pLightObject);
 
-	pLightObject = m_pScene->CreateLight("PointLigh4", LT_POINT);
+	pLightObject = m_pScene->CreateLight("PointLight4", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
 	pTransform->SetWorldPos(75.0f, 7.0f, 50.f);
@@ -325,10 +325,21 @@ void CMainScene::CreateMainSceneLight()
 	SAFE_RELEASE(pPointLight);
 	SAFE_RELEASE(pLightObject);
 
-	pLightObject = m_pScene->CreateLight("PointLig5", LT_POINT);
+	pLightObject = m_pScene->CreateLight("PointLight5", LT_POINT);
 
 	pTransform = pLightObject->GetTransform();
 	pTransform->SetWorldPos(70.0f, 7.0f, 5.f);
+	SAFE_RELEASE(pTransform);
+
+	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	pPointLight->SetLightInfo(tLightInfo);
+	SAFE_RELEASE(pPointLight);
+	SAFE_RELEASE(pLightObject);
+
+	pLightObject = m_pScene->CreateLight("PointLight6", LT_POINT);
+
+	pTransform = pLightObject->GetTransform();
+	pTransform->SetWorldPos(65.0f, 10.0f, 55.0f);
 	SAFE_RELEASE(pTransform);
 
 	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
@@ -476,6 +487,31 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	SAFE_RELEASE(pLayer);
 }
 
+void CMainScene::CreatePortal()
+{
+	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+
+	// Portal
+	CGameObject*	pPortalObject = CGameObject::Create("Portal");
+	pLayer->AddObject(pPortalObject);
+
+	CTransform*		pTransform = pPortalObject->GetTransform();
+	pTransform->SetWorldPos(65.0f, 7.0f, 55.0f);
+	SAFE_RELEASE(pTransform);
+
+	CPortal*	pPortalScript = pPortalObject->AddComponent<CPortal>("PortalComponent");
+	SAFE_RELEASE(pPortalScript);
+
+	CColliderSphere* pColSphere = pPortalObject->AddComponent<CColliderSphere>("PortalColSphere");
+	pColSphere->SetColCheck(CC_PORTAL);
+	pColSphere->SetSphereInfo(65.0f, 7.0f, 55.0f, 0.5f);
+	SAFE_RELEASE(pColSphere);
+
+	SAFE_RELEASE(pPortalObject);
+
+	SAFE_RELEASE(pLayer);
+}
+
 bool CMainScene::Init()
 {
 	CreateProtoType();
@@ -484,6 +520,7 @@ bool CMainScene::Init()
 	//CreateRadioButton();
 	CreateCheckBox();
 	CreateMainSceneLight();
+	CreatePortal();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
 
@@ -519,38 +556,7 @@ bool CMainScene::Init()
 	SAFE_RELEASE(pPlayerScript);
 	SAFE_RELEASE(pPlayerObject);
 	SAFE_RELEASE(pCameraObject);
-
-	//pCameraObject = m_pScene->CreateCamera("SubCamera"/*, DxVector3(0.0f, 0.0f, -5.0f)*/);
-	//SAFE_RELEASE(pCameraObject);
-
-	/*CGameObject* pBattery = CGameObject::Create("BatteryObject");
-	CBattery*	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
-	SAFE_RELEASE(pBattertScript);
-	CTransform* pTransform = pBattery->GetTransform();
-	pTransform->SetWorldPos(35.0f, 1.0f, 15.0f);
-	SAFE_RELEASE(pTransform);
-
-	pLayer->AddObject(pBattery);
-	SAFE_RELEASE(pBattery);
-
-	pBattery = CGameObject::Create("BatteryObject");
-	pBattertScript = pBattery->AddComponent<CBattery>("BatteryScript");
-	SAFE_RELEASE(pBattertScript);
-	pTransform = pBattery->GetTransform();
-	pTransform->SetWorldPos(15.0f, 1.0f, 30.0f);
-	SAFE_RELEASE(pTransform);
-
-	pLayer->AddObject(pBattery);
-	SAFE_RELEASE(pBattery);*/
-
-	// Portal
-	CGameObject*	pPortalObject = CGameObject::Create("Portal");
-	pLayer->AddObject(pPortalObject);
-
-	CPortal*	pPortalScript = pPortalObject->AddComponent<CPortal>("PortalComponent");
-	SAFE_RELEASE(pPortalScript);
-	SAFE_RELEASE(pPortalObject);
-
+	
 	SAFE_RELEASE(pLayer);
 
 	// Test Box Mesh »ý¼º

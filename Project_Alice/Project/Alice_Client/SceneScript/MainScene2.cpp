@@ -224,134 +224,86 @@ void CMainScene2::CreateTerrain()
 
 void CMainScene2::CreateMainSceneLight()
 {
-	CGameObject* pLightObject = m_pScene->CreateLight("PointLight1", LT_POINT);
+	string	strPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(DATAPATH);
+	strPath += "Light2.Data";
 
-	CTransform* pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(15.f, 7.0f, 15.f);
-	SAFE_RELEASE(pTransform);
+	FILE*	pFile = NULL;
+	fopen_s(&pFile, strPath.c_str(), "rb");
 
-	CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
+	if (!pFile)
+	{
+		return;
+	}
 
-	LIGHTINFO	tLightInfo = {};
-	tLightInfo.eType = LT_POINT;
-	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
-	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vAttenuation = DxVector3(0.0f, 0.2f, 0.0f);
+	// Vector Size Load
+	size_t Size = 0;
+	fread(&Size, 4, 1, pFile);
 
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-	SAFE_RELEASE(pLightObject);
+	LIGHT_TYPE eLightType = LT_END;
+	DxVector3 vPos = {};
+	for (size_t i = 0; i < Size; ++i)
+	{
+		// 조명 타입 로드			
+		fread(&eLightType, sizeof(LIGHT_TYPE), 1, pFile);
 
-	pLightObject = m_pScene->CreateLight("PointLigh2", LT_POINT);
+		// WorldPos 로드			
+		fread(&vPos, sizeof(DxVector3), 1, pFile);
 
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(15.f, 7.0f, 50.f);
-	SAFE_RELEASE(pTransform);
+		switch (eLightType)
+		{
+		case WOOJUN::LT_POINT:
+		{
+			CGameObject* pLightObject = m_pScene->CreateLight("PointLight1", LT_POINT);
 
-	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-	SAFE_RELEASE(pLightObject);
+			CTransform* pTransform = pLightObject->GetTransform();
+			pTransform->SetWorldPos(vPos);
+			SAFE_RELEASE(pTransform);
 
-	pLightObject = m_pScene->CreateLight("PointLigh3", LT_POINT);
+			CPointLight* pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
 
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(45.f, 10.0f, 27.f);
-	SAFE_RELEASE(pTransform);
+			LIGHTINFO	tLightInfo = {};
+			tLightInfo.eType = LT_POINT;
+			tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
+			tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
+			tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
+			tLightInfo.vAttenuation = DxVector3(0.0f, 0.2f, 0.0f);
 
-	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-	SAFE_RELEASE(pLightObject);
+			pPointLight->SetLightInfo(tLightInfo);
+			SAFE_RELEASE(pPointLight);
+			SAFE_RELEASE(pLightObject);
+			break;
+		}
+		case WOOJUN::LT_SPOTPARENT:
+		{
+			CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 
-	pLightObject = m_pScene->CreateLight("PointLigh4", LT_POINT);
+			CGameObject* pLightObject = m_pScene->CreateLight("SpotLight1", LT_SPOT);
 
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(75.0f, 7.0f, 50.f);
-	SAFE_RELEASE(pTransform);
+			CTransform* pTransform = pLightObject->GetTransform();
+			pTransform->SetWorldPos(vPos);
+			SAFE_RELEASE(pTransform);
 
-	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-	SAFE_RELEASE(pLightObject);
+			CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
 
-	pLightObject = m_pScene->CreateLight("PointLig5", LT_POINT);
+			LIGHTINFO	tLightInfo = {};
+			tLightInfo.eType = LT_SPOTPARENT;
+			tLightInfo.vDiffuse = { 0.0f, 0.0f, 0.0f, 1.f };
+			tLightInfo.vAmbient = { 1.0f, 0.5f, 0.0f, 1.f };
+			tLightInfo.vSpecular = { 1.0f, 0.5f, 0.0f, 1.f };
+			tLightInfo.vAttenuation = DxVector3(1.0f, 0.0f, 0.0f);
 
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(70.0f, 7.0f, 5.f);
-	SAFE_RELEASE(pTransform);
+			pSpotLight->SetLightInfo(tLightInfo);
+			pSpotLight->InitChildSpotLight();
+			SAFE_RELEASE(pSpotLight);
 
-	pPointLight = (CPointLight*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pPointLight->SetLightInfo(tLightInfo);
-	SAFE_RELEASE(pPointLight);
-	SAFE_RELEASE(pLightObject);
+			pLayer->AddObject(pLightObject);
+			SAFE_RELEASE(pLightObject);
 
-	tLightInfo.eType = LT_SPOTPARENT;
-	tLightInfo.vDiffuse = { 0.0f, 0.0f, 0.0f, 1.f };
-	tLightInfo.vAmbient = { 1.0f, 0.5f, 0.0f, 1.f };
-	tLightInfo.vSpecular = { 1.0f, 0.5f, 0.0f, 1.f };
-	tLightInfo.vAttenuation = DxVector3(1.0f, 0.0f, 0.0f);
-
-	CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
-
-	pLightObject = m_pScene->CreateLight("SpotLight1", LT_SPOT);
-
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(40.0f, 10.0f, 15.0f);
-	SAFE_RELEASE(pTransform);
-
-	CSpotParent* pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pSpotLight->SetLightInfo(tLightInfo);
-	pSpotLight->InitChildSpotLight();
-	SAFE_RELEASE(pSpotLight);
-
-	pLayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-
-	pLightObject = m_pScene->CreateLight("SpotLight2", LT_SPOT);
-
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(50.0f, 10.0f, 40.0f);
-	SAFE_RELEASE(pTransform);
-
-	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pSpotLight->SetLightInfo(tLightInfo);
-	pSpotLight->InitChildSpotLight();
-	SAFE_RELEASE(pSpotLight);
-
-	pLayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-
-	pLightObject = m_pScene->CreateLight("SpotLight3", LT_SPOT);
-
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(10.0f, 10.0f, 20.0f);
-	SAFE_RELEASE(pTransform);
-
-	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pSpotLight->SetLightInfo(tLightInfo);
-	pSpotLight->InitChildSpotLight();
-	SAFE_RELEASE(pSpotLight);
-
-	pLayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-
-	pLightObject = m_pScene->CreateLight("SpotLight4", LT_SPOT);
-
-	pTransform = pLightObject->GetTransform();
-	pTransform->SetWorldPos(77.0f, 10.0f, 20.0f);
-	SAFE_RELEASE(pTransform);
-
-	pSpotLight = (CSpotParent*)pLightObject->FindComponentFromType(CT_LIGHT);
-	pSpotLight->SetLightInfo(tLightInfo);
-	pSpotLight->InitChildSpotLight();
-	SAFE_RELEASE(pSpotLight);
-
-	pLayer->AddObject(pLightObject);
-	SAFE_RELEASE(pLightObject);
-
-	SAFE_RELEASE(pLayer);
+			SAFE_RELEASE(pLayer);
+			break;
+		}
+		}
+	}
 }
 
 void CMainScene2::CreateMonster(CPlayer* _pPlayer)

@@ -74,6 +74,7 @@ bool CPlayer::Init()
 	CRenderer* pPlayerRenderer = m_pGameObject->AddComponent<CRenderer>("Renderer");
 	//pPlayerRenderer->SetMesh("PlayerMesh", L"Elin.msh");
 	pPlayerRenderer->SetMesh("PlayerMesh", L"Player3.msh");	
+	//pPlayerRenderer->SetMesh("PlayerMesh", L"New_Alice.msh");
 	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");	
 	m_fy = pPlayerRenderer->GetMeshSize().y;

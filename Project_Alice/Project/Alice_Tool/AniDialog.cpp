@@ -97,8 +97,8 @@ void CAniDialog::CreateAniObject(const string & _strKey, const wstring & _FullPa
 
 	CTransform* pTransform = pGameObject->GetTransform();
 	pTransform->SetWorldPos(m_fPosX, 0.0f, 0.0f);
-	pTransform->SetWorldScale(5.0f, 5.0f, 5.0f);
-	pTransform->SetLocalRotX(-PI_HALF);
+	pTransform->SetWorldScale(1.0f, 1.0f, 1.0f);
+	//pTransform->SetLocalRotX(-PI_HALF);
 	SAFE_RELEASE(pTransform);
 
 	CToolObject* pToolObject = pGameObject->AddComponent<CToolObject>(_strKey + "Object");

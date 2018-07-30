@@ -23,27 +23,13 @@ CPortal::~CPortal()
 bool CPortal::Init()
 {
 	m_pTransform->SetWorldScale(0.02f, 0.02f, 0.02f);
-	m_pTransform->SetWorldPos(65.0f, 7.0f, 55.0f);
-	//m_pTransform->SetLocalPos(0.0f, -50.0f, 0.0f);
-	//m_pTransform->SetWorldRot(_vRot);
+	//m_pTransform->SetWorldPos(65.0f, 7.0f, 55.0f);
 
 	CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("PortalRenderer");
 	pRenderer->SetMesh("Portal", "Portal.FBX");
 	pRenderer->SetShader(STANDARD_BUMP_SHADER);
 	pRenderer->SetInputLayout("BumpInputLayout");
-
-	DxVector3 vMeshSize = pRenderer->GetMeshSize();
 	SAFE_RELEASE(pRenderer);
-
-	/*CColliderAABB* pColAABB = m_pGameObject->AddComponent<CColliderAABB>("PortalColBox");
-	pColAABB->SetColCheck(CC_PORTAL);
-	pColAABB->SetScale(vMeshSize * 0.5f);
-	SAFE_RELEASE(pColAABB);*/
-
-	CColliderSphere* pColSphere = m_pGameObject->AddComponent<CColliderSphere>("PortalColSphere");
-	pColSphere->SetColCheck(CC_PORTAL);
-	pColSphere->SetSphereInfo(65.0f, 7.0f, 55.0f, 0.5f);
-	SAFE_RELEASE(pColSphere);
 
 	return true;
 }

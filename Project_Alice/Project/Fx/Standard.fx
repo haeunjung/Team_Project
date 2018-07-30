@@ -34,6 +34,21 @@ VS_TEXTURENORMAL_OUTPUT StandardTextureNormalVS(VS_TEXTURENORMAL_INPUT input)
     return output;
 }
 
+VS_TEXTURENORMAL_OUTPUT StandardTextureNormalSkinningVS(VS_TEXTURENORMAL_ANIM_INPUT input)
+{
+    VS_TEXTURENORMAL_OUTPUT output = (VS_TEXTURENORMAL_OUTPUT) 0;
+
+	 // ½ºÅ°´×
+    _tagSkinning tSkinning = Skinning(input.vPos, input.vNormal, input.vWeights, input.vIndices);
+    
+    output.vProjPos = mul(float4(tSkinning.vPos, 1.0f), g_matWVP);
+    output.vUV = input.vUV;
+    output.vNormal = normalize(mul(float4(tSkinning.vNormal, 0.0f), g_matWV).xyz);
+    output.vPos = output.vProjPos;
+    
+    return output;
+}
+
 PS_OUTPUT StandardTextureNormalPS(VS_TEXTURENORMAL_OUTPUT input)
 {
     PS_OUTPUT output = (PS_OUTPUT) 0;

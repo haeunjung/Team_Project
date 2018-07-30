@@ -23,6 +23,10 @@ public:
 	enum { IDD = IDD_DIALOG1 };
 #endif
 
+private:
+	void CreatePointLight(DxVector3 _vPos = { 0, 0, 0 });
+	void CreateSpotLight(DxVector3 _vPos = { 0, 0, 0 });
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
@@ -36,6 +40,6 @@ public:
 	afx_msg void OnBnClickedButtonLoad();
 	afx_msg void OnLbnSelchangeList1();
 	afx_msg void OnEnChangeEdit1Posx2();
-	afx_msg void OnEnChangeEdit1Posy();
-	afx_msg void OnEnChangeEdit1Posz();
+	afx_msg void OnEnChangeEdit1Posy2();
+	afx_msg void OnEnChangeEdit1Posz2();
 };
