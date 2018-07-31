@@ -1,6 +1,6 @@
 #pragma once
 #include "afxwin.h"
-
+#include "07.Component/Transform.h"
 
 // CTestDialog 대화 상자입니다.
 
@@ -21,4 +21,23 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
+private:
+	CListBox m_MonsterListBox;
+	vector<CTransform*> m_vecTransform;
+	int m_iCurSel;
+
+	float m_fPosX;
+	float m_fPosY;
+	float m_fPosZ;
+
+public:
+	afx_msg void OnBnClickedSavemonster();
+	afx_msg void OnBnClickedLoadmonster();
+	afx_msg void OnBnClickedCreatemonster();
+	afx_msg void OnLbnSelchangeList1();
+	afx_msg void OnEnChangeMonsterposx();
+	afx_msg void OnEnChangeMonsterposy();
+	afx_msg void OnEnChangeMonsterposz();
+private:
+	void CreateMinion(DxVector3 vPos = { 0.0f, 0.0f, 0.0f });
 };

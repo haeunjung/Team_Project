@@ -13,7 +13,12 @@
 
 void CMinion::SetRespawnPos(RESPAWN_POS _eRespawnPos)
 {
-	m_eRespawnPos = _eRespawnPos;
+	//m_eRespawnPos = _eRespawnPos;
+}
+
+void CMinion::SetRespawnPos(DxVector3 _vPos)
+{
+	m_vRespawnPos = _vPos;
 }
 
 void CMinion::SetPlayer(CPlayer * _pPlayer)
@@ -452,7 +457,8 @@ void CMinion::MonsterDeath()
 
 void CMinion::SetRespawnPos()
 {
-	switch (m_eRespawnPos)
+	m_pTransform->SetWorldPos(m_vRespawnPos);
+	/*switch (m_eRespawnPos)
 	{
 	case POS_ONE:
 		m_pTransform->SetWorldPos(40.0f, 0.0f, 10.0f);
@@ -472,7 +478,7 @@ void CMinion::SetRespawnPos()
 	case POS_TEST:
 		m_pTransform->SetWorldPos(10.0f, 0.0f, 10.0f);
 		break;
-	}
+	}*/
 }
 
 CMinion::CMinion() :

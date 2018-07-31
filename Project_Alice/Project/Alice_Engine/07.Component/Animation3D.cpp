@@ -659,11 +659,12 @@ bool CAnimation3D::Load(FILE * _pFile)
 	fread(&m_iAnimationLimitFrame, 4, 1, _pFile);
 
 	int		iLength = 0;
+	char	strDefaultName[256] = {};
 	char	strName[256] = {};
 
 	fread(&iLength, 4, 1, _pFile);
-	fread(strName, 1, iLength, _pFile);
-	m_strDefaultClip = strName;
+	fread(strDefaultName, 1, iLength, _pFile);
+	m_strDefaultClip = strDefaultName;
 
 	iLength = 0;
 	fread(&iLength, 4, 1, _pFile);

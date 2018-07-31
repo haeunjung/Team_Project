@@ -233,7 +233,7 @@ void CTestDialog::OnLbnSelchangeList1()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	m_iCurSel = m_LightListBox.GetCurSel();
 
-	if (m_iCurSel > 0)
+	if (m_iCurSel >= 0)
 	{
 		CTransform* pTransform = m_vecLight[m_iCurSel]->GetTransform();
 		DxVector3 vPos = pTransform->GetWorldPos();

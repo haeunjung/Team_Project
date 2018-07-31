@@ -16,9 +16,12 @@
 #define IDC_TAB1                        1000
 #define IDC_BUTTON1                     1001
 #define IDC_BUTTON_CREATELIGHT          1001
+#define IDC_SAVEMONSTER                 1001
 #define IDC_BUTTON_SAVELIGHT            1002
+#define IDC_LOADMONSTER                 1002
 #define IDC_STATIC_POSX                 1003
 #define IDC_BUTTON_LOAD                 1003
+#define IDC_CREATEMONSTER               1003
 #define IDC_EDIT1_POSX                  1004
 #define IDC_BUTTON_CREATELIGHT2         1004
 #define IDC_LIST1                       1005
@@ -44,10 +47,14 @@
 #define IDC_EDIT1_POSZ2                 1014
 #define IDC_STATIC_ROTATIONY            1015
 #define IDC_EDIT_DEFAULTCLIP            1015
+#define IDC_MONSTERPOSX                 1015
 #define IDC_EDIT1_ROTATIONY             1016
 #define IDC_BUTTON_SETDEFAULTCLIP       1016
+#define IDC_MONSTERPOSY                 1016
 #define IDC_STATIC_ROTATIONZ            1017
 #define IDC_EDIT_CURFBX                 1017
+#define IDC_MONSTERPOSX3                1017
+#define IDC_MONSTERPOSZ                 1017
 #define IDC_EDIT1_ROTATIONZ             1018
 #define IDC_BUTTON_LOADFBX              1018
 #define IDC_STATIC_SCALEX               1019
@@ -69,7 +76,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        327
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1015
+#define _APS_NEXT_CONTROL_VALUE         1016
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

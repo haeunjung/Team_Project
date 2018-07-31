@@ -84,7 +84,9 @@ bool CPlayer::Init()
 	m_pTransform->SetLocalPos(0.0f, m_fy * 0.5f, 0.0f);
 	m_pTransform->SetWorldPos(5.0f, 0.0f, 5.0f);
 	m_pTransform->SetWorldScale(1.0f, 1.0f, 1.0f);
+	//m_pTransform->SetWorldScale(0.5f, 0.5f, 0.5f);
 	m_pTransform->SetLocalRot(-PI_HALF, PI, 0.0f);
+	//m_pTransform->SetLocalRot(0.0f, PI, 0.0f);
 
 	m_pAniController = (CAnimation3D*)m_pGameObject->FindComponentFromType(CT_ANIMATION3D);
 	//m_pAniController->AddClipCallback<CPlayer>("Run", 0.2f, this, &CPlayer::FirstStepSound);

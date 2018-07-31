@@ -31,7 +31,8 @@ class CPlayer;
 class CMinion : public CScript
 {
 private:
-	RESPAWN_POS		m_eRespawnPos;
+	//RESPAWN_POS		m_eRespawnPos;
+	DxVector3		m_vRespawnPos;
 	MONSTER_STATE	m_eMonsterState;
 	CAnimation3D*	m_pAniController;
 	CTransform*		m_pPlayerTransform;
@@ -58,6 +59,7 @@ public:
 	}
 public:
 	void SetRespawnPos(RESPAWN_POS _eRespawnPos);
+	void SetRespawnPos(DxVector3 _vPos);
 	void SetPlayer(CPlayer* _pPlayer);
 	void SetMonsterWorldPos(const DxVector3 _Pos);
 	float DistCheckFromPlayer();

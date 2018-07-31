@@ -422,7 +422,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 10.0f));
 	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_ONE);
+	pMinion->SetRespawnPos(DxVector3(40.0f, 0.0f, 10.0f));
 	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
@@ -433,7 +433,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 40.0f));	
 	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_TWO);
+	pMinion->SetRespawnPos(DxVector3(40.0f, 0.0f, 40.0f));
 	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
@@ -444,7 +444,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 35.0f));
 	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_THREE);
+	pMinion->SetRespawnPos(DxVector3(80.0f, 0.0f, 35.0f));
 	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
@@ -455,7 +455,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 15.0f));
 	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_FOUR);
+	pMinion->SetRespawnPos(DxVector3(80.0f, 0.0f, 15.0f));
 	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
@@ -466,7 +466,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
 	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_FIVE);
+	pMinion->SetRespawnPos(DxVector3(10.0f, 0.0f, 20.0f));
 	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
 	SAFE_RELEASE(pMinion);
 
@@ -478,7 +478,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 10.0f));
 	pMinion->SetPlayer(_pPlayer);
 	pMinion->SetIsTest(true);
-	pMinion->SetRespawnPos(POS_TEST);
+	pMinion->SetRespawnPos(DxVector3(10.0f, 0.0f, 10.0f));
 	SAFE_RELEASE(pMinion);
 
 	pLayer->AddObject(pMinionObj);
@@ -564,7 +564,7 @@ bool CMainScene::Init()
 	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
 	//LoadObject("Table", DxVector3(22.5f, 3.0f, 10.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(10.0f, 0.5f, 10.0f), DxVector3(5.0f, 1.0f, 5.0f), Vec3Zero);
-	//LoadObject("Table_2", DxVector3(5.0f, 0.0f, 5.0f), DxVector3(0.1f, 0.1f, 0.1f), Vec3Zero);
+	//LoadObject("Heart", DxVector3(5.0f, 0.0f, 5.0f), DxVector3(0.1f, 0.1f, 0.1f), Vec3Zero);
 
 	return true;
 }

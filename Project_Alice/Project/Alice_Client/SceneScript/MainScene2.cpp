@@ -309,63 +309,46 @@ void CMainScene2::CreateMainSceneLight()
 void CMainScene2::CreateMonster(CPlayer* _pPlayer)
 {
 	CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+	
+	string	strPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(DATAPATH);
+	strPath += "Monster2.Data";
 
-	CGameObject*	pMinionObj = CGameObject::Create("Minion");
-	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 10.0f));
-	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_ONE);
-	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
-	SAFE_RELEASE(pMinion);
+	FILE*	pFile = NULL;
+	fopen_s(&pFile, strPath.c_str(), "rb");
 
-	pLayer->AddObject(pMinionObj);
-	SAFE_RELEASE(pMinionObj);
+	if (!pFile)
+	{
+		return;
+	}
 
-	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 40.0f));
-	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_TWO);
-	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
-	SAFE_RELEASE(pMinion);
+	// Vector Size Load
+	size_t Size = 0;
+	fread(&Size, 4, 1, pFile);
 
-	pLayer->AddObject(pMinionObj);
-	SAFE_RELEASE(pMinionObj);
+	
+	DxVector3 vPos = {};
 
-	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 35.0f));
-	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_THREE);
-	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
-	SAFE_RELEASE(pMinion);
+	CGameObject*	pMinionObj = NULL;
+	CMinion*	pMinion = NULL;
+	for (size_t i = 0; i < Size; ++i)
+	{
+		// WorldPos ·Îµå			
+		fread(&vPos, sizeof(DxVector3), 1, pFile);
 
-	pLayer->AddObject(pMinionObj);
-	SAFE_RELEASE(pMinionObj);
+		pMinionObj = CGameObject::Create("Minion");
+		pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+		pMinion->SetMonsterWorldPos(vPos);
+		pMinion->SetPlayer(_pPlayer);
+		pMinion->SetRespawnPos(vPos);
+		GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
+		SAFE_RELEASE(pMinion);
 
-	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 15.0f));
-	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_FOUR);
-	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
-	SAFE_RELEASE(pMinion);
-
-	pLayer->AddObject(pMinionObj);
-	SAFE_RELEASE(pMinionObj);
-
-	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
-	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(POS_FIVE);
-	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
-	SAFE_RELEASE(pMinion);
-
-	pLayer->AddObject(pMinionObj);
-	SAFE_RELEASE(pMinionObj);
-
+		pLayer->AddObject(pMinionObj);
+		SAFE_RELEASE(pMinionObj);
+	}
 	SAFE_RELEASE(pLayer);
+
+	fclose(pFile);
 }
 
 bool CMainScene2::Init()

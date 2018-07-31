@@ -85,6 +85,10 @@ void CColliderSphere::Update(float _fTime)
 
 	if (true == m_bAniCollider)
 	{
+		if (1 == m_iBoneIndex)
+		{
+			int a = 0;
+		}
 		CAnimation3D* pAnimation3D = m_pGameObject->FindComponentFromTypeID<CAnimation3D>();
 		MATRIX matBone = pAnimation3D->GetBoneMatrixFromIndex(m_iBoneIndex);
 		//MATRIX matWorld = m_pTransform->GetWorldMatrix();

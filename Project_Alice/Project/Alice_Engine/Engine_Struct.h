@@ -624,4 +624,10 @@ typedef struct DLL _tagParticleCBuffer
 	DxVector3	vCreateDir;
 }PARTICLECBUFFER, *PPARTICLECBUFFER;
 
+typedef struct DLL _tagMinionData
+{
+	DxVector3	vPos;
+	int			iType;
+}MINIONDATA, *pMINIONDATA;
+
 WOOJUN_END
