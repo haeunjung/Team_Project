@@ -64,6 +64,7 @@ private:
 	CSoundPlayer*		m_pHitSound;
 	CSoundPlayer*		m_pAttackSound;
 	CSoundPlayer*		m_pWarningSound;
+	CSoundPlayer*		m_pGearSound;
 	//////////
 	bool m_bChange;
 	

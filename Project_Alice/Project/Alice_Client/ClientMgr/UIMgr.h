@@ -31,7 +31,8 @@ private:
 public:
 	void GetBattery();
 	void UseBattery();
-	void SetHp(int _Hp);
+	void SetHpOff(int _Hp);
+	void SetHpOn(int _Hp);
 	void SetPlayer(CPlayer* _pPlayer);
 public:
 	bool Init(CScene* _pScene);	

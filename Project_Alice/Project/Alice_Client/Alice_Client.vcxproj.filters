@@ -59,6 +59,9 @@
     <Filter Include="03. ObjectScript\09. Portal">
       <UniqueIdentifier>{b9bd1eb8-29e4-4947-9fac-d40d3be6a4e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. ObjectScript\10. Gear">
+      <UniqueIdentifier>{df7fbe29-ebb3-424e-9f7c-5c3fcd281059}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneScript\MainScene.h">
@@ -130,6 +133,9 @@
     <ClInclude Include="ClientMgr\StageMgr.h">
       <Filter>05. ClientMgr</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectScript\Gear.h">
+      <Filter>03. ObjectScript\10. Gear</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -197,6 +203,9 @@
     </ClCompile>
     <ClCompile Include="ClientMgr\StageMgr.cpp">
       <Filter>05. ClientMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Gear.cpp">
+      <Filter>03. ObjectScript\10. Gear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

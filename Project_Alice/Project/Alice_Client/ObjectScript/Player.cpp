@@ -115,6 +115,7 @@ bool CPlayer::Init()
 	m_pHitSound = m_pGameObject->AddComponent<CSoundPlayer>("HitSound");
 	m_pAttackSound = m_pGameObject->AddComponent<CSoundPlayer>("AttackSound");
 	m_pWarningSound = m_pGameObject->AddComponent<CSoundPlayer>("WarningSound");
+	m_pGearSound = m_pGameObject->AddComponent<CSoundPlayer>("GearSound");
 
 	CreatePlayerLight();
 
@@ -123,9 +124,10 @@ bool CPlayer::Init()
 	GET_SINGLE(CInput)->CreateKey("MoveLeft", VK_LEFT);
 	GET_SINGLE(CInput)->CreateKey("MoveRight", VK_RIGHT);
 
-	GET_SINGLE(CInput)->CreateKey("Init", VK_CONTROL, VK_MENU);	
 	GET_SINGLE(CInput)->CreateKey("Attack", VK_CONTROL);
 	GET_SINGLE(CInput)->CreateKey("Jump", VK_SPACE);
+	GET_SINGLE(CInput)->CreateKey("PosCheck", VK_RETURN);
+
 	GET_SINGLE(CInput)->CreateKey("ChangeCamera", 'C');
 
 	return true;
@@ -133,6 +135,14 @@ bool CPlayer::Init()
 
 void CPlayer::Input(float _fTime)
 {
+	if (true == KEYPRESS("PosCheck"))
+	{
+		char strPos[256] = {};
+		DxVector3 vPos = m_pTransform->GetWorldPos();
+		sprintf_s(strPos, "[ X : %f, Y : %f, Z : %f]\n", vPos.x, vPos.y, vPos.z);
+		CDebug::OutputConsole(strPos);
+	}
+
 	if (m_bAttack || m_bHeat || m_bClimbToTop || m_bDeath)
 	{
 		return;
@@ -248,6 +258,23 @@ void CPlayer::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 		GET_SINGLE(CMinionMgr)->MinionListDistCheck();
 		m_pWarningSound->MyPlaySound("Warning.wav");
 	}
+
+	if (m_iHp < MAXHP)
+	{
+		// 플레이어 HP가 최대보다 적을 때 Gear 획득 가능
+		if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
+			CC_GEAR == _pDest->GetColliderCheck())
+		{
+			m_pGearSound->MyPlaySound("GetBattery.mp3");
+
+			++m_iHp;
+			GET_SINGLE(CUIMgr)->SetHpOn(m_iHp);
+
+			CGameObject* pGearObject = _pDest->GetGameObject();
+			pGearObject->Death();
+			SAFE_RELEASE(pGearObject);
+		}
+	}	
 	
 }
 
@@ -262,8 +289,8 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 
 			PlayerHitEffect();
 
-			m_iHp -= 1;
-			GET_SINGLE(CUIMgr)->SetHp(m_iHp);
+			--m_iHp;
+			GET_SINGLE(CUIMgr)->SetHpOff(m_iHp);
 
 			CCamera* pCamera = m_pScene->GetMainCamera();
 			pCamera->ActionCameraOn();
@@ -848,6 +875,7 @@ CPlayer::CPlayer() :
 	m_pHitSound(NULL),
 	m_pAttackSound(NULL),
 	m_pWarningSound(NULL),
+	m_pGearSound(NULL),
 	m_bClimb(false),
 	m_bClimbToTop(false)
 {
@@ -862,6 +890,7 @@ CPlayer::CPlayer() :
 
 CPlayer::~CPlayer()
 {		
+	SAFE_RELEASE(m_pGearSound);
 	SAFE_RELEASE(m_pWarningSound);
 	SAFE_RELEASE(m_pAttackSound);
 	SAFE_RELEASE(m_pHitSound);

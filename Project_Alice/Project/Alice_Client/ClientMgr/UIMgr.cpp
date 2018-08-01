@@ -27,7 +27,6 @@ CUIMgr::CUIMgr() :
 CUIMgr::~CUIMgr()
 {	
 	//Safe_Release_VecList(m_vecHpRenderer2D);
-
 	//SAFE_RELEASE(m_pSpringTransform);
 	//SAFE_RELEASE(m_pTimeBar);
 	//SAFE_RELEASE(m_pBatteryCount);
@@ -46,7 +45,7 @@ void CUIMgr::UseBattery()
 	m_pTimeBar->GetTime();
 }
 
-void CUIMgr::SetHp(int _Hp)
+void CUIMgr::SetHpOff(int _Hp)
 {
 	m_PlayerHp = _Hp;
 
@@ -56,6 +55,18 @@ void CUIMgr::SetHp(int _Hp)
 	}
 
 	m_vecHpRenderer2D[m_PlayerHp]->SetIsEnable(false);
+}
+
+void CUIMgr::SetHpOn(int _Hp)
+{
+	m_PlayerHp = _Hp;
+
+	if (MAXHP < m_PlayerHp)
+	{
+		m_PlayerHp = MAXHP;
+	}
+
+	m_vecHpRenderer2D[m_PlayerHp - 1]->SetIsEnable(true);
 }
 
 void CUIMgr::SetPlayer(CPlayer* _pPlayer)

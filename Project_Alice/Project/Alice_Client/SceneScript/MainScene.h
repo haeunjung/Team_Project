@@ -24,6 +24,7 @@ private:
 	void CreateMainSceneLight();
 	void CreateMonster(CPlayer* _pPlayer);
 	void CreatePortal();
+	void CreateGear();
 public:
 	bool Init() override;
 	void Update(float _fTime) override;

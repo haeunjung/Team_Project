@@ -9,6 +9,7 @@
 #include "../ObjectScript/PlayerHitEffect.h"
 #include "../ObjectScript/MessageBox.h"
 #include "../ObjectScript/Portal.h"
+#include "../ObjectScript/Gear.h"
 #include "01.Core/Input.h"
 #include "01.Core/PathMgr.h"
 #include "05.Scene/Scene.h"
@@ -512,6 +513,53 @@ void CMainScene::CreatePortal()
 	SAFE_RELEASE(pLayer);
 }
 
+void CMainScene::CreateGear()
+{
+	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+
+	// Gear
+	CGameObject*	pGearObject = CGameObject::Create("Gear");
+	pLayer->AddObject(pGearObject);
+
+	CGear*	pGear = pGearObject->AddComponent<CGear>("GearComponent");
+	pGear->SetGearPos({ 1.8f, 4.0f, 37.7f });
+	SAFE_RELEASE(pGear);
+
+	SAFE_RELEASE(pGearObject);
+
+	// Gear
+	pGearObject = CGameObject::Create("Gear");
+	pLayer->AddObject(pGearObject);
+
+	pGear = pGearObject->AddComponent<CGear>("GearComponent");
+	pGear->SetGearPos({ 18.2f, 5.0f, 56.9f });
+	SAFE_RELEASE(pGear);
+
+	SAFE_RELEASE(pGearObject);
+
+	// Gear
+	pGearObject = CGameObject::Create("Gear");
+	pLayer->AddObject(pGearObject);
+
+	pGear = pGearObject->AddComponent<CGear>("GearComponent");
+	pGear->SetGearPos({ 45.9f, 10.0f, 2.4f });
+	SAFE_RELEASE(pGear);
+
+	SAFE_RELEASE(pGearObject);
+
+	// Gear
+	pGearObject = CGameObject::Create("Gear");
+	pLayer->AddObject(pGearObject);
+
+	pGear = pGearObject->AddComponent<CGear>("GearComponent");
+	pGear->SetGearPos({ 79.7f, 4.0f, 4.3f });
+	SAFE_RELEASE(pGear);
+
+	SAFE_RELEASE(pGearObject);
+
+	SAFE_RELEASE(pLayer);
+}
+
 bool CMainScene::Init()
 {
 	CreateProtoType();
@@ -521,6 +569,7 @@ bool CMainScene::Init()
 	CreateCheckBox();
 	CreateMainSceneLight();
 	CreatePortal();
+	CreateGear();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
 
@@ -564,7 +613,7 @@ bool CMainScene::Init()
 	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
 	//LoadObject("Table", DxVector3(22.5f, 3.0f, 10.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(10.0f, 0.5f, 10.0f), DxVector3(5.0f, 1.0f, 5.0f), Vec3Zero);
-	//LoadObject("Heart", DxVector3(5.0f, 0.0f, 5.0f), DxVector3(0.1f, 0.1f, 0.1f), Vec3Zero);
+	//LoadObject("Cog", DxVector3(5.0f, 0.0f, 5.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 
 	return true;
 }
