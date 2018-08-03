@@ -9,6 +9,7 @@
 #include "../ObjectScript/PlayerHitEffect.h"
 #include "../ObjectScript/MessageBox.h"
 #include "../ObjectScript/Portal.h"
+#include "../ObjectScript/Gear.h"
 #include "01.Core/Input.h"
 #include "01.Core/PathMgr.h"
 #include "05.Scene/Scene.h"
@@ -351,6 +352,57 @@ void CMainScene2::CreateMonster(CPlayer* _pPlayer)
 	fclose(pFile);
 }
 
+void CMainScene2::CreatePortal()
+{
+}
+
+void CMainScene2::CreateGear()
+{
+	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+
+	// Gear
+	CGameObject*	pGearObject = CGameObject::Create("Gear");
+	pLayer->AddObject(pGearObject);
+
+	CGear*	pGear = pGearObject->AddComponent<CGear>("GearComponent");
+	pGear->SetGearPos({ 15.1f, 7.0f, 52.8f });
+	SAFE_RELEASE(pGear);
+
+	SAFE_RELEASE(pGearObject);
+
+	// Gear
+	pGearObject = CGameObject::Create("Gear");
+	pLayer->AddObject(pGearObject);
+
+	pGear = pGearObject->AddComponent<CGear>("GearComponent");
+	pGear->SetGearPos({ 57.6f, 6.0f, 42.1f });
+	SAFE_RELEASE(pGear);
+
+	SAFE_RELEASE(pGearObject);
+
+	// Gear
+	pGearObject = CGameObject::Create("Gear");
+	pLayer->AddObject(pGearObject);
+
+	pGear = pGearObject->AddComponent<CGear>("GearComponent");
+	pGear->SetGearPos({ 80.1f, 4.0f, 5.4f });
+	SAFE_RELEASE(pGear);
+
+	SAFE_RELEASE(pGearObject);
+
+	// Gear
+	pGearObject = CGameObject::Create("Gear");
+	pLayer->AddObject(pGearObject);
+
+	pGear = pGearObject->AddComponent<CGear>("GearComponent");
+	pGear->SetGearPos({ 45.9f, 10.0f, 14.8f });
+	SAFE_RELEASE(pGear);
+
+	SAFE_RELEASE(pGearObject);
+
+	SAFE_RELEASE(pLayer);
+}
+
 bool CMainScene2::Init()
 {
 	CreateProtoType();
@@ -358,6 +410,7 @@ bool CMainScene2::Init()
 	CreateTerrain();
 	CreateCheckBox();
 	CreateMainSceneLight();
+	CreateGear();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
 

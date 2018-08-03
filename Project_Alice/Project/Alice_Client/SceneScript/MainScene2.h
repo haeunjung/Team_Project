@@ -22,6 +22,8 @@ private:
 	void CreateTerrain();
 	void CreateMainSceneLight();
 	void CreateMonster(CPlayer* _pPlayer);
+	void CreatePortal();
+	void CreateGear();
 public:
 	virtual bool Init();
 	virtual void Update(float _fTime);
