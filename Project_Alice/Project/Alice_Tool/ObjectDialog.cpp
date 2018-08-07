@@ -186,7 +186,7 @@ void CObjectDialog::CreateObject(const string & _strKey, const wstring & _FileNa
 	CGameObject* pGameObject = CGameObject::Create(_strKey);
 
 	CTransform* pTransform = pGameObject->GetTransform();
-	pTransform->SetWorldPos(0.0f, 0.0f, 0.0f);
+	pTransform->SetWorldPos(5.0f, 2.0f, 5.0f);
 	pTransform->SetWorldScale(0.1f, 0.1f, 0.1f);
 	SAFE_RELEASE(pTransform);
 
@@ -200,7 +200,7 @@ void CObjectDialog::CreateObject(const string & _strKey, const wstring & _FileNa
 	SAFE_RELEASE(pRenderer);
 
 	CColliderSphere* pColSphere = pGameObject->AddComponent<CColliderSphere>(_strKey + "ColSphere");
-	pColSphere->SetSphereInfo(Vec3Zero, 1.0f);
+	pColSphere->SetSphereInfo(5.0f, 2.0f, 5.0f, 1.0f);
 	SAFE_RELEASE(pColSphere);
 
 	pLayer->AddObject(pGameObject);

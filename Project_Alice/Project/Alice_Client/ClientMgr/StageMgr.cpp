@@ -4,6 +4,7 @@
 #include "05.Scene/Scene.h"
 #include "../SceneScript/MainScene.h"
 #include "../SceneScript/MainScene2.h"
+#include "../SceneScript/MainScene3.h"
 #include "../SceneScript/LoadingScene.h"
 
 DEFINITION_SINGLE(CStageMgr)
@@ -49,7 +50,12 @@ void CStageMgr::StartStage()
 		break;
 	}
 	case 3:
+	{
+		CScene * pScene = GET_SINGLE(CSceneMgr)->CreateScene("MainScene3");
+		CMainScene3* pMain3 = pScene->CreateScript<CMainScene3>();
+		GET_SINGLE(CSceneMgr)->ReplaceScene(pScene);
 		break;
+	}
 	}
 }
 

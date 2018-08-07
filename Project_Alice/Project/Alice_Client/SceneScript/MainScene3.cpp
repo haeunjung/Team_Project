@@ -1,4 +1,4 @@
-#include "MainScene2.h"
+#include "MainScene3.h"
 #include "../ClientMgr/MinionMgr.h"
 #include "../ClientMgr/UIMgr.h"
 #include "../ObjectScript/Player.h"
@@ -38,7 +38,7 @@
 #include "07.Component/SpotLight.h"
 #include "07.Component/ParticleSystem.h"
 
-void CMainScene2::CreateProtoType()
+void CMainScene3::CreateProtoType()
 {
 	// Battery 
 	CGameObject*	pBattery = CGameObject::Create("BatteryObject", true);
@@ -65,23 +65,12 @@ void CMainScene2::CreateProtoType()
 		SAFE_RELEASE(pEffect);
 		SAFE_RELEASE(pEffectObj);
 	}
-
-	// Particle
-	/*CGameObject*	pParticleObj = CGameObject::Create("Particle", true);	
-	CParticleSystem*	pParticle = pParticleObj->AddComponent<CParticleSystem>("Particle");
-	pParticle->SetParticleInfo();
-	pParticle->SetParticleTexture("ParticleSample", L"Effect/PlayerHit2.png");
-	pParticle->SetParticleLight(true);
-	SAFE_RELEASE(pParticle);
-	SAFE_RELEASE(pParticleObj);*/
 }
 
-// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-
-void CMainScene2::CreateObject()
+void CMainScene3::CreateObject()
 {
 	string	strPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(DATAPATH);
-	strPath += "Stage2.Data";
+	strPath += "Stage3.Data";
 
 	FILE*	pFile = NULL;
 	fopen_s(&pFile, strPath.c_str(), "rb");
@@ -120,7 +109,7 @@ void CMainScene2::CreateObject()
 	fclose(pFile);
 }
 
-void CMainScene2::LoadObject(const string & _strKey, const DxVector3 & _vPos, const DxVector3 & _vScale, const DxVector3 & _vRot)
+void CMainScene3::LoadObject(const string & _strKey, const DxVector3 & _vPos, const DxVector3 & _vScale, const DxVector3 & _vRot)
 {
 	CLayer*	pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 
@@ -131,9 +120,6 @@ void CMainScene2::LoadObject(const string & _strKey, const DxVector3 & _vPos, co
 	pTransform->SetWorldScale(_vScale);
 	pTransform->SetWorldRot(_vRot);
 	SAFE_RELEASE(pTransform);
-
-	/*CToolObject* pToolObject = pGameObject->AddComponent<CToolObject>(_strKey + "Object");
-	SAFE_RELEASE(pToolObject);*/
 
 	string	FileName = _strKey + ".FBX";
 
@@ -156,7 +142,7 @@ void CMainScene2::LoadObject(const string & _strKey, const DxVector3 & _vPos, co
 	SAFE_RELEASE(pLayer);
 }
 
-void CMainScene2::CreateCheckBox()
+void CMainScene3::CreateCheckBox()
 {
 	CLayer*		pUILayer = m_pScene->FindLayer("UILayer");
 
@@ -187,7 +173,7 @@ void CMainScene2::CreateCheckBox()
 	SAFE_RELEASE(pRenderer);
 
 	CCheckBox*	pCheckBox = pCheckButtonObject->AddComponent<CCheckBox>("CheckBox");
-	pCheckBox->SetButtonFunc(this, &CMainScene2::CheckButton);
+	pCheckBox->SetButtonFunc(this, &CMainScene3::CheckButton);
 	SAFE_RELEASE(pCheckBox);
 
 	pUILayer->AddObject(pCheckButtonObject);
@@ -201,14 +187,13 @@ void CMainScene2::CreateCheckBox()
 	SAFE_RELEASE(pUILayer);
 }
 
-void CMainScene2::CreateTerrain()
+void CMainScene3::CreateTerrain()
 {
 	CLayer*	pMapLayer = m_pScene->FindLayer(MAPLAYER);
 
 	CGameObject*	pTerrainObject = CGameObject::Create("TerrainObject");
 
 	CTransform*		pTransform = pTerrainObject->GetTransform();
-	//pTransform->SetWorldPos(-32.0f, -1.0f, -32.0f);
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
@@ -223,10 +208,10 @@ void CMainScene2::CreateTerrain()
 	SAFE_RELEASE(pMapLayer);
 }
 
-void CMainScene2::CreateMainSceneLight()
+void CMainScene3::CreateMainSceneLight()
 {
 	string	strPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(DATAPATH);
-	strPath += "Light2.Data";
+	strPath += "Light3.Data";
 
 	FILE*	pFile = NULL;
 	fopen_s(&pFile, strPath.c_str(), "rb");
@@ -307,12 +292,12 @@ void CMainScene2::CreateMainSceneLight()
 	}
 }
 
-void CMainScene2::CreateMonster(CPlayer* _pPlayer)
+void CMainScene3::CreateMonster(CPlayer* _pPlayer)
 {
 	CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 	
 	string	strPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(DATAPATH);
-	strPath += "Monster2.Data";
+	strPath += "Monster3.Data";
 
 	FILE*	pFile = NULL;
 	fopen_s(&pFile, strPath.c_str(), "rb");
@@ -352,32 +337,11 @@ void CMainScene2::CreateMonster(CPlayer* _pPlayer)
 	fclose(pFile);
 }
 
-void CMainScene2::CreatePortal()
+void CMainScene3::CreatePortal()
 {
-	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
-
-	// Portal
-	CGameObject*	pPortalObject = CGameObject::Create("Portal");
-	pLayer->AddObject(pPortalObject);
-
-	CTransform*		pTransform = pPortalObject->GetTransform();
-	pTransform->SetWorldPos(80.0f, 8.0f, 56.0f);
-	SAFE_RELEASE(pTransform);
-
-	CPortal*	pPortalScript = pPortalObject->AddComponent<CPortal>("PortalComponent");
-	SAFE_RELEASE(pPortalScript);
-
-	CColliderSphere* pColSphere = pPortalObject->AddComponent<CColliderSphere>("PortalColSphere");
-	pColSphere->SetColCheck(CC_PORTAL);
-	pColSphere->SetSphereInfo(80.0f, 8.0f, 56.0f, 0.5f);
-	SAFE_RELEASE(pColSphere);
-
-	SAFE_RELEASE(pPortalObject);
-
-	SAFE_RELEASE(pLayer);
 }
 
-void CMainScene2::CreateGear()
+void CMainScene3::CreateGear()
 {
 	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 
@@ -424,15 +388,14 @@ void CMainScene2::CreateGear()
 	SAFE_RELEASE(pLayer);
 }
 
-bool CMainScene2::Init()
+bool CMainScene3::Init()
 {
 	CreateProtoType();
 	CreateObject();
 	CreateTerrain();
 	CreateCheckBox();
 	CreateMainSceneLight();
-	CreatePortal();
-	CreateGear();
+	//CreateGear();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
 
@@ -482,7 +445,7 @@ bool CMainScene2::Init()
 	return true;
 }
 
-void CMainScene2::Update(float _fTime)
+void CMainScene3::Update(float _fTime)
 {
 	GET_SINGLE(CMinionMgr)->Update(_fTime);
 	GET_SINGLE(CUIMgr)->Update(_fTime);
@@ -494,12 +457,12 @@ void CMainScene2::Update(float _fTime)
 	}
 }
 
-void CMainScene2::CheckButton(CGameObject * _pObj, float _fTime)
+void CMainScene3::CheckButton(CGameObject * _pObj, float _fTime)
 {
 	CPlayer::CheatKey();
 }
 
-CMainScene2::CMainScene2() :
+CMainScene3::CMainScene3() :
 	m_pCheckBoxObject(NULL),
 	m_fRespawnTime(0.0f),
 	m_fRespawnLimitTime(10.0f),
@@ -507,7 +470,7 @@ CMainScene2::CMainScene2() :
 {
 }
 
-CMainScene2::~CMainScene2()
+CMainScene3::~CMainScene3()
 {
 	if (false == GET_SINGLE(CSceneMgr)->GetIsChange())
 	{

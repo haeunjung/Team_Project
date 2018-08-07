@@ -136,6 +136,9 @@
     <ClInclude Include="ObjectScript\Gear.h">
       <Filter>03. ObjectScript\10. Gear</Filter>
     </ClInclude>
+    <ClInclude Include="SceneScript\MainScene3.h">
+      <Filter>02. SceneScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -206,6 +209,9 @@
     </ClCompile>
     <ClCompile Include="ObjectScript\Gear.cpp">
       <Filter>03. ObjectScript\10. Gear</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneScript\MainScene3.cpp">
+      <Filter>02. SceneScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
