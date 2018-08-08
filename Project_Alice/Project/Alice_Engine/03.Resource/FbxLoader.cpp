@@ -328,6 +328,7 @@ void CFbxLoader::LoadUV(FbxMesh * _pMesh, pFBXMESHCONTAINER _pContainer, int _iU
 
 	_pContainer->vecUV[_iControlIndex].x = vUV.mData[0];
 	_pContainer->vecUV[_iControlIndex].y = 1.0f - vUV.mData[1];
+	//_pContainer->vecUV[_iControlIndex].y = vUV.mData[1];
 }
 
 void CFbxLoader::LoadTangent(FbxMesh * _pMesh, pFBXMESHCONTAINER _pContainer, int _iVtxID, int _iControlIndex)

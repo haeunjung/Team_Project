@@ -76,9 +76,13 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
         // 조명의 위치를 뷰공간으로 바꾼다.
         float3 vLightPos = mul(float4(g_vLightPos, 1.0f), g_matView).xyz;
         vLightDir = vLightPos - vViewPos;
+
+        float fDist = length(vLightDir);
+
         vLightDir = normalize(vLightDir);
 
-        float3 vLightCalDir; //환경광처럼 방향을 주고
+        //환경광처럼 방향을 주고
+        float3 vLightCalDir; 
         vLightCalDir = mul(float4(g_vLightDir, 0.0f), g_matView).xyz; //LigthDir ->nor
         vLightCalDir = -normalize(vLightCalDir);
 
@@ -86,13 +90,12 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
         fDots = max(0, dot(vLightDir, vLightCalDir));
         fDots = acos(fDots);
         fDots = degrees(fDots);
-
-        float fDist = length(vLightDir);
+                
         if (10.0f > fDots)
         {
             //거리에 따른 조명 감쇠
             //float fDist = length(vLightPos - vViewPos);
-            fAtt = 1.0f / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist)); 
+            fAtt = 1.0f / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist));
         }
         else if (10.0f > fDots)
         {
@@ -111,7 +114,7 @@ _tagMaterial ComputeAccLight(float3 vNormal, float3 vViewPos, float2 vUV, float 
         //    return tMtrl;
         //else
         //{
-        //    fSpot = pow(max(dot(-vLightDir, g_vLightDir), 0.0f), g_fSpot);1025613w
+        //    fSpot = pow(max(dot(-vLightDir, g_vLightDir), 0.0f), g_fSpot);
 
         //    fAtt = fSpot / dot(g_vAttenuation.xyz, float3(1.0f, fDist, fDist * fDist));
         //}

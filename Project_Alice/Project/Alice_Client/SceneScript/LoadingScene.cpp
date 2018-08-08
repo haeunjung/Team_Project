@@ -32,7 +32,7 @@ bool CLoadingScene::Init()
 	pRenderer->SetRenderState(ALPHABLEND);
 
 	CMaterial*	pMaterial = pRenderer->GetMaterial();
-	pMaterial->SetDiffuseTexture("Linear", "LoadingScene", L"StartScene/Loading.png");
+	pMaterial->SetDiffuseTexture("Linear", "LoadingScene", L"StartScene/Loading2.png");
 	SAFE_RELEASE(pMaterial);
 	SAFE_RELEASE(pRenderer);
 	SAFE_RELEASE(pRenderer);

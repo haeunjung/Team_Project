@@ -1,6 +1,5 @@
 #include "SpotLight.h"
 #include "Transform.h"
-
 #include "../06.GameObject/GameObject.h"
 #include "../07.Component/Renderer.h"
 #include "../04.Rendering/ShaderMgr.h"
@@ -39,18 +38,17 @@ void CSpotLight::InitSpotLightInfo()
 
 bool CSpotLight::Init()
 {
-	CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("SpotLight");
-	pRenderer->SetMesh("ColorSphere");
-	pRenderer->SetShader("ColliderColorShader");
-	pRenderer->SetInputLayout("ColorInputLayout");
-	pRenderer->SetRenderState(WIRE_FRAME);
+	//CRenderer* pRenderer = m_pGameObject->AddComponent<CRenderer>("SpotLight");
+	//pRenderer->SetMesh("ColorSphere");
+	//pRenderer->SetShader("ColliderColorShader");
+	//pRenderer->SetInputLayout("ColorInputLayout");
+	//pRenderer->SetRenderState(WIRE_FRAME);
+	//SAFE_RELEASE(pRenderer);
 
 	m_pColSphere = m_pGameObject->AddComponent<CColliderSphere>("SpotColSphere");
 	m_pColSphere->SetSphereInfo(100.0f, 100.0f, 100.0f, 2.0f);
 	m_pColSphere->SetColCheck(CC_SPOTLIGHT);
-
-	SAFE_RELEASE(pRenderer);
-
+	
 	return true;
 }
 

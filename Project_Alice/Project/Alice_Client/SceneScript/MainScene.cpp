@@ -610,10 +610,11 @@ bool CMainScene::Init()
 
 	// Test Box Mesh »ý¼º
 	//LoadObject("My_Box", DxVector3(15.0f, 2.5f, 15.0f), DxVector3(5.0f, 5.0f, 5.0f), Vec3Zero);
-	//LoadObject("Box2", DxVector3(22.5f, 2.5f, 10.0f), DxVector3(10.0f, 5.0f, 15.0f), Vec3Zero);
+	//LoadObject("test", DxVector3(20.0f, 1.0f, 20.0f), DxVector3(2.0f, 2.0f, 2.0f), Vec3Zero);
 	//LoadObject("Table", DxVector3(22.5f, 3.0f, 10.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 	//LoadObject("Box2", DxVector3(10.0f, 0.5f, 10.0f), DxVector3(5.0f, 1.0f, 5.0f), Vec3Zero);
 	//LoadObject("Cog", DxVector3(5.0f, 0.0f, 5.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
+	//LoadObject("Hip Hop Dancing 2", DxVector3(5.0f, 2.0f, 5.0f), DxVector3(0.01f, 0.01f, 0.01f), DxVector3(-PI_HALF, 0.0f, 0.0f));
 
 	return true;
 }
