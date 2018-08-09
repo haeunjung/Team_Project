@@ -17,21 +17,10 @@ enum MONSTER_STATE
 	MS_DEATH
 };
 
-enum RESPAWN_POS
-{
-	POS_ONE,
-	POS_TWO,
-	POS_THREE,
-	POS_FOUR,
-	POS_FIVE,
-	POS_TEST,
-};
-
 class CPlayer;
 class CMinion : public CScript
 {
-private:
-	//RESPAWN_POS		m_eRespawnPos;
+protected:
 	DxVector3		m_vRespawnPos;
 	MONSTER_STATE	m_eMonsterState;
 	CAnimation3D*	m_pAniController;
@@ -49,16 +38,12 @@ private:
 	CSoundPlayer*		m_pHitSound;
 	CSoundPlayer*		m_pAttackSound;
 
-	CGameObject* m_pParticleObj;
-	// Test¿ë
-private:
 	bool	m_bTest;
 public:
 	inline void SetIsTest(bool _bTest) {
 		m_bTest = _bTest;
 	}
 public:
-	void SetRespawnPos(RESPAWN_POS _eRespawnPos);
 	void SetRespawnPos(DxVector3 _vPos);
 	void SetPlayer(CPlayer* _pPlayer);
 	void SetMonsterWorldPos(const DxVector3 _Pos);
@@ -68,20 +53,14 @@ public:
 	bool RespawnUpdate(float _fTime);
 	void MinionAttackSound();
 public:
-	bool Init() override;	
-	void Update(float _fTime) override;	
-	CMinion* Clone() override;
+	virtual bool Init() override;	
+	virtual void Update(float _fTime) override;	
+	virtual CMinion* Clone() override;
 public:
-	void OnCollisionEnter(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
-	void OnCollisionStay(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
-private:
+	virtual void OnCollisionEnter(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
+	virtual void OnCollisionStay(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
+protected:
 	bool BackAttackCheck(const DxVector3& _SrcForward, const DxVector3& _DestForward);
-	void MonsterIdle(float _fTime);
-	void MonsterWalk(float _fTime);
-	void MonsterTrace(float _fTime);
-	void MonsterSpotTrace(float _fTime);
-	void MonsterAttack();
-	void MonsterDeath();
 	void SetRespawnPos();
 public:
 	CMinion();

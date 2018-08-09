@@ -48,6 +48,7 @@ BEGIN_MESSAGE_MAP(CMonsterDialog, CDialogEx)
 	ON_EN_CHANGE(IDC_MONSTERPOSX, &CMonsterDialog::OnEnChangeMonsterposx)
 	ON_EN_CHANGE(IDC_MONSTERPOSY, &CMonsterDialog::OnEnChangeMonsterposy)
 	ON_EN_CHANGE(IDC_MONSTERPOSZ, &CMonsterDialog::OnEnChangeMonsterposz)
+	ON_BN_CLICKED(IDC_CREATEMONSTER2, &CMonsterDialog::OnBnClickedCreatemonster2)
 END_MESSAGE_MAP()
 
 
@@ -112,20 +113,24 @@ void CMonsterDialog::OnBnClickedLoadmonster()
 			// WorldPos 로드			
 			fread(&vPos, sizeof(DxVector3), 1, pFile);
 
-			CreateMinion(vPos);
+			CreatePlant(vPos);
 		}
 
 		fclose(pFile);
 	}
 }
 
-
 void CMonsterDialog::OnBnClickedCreatemonster()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	CreateMinion();
+	CreatePlant();
 }
 
+void CMonsterDialog::OnBnClickedCreatemonster2()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CreateMutant();
+}
 
 void CMonsterDialog::OnLbnSelchangeList1()
 {
@@ -176,13 +181,14 @@ void CMonsterDialog::OnEnChangeMonsterposz()
 	UpdateData(FALSE);
 }
 
-void CMonsterDialog::CreateMinion(DxVector3 vPos)
+void CMonsterDialog::CreatePlant(DxVector3 vPos)
 {
 	CLayer* pLayer = GET_SINGLE(CSceneMgr)->GetCurScene()->FindLayer(DEFAULTLAYER);
 
 	CGameObject*	pMinionObj = CGameObject::Create("Minion");
 
 	CTransform*		pTransform = pMinionObj->GetTransform();
+	pTransform->SetTag("Plant");
 	pTransform->SetWorldPos(vPos);
 	pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
 	pTransform->SetLocalRotY(-PI * 0.5f);
@@ -193,7 +199,7 @@ void CMonsterDialog::CreateMinion(DxVector3 vPos)
 	SAFE_RELEASE(pTransform);
 
 	CRenderer* pPlayerRenderer = pMinionObj->AddComponent<CRenderer>("Renderer");
-	pPlayerRenderer->SetMesh("MinionMesh", L"SmallMonster.msh");
+	pPlayerRenderer->SetMesh("Plant", L"SmallMonster.msh");
 	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");
 	SAFE_RELEASE(pPlayerRenderer);
@@ -203,5 +209,37 @@ void CMonsterDialog::CreateMinion(DxVector3 vPos)
 
 	SAFE_RELEASE(pLayer);
 
-	m_MonsterListBox.AddString(L"Minion");
+	m_MonsterListBox.AddString(L"Plant");
 }
+
+void CMonsterDialog::CreateMutant(DxVector3 vPos)
+{
+	CLayer* pLayer = GET_SINGLE(CSceneMgr)->GetCurScene()->FindLayer(DEFAULTLAYER);
+
+	CGameObject*	pMinionObj = CGameObject::Create("Minion");
+
+	CTransform*		pTransform = pMinionObj->GetTransform();
+	pTransform->SetTag("Mutant");
+	pTransform->SetWorldPos(vPos);
+	pTransform->SetWorldScale(0.015f, 0.015f, 0.015f);
+	pTransform->SetLocalRotX(-PI * 0.5f);
+	//pTransform->SetWorldRotY(PI);
+
+	m_vecTransform.push_back(pTransform);
+	pTransform->AddRef();
+	SAFE_RELEASE(pTransform);
+
+	CRenderer* pPlayerRenderer = pMinionObj->AddComponent<CRenderer>("Renderer");
+	pPlayerRenderer->SetMesh("Mutant", L"Mutant.msh");
+	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
+	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");
+	SAFE_RELEASE(pPlayerRenderer);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	SAFE_RELEASE(pLayer);
+
+	m_MonsterListBox.AddString(L"Mutant");
+}
+

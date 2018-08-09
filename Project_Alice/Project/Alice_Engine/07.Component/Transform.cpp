@@ -1048,7 +1048,7 @@ void CTransform::Update(float _fTime)
 	if (NULL != m_pParentTransform)
 	{
 		*m_matParent = m_pParentTransform->GetWorldMatrix();		
-	}	
+	}
 
 	*m_matLocal = (*m_matLocalScale) * (*m_matLocalRot) * (*m_matLocalPos);
 	*m_matWorld = (*m_matWorldScale) * (*m_matWorldRot) * (*m_matWorldPos) * (*m_matParent);

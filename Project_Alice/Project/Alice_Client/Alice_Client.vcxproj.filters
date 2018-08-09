@@ -62,6 +62,12 @@
     <Filter Include="03. ObjectScript\10. Gear">
       <UniqueIdentifier>{df7fbe29-ebb3-424e-9f7c-5c3fcd281059}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. ObjectScript\03. Monster\01.Plant">
+      <UniqueIdentifier>{81e305ec-9628-4a94-b436-37e7b02d6883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\03. Monster\02.Mutant">
+      <UniqueIdentifier>{93a30721-576e-4313-93fa-3aae8ccbb3c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneScript\MainScene.h">
@@ -139,6 +145,12 @@
     <ClInclude Include="SceneScript\MainScene3.h">
       <Filter>02. SceneScript</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectScript\Plant.h">
+      <Filter>03. ObjectScript\03. Monster\01.Plant</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\Mutant.h">
+      <Filter>03. ObjectScript\03. Monster\02.Mutant</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -212,6 +224,12 @@
     </ClCompile>
     <ClCompile Include="SceneScript\MainScene3.cpp">
       <Filter>02. SceneScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Plant.cpp">
+      <Filter>03. ObjectScript\03. Monster\01.Plant</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Mutant.cpp">
+      <Filter>03. ObjectScript\03. Monster\02.Mutant</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -24,6 +24,7 @@
 #define IDC_CREATEMONSTER               1003
 #define IDC_EDIT1_POSX                  1004
 #define IDC_BUTTON_CREATELIGHT2         1004
+#define IDC_CREATEMONSTER2              1004
 #define IDC_LIST1                       1005
 #define IDC_LOAD_BUTTON                 1006
 #define IDC_STATIC_POSX2                1006
@@ -53,7 +54,6 @@
 #define IDC_MONSTERPOSY                 1016
 #define IDC_STATIC_ROTATIONZ            1017
 #define IDC_EDIT_CURFBX                 1017
-#define IDC_MONSTERPOSX3                1017
 #define IDC_MONSTERPOSZ                 1017
 #define IDC_EDIT1_ROTATIONZ             1018
 #define IDC_BUTTON_LOADFBX              1018

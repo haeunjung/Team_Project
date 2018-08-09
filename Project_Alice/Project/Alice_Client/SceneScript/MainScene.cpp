@@ -3,6 +3,8 @@
 #include "../ClientMgr/UIMgr.h"
 #include "../ObjectScript/Player.h"
 #include "../ObjectScript/Minion.h"
+#include "../ObjectScript/Plant.h"
+#include "../ObjectScript/Mutant.h"
 #include "../ObjectScript/Battery.h"
 #include "../ObjectScript/Mouse.h"
 #include "../ObjectScript/HitEffect.h"
@@ -420,7 +422,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	CLayer* pLayer = m_pScene->FindLayer(DEFAULTLAYER);
 
 	CGameObject*	pMinionObj = CGameObject::Create("Minion");
-	CMinion*	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	CPlant*	pMinion = pMinionObj->AddComponent<CPlant>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 10.0f));
 	pMinion->SetPlayer(_pPlayer);
 	pMinion->SetRespawnPos(DxVector3(40.0f, 0.0f, 10.0f));
@@ -431,7 +433,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	SAFE_RELEASE(pMinionObj);
 
 	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion = pMinionObj->AddComponent<CPlant>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(40.0f, 0.0f, 40.0f));	
 	pMinion->SetPlayer(_pPlayer);
 	pMinion->SetRespawnPos(DxVector3(40.0f, 0.0f, 40.0f));
@@ -442,7 +444,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	SAFE_RELEASE(pMinionObj);
 
 	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion = pMinionObj->AddComponent<CPlant>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 35.0f));
 	pMinion->SetPlayer(_pPlayer);
 	pMinion->SetRespawnPos(DxVector3(80.0f, 0.0f, 35.0f));
@@ -453,7 +455,7 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	SAFE_RELEASE(pMinionObj);
 
 	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion = pMinionObj->AddComponent<CPlant>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(80.0f, 0.0f, 15.0f));
 	pMinion->SetPlayer(_pPlayer);
 	pMinion->SetRespawnPos(DxVector3(80.0f, 0.0f, 15.0f));
@@ -463,19 +465,30 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pLayer->AddObject(pMinionObj);
 	SAFE_RELEASE(pMinionObj);
 
-	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
-	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetRespawnPos(DxVector3(10.0f, 0.0f, 20.0f));
-	GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
-	SAFE_RELEASE(pMinion);
+	//pMinionObj = CGameObject::Create("Minion");
+	//pMinion = pMinionObj->AddComponent<CPlant>("MinionScript");
+	//pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
+	//pMinion->SetPlayer(_pPlayer);
+	//pMinion->SetRespawnPos(DxVector3(10.0f, 0.0f, 20.0f));
+	//GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
+	//SAFE_RELEASE(pMinion);
+
+	//pLayer->AddObject(pMinionObj);
+	//SAFE_RELEASE(pMinionObj);
+
+	pMinionObj = CGameObject::Create("Mutant");
+	CMutant* pMutant = pMinionObj->AddComponent<CMutant>("MutantScript");
+	pMutant->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
+	pMutant->SetPlayer(_pPlayer);
+	pMutant->SetRespawnPos(DxVector3(10.0f, 0.0f, 20.0f));
+	GET_SINGLE(CMinionMgr)->PushMinion(pMutant);
+	SAFE_RELEASE(pMutant);
 
 	pLayer->AddObject(pMinionObj);
 	SAFE_RELEASE(pMinionObj);
 
 	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
+	pMinion = pMinionObj->AddComponent<CPlant>("MinionScript");
 	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 10.0f));
 	pMinion->SetPlayer(_pPlayer);
 	pMinion->SetIsTest(true);

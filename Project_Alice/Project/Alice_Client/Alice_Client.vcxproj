@@ -31,6 +31,8 @@
     <ClInclude Include="ObjectScript\MonsterBullet.h" />
     <ClInclude Include="ObjectScript\Minion.h" />
     <ClInclude Include="ObjectScript\Mouse.h" />
+    <ClInclude Include="ObjectScript\Mutant.h" />
+    <ClInclude Include="ObjectScript\Plant.h" />
     <ClInclude Include="ObjectScript\Player.h" />
     <ClInclude Include="ObjectScript\PlayerBullet.h" />
     <ClInclude Include="ObjectScript\PlayerHitEffect.h" />
@@ -58,6 +60,8 @@
     <ClCompile Include="ObjectScript\MonsterBullet.cpp" />
     <ClCompile Include="ObjectScript\Minion.cpp" />
     <ClCompile Include="ObjectScript\Mouse.cpp" />
+    <ClCompile Include="ObjectScript\Mutant.cpp" />
+    <ClCompile Include="ObjectScript\Plant.cpp" />
     <ClCompile Include="ObjectScript\Player.cpp" />
     <ClCompile Include="ObjectScript\PlayerBullet.cpp" />
     <ClCompile Include="ObjectScript\PlayerHitEffect.cpp" />
