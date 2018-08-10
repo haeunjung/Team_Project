@@ -21,7 +21,7 @@ protected:
 	list<CCollider*>::iterator	m_iterEnd;
 
 	bool			m_bCollision;
-
+	bool			m_bColOnOff;
 	DxVector3		m_Point;
 
 //#ifdef _DEBUG
@@ -39,6 +39,9 @@ public:
 	COLLIDER_TYPE GetColliderType() const;
 	COLLIDER_CHECK GetColliderCheck() const;
 	DxVector3 GetTransformWorldAxis(AXIS _Axis) const;
+	bool GetColOnOff();
+	void ColOn();
+	void ColOff();
 public:
 	void AddColList(CCollider* _pCol);
 	void EraseColList(CCollider* _pCol);

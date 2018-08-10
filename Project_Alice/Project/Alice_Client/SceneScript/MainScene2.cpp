@@ -3,6 +3,9 @@
 #include "../ClientMgr/UIMgr.h"
 #include "../ObjectScript/Player.h"
 #include "../ObjectScript/Minion.h"
+#include "../ObjectScript/Plant.h"
+#include "../ObjectScript/Mutant.h"
+#include "../ObjectScript/Warrok.h"
 #include "../ObjectScript/Battery.h"
 #include "../ObjectScript/Mouse.h"
 #include "../ObjectScript/HitEffect.h"
@@ -265,8 +268,8 @@ void CMainScene2::CreateMainSceneLight()
 			LIGHTINFO	tLightInfo = {};
 			tLightInfo.eType = LT_POINT;
 			tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
-			tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
-			tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
+			tLightInfo.vAmbient = { 0.6f, 0.6f, 0.6f, 1.f };
+			tLightInfo.vSpecular = { 0.6f, 0.6f, 0.6f, 1.f };
 			tLightInfo.vAttenuation = DxVector3(0.0f, 0.2f, 0.0f);
 
 			pPointLight->SetLightInfo(tLightInfo);
@@ -325,28 +328,58 @@ void CMainScene2::CreateMonster(CPlayer* _pPlayer)
 	// Vector Size Load
 	size_t Size = 0;
 	fread(&Size, 4, 1, pFile);
-
 	
 	DxVector3 vPos = {};
-
 	CGameObject*	pMinionObj = NULL;
-	CMinion*	pMinion = NULL;
+	MONSTER_TYPE	Type;
 	for (size_t i = 0; i < Size; ++i)
 	{
+		// 몬스터 타입 로드
+		fread(&Type, sizeof(MONSTER_TYPE), 1, pFile);
+
 		// WorldPos 로드			
 		fread(&vPos, sizeof(DxVector3), 1, pFile);
 
 		pMinionObj = CGameObject::Create("Minion");
-		pMinion = pMinionObj->AddComponent<CMinion>("MinionScript");
-		pMinion->SetMonsterWorldPos(vPos);
-		pMinion->SetPlayer(_pPlayer);
-		pMinion->SetRespawnPos(vPos);
-		GET_SINGLE(CMinionMgr)->PushMinion(pMinion);
-		SAFE_RELEASE(pMinion);
+
+		switch (Type)
+		{
+		case WOOJUN::MT_PLANT:
+		{
+			CPlant* pPlant = pMinionObj->AddComponent<CPlant>("PlantScript");
+			pPlant->SetMonsterWorldPos(vPos);
+			pPlant->SetPlayer(_pPlayer);
+			pPlant->SetRespawnPos(vPos);
+			GET_SINGLE(CMinionMgr)->PushMinion((CMinion*)pPlant);
+			SAFE_RELEASE(pPlant);
+			break;
+		}
+		case WOOJUN::MT_MUTANT:
+		{
+			CMutant* pMutant = pMinionObj->AddComponent<CMutant>("MutantScript");
+			pMutant->SetMonsterWorldPos(vPos);
+			pMutant->SetPlayer(_pPlayer);
+			pMutant->SetRespawnPos(vPos);
+			GET_SINGLE(CMinionMgr)->PushMinion((CMinion*)pMutant);
+			SAFE_RELEASE(pMutant);
+			break;
+		}
+		case WOOJUN::MT_WARROK:
+		{
+			CWarrok* pWarrok = pMinionObj->AddComponent<CWarrok>("WarrokScript");
+			pWarrok->SetMonsterWorldPos(vPos);
+			pWarrok->SetPlayer(_pPlayer);
+			pWarrok->SetRespawnPos(vPos);
+			GET_SINGLE(CMinionMgr)->PushMinion((CMinion*)pWarrok);
+			SAFE_RELEASE(pWarrok);
+			break;
+		}
+		}		
 
 		pLayer->AddObject(pMinionObj);
 		SAFE_RELEASE(pMinionObj);
 	}
+
 	SAFE_RELEASE(pLayer);
 
 	fclose(pFile);

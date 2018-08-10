@@ -35,11 +35,14 @@ public:
 	afx_msg void OnBnClickedLoadmonster();
 	afx_msg void OnBnClickedCreatemonster();
 	afx_msg void OnBnClickedCreatemonster2();
+	afx_msg void OnBnClickedCreatemonster3();
+	afx_msg void OnBnClickedDeletemonster();
 	afx_msg void OnLbnSelchangeList1();
 	afx_msg void OnEnChangeMonsterposx();
 	afx_msg void OnEnChangeMonsterposy();
 	afx_msg void OnEnChangeMonsterposz();
 private:
 	void CreatePlant(DxVector3 vPos = { 0.0f, 0.0f, 0.0f });
-	void CreateMutant(DxVector3 vPos = { 0.0f, 0.8f, 0.0f });
+	void CreateMutant(DxVector3 vPos = { 0.0f, 0.0f, 0.0f });
+	void CreateWarrok(DxVector3 vPos = { 0.0f, 0.0f, 0.0f });
 };

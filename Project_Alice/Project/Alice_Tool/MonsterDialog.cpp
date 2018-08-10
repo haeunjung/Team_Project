@@ -49,6 +49,8 @@ BEGIN_MESSAGE_MAP(CMonsterDialog, CDialogEx)
 	ON_EN_CHANGE(IDC_MONSTERPOSY, &CMonsterDialog::OnEnChangeMonsterposy)
 	ON_EN_CHANGE(IDC_MONSTERPOSZ, &CMonsterDialog::OnEnChangeMonsterposz)
 	ON_BN_CLICKED(IDC_CREATEMONSTER2, &CMonsterDialog::OnBnClickedCreatemonster2)
+	ON_BN_CLICKED(IDC_CREATEMONSTER3, &CMonsterDialog::OnBnClickedCreatemonster3)
+	ON_BN_CLICKED(IDC_DELETEMONSTER, &CMonsterDialog::OnBnClickedDeletemonster)
 END_MESSAGE_MAP()
 
 
@@ -70,12 +72,34 @@ void CMonsterDialog::OnBnClickedSavemonster()
 			return;
 		}
 
+
 		// Vector Size Save
 		size_t Size = m_vecTransform.size();
 		fwrite(&Size, 4, 1, pFile);
 
+		string Tag;
+		MONSTER_TYPE Type = MT_DEFAULT;
 		for (size_t i = 0; i < Size; ++i)
 		{			
+			Tag = m_vecTransform[i]->GetTagStr();
+
+			// 이름으로 몬스터 타입 판단 및 저장
+			if ("Plant" == Tag)
+			{
+				Type = MT_PLANT;
+				fwrite(&Type, sizeof(MONSTER_TYPE), 1, pFile);
+			}
+			else if ("Mutant" == Tag)
+			{
+				Type = MT_MUTANT;
+				fwrite(&Type, sizeof(MONSTER_TYPE), 1, pFile);
+			}
+			else if ("Warrok" == Tag)
+			{
+				Type = MT_WARROK;
+				fwrite(&Type, sizeof(MONSTER_TYPE), 1, pFile);
+			}
+
 			// WorldPos 저장
 			fwrite(&m_vecTransform[i]->GetWorldPos(), sizeof(DxVector3), 1, pFile);
 		}
@@ -107,13 +131,27 @@ void CMonsterDialog::OnBnClickedLoadmonster()
 		size_t Size = 0;
 		fread(&Size, 4, 1, pFile);
 
+		MONSTER_TYPE Type;
 		DxVector3 vPos = {};
 		for (size_t i = 0; i < Size; ++i)
 		{
-			// WorldPos 로드			
+			fread(&Type, sizeof(MONSTER_TYPE), 1, pFile);
+
+			// WorldPos 로드		
 			fread(&vPos, sizeof(DxVector3), 1, pFile);
 
-			CreatePlant(vPos);
+			switch (Type)
+			{
+			case WOOJUN::MT_PLANT:
+				CreatePlant(vPos);
+				break;
+			case WOOJUN::MT_MUTANT:
+				CreateMutant(vPos);
+				break;
+			case WOOJUN::MT_WARROK:
+				CreateWarrok(vPos);
+				break;
+			}			
 		}
 
 		fclose(pFile);
@@ -130,6 +168,36 @@ void CMonsterDialog::OnBnClickedCreatemonster2()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CreateMutant();
+}
+
+void CMonsterDialog::OnBnClickedCreatemonster3()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CreateWarrok();
+}
+
+void CMonsterDialog::OnBnClickedDeletemonster()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_iCurSel = m_MonsterListBox.GetCurSel();
+
+	if (m_iCurSel >= 0)
+	{
+		vector<CTransform*>::iterator FindIter = find(m_vecTransform.begin(), m_vecTransform.end(), m_vecTransform[m_iCurSel]);
+
+		if (FindIter != m_vecTransform.end())
+		{
+			CGameObject* pCurObject = m_vecTransform[m_iCurSel]->GetGameObject();
+
+			SAFE_RELEASE((*FindIter));
+			m_vecTransform.erase(FindIter);
+
+			pCurObject->Death();
+			SAFE_RELEASE(pCurObject);
+
+			m_MonsterListBox.DeleteString(m_iCurSel);
+		}			
+	}
 }
 
 void CMonsterDialog::OnLbnSelchangeList1()
@@ -185,7 +253,7 @@ void CMonsterDialog::CreatePlant(DxVector3 vPos)
 {
 	CLayer* pLayer = GET_SINGLE(CSceneMgr)->GetCurScene()->FindLayer(DEFAULTLAYER);
 
-	CGameObject*	pMinionObj = CGameObject::Create("Minion");
+	CGameObject*	pMinionObj = CGameObject::Create("Plant");
 
 	CTransform*		pTransform = pMinionObj->GetTransform();
 	pTransform->SetTag("Plant");
@@ -216,7 +284,7 @@ void CMonsterDialog::CreateMutant(DxVector3 vPos)
 {
 	CLayer* pLayer = GET_SINGLE(CSceneMgr)->GetCurScene()->FindLayer(DEFAULTLAYER);
 
-	CGameObject*	pMinionObj = CGameObject::Create("Minion");
+	CGameObject*	pMinionObj = CGameObject::Create("Mutant");
 
 	CTransform*		pTransform = pMinionObj->GetTransform();
 	pTransform->SetTag("Mutant");
@@ -243,3 +311,33 @@ void CMonsterDialog::CreateMutant(DxVector3 vPos)
 	m_MonsterListBox.AddString(L"Mutant");
 }
 
+void CMonsterDialog::CreateWarrok(DxVector3 vPos)
+{
+	CLayer* pLayer = GET_SINGLE(CSceneMgr)->GetCurScene()->FindLayer(DEFAULTLAYER);
+
+	CGameObject*	pMinionObj = CGameObject::Create("Warrok");
+
+	CTransform*		pTransform = pMinionObj->GetTransform();
+	pTransform->SetTag("Warrok");
+	pTransform->SetWorldPos(vPos);
+	pTransform->SetWorldScale(0.012f, 0.012f, 0.012f);
+	pTransform->SetLocalRotX(-PI * 0.5f);
+	//pTransform->SetWorldRotY(PI);
+
+	m_vecTransform.push_back(pTransform);
+	pTransform->AddRef();
+	SAFE_RELEASE(pTransform);
+
+	CRenderer* pPlayerRenderer = pMinionObj->AddComponent<CRenderer>("Renderer");
+	pPlayerRenderer->SetMesh("Warrok", L"Warrok.msh");
+	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
+	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");
+	SAFE_RELEASE(pPlayerRenderer);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	SAFE_RELEASE(pLayer);
+
+	m_MonsterListBox.AddString(L"Warrok");
+}

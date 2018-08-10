@@ -5,6 +5,7 @@
 #include "../ObjectScript/Minion.h"
 #include "../ObjectScript/Plant.h"
 #include "../ObjectScript/Mutant.h"
+#include "../ObjectScript/Warrok.h"
 #include "../ObjectScript/Battery.h"
 #include "../ObjectScript/Mouse.h"
 #include "../ObjectScript/HitEffect.h"
@@ -287,8 +288,8 @@ void CMainScene::CreateMainSceneLight()
 	LIGHTINFO	tLightInfo = {};
 	tLightInfo.eType = LT_POINT;
 	tLightInfo.vDiffuse = { 1.0f, 1.0f, 1.0f, 1.f };
-	tLightInfo.vAmbient = { 0.2f, 0.2f, 0.2f, 1.f };
-	tLightInfo.vSpecular = { 0.2f, 0.2f, 0.2f, 1.f };
+	tLightInfo.vAmbient = { 0.6f, 0.6f, 0.6f, 1.f };
+	tLightInfo.vSpecular = { 0.6f, 0.6f, 0.6f, 1.f };
 	tLightInfo.vAttenuation = DxVector3(0.0f, 0.2f, 0.0f);
 
 	pPointLight->SetLightInfo(tLightInfo);
@@ -476,13 +477,24 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	//pLayer->AddObject(pMinionObj);
 	//SAFE_RELEASE(pMinionObj);
 
-	pMinionObj = CGameObject::Create("Mutant");
-	CMutant* pMutant = pMinionObj->AddComponent<CMutant>("MutantScript");
-	pMutant->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
-	pMutant->SetPlayer(_pPlayer);
-	pMutant->SetRespawnPos(DxVector3(10.0f, 0.0f, 20.0f));
-	GET_SINGLE(CMinionMgr)->PushMinion(pMutant);
-	SAFE_RELEASE(pMutant);
+	//pMinionObj = CGameObject::Create("Mutant");
+	//CMutant* pMutant = pMinionObj->AddComponent<CMutant>("MutantScript");
+	//pMutant->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
+	//pMutant->SetPlayer(_pPlayer);
+	//pMutant->SetRespawnPos(DxVector3(10.0f, 0.0f, 20.0f));
+	//GET_SINGLE(CMinionMgr)->PushMinion(pMutant);
+	//SAFE_RELEASE(pMutant);
+
+	//pLayer->AddObject(pMinionObj);
+	//SAFE_RELEASE(pMinionObj);
+
+	pMinionObj = CGameObject::Create("Warrok");
+	CWarrok* pWarrok = pMinionObj->AddComponent<CWarrok>("WarrokScript");
+	pWarrok->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
+	pWarrok->SetPlayer(_pPlayer);
+	pWarrok->SetRespawnPos(DxVector3(10.0f, 0.0f, 20.0f));
+	GET_SINGLE(CMinionMgr)->PushMinion(pWarrok);
+	SAFE_RELEASE(pWarrok);
 
 	pLayer->AddObject(pMinionObj);
 	SAFE_RELEASE(pMinionObj);

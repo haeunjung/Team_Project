@@ -28,6 +28,21 @@ DxVector3 CCollider::GetTransformWorldAxis(AXIS _Axis) const
 	return m_pTransform->GetWorldAxis(_Axis);
 }
 
+bool CCollider::GetColOnOff()
+{
+	return m_bColOnOff;
+}
+
+void CCollider::ColOn()
+{
+	m_bColOnOff = true;
+}
+
+void CCollider::ColOff()
+{
+	m_bColOnOff = false;
+}
+
 void CCollider::AddColList(CCollider * _pCol)
 {
 	m_listCollider.push_back(_pCol);

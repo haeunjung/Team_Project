@@ -28,8 +28,10 @@
 #define IDC_LIST1                       1005
 #define IDC_LOAD_BUTTON                 1006
 #define IDC_STATIC_POSX2                1006
+#define IDC_CREATEMONSTER3              1006
 #define IDC_CREATE_BUTTON               1007
 #define IDC_EDIT1_POSX2                 1007
+#define IDC_DELETEMONSTER               1007
 #define IDC_EDIT_CLIPNAME               1008
 #define IDC_SAVEOBJECT                  1008
 #define IDC_STATIC_POSY                 1009

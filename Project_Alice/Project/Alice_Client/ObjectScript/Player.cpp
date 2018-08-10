@@ -297,6 +297,7 @@ void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTim
 			SAFE_RELEASE(pCamera);
 
 			_pDest->SetIsEnable(false);
+			//_pDest->ColOn();
 
 			if (0 >= m_iHp && !m_bCheat)
 			{

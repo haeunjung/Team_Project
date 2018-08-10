@@ -39,6 +39,7 @@
     <ClInclude Include="ObjectScript\Portal.h" />
     <ClInclude Include="ObjectScript\RotBullet.h" />
     <ClInclude Include="ObjectScript\TimeBar.h" />
+    <ClInclude Include="ObjectScript\Warrok.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneScript\LoadingScene.h" />
     <ClInclude Include="SceneScript\MainScene.h" />
@@ -68,6 +69,7 @@
     <ClCompile Include="ObjectScript\Portal.cpp" />
     <ClCompile Include="ObjectScript\RotBullet.cpp" />
     <ClCompile Include="ObjectScript\TimeBar.cpp" />
+    <ClCompile Include="ObjectScript\Warrok.cpp" />
     <ClCompile Include="SceneScript\LoadingScene.cpp" />
     <ClCompile Include="SceneScript\MainScene.cpp" />
     <ClCompile Include="SceneScript\MainScene2.cpp" />

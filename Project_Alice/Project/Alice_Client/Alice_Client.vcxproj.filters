@@ -68,6 +68,9 @@
     <Filter Include="03. ObjectScript\03. Monster\02.Mutant">
       <UniqueIdentifier>{93a30721-576e-4313-93fa-3aae8ccbb3c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. ObjectScript\03. Monster\03.Warrok">
+      <UniqueIdentifier>{94c17afc-1a75-4ca5-bd54-63a5832de012}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneScript\MainScene.h">
@@ -151,6 +154,9 @@
     <ClInclude Include="ObjectScript\Mutant.h">
       <Filter>03. ObjectScript\03. Monster\02.Mutant</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectScript\Warrok.h">
+      <Filter>03. ObjectScript\03. Monster\03.Warrok</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -230,6 +236,9 @@
     </ClCompile>
     <ClCompile Include="ObjectScript\Mutant.cpp">
       <Filter>03. ObjectScript\03. Monster\02.Mutant</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Warrok.cpp">
+      <Filter>03. ObjectScript\03. Monster\03.Warrok</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

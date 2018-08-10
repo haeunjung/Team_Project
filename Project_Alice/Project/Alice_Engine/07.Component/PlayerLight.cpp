@@ -96,7 +96,7 @@ void CPlayerLight::SetLight()
 
 	m_tCBuffer.vAttenuation = m_tInfo.vAttenuation;
 	m_tCBuffer.fRange = 100.0f;
-	m_tCBuffer.fSpot = 48.0f;
+	m_tCBuffer.fSpot = 60.0f;
 	m_tCBuffer.vDir = m_vDir;
 
 	// Transform의 Z축 == 조명의 방향
