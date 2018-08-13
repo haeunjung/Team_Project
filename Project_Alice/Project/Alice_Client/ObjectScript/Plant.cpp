@@ -196,9 +196,13 @@ void CPlant::PlantIdle(float _fTime)
 		return;
 	}
 
+	if (true != m_pAniController->CheckClipName("Idle"))
+	{
+		m_pAniController->ReturnToDefaultClip();
+	}
+
 	// 일정 시간이 되면 Walk로 가자
 	m_fTime += _fTime;
-
 	if (3.0f <= m_fTime)
 	{
 		m_fTime = 0.0f;
@@ -236,10 +240,17 @@ void CPlant::PlantWalk(float _fTime)
 
 void CPlant::PlantTrace(float _fTime)
 {
+	if (0.0f < m_pPlayerTransform->GetWorldPos().y)
+	{
+		m_eMonsterState = MS_DEFAULT;
+		return;
+	}
+
 	PLAYER_STATE PlayerState = m_pPlayerScript->GetPlayerState();
 	if (PS_DEATH == PlayerState || PS_CLIMB == PlayerState || PS_CLIMBIDLE == PlayerState)
 	{
 		m_eMonsterState = MS_DEFAULT;
+		return;
 	}
 
 	m_pTransform->LookAt(m_pPlayerTransform);

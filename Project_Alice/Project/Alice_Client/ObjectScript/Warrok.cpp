@@ -34,7 +34,7 @@ bool CWarrok::Init()
 	DxVector3 Forward = m_pTransform->GetWorldAxis(AXIS_Z);
 
 	m_pViewCol = m_pGameObject->AddComponent<CColliderSphere>("MonsterViewCol");
-	m_pViewCol->SetSphereInfo(Pos + Forward * 2.5f, 2.5f);
+	m_pViewCol->SetSphereInfo(Pos + Forward * 2.5f, 2.0f);
 	m_pViewCol->SetColCheck(CC_VIEW);
 
 	m_pAttCol = m_pGameObject->AddComponent<CColliderSphere>("MonsterAttCol");
@@ -210,10 +210,17 @@ void CWarrok::WarrokWalk(float _fTime)
 
 void CWarrok::WarrokTrace(float _fTime)
 {
+	if (0.0f < m_pPlayerTransform->GetWorldPos().y)
+	{
+		m_eMonsterState = MS_DEFAULT;
+		return;
+	}
+
 	PLAYER_STATE PlayerState = m_pPlayerScript->GetPlayerState();
 	if (PS_DEATH == PlayerState || PS_CLIMB == PlayerState || PS_CLIMBIDLE == PlayerState)
 	{
 		m_eMonsterState = MS_DEFAULT;
+		return;
 	}
 
 	m_pTransform->LookAt(m_pPlayerTransform);

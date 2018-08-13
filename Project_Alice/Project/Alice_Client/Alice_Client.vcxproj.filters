@@ -157,6 +157,9 @@
     <ClInclude Include="ObjectScript\Warrok.h">
       <Filter>03. ObjectScript\03. Monster\03.Warrok</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectScript\Plant_Range.h">
+      <Filter>03. ObjectScript\03. Monster\01.Plant</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -239,6 +242,9 @@
     </ClCompile>
     <ClCompile Include="ObjectScript\Warrok.cpp">
       <Filter>03. ObjectScript\03. Monster\03.Warrok</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Plant_Range.cpp">
+      <Filter>03. ObjectScript\03. Monster\01.Plant</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

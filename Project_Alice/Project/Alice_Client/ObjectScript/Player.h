@@ -25,7 +25,8 @@ enum PLAYER_STATE
 	PS_FALL,
 	PS_HEAT,
 	PS_CLIMBTOUP,
-	PS_DEATH
+	PS_DEATH,
+	PS_ROLL
 };
 
 class CPlayer : public CScript
@@ -37,6 +38,7 @@ private:
 	bool	m_bHeat;
 	bool	m_bClimbToTop;
 	bool	m_bDeath;
+	bool	m_bRoll;
 
 	float	m_fHeatTime;
 	float	m_fSpeed;
@@ -90,6 +92,7 @@ public:
 	const PLAYER_STATE& GetPlayerState() const;
 	void SetPlayerDeath();
 	void PlayAttackSound();
+	CTransform* GetChildTransform() const;
 public:
 	bool Init() override;
 	void Input(float _fTime) override;
@@ -112,6 +115,7 @@ private:
 	void PlayerHit(float _fTime);
 	void PlayerClimbToTop();
 	void PlayerDeath();
+	void PlayerRoll(float _fTime);
 	void CreatePlayerLight();
 	void PlayerHitEffect();
 public:

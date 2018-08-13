@@ -4,13 +4,11 @@
 #include "../ObjectScript/Player.h"
 #include "../ObjectScript/Minion.h"
 #include "../ObjectScript/Plant.h"
-#include "../ObjectScript/Mutant.h"
-#include "../ObjectScript/Warrok.h"
 #include "../ObjectScript/Battery.h"
+#include "../ObjectScript/Plant_Range.h"
 #include "../ObjectScript/Mouse.h"
 #include "../ObjectScript/HitEffect.h"
 #include "../ObjectScript/PlayerHitEffect.h"
-#include "../ObjectScript/MessageBox.h"
 #include "../ObjectScript/Portal.h"
 #include "../ObjectScript/Gear.h"
 #include "01.Core/Input.h"
@@ -33,13 +31,10 @@
 #include "07.Component/RadioButtonMgr.h"
 #include "07.Component/UIBack.h"
 #include "07.Component/Terrain.h"
-#include "07.Component/ColliderSphere.h"
-#include "07.Component/ColliderAABB.h"
 #include "07.Component/SoundPlayer.h"
 #include "07.Component/PointLight.h"
 #include "07.Component/Light.h"
 #include "07.Component/SpotLight.h"
-#include "07.Component/ParticleSystem.h"
 
 void CMainScene::CreateProtoType()
 {
@@ -477,6 +472,17 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	//pLayer->AddObject(pMinionObj);
 	//SAFE_RELEASE(pMinionObj);
 
+	pMinionObj = CGameObject::Create("PlantRange");
+	CPlantRange* pPlantRange = pMinionObj->AddComponent<CPlantRange>("WarrokScript");
+	pPlantRange->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 25.0f));
+	pPlantRange->SetPlayer(_pPlayer);
+	pPlantRange->SetRespawnPos(DxVector3(10.0f, 0.0f, 25.0f));
+	GET_SINGLE(CMinionMgr)->PushMinion(pPlantRange);
+	SAFE_RELEASE(pPlantRange);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
 	//pMinionObj = CGameObject::Create("Mutant");
 	//CMutant* pMutant = pMinionObj->AddComponent<CMutant>("MutantScript");
 	//pMutant->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
@@ -488,16 +494,16 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	//pLayer->AddObject(pMinionObj);
 	//SAFE_RELEASE(pMinionObj);
 
-	pMinionObj = CGameObject::Create("Warrok");
-	CWarrok* pWarrok = pMinionObj->AddComponent<CWarrok>("WarrokScript");
-	pWarrok->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
-	pWarrok->SetPlayer(_pPlayer);
-	pWarrok->SetRespawnPos(DxVector3(10.0f, 0.0f, 20.0f));
-	GET_SINGLE(CMinionMgr)->PushMinion(pWarrok);
-	SAFE_RELEASE(pWarrok);
+	//pMinionObj = CGameObject::Create("Warrok");
+	//CWarrok* pWarrok = pMinionObj->AddComponent<CWarrok>("WarrokScript");
+	//pWarrok->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 20.0f));
+	//pWarrok->SetPlayer(_pPlayer);
+	//pWarrok->SetRespawnPos(DxVector3(10.0f, 0.0f, 20.0f));
+	//GET_SINGLE(CMinionMgr)->PushMinion(pWarrok);
+	//SAFE_RELEASE(pWarrok);
 
-	pLayer->AddObject(pMinionObj);
-	SAFE_RELEASE(pMinionObj);
+	//pLayer->AddObject(pMinionObj);
+	//SAFE_RELEASE(pMinionObj);
 
 	pMinionObj = CGameObject::Create("Minion");
 	pMinion = pMinionObj->AddComponent<CPlant>("MinionScript");
@@ -640,6 +646,8 @@ bool CMainScene::Init()
 	//LoadObject("Box2", DxVector3(10.0f, 0.5f, 10.0f), DxVector3(5.0f, 1.0f, 5.0f), Vec3Zero);
 	//LoadObject("Cog", DxVector3(5.0f, 0.0f, 5.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 	//LoadObject("Hip Hop Dancing 2", DxVector3(5.0f, 2.0f, 5.0f), DxVector3(0.01f, 0.01f, 0.01f), DxVector3(-PI_HALF, 0.0f, 0.0f));
+
+	
 
 	return true;
 }

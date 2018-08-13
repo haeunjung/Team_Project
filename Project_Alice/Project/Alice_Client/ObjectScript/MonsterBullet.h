@@ -1,19 +1,18 @@
 #pragma once
 #include "07.Component/Script.h"
-#include "06.GameObject/GameObject.h"
 
 WOOJUN_USING
 
 class CMonsterBullet : public CScript
 {
 private:
-	CGameObject*	m_pPlayer;
+	CTransform*	m_pPlayerTransform;
 
 	float	m_fSpeed;
 	float	m_fDist;
 	float	m_fTime;	
 public:
-	void SetPlayer(CGameObject* _pPlayer);
+	void SetPlayerTransform(CTransform* _pPlayerTransform);
 public:
 	bool Init() override;	
 	void Update(float _fTime) override;	

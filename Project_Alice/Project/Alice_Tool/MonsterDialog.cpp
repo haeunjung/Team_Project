@@ -51,6 +51,7 @@ BEGIN_MESSAGE_MAP(CMonsterDialog, CDialogEx)
 	ON_BN_CLICKED(IDC_CREATEMONSTER2, &CMonsterDialog::OnBnClickedCreatemonster2)
 	ON_BN_CLICKED(IDC_CREATEMONSTER3, &CMonsterDialog::OnBnClickedCreatemonster3)
 	ON_BN_CLICKED(IDC_DELETEMONSTER, &CMonsterDialog::OnBnClickedDeletemonster)
+	ON_BN_CLICKED(IDC_CREATEMONSTER4, &CMonsterDialog::OnBnClickedCreatemonster4)
 END_MESSAGE_MAP()
 
 
@@ -97,6 +98,11 @@ void CMonsterDialog::OnBnClickedSavemonster()
 			else if ("Warrok" == Tag)
 			{
 				Type = MT_WARROK;
+				fwrite(&Type, sizeof(MONSTER_TYPE), 1, pFile);
+			}
+			else if ("PlantRange" == Tag)
+			{
+				Type = MT_PLANTRANGE;
 				fwrite(&Type, sizeof(MONSTER_TYPE), 1, pFile);
 			}
 
@@ -151,6 +157,9 @@ void CMonsterDialog::OnBnClickedLoadmonster()
 			case WOOJUN::MT_WARROK:
 				CreateWarrok(vPos);
 				break;
+			case WOOJUN::MT_PLANTRANGE:
+				CreatePlantRange(vPos);
+				break;
 			}			
 		}
 
@@ -174,6 +183,12 @@ void CMonsterDialog::OnBnClickedCreatemonster3()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	CreateWarrok();
+}
+
+void CMonsterDialog::OnBnClickedCreatemonster4()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CreatePlantRange();
 }
 
 void CMonsterDialog::OnBnClickedDeletemonster()
@@ -278,6 +293,37 @@ void CMonsterDialog::CreatePlant(DxVector3 vPos)
 	SAFE_RELEASE(pLayer);
 
 	m_MonsterListBox.AddString(L"Plant");
+}
+
+void CMonsterDialog::CreatePlantRange(DxVector3 vPos)
+{
+	CLayer* pLayer = GET_SINGLE(CSceneMgr)->GetCurScene()->FindLayer(DEFAULTLAYER);
+
+	CGameObject*	pMinionObj = CGameObject::Create("PlantRange");
+
+	CTransform*		pTransform = pMinionObj->GetTransform();
+	pTransform->SetTag("PlantRange");
+	pTransform->SetWorldPos(vPos);
+	pTransform->SetWorldScale(0.05f, 0.05f, 0.05f);
+	pTransform->SetLocalRotY(-PI * 0.5f);
+	pTransform->SetWorldRotY(PI);
+
+	m_vecTransform.push_back(pTransform);
+	pTransform->AddRef();
+	SAFE_RELEASE(pTransform);
+
+	CRenderer* pPlayerRenderer = pMinionObj->AddComponent<CRenderer>("Renderer");
+	pPlayerRenderer->SetMesh("Plant", L"SmallMonster.msh");
+	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
+	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");
+	SAFE_RELEASE(pPlayerRenderer);
+
+	pLayer->AddObject(pMinionObj);
+	SAFE_RELEASE(pMinionObj);
+
+	SAFE_RELEASE(pLayer);
+
+	m_MonsterListBox.AddString(L"PlantRange");
 }
 
 void CMonsterDialog::CreateMutant(DxVector3 vPos)

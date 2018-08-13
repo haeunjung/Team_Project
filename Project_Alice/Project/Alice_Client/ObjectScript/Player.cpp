@@ -60,6 +60,12 @@ void CPlayer::PlayAttackSound()
 	m_pAttackSound->MyPlaySound("PlayerAttack.wav");
 }
 
+CTransform * CPlayer::GetChildTransform() const
+{
+	m_pChildTransform->AddRef();
+	return m_pChildTransform;
+}
+
 bool CPlayer::Init()
 {	
 	CGameObject* pChild = CGameObject::Create("Child");
@@ -73,7 +79,7 @@ bool CPlayer::Init()
 
 	CRenderer* pPlayerRenderer = m_pGameObject->AddComponent<CRenderer>("Renderer");
 	//pPlayerRenderer->SetMesh("PlayerMesh", L"Elin.msh");
-	pPlayerRenderer->SetMesh("PlayerMesh", L"Player3.msh");	
+	pPlayerRenderer->SetMesh("PlayerMesh", L"Player4.msh");	
 	//pPlayerRenderer->SetMesh("PlayerMesh", L"New_Alice.msh");
 	pPlayerRenderer->SetShader(STANDARD_ANI_BUMP_SHADER);
 	pPlayerRenderer->SetInputLayout("AniBumpInputLayout");	
@@ -126,8 +132,9 @@ bool CPlayer::Init()
 
 	GET_SINGLE(CInput)->CreateKey("Attack", VK_CONTROL);
 	GET_SINGLE(CInput)->CreateKey("Jump", VK_SPACE);
-	GET_SINGLE(CInput)->CreateKey("PosCheck", VK_RETURN);
+	GET_SINGLE(CInput)->CreateKey("Roll", 'Z');
 
+	GET_SINGLE(CInput)->CreateKey("PosCheck", VK_RETURN);
 	GET_SINGLE(CInput)->CreateKey("ChangeCamera", 'C');
 
 	return true;
@@ -143,7 +150,7 @@ void CPlayer::Input(float _fTime)
 		CDebug::OutputConsole(strPos);
 	}
 
-	if (m_bAttack || m_bHeat || m_bClimbToTop || m_bDeath)
+	if (m_bAttack || m_bHeat || m_bClimbToTop || m_bDeath || m_bRoll)
 	{
 		return;
 	}
@@ -155,11 +162,18 @@ void CPlayer::Input(float _fTime)
 		return;
 	}
 
-	if (true == KEYPRESS("Attack"))
+	if (KEYPRESS("Attack"))
 	{
 		m_ePlayerState = PS_ATTACK;
 		return;
 	}	
+
+	if (KEYPRESS("Roll") &&
+		0.0f == m_pTransform->GetWorldPos().y)
+	{
+		m_ePlayerState = PS_ROLL;
+		return;
+	}
 
 	if (KEYPRESS("Jump")
 		&& KEYPUSH("MoveBack"))
@@ -167,7 +181,7 @@ void CPlayer::Input(float _fTime)
 		return;
 	}
 
-	if (true == KEYPRESS("Jump"))
+	if (KEYPRESS("Jump"))
 	{
 		if (!m_bFrontCol && !m_bBackCol &&
 			!m_bLeftCol && !m_bRightCol)
@@ -242,6 +256,9 @@ void CPlayer::Update(float _fTime)
 	case PS_DEATH:
 		PlayerDeath();
 		break;
+	case PS_ROLL:
+		PlayerRoll(_fTime);
+		break;
 	}
 }
  
@@ -275,7 +292,37 @@ void CPlayer::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 			SAFE_RELEASE(pGearObject);
 		}
 	}	
-	
+
+	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck()
+		&& CC_BULLET == _pDest->GetColliderCheck())
+	{
+		CGameObject* pBulletObj = _pDest->GetGameObject();
+		pBulletObj->Death();
+		SAFE_RELEASE(pBulletObj);
+
+		if (!m_bRoll)
+		{
+			m_pHitSound->MyPlaySound("PlayerHit.mp3");
+
+			PlayerHitEffect();
+
+			--m_iHp;
+			GET_SINGLE(CUIMgr)->SetHpOff(m_iHp);
+
+			CCamera* pCamera = m_pScene->GetMainCamera();
+			pCamera->ActionCameraOn();
+			SAFE_RELEASE(pCamera);
+
+			if (0 >= m_iHp && !m_bCheat)
+			{
+				SetPlayerDeath();
+			}
+			else
+			{
+				m_ePlayerState = PS_HEAT;
+			}
+		}
+	}	
 }
 
 void CPlayer::OnCollisionStay(CCollider * _pSrc, CCollider * _pDest, float _fTime)
@@ -807,6 +854,26 @@ void CPlayer::PlayerDeath()
 	}
 }
 
+void CPlayer::PlayerRoll(float _fTime)
+{
+	if (m_pAniController->CheckClipName("Roll"))
+	{
+		m_pTransform->Forward(m_fSpeed, _fTime);
+
+		if (m_pAniController->GetAnimationEnd())
+		{
+			m_pAniController->ReturnToDefaultClip();
+			m_bRoll = false;
+			m_ePlayerState = PS_DEFAULT;
+		}
+	}
+	else
+	{		
+		m_bRoll = true;
+		m_pAniController->ChangeClip("Roll");
+	}	
+}
+
 void CPlayer::CreatePlayerLight()
 {
 	CGameObject* pLightObject = m_pScene->CreateLight("SpotLight", LT_PLAYERLIGHT);
@@ -878,7 +945,8 @@ CPlayer::CPlayer() :
 	m_pWarningSound(NULL),
 	m_pGearSound(NULL),
 	m_bClimb(false),
-	m_bClimbToTop(false)
+	m_bClimbToTop(false),
+	m_bRoll(false)
 {
 	SetTypeID<CPlayer>();
 	SetTypeName("CPlayer");

@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++¿¡¼­ »ý¼ºÇÑ Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
-// Alice_Tool.rc¿¡¼­ »ç¿ëµÇ°í ÀÖ½À´Ï´Ù.
+// Microsoft Visual C++ì—ì„œ ìƒì„±í•œ í¬í•¨ íŒŒì¼ìž…ë‹ˆë‹¤.
+// Alice_Tool.rcì—ì„œ ì‚¬ìš©ë˜ê³  ìžˆìŠµë‹ˆë‹¤.
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
@@ -34,6 +34,7 @@
 #define IDC_DELETEMONSTER               1007
 #define IDC_EDIT_CLIPNAME               1008
 #define IDC_SAVEOBJECT                  1008
+#define IDC_CREATEMONSTER4              1008
 #define IDC_STATIC_POSY                 1009
 #define IDC_EDIT_STARTFRAME             1009
 #define IDC_EDIT1_POSY                  1010

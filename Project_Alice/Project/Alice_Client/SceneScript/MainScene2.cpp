@@ -6,6 +6,7 @@
 #include "../ObjectScript/Plant.h"
 #include "../ObjectScript/Mutant.h"
 #include "../ObjectScript/Warrok.h"
+#include "../ObjectScript/Plant_Range.h"
 #include "../ObjectScript/Battery.h"
 #include "../ObjectScript/Mouse.h"
 #include "../ObjectScript/HitEffect.h"
@@ -372,6 +373,16 @@ void CMainScene2::CreateMonster(CPlayer* _pPlayer)
 			pWarrok->SetRespawnPos(vPos);
 			GET_SINGLE(CMinionMgr)->PushMinion((CMinion*)pWarrok);
 			SAFE_RELEASE(pWarrok);
+			break;
+		}
+		case WOOJUN::MT_PLANTRANGE:
+		{
+			CPlantRange* pPlantRange = pMinionObj->AddComponent<CPlantRange>("PlantRangeScript");
+			pPlantRange->SetMonsterWorldPos(vPos);
+			pPlantRange->SetPlayer(_pPlayer);
+			pPlantRange->SetRespawnPos(vPos);
+			GET_SINGLE(CMinionMgr)->PushMinion((CMinion*)pPlantRange);
+			SAFE_RELEASE(pPlantRange);
 			break;
 		}
 		}		
