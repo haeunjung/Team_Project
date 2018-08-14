@@ -148,18 +148,20 @@ void CPlantRange::PlantRangeAttack()
 	}
 
 	m_pTransform->LookAt(m_pPlayerTransform);
-	if (true == m_pAniController->CheckClipName("Attack"))
+	if (true == m_pAniController->CheckClipName("AttackRange"))
 	{
 		if (true == m_pAniController->GetAnimationEnd())
 		{
 			CreateEnergyBall();
+			m_pAttackSound->MyPlaySound("MinionAttack.wav");
+
 			m_pAniController->ReturnToDefaultClip();
 			m_eMonsterState = MS_DEFAULT;
 		}
 	}
 	else
 	{
-		m_pAniController->ChangeClip("Attack");
+		m_pAniController->ChangeClip("AttackRange");
 	}
 }
 

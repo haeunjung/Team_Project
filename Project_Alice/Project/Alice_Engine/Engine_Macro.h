@@ -99,6 +99,6 @@
 
 #define ACC_BLEND						"AccBlend"
 
-#define TERRAINSIZE		20
+#define TERRAINSIZE		10
 #define MAXHP	3
 #define	MAX_PARTICLES	10000

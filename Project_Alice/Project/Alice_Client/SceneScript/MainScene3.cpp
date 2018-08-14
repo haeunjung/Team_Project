@@ -6,6 +6,7 @@
 #include "../ObjectScript/Plant.h"
 #include "../ObjectScript/Mutant.h"
 #include "../ObjectScript/Warrok.h"
+#include "../ObjectScript/Plant_Range.h"
 #include "../ObjectScript/Battery.h"
 #include "../ObjectScript/Mouse.h"
 #include "../ObjectScript/HitEffect.h"
@@ -200,10 +201,11 @@ void CMainScene3::CreateTerrain()
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
-	pTerrain->CreateTerrain("Terrain", TERRAINSIZE + 5, TERRAINSIZE, 4, 4/*, "Terrain/Height1.bmp"*/);
-	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_COLOR.png");
-	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_NRM.png");
-	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_SPEC.png");
+	pTerrain->CreateTerrain("Terrain", 3, 2, 64, 64/*, "Terrain/Height1.bmp"*/);
+	//pTerrain->CreateTerrain("Terrain", 10, 8, 8, 8/*, "Terrain/Height1.bmp"*/);
+	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/TexturesCom_WoodFine0032_2_seamless_S_COLOR.png");
+	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/TexturesCom_WoodFine0032_2_seamless_S_NRM.png");
+	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/TexturesCom_WoodFine0032_2_seamless_S_SPEC.png");
 	SAFE_RELEASE(pTerrain);
 
 	pMapLayer->AddObject(pTerrainObject);
@@ -359,6 +361,16 @@ void CMainScene3::CreateMonster(CPlayer* _pPlayer)
 			SAFE_RELEASE(pWarrok);
 			break;
 		}
+		case WOOJUN::MT_PLANTRANGE:
+		{
+			CPlantRange* pPlantRange = pMinionObj->AddComponent<CPlantRange>("PlantRangeScript");
+			pPlantRange->SetMonsterWorldPos(vPos);
+			pPlantRange->SetPlayer(_pPlayer);
+			pPlantRange->SetRespawnPos(vPos);
+			GET_SINGLE(CMinionMgr)->PushMinion((CMinion*)pPlantRange);
+			SAFE_RELEASE(pPlantRange);
+			break;
+		}
 		}
 
 		pLayer->AddObject(pMinionObj);
@@ -372,6 +384,27 @@ void CMainScene3::CreateMonster(CPlayer* _pPlayer)
 
 void CMainScene3::CreatePortal()
 {
+	CLayer*		pLayer = m_pScene->FindLayer(DEFAULTLAYER);
+
+	// Portal
+	CGameObject*	pPortalObject = CGameObject::Create("Portal");
+	pLayer->AddObject(pPortalObject);
+
+	CTransform*		pTransform = pPortalObject->GetTransform();
+	pTransform->SetWorldPos(84.6f, 7.0f, 54.2f);
+	SAFE_RELEASE(pTransform);
+
+	CPortal*	pPortalScript = pPortalObject->AddComponent<CPortal>("PortalComponent");
+	SAFE_RELEASE(pPortalScript);
+
+	CColliderSphere* pColSphere = pPortalObject->AddComponent<CColliderSphere>("PortalColSphere");
+	pColSphere->SetColCheck(CC_PORTAL);
+	pColSphere->SetSphereInfo(84.6f, 7.0f, 54.2f, 0.5f);
+	SAFE_RELEASE(pColSphere);
+
+	SAFE_RELEASE(pPortalObject);
+
+	SAFE_RELEASE(pLayer);
 }
 
 void CMainScene3::CreateGear()
@@ -383,7 +416,7 @@ void CMainScene3::CreateGear()
 	pLayer->AddObject(pGearObject);
 
 	CGear*	pGear = pGearObject->AddComponent<CGear>("GearComponent");
-	pGear->SetGearPos({ 15.1f, 7.0f, 52.8f });
+	pGear->SetGearPos({ 33.6f, 9.0f, 14.0f });
 	SAFE_RELEASE(pGear);
 
 	SAFE_RELEASE(pGearObject);
@@ -393,7 +426,7 @@ void CMainScene3::CreateGear()
 	pLayer->AddObject(pGearObject);
 
 	pGear = pGearObject->AddComponent<CGear>("GearComponent");
-	pGear->SetGearPos({ 57.6f, 6.0f, 42.1f });
+	pGear->SetGearPos({ 76.4f, 7.0f, 20.4f });
 	SAFE_RELEASE(pGear);
 
 	SAFE_RELEASE(pGearObject);
@@ -403,7 +436,7 @@ void CMainScene3::CreateGear()
 	pLayer->AddObject(pGearObject);
 
 	pGear = pGearObject->AddComponent<CGear>("GearComponent");
-	pGear->SetGearPos({ 80.1f, 4.0f, 5.4f });
+	pGear->SetGearPos({ 27.0f, 7.0f, 53.7f });
 	SAFE_RELEASE(pGear);
 
 	SAFE_RELEASE(pGearObject);
@@ -413,7 +446,7 @@ void CMainScene3::CreateGear()
 	pLayer->AddObject(pGearObject);
 
 	pGear = pGearObject->AddComponent<CGear>("GearComponent");
-	pGear->SetGearPos({ 45.9f, 10.0f, 14.8f });
+	pGear->SetGearPos({ 53.7f, 5.0f, 32.1f });
 	SAFE_RELEASE(pGear);
 
 	SAFE_RELEASE(pGearObject);
@@ -428,7 +461,8 @@ bool CMainScene3::Init()
 	CreateTerrain();
 	CreateCheckBox();
 	CreateMainSceneLight();
-	//CreateGear();
+	CreateGear();
+	CreatePortal();
 
 	GET_SINGLE(CUIMgr)->Init(m_pScene);
 

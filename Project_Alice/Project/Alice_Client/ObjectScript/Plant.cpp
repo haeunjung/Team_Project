@@ -258,7 +258,7 @@ void CPlant::PlantTrace(float _fTime)
 
 	if (true == m_pAniController->CheckClipName("Run"))
 	{
-		m_pTransform->Forward(m_fSpeed * 1.5f, _fTime);
+		m_pTransform->Forward(m_fSpeed * 2.5f, _fTime);
 	}
 	else
 	{
@@ -289,7 +289,7 @@ void CPlant::PlantSpotTrace(float _fTime)
 
 	if (true == m_pAniController->CheckClipName("Run"))
 	{
-		m_pTransform->Forward(m_fSpeed * 1.5f, _fTime);
+		m_pTransform->Forward(m_fSpeed * 2.5f, _fTime);
 	}
 	else
 	{
@@ -315,6 +315,7 @@ void CPlant::PlantAttack()
 	{
 		if (40 == m_pAniController->GetAnimationProgressFrame())
 		{
+			m_pAttackSound->MyPlaySound("MinionAttack.wav");
 			m_pAttCol->SetIsEnable(true);
 		}
 

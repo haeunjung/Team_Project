@@ -65,6 +65,13 @@ void CColliderSphere::SetSphereInfo(float _fX, float _fY, float _fZ, float _fRad
 	m_vPrevPos = m_pTransform->GetWorldPos();
 }
 
+void CColliderSphere::SetSpherePos(const DxVector3 _vPos)
+{
+	m_tSphereInfo.vCenter = _vPos;
+
+	m_vPrevPos = m_pTransform->GetWorldPos();
+}
+
 bool CColliderSphere::Init()
 {
 	SetMesh("ColorSphere");

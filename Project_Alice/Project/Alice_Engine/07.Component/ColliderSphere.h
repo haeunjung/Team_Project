@@ -23,6 +23,7 @@ public:
 	void SetSphereInfo(const SPHEREINFO& _tSphereInfo);
 	void SetSphereInfo(const DxVector3& _vCenter, float _fRadius);
 	void SetSphereInfo(float _fX, float _fY, float _fZ, float _fRadius);
+	void SetSpherePos(const DxVector3 _vPos);
 public:
 	virtual bool Init();
 	virtual void Input(float _fTime);

@@ -25,10 +25,10 @@ void CToolScene::CreateTerrain()
 	SAFE_RELEASE(pTransform);
 
 	CTerrain*	pTerrain = pTerrainObject->AddComponent<CTerrain>("Terrain");
-	pTerrain->CreateTerrain("Terrain", TERRAINSIZE + 5, TERRAINSIZE, 4, 4/*, "Terrain/Height1.bmp"*/);
-	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_COLOR.png");
-	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_NRM.png");
-	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/TexturesCom_PlywoodNew0050_1_seamless_S_SPEC.png");
+	pTerrain->CreateTerrain("Terrain", 3, 2, 64, 64/*, "Terrain/Height1.bmp"*/);
+	pTerrain->SetBaseTexture("TerrainDiffuse", L"Terrain/TexturesCom_WoodFine0032_2_seamless_S_COLOR.png");
+	pTerrain->SetNormalTexture("TerrainNormal", L"Terrain/TexturesCom_WoodFine0032_2_seamless_S_NRM.png");
+	pTerrain->SetSpecularTexture("TerrainSpc", L"Terrain/TexturesCom_WoodFine0032_2_seamless_S_SPEC.png");
 	SAFE_RELEASE(pTerrain);
 
 	pMapLayer->AddObject(pTerrainObject);

@@ -34,6 +34,21 @@ void CSpotLight::InitSpotLightInfo()
 	m_ColDist = m_pTransform->GetWorldPos().Distance(m_ColPos);
 
 	SAFE_RELEASE(pParentTransform);
+
+	float fPosY = m_pTransform->GetWorldPos().y;
+		
+	if (15.0f == fPosY)
+	{
+		m_pColSphere->SetSphereInfo(100.0f, 100.0f, 100.0f, 3.0f);
+	}
+	else if (20.0f == fPosY)
+	{
+		m_pColSphere->SetSphereInfo(100.0f, 100.0f, 100.0f, 4.0f);
+	}	
+	else
+	{
+		m_pColSphere->SetSphereInfo(100.0f, 100.0f, 100.0f, 2.0f);
+	}
 }
 
 bool CSpotLight::Init()
@@ -46,7 +61,6 @@ bool CSpotLight::Init()
 	//SAFE_RELEASE(pRenderer);
 
 	m_pColSphere = m_pGameObject->AddComponent<CColliderSphere>("SpotColSphere");
-	m_pColSphere->SetSphereInfo(100.0f, 100.0f, 100.0f, 2.0f);
 	m_pColSphere->SetColCheck(CC_SPOTLIGHT);
 	
 	return true;
@@ -74,7 +88,7 @@ void CSpotLight::Update(float _fTime)
 	
 	m_Dir = m_pTransform->GetWorldAxis(AXIS_Z);
 	m_ColPos = m_pTransform->GetWorldPos() + (m_Dir * m_ColDist);
-	m_pColSphere->SetSphereInfo(m_ColPos, 2.0f);
+	m_pColSphere->SetSpherePos(m_ColPos);
 }
 
 void CSpotLight::LateUpdate(float _fTime)
@@ -114,7 +128,7 @@ void CSpotLight::SetLight()
 	CLight::SetLight();
 
 	m_tCBuffer.vAttenuation = m_tInfo.vAttenuation;
-	m_tCBuffer.fRange = 1000.0f;
+	m_tCBuffer.fRange = 10000.0f;
 	m_tCBuffer.fSpot = 48.0f;
 	m_tCBuffer.vDir = m_Dir;
 

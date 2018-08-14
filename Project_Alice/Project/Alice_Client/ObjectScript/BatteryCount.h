@@ -1,6 +1,7 @@
 #pragma once
 #include "07.Component/Script.h"
 #include "07.Component/Material.h"
+#include "07.Component/SoundPlayer.h"
 
 WOOJUN_USING
 
@@ -10,6 +11,8 @@ private:
 	CMaterial * m_pMaterial;
 	int m_iCount;
 	string m_strKey;
+
+	CSoundPlayer* m_pUseSound;
 public:
 	void PlusCount();
 	void MinusCount();

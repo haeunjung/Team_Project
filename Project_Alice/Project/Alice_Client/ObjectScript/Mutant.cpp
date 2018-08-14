@@ -227,7 +227,7 @@ void CMutant::MutantTrace(float _fTime)
 
 	if (true == m_pAniController->CheckClipName("Run"))
 	{
-		m_pTransform->Forward(m_fSpeed * 1.5f, _fTime);
+		m_pTransform->Forward(m_fSpeed * 3.0f, _fTime);
 	}
 	else
 	{
@@ -258,7 +258,7 @@ void CMutant::MutantSpotTrace(float _fTime)
 
 	if (true == m_pAniController->CheckClipName("Run"))
 	{
-		m_pTransform->Forward(m_fSpeed * 1.5f, _fTime);
+		m_pTransform->Forward(m_fSpeed * 3.0f, _fTime);
 	}
 	else
 	{
@@ -286,6 +286,7 @@ void CMutant::MutantAttack()
 			&& 390 >= m_pAniController->GetAnimationProgressFrame())
 		{
 			m_pAttCol->SetIsEnable(true);
+			m_pAttackSound->MyPlaySound("MutantAttack.wav");
 		}
 
 		if (true == m_pAniController->GetAnimationEnd())
@@ -330,7 +331,7 @@ void CMutant::MutantDeath()
 	}
 	else
 	{
-		m_pHitSound->MyPlaySound("MinionDeath.wav");
+		m_pHitSound->MyPlaySound("MutantDeath.wav");
 		m_pAniController->ChangeClip("Die");
 	}
 }

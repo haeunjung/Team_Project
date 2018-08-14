@@ -10,7 +10,8 @@
 
 CBatteryCount::CBatteryCount() :
 	m_pMaterial(NULL),
-	m_iCount(0)
+	m_iCount(0),
+	m_pUseSound(NULL)
 {
 	SetTag("BatteryCount");
 	SetTypeName("CBatteryCount");
@@ -23,12 +24,16 @@ CBatteryCount::CBatteryCount(const CBatteryCount & _BatteryCount) :
 	SAFE_RELEASE(m_pMaterial);
 	m_pMaterial = _BatteryCount.m_pMaterial;
 
+	SAFE_RELEASE(m_pUseSound);
+	m_pUseSound = _BatteryCount.m_pUseSound;
+
 	m_iCount = _BatteryCount.m_iCount;
 }
 
 
 CBatteryCount::~CBatteryCount()
 {
+	SAFE_RELEASE(m_pUseSound);
 	SAFE_RELEASE(m_pMaterial);
 }
 
@@ -87,11 +92,9 @@ bool CBatteryCount::Init()
 
 	m_pMaterial = pRenderer->GetMaterial();
 	m_pMaterial->SetDiffuseColor(DxVector4(0.8f, 0.8f, 0.8f, 1.0f));
-	//CMaterial* pMaterial = pRenderer->GetMaterial();
-	//pMaterial->SetDiffuseColor(DxVector4(0.8f, 0.8f, 0.8f, 1.0f));
-
-	//SAFE_RELEASE(pMaterial);
 	SAFE_RELEASE(pRenderer);
+
+	m_pUseSound = m_pGameObject->AddComponent<CSoundPlayer>("BatteryUseSound");
 
 	return true;
 }
@@ -102,6 +105,7 @@ void CBatteryCount::Input(float _fTime)
 	{
 		if (0 < m_iCount)
 		{
+			m_pUseSound->MyPlaySound("Shock.wav");
 			--m_iCount;
 			GET_SINGLE(CUIMgr)->UseBattery();
 		}

@@ -79,7 +79,7 @@ bool CFrustum::FrustumInSphere(const DxVector3 & _vCenter, float _fRad)
 
 bool CFrustum::Init()
 {
-	/*m_vPos[0] = DxVector3(-1.f, 1.f, 0.f);
+	m_vPos[0] = DxVector3(-1.f, 1.f, 0.f);
 	m_vPos[1] = DxVector3(1.f, 1.f, 0.f);
 	m_vPos[2] = DxVector3(-1.f, -1.f, 0.f);
 	m_vPos[3] = DxVector3(1.f, -1.f, 0.f);
@@ -87,17 +87,17 @@ bool CFrustum::Init()
 	m_vPos[4] = DxVector3(-1.f, 1.f, 1.f);
 	m_vPos[5] = DxVector3(1.f, 1.f, 1.f);
 	m_vPos[6] = DxVector3(-1.f, -1.f, 1.f);
-	m_vPos[7] = DxVector3(1.f, -1.f, 1.f);*/
+	m_vPos[7] = DxVector3(1.f, -1.f, 1.f);
 
-	m_vPos[0] = DxVector3(-0.7f, 0.7f, 0.f);
-	m_vPos[1] = DxVector3(0.7f, 0.7f, 0.f);
-	m_vPos[2] = DxVector3(-0.7f, -0.7f, 0.f);
-	m_vPos[3] = DxVector3(0.7f, -0.7f, 0.f);
+	//m_vPos[0] = DxVector3(-0.7f, 0.7f, 0.f);
+	//m_vPos[1] = DxVector3(0.7f, 0.7f, 0.f);
+	//m_vPos[2] = DxVector3(-0.7f, -0.7f, 0.f);
+	//m_vPos[3] = DxVector3(0.7f, -0.7f, 0.f);
 
-	m_vPos[4] = DxVector3(-0.7f, 0.7f, 1.f);
-	m_vPos[5] = DxVector3(0.7f, 0.7f, 1.f);
-	m_vPos[6] = DxVector3(-0.7f, -0.7f, 1.f);
-	m_vPos[7] = DxVector3(0.7f, -0.7f, 1.f);
+	//m_vPos[4] = DxVector3(-0.7f, 0.7f, 1.f);
+	//m_vPos[5] = DxVector3(0.7f, 0.7f, 1.f);
+	//m_vPos[6] = DxVector3(-0.7f, -0.7f, 1.f);
+	//m_vPos[7] = DxVector3(0.7f, -0.7f, 1.f);
 
 	return true;
 }

@@ -228,7 +228,7 @@ void CWarrok::WarrokTrace(float _fTime)
 
 	if (true == m_pAniController->CheckClipName("Run"))
 	{
-		m_pTransform->Forward(m_fSpeed * 1.5f, _fTime);
+		m_pTransform->Forward(m_fSpeed * 3.0f, _fTime);
 	}
 	else
 	{
@@ -259,7 +259,7 @@ void CWarrok::WarrokSpotTrace(float _fTime)
 
 	if (true == m_pAniController->CheckClipName("Run"))
 	{
-		m_pTransform->Forward(m_fSpeed * 1.5f, _fTime);
+		m_pTransform->Forward(m_fSpeed * 3.0f, _fTime);
 	}
 	else
 	{
@@ -291,6 +291,7 @@ void CWarrok::WarrokAttack()
 		if (220 == m_pAniController->GetAnimationProgressFrame())
 		{
 			m_pAttCol->SetIsEnable(true);
+			m_pAttackSound->MyPlaySound("WarrokAttack.wav");
 		}		
 
 		if (true == m_pAniController->GetAnimationEnd())
@@ -335,7 +336,7 @@ void CWarrok::WarrokDeath()
 	}
 	else
 	{
-		m_pHitSound->MyPlaySound("MinionDeath.wav");
+		m_pHitSound->MyPlaySound("WarrokDeath.wav");
 		m_pAniController->ChangeClip("Die");
 	}
 }
