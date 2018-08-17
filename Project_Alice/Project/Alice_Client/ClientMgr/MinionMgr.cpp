@@ -101,3 +101,9 @@ void CMinionMgr::Update(float _fTime)
 			break;
 	}
 }
+
+void CMinionMgr::Release()
+{
+	Safe_Release_VecList(m_listMinion);
+	Safe_Release_VecList(m_listRespawn);
+}

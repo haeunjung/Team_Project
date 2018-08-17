@@ -134,7 +134,7 @@ bool CPlayer::Init()
 	GET_SINGLE(CInput)->CreateKey("Jump", VK_SPACE);
 	GET_SINGLE(CInput)->CreateKey("Roll", 'Z');
 
-	GET_SINGLE(CInput)->CreateKey("PosCheck", VK_RETURN);
+	GET_SINGLE(CInput)->CreateKey("Return", VK_RETURN);
 	GET_SINGLE(CInput)->CreateKey("ChangeCamera", 'C');
 
 	return true;
@@ -142,12 +142,16 @@ bool CPlayer::Init()
 
 void CPlayer::Input(float _fTime)
 {
-	if (true == KEYPRESS("PosCheck"))
+	if (true == KEYPRESS("Return"))
 	{
-		char strPos[256] = {};
+		m_bAttack = false;
+		m_bHeat = false;
+		m_bRoll = false;
+
+		/*char strPos[256] = {};
 		DxVector3 vPos = m_pTransform->GetWorldPos();
 		sprintf_s(strPos, "[ X : %f, Y : %f, Z : %f]\n", vPos.x, vPos.y, vPos.z);
-		CDebug::OutputConsole(strPos);
+		CDebug::OutputConsole(strPos);*/
 	}
 
 	if (m_bAttack || m_bHeat || m_bClimbToTop || m_bDeath || m_bRoll)
@@ -275,22 +279,17 @@ void CPlayer::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTi
 		GET_SINGLE(CMinionMgr)->MinionListDistCheck();
 		m_pWarningSound->MyPlaySound("Warning.wav");
 	}
-
-	if (m_iHp < MAXHP)
+	
+	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
+		CC_GEAR == _pDest->GetColliderCheck())
 	{
-		// 플레이어 HP가 최대보다 적을 때 Gear 획득 가능
-		if (CC_PLAYER_HIT == _pSrc->GetColliderCheck() &&
-			CC_GEAR == _pDest->GetColliderCheck())
-		{
-			m_pGearSound->MyPlaySound("GetBattery.mp3");
+		m_pGearSound->MyPlaySound("GetBattery.mp3");
 
-			++m_iHp;
-			GET_SINGLE(CUIMgr)->SetHpOn(m_iHp);
+		GET_SINGLE(CUIMgr)->GetGear();
 
-			CGameObject* pGearObject = _pDest->GetGameObject();
-			pGearObject->Death();
-			SAFE_RELEASE(pGearObject);
-		}
+		CGameObject* pGearObject = _pDest->GetGameObject();
+		pGearObject->Death();
+		SAFE_RELEASE(pGearObject);
 	}	
 
 	if (CC_PLAYER_HIT == _pSrc->GetColliderCheck()

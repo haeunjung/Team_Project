@@ -17,6 +17,7 @@ public:
 	void EraseRespawnList(CMinion* _pMinion);
 	void MinionListDistCheck();
 	void Update(float _fTime);
+	void Release();
 
 	DECLARE_SINGLE(CMinionMgr)
 };

@@ -55,30 +55,9 @@ void CBatteryCount::MinusCount()
 
 bool CBatteryCount::Init()
 {
-	CTexture* pTexture = GET_SINGLE(CResMgr)->LoadTexture("Zero", "0.png");
-	SAFE_RELEASE(pTexture);
-	pTexture = GET_SINGLE(CResMgr)->LoadTexture("One", "1.png");
-	SAFE_RELEASE(pTexture);
-	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Two", "2.png");
-	SAFE_RELEASE(pTexture);
-	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Three", "3.png");
-	SAFE_RELEASE(pTexture);
-	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Four", "4.png");
-	SAFE_RELEASE(pTexture);
-	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Five", "5.png");
-	SAFE_RELEASE(pTexture);
-	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Six", "6.png");
-	SAFE_RELEASE(pTexture);
-	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Seven", "7.png");
-	SAFE_RELEASE(pTexture);
-	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Eight", "8.png");
-	SAFE_RELEASE(pTexture);
-	pTexture = GET_SINGLE(CResMgr)->LoadTexture("Nine", "9.png");
-	SAFE_RELEASE(pTexture);
-
 	DxVector3	vScale = { 49.2f, 57.0f, 1.0f };
 	m_pTransform->SetWorldScale(vScale);
-	m_pTransform->SetWorldPos(130.0f, 50.0f, 0.0f);
+	m_pTransform->SetWorldPos(90.0f, 50.0f, 0.0f);
 	m_pTransform->SetPivot(0.0f, 0.0f, 0.0f);
 
 	CUIBack*	pUI = m_pGameObject->AddComponent<CUIBack>("BatteryCountUI");

@@ -313,7 +313,8 @@ void CPlant::PlantAttack()
 
 	if (true == m_pAniController->CheckClipName("Attack"))
 	{
-		if (40 == m_pAniController->GetAnimationProgressFrame())
+		if (40 <= m_pAniController->GetAnimationProgressFrame() &&
+			41 >= m_pAniController->GetAnimationProgressFrame())
 		{
 			m_pAttackSound->MyPlaySound("MinionAttack.wav");
 			m_pAttCol->SetIsEnable(true);

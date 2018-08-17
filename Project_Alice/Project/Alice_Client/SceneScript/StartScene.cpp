@@ -178,6 +178,7 @@ void CStartScene::ExitButton(CGameObject* _pObj, float _fTime)
 
 void CStartScene::StartButton(CGameObject * _pObj, float _fTime)
 {
+	//GET_SINGLE(CStageMgr)->SetCurStage(2);
 	GET_SINGLE(CStageMgr)->StartStage();
 }
 

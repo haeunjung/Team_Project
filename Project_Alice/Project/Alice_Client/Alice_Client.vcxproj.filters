@@ -160,6 +160,12 @@
     <ClInclude Include="ObjectScript\Plant_Range.h">
       <Filter>03. ObjectScript\03. Monster\01.Plant</Filter>
     </ClInclude>
+    <ClInclude Include="SceneScript\EndingScene.h">
+      <Filter>02. SceneScript</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\GearCount.h">
+      <Filter>03. ObjectScript\10. Gear</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneScript\MainScene.cpp">
@@ -245,6 +251,12 @@
     </ClCompile>
     <ClCompile Include="ObjectScript\Plant_Range.cpp">
       <Filter>03. ObjectScript\03. Monster\01.Plant</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneScript\EndingScene.cpp">
+      <Filter>02. SceneScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\GearCount.cpp">
+      <Filter>03. ObjectScript\10. Gear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

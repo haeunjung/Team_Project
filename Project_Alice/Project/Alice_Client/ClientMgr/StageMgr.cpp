@@ -6,6 +6,7 @@
 #include "../SceneScript/MainScene2.h"
 #include "../SceneScript/MainScene3.h"
 #include "../SceneScript/LoadingScene.h"
+#include "../SceneScript/EndingScene.h"
 
 DEFINITION_SINGLE(CStageMgr)
 
@@ -16,6 +17,11 @@ CStageMgr::CStageMgr() :
 
 CStageMgr::~CStageMgr()
 {
+}
+
+void CStageMgr::SetCurStage(int _iStage)
+{
+	m_iCurStage = _iStage;
 }
 
 int CStageMgr::GetCurStage()
@@ -63,9 +69,18 @@ void CStageMgr::NextStage()
 {
 	++m_iCurStage;
 
-	CScene * pScene = GET_SINGLE(CSceneMgr)->CreateScene("LoadingScene");
-	CLoadingScene* pMain2 = pScene->CreateScript<CLoadingScene>();
-	GET_SINGLE(CSceneMgr)->ReplaceScene(pScene);
+	if (3 >= m_iCurStage)
+	{
+		CScene * pScene = GET_SINGLE(CSceneMgr)->CreateScene("LoadingScene");
+		CLoadingScene* pLoading = pScene->CreateScript<CLoadingScene>();
+		GET_SINGLE(CSceneMgr)->ReplaceScene(pScene);
+	}
+	else
+	{
+		CScene * pScene = GET_SINGLE(CSceneMgr)->CreateScene("EndingScene");
+		CEndingScene* pEnding = pScene->CreateScript<CEndingScene>();
+		GET_SINGLE(CSceneMgr)->ReplaceScene(pScene);
+	}	
 }
 
 

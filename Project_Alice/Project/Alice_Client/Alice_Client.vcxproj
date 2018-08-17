@@ -26,6 +26,7 @@
     <ClInclude Include="ObjectScript\Battery.h" />
     <ClInclude Include="ObjectScript\BatteryCount.h" />
     <ClInclude Include="ObjectScript\Gear.h" />
+    <ClInclude Include="ObjectScript\GearCount.h" />
     <ClInclude Include="ObjectScript\HitEffect.h" />
     <ClInclude Include="ObjectScript\MessageBox.h" />
     <ClInclude Include="ObjectScript\MonsterBullet.h" />
@@ -42,6 +43,7 @@
     <ClInclude Include="ObjectScript\TimeBar.h" />
     <ClInclude Include="ObjectScript\Warrok.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SceneScript\EndingScene.h" />
     <ClInclude Include="SceneScript\LoadingScene.h" />
     <ClInclude Include="SceneScript\MainScene.h" />
     <ClInclude Include="SceneScript\MainScene2.h" />
@@ -57,6 +59,7 @@
     <ClCompile Include="ObjectScript\Battery.cpp" />
     <ClCompile Include="ObjectScript\BatteryCount.cpp" />
     <ClCompile Include="ObjectScript\Gear.cpp" />
+    <ClCompile Include="ObjectScript\GearCount.cpp" />
     <ClCompile Include="ObjectScript\HitEffect.cpp" />
     <ClCompile Include="ObjectScript\MessageBox.cpp" />
     <ClCompile Include="ObjectScript\MonsterBullet.cpp" />
@@ -72,6 +75,7 @@
     <ClCompile Include="ObjectScript\RotBullet.cpp" />
     <ClCompile Include="ObjectScript\TimeBar.cpp" />
     <ClCompile Include="ObjectScript\Warrok.cpp" />
+    <ClCompile Include="SceneScript\EndingScene.cpp" />
     <ClCompile Include="SceneScript\LoadingScene.cpp" />
     <ClCompile Include="SceneScript\MainScene.cpp" />
     <ClCompile Include="SceneScript\MainScene2.cpp" />

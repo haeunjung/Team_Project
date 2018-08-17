@@ -58,7 +58,7 @@ void CMonsterBullet::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, flo
 
 CMonsterBullet::CMonsterBullet() :
 	m_pPlayerTransform(NULL),
-	m_fSpeed(5.0f),
+	m_fSpeed(10.0f),
 	m_fDist(3.0f),
 	m_fTime(0.0f)
 {

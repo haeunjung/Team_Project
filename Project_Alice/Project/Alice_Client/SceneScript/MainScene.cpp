@@ -436,16 +436,16 @@ void CMainScene::CreateMonster(CPlayer* _pPlayer)
 	pLayer->AddObject(pMinionObj);
 	SAFE_RELEASE(pMinionObj);
 
-	pMinionObj = CGameObject::Create("Minion");
-	pMinion = pMinionObj->AddComponent<CPlant>("MinionScript");
-	pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 10.0f));
-	pMinion->SetPlayer(_pPlayer);
-	pMinion->SetIsTest(true);
-	pMinion->SetRespawnPos(DxVector3(10.0f, 0.0f, 10.0f));
-	SAFE_RELEASE(pMinion);
+	//pMinionObj = CGameObject::Create("Minion");
+	//pMinion = pMinionObj->AddComponent<CPlant>("MinionScript");
+	//pMinion->SetMonsterWorldPos(DxVector3(10.0f, 0.0f, 10.0f));
+	//pMinion->SetPlayer(_pPlayer);
+	//pMinion->SetIsTest(true);
+	//pMinion->SetRespawnPos(DxVector3(10.0f, 0.0f, 10.0f));
+	//SAFE_RELEASE(pMinion);
 
-	pLayer->AddObject(pMinionObj);
-	SAFE_RELEASE(pMinionObj);
+	//pLayer->AddObject(pMinionObj);
+	//SAFE_RELEASE(pMinionObj);
 
 	SAFE_RELEASE(pLayer);
 }
@@ -458,20 +458,35 @@ void CMainScene::CreatePortal()
 	CGameObject*	pPortalObject = CGameObject::Create("Portal");
 	pLayer->AddObject(pPortalObject);
 
-	CTransform*		pTransform = pPortalObject->GetTransform();
-	pTransform->SetWorldPos(65.0f, 7.0f, 55.0f);
-	SAFE_RELEASE(pTransform);
-
 	CPortal*	pPortalScript = pPortalObject->AddComponent<CPortal>("PortalComponent");
 	SAFE_RELEASE(pPortalScript);
 
 	CColliderSphere* pColSphere = pPortalObject->AddComponent<CColliderSphere>("PortalColSphere");
 	pColSphere->SetColCheck(CC_PORTAL);
-	pColSphere->SetSphereInfo(65.0f, 7.0f, 55.0f, 0.5f);
-	SAFE_RELEASE(pColSphere);
 
+	CTransform*		pTransform = pPortalObject->GetTransform();
+
+	int iRandPos = rand() % 3;
+	switch (iRandPos)
+	{
+	case 0:
+		pTransform->SetWorldPos(65.0f, 7.0f, 55.0f);
+		pColSphere->SetSphereInfo(65.0f, 7.0f, 55.0f, 0.5f);
+		break;
+	case 1:
+		pTransform->SetWorldPos(60.f, 10.0f, 3.6f);
+		pColSphere->SetSphereInfo(60.f, 10.0f, 3.6f, 0.5f);
+		break;
+	case 2:
+		pTransform->SetWorldPos(2.5f, 7.0f, 54.5f);
+		pTransform->SetWorldRotY(PI_HALF);
+		pColSphere->SetSphereInfo(2.5f, 7.0f, 54.5f, 0.5f);
+		break;
+	}
+	
+	SAFE_RELEASE(pTransform);
+	SAFE_RELEASE(pColSphere);	
 	SAFE_RELEASE(pPortalObject);
-
 	SAFE_RELEASE(pLayer);
 }
 
@@ -484,7 +499,7 @@ void CMainScene::CreateGear()
 	pLayer->AddObject(pGearObject);
 
 	CGear*	pGear = pGearObject->AddComponent<CGear>("GearComponent");
-	pGear->SetGearPos({ 1.8f, 4.0f, 37.7f });
+	pGear->SetGearPos({ 2.0f, 4.0f, 37.7f });
 	SAFE_RELEASE(pGear);
 
 	SAFE_RELEASE(pGearObject);
@@ -504,7 +519,7 @@ void CMainScene::CreateGear()
 	pLayer->AddObject(pGearObject);
 
 	pGear = pGearObject->AddComponent<CGear>("GearComponent");
-	pGear->SetGearPos({ 45.9f, 10.0f, 2.4f });
+	pGear->SetGearPos({ 45.9f, 10.0f, 2.6f });
 	SAFE_RELEASE(pGear);
 
 	SAFE_RELEASE(pGearObject);
@@ -629,9 +644,10 @@ CMainScene::~CMainScene()
 {
 	if (false == GET_SINGLE(CSceneMgr)->GetIsChange())
 	{
-		DESTROY_SINGLE(CMinionMgr);
 		DESTROY_SINGLE(CUIMgr);
+		DESTROY_SINGLE(CMinionMgr);
 	}
 	
+	GET_SINGLE(CMinionMgr)->Release();
 	SAFE_RELEASE(m_pCheckBoxObject);
 }

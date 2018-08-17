@@ -8,6 +8,7 @@
 #include "07.Component/ColliderSphere.h"
 #include "../SceneScript/MainScene2.h"
 #include "../ClientMgr/StageMgr.h"
+#include "../ClientMgr/UIMgr.h"
 
 CPortal::CPortal()
 {
@@ -40,10 +41,12 @@ void CPortal::Update(float _fTime)
 
 void CPortal::OnCollisionEnter(CCollider * _pSrc, CCollider * _pDest, float _fTime)
 {
-	if (CC_PLAYER_HIT == _pDest->GetColliderCheck()
-		&& Vec3Zero != ((CColliderAABB*)_pSrc)->GetAABBInfo().vCenter)
+	if (CC_PLAYER_HIT == _pDest->GetColliderCheck())
 	{
-		StageChange();
+		if (4 <= GET_SINGLE(CUIMgr)->GetGearCount())
+		{
+			StageChange();
+		}
 	}
 }
 

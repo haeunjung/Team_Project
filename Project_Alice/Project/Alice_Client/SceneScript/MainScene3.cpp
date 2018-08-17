@@ -390,20 +390,35 @@ void CMainScene3::CreatePortal()
 	CGameObject*	pPortalObject = CGameObject::Create("Portal");
 	pLayer->AddObject(pPortalObject);
 
-	CTransform*		pTransform = pPortalObject->GetTransform();
-	pTransform->SetWorldPos(84.6f, 7.0f, 54.2f);
-	SAFE_RELEASE(pTransform);
-
 	CPortal*	pPortalScript = pPortalObject->AddComponent<CPortal>("PortalComponent");
 	SAFE_RELEASE(pPortalScript);
 
 	CColliderSphere* pColSphere = pPortalObject->AddComponent<CColliderSphere>("PortalColSphere");
 	pColSphere->SetColCheck(CC_PORTAL);
-	pColSphere->SetSphereInfo(84.6f, 7.0f, 54.2f, 0.5f);
+
+	CTransform*		pTransform = pPortalObject->GetTransform();
+
+	int iRandPos = rand() % 3;
+	switch (iRandPos)
+	{
+	case 0:
+		pTransform->SetWorldPos(86.4f, 8.0f, 20.5f);
+		pColSphere->SetSphereInfo(86.4f, 8.0f, 20.5f, 0.5f);
+		break;
+	case 1:
+		pTransform->SetWorldPos(26.8f, 8.0f, 57.1f);
+		pTransform->SetWorldRotY(PI_HALF);
+		pColSphere->SetSphereInfo(26.8f, 8.0f, 57.1f, 0.5f);
+		break;
+	case 2:
+		pTransform->SetWorldPos(86.3f, 7.0f, 54.5f);
+		pColSphere->SetSphereInfo(86.3f, 7.0f, 54.5f, 0.5f);
+		break;
+	}
+
+	SAFE_RELEASE(pTransform);
 	SAFE_RELEASE(pColSphere);
-
 	SAFE_RELEASE(pPortalObject);
-
 	SAFE_RELEASE(pLayer);
 }
 
@@ -544,6 +559,8 @@ CMainScene3::~CMainScene3()
 		DESTROY_SINGLE(CMinionMgr);
 		DESTROY_SINGLE(CUIMgr);
 	}
+
+	GET_SINGLE(CMinionMgr)->Release();
 	SAFE_RELEASE(m_pCheckBoxObject);
 }
 

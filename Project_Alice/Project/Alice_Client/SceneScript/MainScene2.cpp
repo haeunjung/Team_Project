@@ -405,20 +405,35 @@ void CMainScene2::CreatePortal()
 	CGameObject*	pPortalObject = CGameObject::Create("Portal");
 	pLayer->AddObject(pPortalObject);
 
-	CTransform*		pTransform = pPortalObject->GetTransform();
-	pTransform->SetWorldPos(80.0f, 8.0f, 56.0f);
-	SAFE_RELEASE(pTransform);
-
 	CPortal*	pPortalScript = pPortalObject->AddComponent<CPortal>("PortalComponent");
 	SAFE_RELEASE(pPortalScript);
 
 	CColliderSphere* pColSphere = pPortalObject->AddComponent<CColliderSphere>("PortalColSphere");
 	pColSphere->SetColCheck(CC_PORTAL);
-	pColSphere->SetSphereInfo(80.0f, 8.0f, 56.0f, 0.5f);
+
+	CTransform*		pTransform = pPortalObject->GetTransform();
+
+	int iRandPos = rand() % 3;
+	switch (iRandPos)
+	{
+	case 0:
+		pTransform->SetWorldPos(60.0f, 11.0f, 14.7f);
+		pColSphere->SetSphereInfo(60.0f, 11.0f, 14.7f, 0.5f);
+		break;
+	case 1:
+		pTransform->SetWorldPos(86.7f, 7.0f, 3.0f);
+		pTransform->SetWorldRotY(PI_HALF);
+		pColSphere->SetSphereInfo(86.7f, 7.0f, 3.0f, 0.5f);
+		break;
+	case 2:
+		pTransform->SetWorldPos(80.0f, 8.0f, 56.0f);
+		pColSphere->SetSphereInfo(80.0f, 8.0f, 56.0f, 0.5f);
+		break;
+	}
+
+	SAFE_RELEASE(pTransform);
 	SAFE_RELEASE(pColSphere);
-
 	SAFE_RELEASE(pPortalObject);
-
 	SAFE_RELEASE(pLayer);
 }
 
@@ -451,7 +466,7 @@ void CMainScene2::CreateGear()
 	pLayer->AddObject(pGearObject);
 
 	pGear = pGearObject->AddComponent<CGear>("GearComponent");
-	pGear->SetGearPos({ 80.1f, 4.0f, 5.4f });
+	pGear->SetGearPos({ 80.1f, 5.0f, 5.4f });
 	SAFE_RELEASE(pGear);
 
 	SAFE_RELEASE(pGearObject);
@@ -559,7 +574,7 @@ CMainScene2::~CMainScene2()
 		DESTROY_SINGLE(CMinionMgr);
 		DESTROY_SINGLE(CUIMgr);
 	}
+
+	GET_SINGLE(CMinionMgr)->Release();
 	SAFE_RELEASE(m_pCheckBoxObject);
 }
-
-// 06.28 - 메모리 릭 확인

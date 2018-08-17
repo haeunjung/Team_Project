@@ -34,7 +34,7 @@ bool CWarrok::Init()
 	DxVector3 Forward = m_pTransform->GetWorldAxis(AXIS_Z);
 
 	m_pViewCol = m_pGameObject->AddComponent<CColliderSphere>("MonsterViewCol");
-	m_pViewCol->SetSphereInfo(Pos + Forward * 2.5f, 2.0f);
+	m_pViewCol->SetSphereInfo(Pos + Forward * 3.0f, 2.0f);
 	m_pViewCol->SetColCheck(CC_VIEW);
 
 	m_pAttCol = m_pGameObject->AddComponent<CColliderSphere>("MonsterAttCol");
