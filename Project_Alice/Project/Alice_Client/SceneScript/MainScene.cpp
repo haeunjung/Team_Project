@@ -592,8 +592,8 @@ bool CMainScene::Init()
 	//LoadObject("Box2", DxVector3(10.0f, 0.5f, 10.0f), DxVector3(5.0f, 1.0f, 5.0f), Vec3Zero);
 	//LoadObject("Cog", DxVector3(5.0f, 0.0f, 5.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 	//LoadObject("Hip Hop Dancing 2", DxVector3(5.0f, 2.0f, 5.0f), DxVector3(0.01f, 0.01f, 0.01f), DxVector3(-PI_HALF, 0.0f, 0.0f));
-
-	
+	//LoadObject("Box_05", DxVector3(8.0f, 0.5f, 5.0f), DxVector3(1.0f, 1.0f, 1.0f), Vec3Zero);	
+	// 박스 오브젝트 피봇 수정 후 리셋 엑스폼 하기
 
 	return true;
 }

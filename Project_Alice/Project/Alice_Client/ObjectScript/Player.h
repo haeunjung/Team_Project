@@ -102,6 +102,7 @@ public:
 	void OnCollisionStay(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
 	void OnCollisionLeave(CCollider* _pSrc, CCollider* _pDest, float _fTime) override;
 private:
+	void PlayerIdle();
 	void PlayerMove(float _fTime);
 	void MoveForward(float _fTime);
 	void MoveBack(float _fTime);

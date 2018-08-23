@@ -230,10 +230,11 @@ void CPlayer::Update(float _fTime)
 {	
 	m_pChildTransform->SetWorldPos(m_pHitCol->GetSphereInfo().vCenter);
 
-	m_pTransform->SetLocalPos(0.0f, m_fy * 0.5f, 0.0f);
+	m_pTransform->SetLocalPos(0.0f, m_fy * 0.53f, 0.0f);
 	switch (m_ePlayerState)
 	{
 	case PS_DEFAULT:
+		PlayerIdle();
 		break;
 	case PS_ATTACK:
 		PlayerAttack();
@@ -459,6 +460,11 @@ void CPlayer::OnCollisionLeave(CCollider * _pSrc, CCollider * _pDest, float _fTi
 			m_fJumpTime = 1.0f;
 		}		
 	}
+}
+
+void CPlayer::PlayerIdle()
+{
+	//m_pTransform->SetLocalPosY(m_fy * 0.55f);
 }
 
 void CPlayer::PlayerMove(float _fTime)
