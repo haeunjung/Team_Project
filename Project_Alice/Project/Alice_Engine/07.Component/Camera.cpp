@@ -190,12 +190,11 @@ void CCamera::Update(float _fTime)
 	// 붙어있는 오브젝트가 움직였을 경우 이동시켜준다.
 	if (NULL != m_pAttachObject)
 	{
-		DxVector3	vAttachPos = m_pAttachTransform->GetWorldPos();
-		DxVector3	vMove = vAttachPos - m_vPrevPos;
+		m_vAttachPos = m_pAttachTransform->GetWorldPos();
+		m_vMove = m_vAttachPos - m_vPrevPos;
 
-		m_pTransform->Move(vMove);
-		//m_pTransform->SetWorldPos(vAttachPos + m_vAttachPos);
-		m_vPrevPos = vAttachPos;
+		m_pTransform->Move(m_vMove);
+		m_vPrevPos = m_vAttachPos;
 
 		m_pTransform->SetWorldRot(m_pAttachTransform->GetWorldRot());
 	}
