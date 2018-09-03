@@ -540,7 +540,7 @@ void CMainScene::CreateGear()
 bool CMainScene::Init()
 {
 	CreateProtoType();
-	CreateObject();
+	//CreateObject();
 	CreateTerrain();
 	//CreateRadioButton();
 	CreateCheckBox();
@@ -574,7 +574,7 @@ bool CMainScene::Init()
 	CPlayer*	pPlayerScript = pPlayerObject->AddComponent<CPlayer>("PlayerScript");
 
 	// 몬스터 생성 시 플레이어 정보 넘겨줌
-	CreateMonster(pPlayerScript);
+	//CreateMonster(pPlayerScript);
 
 	// TimeBar에 플레이어 정보 넘겨줌
 	GET_SINGLE(CUIMgr)->SetPlayer(pPlayerScript);
@@ -592,7 +592,13 @@ bool CMainScene::Init()
 	//LoadObject("Box2", DxVector3(10.0f, 0.5f, 10.0f), DxVector3(5.0f, 1.0f, 5.0f), Vec3Zero);
 	//LoadObject("Cog", DxVector3(5.0f, 0.0f, 5.0f), DxVector3(0.05f, 0.05f, 0.05f), Vec3Zero);
 	//LoadObject("Hip Hop Dancing 2", DxVector3(5.0f, 2.0f, 5.0f), DxVector3(0.01f, 0.01f, 0.01f), DxVector3(-PI_HALF, 0.0f, 0.0f));
-	//LoadObject("Box_05", DxVector3(8.0f, 0.5f, 5.0f), DxVector3(1.0f, 1.0f, 1.0f), Vec3Zero);	
+	LoadObject("Box_01", DxVector3(2.0f, 1.0f, 5.0f), DxVector3(2.0f, 2.0f, 2.0f), Vec3Zero);	
+	LoadObject("Box_02", DxVector3(5.0f, 1.0f, 5.0f), DxVector3(2.0f, 2.0f, 2.0f), Vec3Zero);
+	LoadObject("Box_03", DxVector3(8.0f, 1.0f, 5.0f), DxVector3(2.0f, 2.0f, 2.0f), Vec3Zero);
+	LoadObject("Box_04", DxVector3(11.0f, 1.0f, 5.0f), DxVector3(2.0f, 2.0f, 2.0f), Vec3Zero);
+	LoadObject("Box_05", DxVector3(14.0f, 1.0f, 5.0f), DxVector3(2.0f, 2.0f, 2.0f), Vec3Zero);
+	LoadObject("Box_06", DxVector3(17.0f, 1.0f, 5.0f), DxVector3(2.0f, 2.0f, 2.0f), Vec3Zero);
+	LoadObject("Box_07", DxVector3(20.0f, 1.0f, 5.0f), DxVector3(2.0f, 2.0f, 2.0f), Vec3Zero);
 	// 박스 오브젝트 피봇 수정 후 리셋 엑스폼 하기
 
 	return true;
