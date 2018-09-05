@@ -50,6 +50,8 @@ void CObjectDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 
+	DDX_Text(pDX, IDC_EDIT_MESHNAME, m_strMeshName);
+
 	DDX_Text(pDX, IDC_EDIT1_SCALEX, m_fScaleX);
 	DDX_Text(pDX, IDC_EDIT1_SCALEY, m_fScaleY);
 	DDX_Text(pDX, IDC_EDIT1_SCALEZ, m_fScaleZ);
@@ -61,6 +63,7 @@ void CObjectDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT1_POSX, m_fPosX);
 	DDX_Text(pDX, IDC_EDIT1_POSY, m_fPosY);
 	DDX_Text(pDX, IDC_EDIT1_POSZ, m_fPosZ);
+	
 	DDX_Control(pDX, IDC_LIST1, m_ObjectListBox);
 }
 
@@ -130,7 +133,9 @@ void CObjectDialog::SetObjectValue()
 	{
 		return;
 	}
-
+	
+	m_strMeshName = GET_SINGLE(CToolValue)->StringToCString(m_pPickObject->GetTagStr());
+	
 	CTransform*		pTransform = m_pPickObject->GetTransform();
 
 	DxVector3	Scale = pTransform->GetWorldScale();

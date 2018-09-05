@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ì—ì„œ ìƒì„±í•œ í¬í•¨ íŒŒì¼ì…ë‹ˆë‹¤.
-// Alice_Tool.rcì—ì„œ ì‚¬ìš©ë˜ê³  ìˆìŠµë‹ˆë‹¤.
+// Microsoft Visual C++¿¡¼­ »ı¼ºÇÑ Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
+// Alice_Tool.rc¿¡¼­ »ç¿ëµÇ°í ÀÖ½À´Ï´Ù.
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
@@ -72,6 +72,8 @@
 #define IDC_LOADOBJECT                  1025
 #define IDC_CREATE_BUTTON2              1026
 #define IDC_DELETE_BUTTON               1026
+#define IDC_STATIC_POSX3                1027
+#define IDC_EDIT_MESHNAME               1028
 
 // Next default values for new objects
 // 

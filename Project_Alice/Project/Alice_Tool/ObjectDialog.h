@@ -26,6 +26,8 @@ public:
 	virtual void OnOK();
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 public:
+	CString m_strMeshName;
+
 	float m_fScaleX;
 	float m_fScaleY;
 	float m_fScaleZ;
