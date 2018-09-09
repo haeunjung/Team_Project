@@ -621,6 +621,11 @@ float _tagDxVector3::Min() const
 	}
 }
 
+_tagDxVector3 _tagDxVector3::Lerp(const _tagDxVector3 & _v, float _fPercent)
+{
+	return XMVectorLerp(this->Convert(), _v.Convert(), _fPercent);
+}
+
 
 // ==================== Vector3 ====================
 _tagVector3::_tagVector3() :

@@ -148,10 +148,17 @@ void CPlayer::Input(float _fTime)
 		m_bHeat = false;
 		m_bRoll = false;
 
-		/*char strPos[256] = {};
+		char strPos[256] = {};
 		DxVector3 vPos = m_pTransform->GetWorldPos();
 		sprintf_s(strPos, "[ X : %f, Y : %f, Z : %f]\n", vPos.x, vPos.y, vPos.z);
-		CDebug::OutputConsole(strPos);*/
+		CDebug::OutputConsole(strPos);
+
+		DxVector3 vPos1 = { 22.936409f, 5.128803f, 4.399892f };
+		DxVector3 vPos2 = { 21.634571f, 3.534795f, 4.413408f };
+
+		char strDist[256] = {};
+		sprintf_s(strDist, "[Dist : %f]", vPos1.Distance(vPos2));
+		CDebug::OutputConsole(strDist);
 	}
 
 	if (m_bAttack || m_bHeat || m_bClimbToTop || m_bDeath || m_bRoll)
@@ -817,7 +824,12 @@ void CPlayer::PlayerHit(float _fTime)
 
 void CPlayer::PlayerClimbToTop()
 {
-	m_pTransform->SetLocalPosZ(-0.5f);
+	char strPos[256] = {};
+	DxVector3 vChildPos = m_pChildTransform->GetWorldPos();
+	sprintf_s(strPos, "[ X : %f, Y : %f, Z : %f]\n", vChildPos.x, vChildPos.y, vChildPos.z);
+	CDebug::OutputConsole(strPos);
+
+	m_pTransform->SetLocalPosZ(-1.0f);
 	m_bClimbToTop = true;
 
 	if (m_pAniController->GetAnimationEnd())
@@ -831,6 +843,12 @@ void CPlayer::PlayerClimbToTop()
 
 		m_pFootCol->SetIsEnable(true);
 	}
+
+	/*
+	카메라 문제라기 보다는
+	캐릭터 위치 자체가 확 변해버리기 때문에
+	보간을 이용한 처리를 해줘야 할 듯
+	*/
 }
 
 void CPlayer::PlayerDeath()

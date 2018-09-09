@@ -193,6 +193,12 @@ void CCamera::Update(float _fTime)
 		m_vAttachPos = m_pAttachTransform->GetWorldPos();
 		m_vMove = m_vAttachPos - m_vPrevPos;
 
+		if (1.0f <= m_vMove.Length() && m_vPrevPos != Vec3Zero)
+		{
+			m_vAttachPos = m_vAttachPos.Lerp(m_vPrevPos, 0.5f);
+			m_vMove = m_vAttachPos - m_vPrevPos;
+		}
+
 		m_pTransform->Move(m_vMove);
 		m_vPrevPos = m_vAttachPos;
 
