@@ -37,6 +37,7 @@ private:
 	bool	m_bJump;
 	bool	m_bHeat;
 	bool	m_bClimbToTop;
+	bool	m_bTopLerp;
 	bool	m_bDeath;
 	bool	m_bRoll;
 

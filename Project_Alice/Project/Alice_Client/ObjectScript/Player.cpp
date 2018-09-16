@@ -829,11 +829,18 @@ void CPlayer::PlayerClimbToTop()
 	sprintf_s(strPos, "[ X : %f, Y : %f, Z : %f]\n", vChildPos.x, vChildPos.y, vChildPos.z);
 	CDebug::OutputConsole(strPos);
 
+	char strFrame[256] = {};
+	int iFrame = m_pAniController->GetAnimationProgressFrame();
+	sprintf_s(strFrame, "[ Frame : %d ]\n", iFrame);
+	CDebug::OutputConsole(strFrame);
+
 	m_pTransform->SetLocalPosZ(-1.0f);
 	m_bClimbToTop = true;
 
 	if (m_pAniController->GetAnimationEnd())
 	{
+		//m_bTopLerp = true;
+
 		float DestY = ((CColliderAABB*)m_pOtherCol)->GetTop();
 		m_pTransform->SetWorldPos(m_pHitCol->GetSphereInfo().vCenter.x,	DestY,
 			m_pHitCol->GetSphereInfo().vCenter.z);
@@ -842,6 +849,38 @@ void CPlayer::PlayerClimbToTop()
 		m_ePlayerState = PS_DEFAULT;
 
 		m_pFootCol->SetIsEnable(true);
+	}
+
+	if (m_bTopLerp)
+	{
+		float DestY = ((CColliderAABB*)m_pOtherCol)->GetTop();
+		m_pTransform->SetWorldPos(m_pHitCol->GetSphereInfo().vCenter.x,	DestY,
+		m_pHitCol->GetSphereInfo().vCenter.z);
+		m_pTransform->Forward(1.5f);
+		m_bClimbToTop = false;
+		m_ePlayerState = PS_DEFAULT;
+
+		m_pFootCol->SetIsEnable(true);
+		m_bTopLerp = false;
+		/*DxVector3 vPos = m_pTransform->GetWorldPos();
+
+		DxVector3 vSetPos = { m_pHitCol->GetSphereInfo().vCenter.x,
+			((CColliderAABB*)m_pOtherCol)->GetTop(), m_pHitCol->GetSphereInfo().vCenter.z };
+
+		vPos = vPos.Lerp(vSetPos, 0.5f);
+		m_pTransform->SetWorldPos(vSetPos);
+		m_pTransform->SetWorldPosY(vPos.y);
+
+		if ((int)vPos.y == (int)vSetPos.y)
+		{
+			m_pTransform->SetWorldPosY(vSetPos.y);
+			m_pTransform->Forward(1.5f);
+			m_bClimbToTop = false;
+			m_ePlayerState = PS_DEFAULT;
+
+			m_pFootCol->SetIsEnable(true);
+			m_bTopLerp = false;
+		}*/
 	}
 
 	/*
@@ -969,6 +1008,7 @@ CPlayer::CPlayer() :
 	m_pGearSound(NULL),
 	m_bClimb(false),
 	m_bClimbToTop(false),
+	m_bTopLerp(false),
 	m_bRoll(false)
 {
 	SetTypeID<CPlayer>();
