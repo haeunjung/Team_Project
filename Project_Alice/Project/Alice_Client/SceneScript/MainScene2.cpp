@@ -85,7 +85,7 @@ void CMainScene2::CreateProtoType()
 void CMainScene2::CreateObject()
 {
 	string	strPath = GET_SINGLE(CPathMgr)->FindPathToMultiByte(DATAPATH);
-	strPath += "Stage2.Data";
+	strPath += "NewStage2.Data";
 
 	FILE*	pFile = NULL;
 	fopen_s(&pFile, strPath.c_str(), "rb");
