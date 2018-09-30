@@ -28,6 +28,7 @@
     <ClInclude Include="ObjectScript\Gear.h" />
     <ClInclude Include="ObjectScript\GearCount.h" />
     <ClInclude Include="ObjectScript\HitEffect.h" />
+    <ClInclude Include="ObjectScript\Maw.h" />
     <ClInclude Include="ObjectScript\MessageBox.h" />
     <ClInclude Include="ObjectScript\MonsterBullet.h" />
     <ClInclude Include="ObjectScript\Minion.h" />
@@ -61,6 +62,7 @@
     <ClCompile Include="ObjectScript\Gear.cpp" />
     <ClCompile Include="ObjectScript\GearCount.cpp" />
     <ClCompile Include="ObjectScript\HitEffect.cpp" />
+    <ClCompile Include="ObjectScript\Maw.cpp" />
     <ClCompile Include="ObjectScript\MessageBox.cpp" />
     <ClCompile Include="ObjectScript\MonsterBullet.cpp" />
     <ClCompile Include="ObjectScript\Minion.cpp" />

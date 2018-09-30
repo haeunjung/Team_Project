@@ -68,7 +68,10 @@
     <Filter Include="03. ObjectScript\03. Monster\02.Mutant">
       <UniqueIdentifier>{93a30721-576e-4313-93fa-3aae8ccbb3c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. ObjectScript\03. Monster\03.Warrok">
+    <Filter Include="03. ObjectScript\03. Monster\04.Temp">
+      <UniqueIdentifier>{029e1be6-99d5-4094-b702-728343e9a459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ObjectScript\03. Monster\03.Maw">
       <UniqueIdentifier>{94c17afc-1a75-4ca5-bd54-63a5832de012}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -155,7 +158,7 @@
       <Filter>03. ObjectScript\03. Monster\02.Mutant</Filter>
     </ClInclude>
     <ClInclude Include="ObjectScript\Warrok.h">
-      <Filter>03. ObjectScript\03. Monster\03.Warrok</Filter>
+      <Filter>03. ObjectScript\03. Monster\03.Maw</Filter>
     </ClInclude>
     <ClInclude Include="ObjectScript\Plant_Range.h">
       <Filter>03. ObjectScript\03. Monster\01.Plant</Filter>
@@ -165,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="ObjectScript\GearCount.h">
       <Filter>03. ObjectScript\10. Gear</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectScript\Maw.h">
+      <Filter>03. ObjectScript\03. Monster\03.Maw</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -247,7 +253,7 @@
       <Filter>03. ObjectScript\03. Monster\02.Mutant</Filter>
     </ClCompile>
     <ClCompile Include="ObjectScript\Warrok.cpp">
-      <Filter>03. ObjectScript\03. Monster\03.Warrok</Filter>
+      <Filter>03. ObjectScript\03. Monster\03.Maw</Filter>
     </ClCompile>
     <ClCompile Include="ObjectScript\Plant_Range.cpp">
       <Filter>03. ObjectScript\03. Monster\01.Plant</Filter>
@@ -257,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="ObjectScript\GearCount.cpp">
       <Filter>03. ObjectScript\10. Gear</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectScript\Maw.cpp">
+      <Filter>03. ObjectScript\03. Monster\03.Maw</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
